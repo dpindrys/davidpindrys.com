@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import LogoStrip from "./components/LogoStrip";
 import ProjectSection from "./components/ProjectSection";
+import type { CarouselSlide } from "./components/Carousel";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -50,7 +51,7 @@ const freseniusProject = {
       { type: "video", src: "/images/fresenius-objectwireframe.mp4", caption: "Object wireframe", height: 535 },
       { type: "image", src: "/images/fresenius-addresses.png", alt: "Addresses", caption: "Addresses", width: 740, height: 573 },
       { type: "image", src: "/images/fresenius-datelabel.png", alt: "Date label", caption: "Date label", width: 512, height: 491 },
-    ],
+    ] satisfies CarouselSlide[],
     caption: "In-clinic refill workflow",
   },
   featureImages: [],
