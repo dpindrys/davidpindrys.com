@@ -54,8 +54,8 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* Label sits close to cards (hierarchy: label → compact group) */}
-      <div className="flex w-full flex-col gap-2">
+      {/* Gap below label matches Selected work → project logo (page.tsx h2 mb-*) */}
+      <div className="flex w-full flex-col gap-2 md:gap-5 lg:gap-10">
         <h2 className={sectionHeadingClass}>How we can work together</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full items-stretch">
           <a
