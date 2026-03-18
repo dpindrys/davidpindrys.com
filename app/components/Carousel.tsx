@@ -3,8 +3,25 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
 export type CarouselSlide =
-  | { type: "image"; src: string; alt: string; caption?: string; width?: number; height?: number }
-  | { type: "video"; src: string; poster?: string; caption?: string; height?: number };
+  | {
+      type: "image";
+      src: string;
+      alt: string;
+      caption?: string;
+      captionTitle?: string;
+      captionBody?: string;
+      width?: number;
+      height?: number;
+    }
+  | {
+      type: "video";
+      src: string;
+      poster?: string;
+      caption?: string;
+      captionTitle?: string;
+      captionBody?: string;
+      height?: number;
+    };
 
 interface CarouselProps {
   slides: CarouselSlide[];
@@ -95,7 +112,10 @@ export default function Carousel({ slides, caption }: CarouselProps) {
 
   if (total === 0) return null;
 
-  const activeCaption = slides[activeIndex]?.caption ?? caption;
+  const s = slides[activeIndex];
+  const capTitle = s?.captionTitle;
+  const capBody = s?.captionBody;
+  const legacyCaption = s?.caption ?? caption;
   const prevIndex = (activeIndex - 1 + total) % total;
   const nextIndex = (activeIndex + 1) % total;
   // Key by slideIndex so the same slide DOM element is reused when it moves left/center/right — enables smooth transform transition
@@ -241,15 +261,30 @@ export default function Carousel({ slides, caption }: CarouselProps) {
           ))}
         </div>
 
-        {/* Per-slide caption (or fallback) */}
-        {activeCaption && (
+        {/* Per-slide caption: title + body, or legacy single line */}
+        {capTitle != null && capTitle !== "" && capBody != null && capBody !== "" ? (
+          <div className="mt-6 w-full flex flex-col items-center gap-1 text-center px-2">
+            <p
+              className="font-sans font-bold text-[15px] leading-[1.3] tracking-tight w-full"
+              style={{ color: "rgb(82, 82, 82)" }}
+            >
+              {capTitle}
+            </p>
+            <p
+              className="font-sans font-normal text-[15px] leading-[1.3] tracking-tight w-full max-w-[640px]"
+              style={{ color: "rgb(82, 82, 82)" }}
+            >
+              {capBody}
+            </p>
+          </div>
+        ) : legacyCaption ? (
           <p
             className="mt-6 w-full text-center font-sans font-semibold text-[15px] leading-[1.3] tracking-tight"
             style={{ color: "rgb(82, 82, 82)" }}
           >
-            {activeCaption}
+            {legacyCaption}
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );
