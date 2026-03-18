@@ -176,13 +176,15 @@ const ascensionProject = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#F0F0F0]">
-      <div className="flex justify-center w-full px-8 lg:px-16">
-        <div className="flex flex-col items-stretch w-full max-w-[1200px] gap-[160px] pt-12 pb-32">
+    <main className="min-h-screen overflow-x-visible bg-[#F0F0F0]">
+      <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
+        <div className="flex flex-col items-stretch w-full max-w-[1200px] gap-[160px] pt-12 pb-32 overflow-x-visible">
 
           <Header />
           <Hero />
-          <LogoStrip />
+          <div className="w-screen max-w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] overflow-x-hidden md:ml-0 md:mr-0 md:w-full md:max-w-none">
+            <LogoStrip />
+          </div>
           <ProjectSection {...vehrProject} />
           <ProjectSection {...freseniusProject} />
           {/* <ProjectSection {...vinylHealthProject} /> */}

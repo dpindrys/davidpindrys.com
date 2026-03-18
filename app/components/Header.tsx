@@ -12,8 +12,9 @@ export default function Header() {
         />
         <span className="font-sans text-[20px] leading-[1.21] text-black tracking-tight">
           <span className="font-bold">David Pindrys</span>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="font-normal">Boston, USA</span>
+          <span className="hidden md:inline font-normal">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Boston, USA
+          </span>
         </span>
       </div>
 
@@ -23,12 +24,11 @@ export default function Header() {
         className="flex items-center gap-2.5 font-sans font-bold text-[20px] leading-[1.21] text-black hover:opacity-60 transition-opacity"
       >
         <span>Download CV</span>
-        {/* CV icon */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/cv-icon.png"
           alt=""
-          className="w-[63px] h-[63px] object-contain"
+          className="h-10 w-10 shrink-0 object-contain brightness-0"
           aria-hidden="true"
         />
       </a>
