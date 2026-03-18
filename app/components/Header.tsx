@@ -20,7 +20,9 @@ export default function Header() {
 
       {/* Right: Download CV */}
       <a
-        href="#"
+        href="https://drive.google.com/file/d/1IERAxyJMnHsA-RH_QyKJBZSnPfH1PQSe/view?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
         className="flex items-center gap-2.5 font-sans font-bold text-[20px] leading-[1.21] text-black hover:opacity-60 transition-opacity"
       >
         <span>Download CV</span>

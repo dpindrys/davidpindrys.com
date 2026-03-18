@@ -42,6 +42,8 @@ interface Blurbs {
 interface ProjectSectionProps {
   projectLabel: string;
   projectLogo?: string;
+  /** Shown top-right, same type as descriptor */
+  projectDate?: string;
   title: string;
   descriptor: string;
   heroImage: string;
@@ -70,6 +72,7 @@ interface ProjectSectionProps {
 export default function ProjectSection({
   projectLabel,
   projectLogo,
+  projectDate,
   title,
   descriptor,
   heroImage,
@@ -101,19 +104,29 @@ export default function ProjectSection({
 
       {/* Label · Title · Descriptor — 20px between each */}
       <div className="flex flex-col gap-5 w-full">
-        <div className="flex items-center gap-3">
-          {projectLogo && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={projectLogo}
-              alt=""
-              className="w-9 h-8 object-contain shrink-0"
-              aria-hidden="true"
-            />
-          )}
-          <span className="font-sans font-bold text-[20px] leading-[1.21] text-black">
-            {projectLabel}
-          </span>
+        <div className="flex w-full items-start justify-between gap-4">
+          <div className="flex min-w-0 items-start gap-3">
+            {projectLogo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={projectLogo}
+                alt=""
+                className="h-8 w-9 shrink-0 object-contain"
+                aria-hidden="true"
+              />
+            )}
+            <span className="font-sans text-[20px] font-bold leading-[1.21] text-black">
+              {projectLabel}
+            </span>
+          </div>
+          {projectDate ? (
+            <p
+              className="shrink-0 pt-px text-right font-sans text-[clamp(16px,1.9vw,28px)] font-normal leading-[1.4] text-black/70"
+              aria-label={`Project years: ${projectDate}`}
+            >
+              {projectDate}
+            </p>
+          ) : null}
         </div>
 
         <h2 className="font-serif font-normal text-[clamp(36px,5.5vw,75px)] leading-[1.305] text-black">

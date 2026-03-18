@@ -1,6 +1,8 @@
+import { sectionHeadingClass } from "./sectionHeading";
+
 export default function Hero() {
   return (
-    <section className="flex flex-col gap-10 w-full">
+    <section className="flex w-full flex-col gap-10">
       {/* Headline + subhead */}
       <div className="flex flex-col gap-5">
         <h1 className="font-serif font-normal text-[clamp(40px,5.5vw,75px)] leading-[1.305] text-black max-w-[1291px]">
@@ -52,11 +54,9 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* How we can work together — tight spacing vs CTAs */}
-      <div className="flex flex-col gap-2.5 w-full">
-        <h2 className="font-sans font-bold text-[15px] leading-tight tracking-tight text-black">
-          How we can work together
-        </h2>
+      {/* Label sits close to cards (hierarchy: label → compact group) */}
+      <div className="flex w-full flex-col gap-2">
+        <h2 className={sectionHeadingClass}>How we can work together</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full items-stretch">
           <a
             href="https://cal.com/dpindrys/30min"

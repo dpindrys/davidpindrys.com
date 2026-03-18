@@ -12,7 +12,7 @@ const imgBase =
 export default function LogoStrip() {
   return (
     <div
-      className="grid w-full grid-cols-2 items-center justify-items-center gap-x-4 gap-y-8 px-3 sm:gap-x-6 sm:gap-y-10 sm:px-4 md:flex md:flex-nowrap md:justify-center md:gap-16 md:px-0"
+      className="grid w-full grid-cols-2 items-center justify-items-center gap-x-4 gap-y-8 overflow-visible px-3 sm:gap-x-6 sm:gap-y-10 sm:px-4 md:flex md:flex-nowrap md:justify-center md:gap-16 md:px-0"
       aria-label="Organizations"
     >
       {logos.map((logo, i) => (

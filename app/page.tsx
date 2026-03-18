@@ -2,12 +2,14 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
+import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
 import type { CarouselSlide } from "./components/Carousel";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
   projectLogo: "/images/VEHR-project-logo.png",
+  projectDate: "2024",
   title: "Clinical Sensemaking",
   descriptor: "Visualizing longitudinal patient health information",
   heroImage: "/images/vehr-hero.png",
@@ -41,6 +43,7 @@ const vehrProject = {
 const freseniusProject = {
   projectLabel: "Fresenius Medical Care",
   projectLogo: "/images/fresenius-project-logo.png",
+  projectDate: "2022-2023",
   title: "Human Factors Rigor",
   descriptor:
     "Digitizing In-clinic Refills for 2,800+ clinics and 43,000+ patients",
@@ -144,6 +147,7 @@ const vinylHealthProject = {
 const ascensionProject = {
   projectLabel: "Dell Children's Health Plan",
   projectLogo: "/images/ascension-project-logo.png",
+  projectDate: "2023-2024",
   title: "Care Access Modernization",
   descriptor: "Responsive portal for 40,000+ members",
   heroImage: "/images/dellchildrens-laptop-hero.png",
@@ -180,17 +184,28 @@ export default function Home() {
     <>
       <main className="min-h-screen overflow-x-visible bg-[#F0F0F0]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
-          <div className="flex flex-col items-stretch w-full max-w-[1200px] gap-[160px] pt-12 pb-32 overflow-x-visible">
+          <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-12 pb-32 overflow-x-visible">
 
             <Header />
-            <Hero />
-            <div className="w-screen max-w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] overflow-x-hidden md:ml-0 md:mr-0 md:w-full md:max-w-none">
+            <div className="mt-28 md:mt-36 lg:mt-44">
+              <Hero />
+            </div>
+            <div className="mt-16 md:mt-20 lg:mt-24 w-screen max-w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] overflow-x-visible md:ml-0 md:mr-0 md:w-full md:max-w-none">
               <LogoStrip />
             </div>
+            <h2
+              className={`${sectionHeadingClass} mt-16 text-left md:mt-20 lg:mt-24 mb-2 md:mb-5 lg:mb-10`}
+            >
+              Selected work
+            </h2>
             <ProjectSection {...vehrProject} />
-            <ProjectSection {...freseniusProject} />
+            <div className="mt-28 md:mt-36 lg:mt-40">
+              <ProjectSection {...freseniusProject} />
+            </div>
             {/* <ProjectSection {...vinylHealthProject} /> */}
-            <ProjectSection {...ascensionProject} />
+            <div className="mt-28 md:mt-36 lg:mt-40">
+              <ProjectSection {...ascensionProject} />
+            </div>
 
           </div>
         </div>
