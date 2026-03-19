@@ -204,7 +204,7 @@ export default function Home() {
             </div>
             {/* <ProjectSection {...vinylHealthProject} /> */}
             <div className="mt-28 md:mt-36 lg:mt-40">
-              <ProjectSection {...ascensionProject} />
+              <ProjectSection {...ascensionProject} narrowSingleFeatureByPx={232} />
             </div>
 
           </div>

@@ -63,6 +63,11 @@ interface ProjectSectionProps {
   /** Optional carousel (slides + caption) shown between hero and feature images */
   carousel?: { slides: CarouselSlide[]; caption?: string };
   featureImages: FeatureImage[];
+  /**
+   * When there is exactly one feature image, constrain its width by this many pixels
+   * (centered). The metadata divider below stays full width of the content column.
+   */
+  narrowSingleFeatureByPx?: number;
   meta: MetaItem[];
   /** Optional Problem / Solution / Why it matters, shown left of testimonial at 33% width */
   blurbs?: Blurbs;
@@ -86,6 +91,7 @@ export default function ProjectSection({
   heroPrototypeLink,
   carousel,
   featureImages,
+  narrowSingleFeatureByPx,
   meta,
   blurbs,
   testimonial,
@@ -248,14 +254,28 @@ export default function ProjectSection({
       {/* Feature thumbnails with labels — only if any images; single image = full width, flush with line above ROLE */}
       {featureImages.length > 0 && (
       <div className={featureImages.length === 1 ? "w-full -mb-16" : "grid grid-cols-3 gap-8 w-full"}>
-        {featureImages.map((img, i) => (
-          <div key={i} className="flex flex-col gap-3">
+        {featureImages.map((img, i) => {
+          const single = featureImages.length === 1;
+          const narrow =
+            single &&
+            typeof narrowSingleFeatureByPx === "number" &&
+            narrowSingleFeatureByPx > 0;
+          const narrowMaxWidth = narrow
+            ? `min(100%, max(17.5rem, calc(100% - ${narrowSingleFeatureByPx}px)))`
+            : undefined;
+
+          return (
+          <div
+            key={i}
+            className={`flex flex-col gap-3 ${narrow ? "mx-auto w-full min-w-0" : single ? "w-full" : ""}`}
+            style={narrow && narrowMaxWidth ? { maxWidth: narrowMaxWidth } : undefined}
+          >
             {img.src ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={img.src}
                 alt={img.alt}
-                className={`w-full block ${featureImages.length === 1 ? "h-auto rounded-none" : "aspect-[4/3] object-cover rounded-xl"}`}
+                className={`w-full block ${single ? "h-auto rounded-none" : "aspect-[4/3] object-cover rounded-xl"}`}
               />
             ) : (
               <div className="w-full aspect-[4/3] rounded-xl bg-[#E4E4E4] flex items-center justify-center">
@@ -270,7 +290,8 @@ export default function ProjectSection({
               </span>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
       )}
 
