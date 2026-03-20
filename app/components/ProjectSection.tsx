@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import Carousel, { type CarouselSlide } from "./Carousel";
+import CaseStudyHighlights, { type CaseStudyHighlightsData } from "./CaseStudyHighlights";
 
 interface MetaItem {
   label: string;
@@ -39,6 +40,12 @@ interface Blurbs {
   whyItMatters: string;
 }
 
+/** Single left-column block (e.g. SUMMARY) instead of Problem/Solution/Why */
+interface SummaryBlock {
+  label: string;
+  body: string;
+}
+
 interface ProjectSectionProps {
   projectLabel: string;
   projectLogo?: string;
@@ -71,7 +78,15 @@ interface ProjectSectionProps {
   meta: MetaItem[];
   /** Optional Problem / Solution / Why it matters, shown left of testimonial at 33% width */
   blurbs?: Blurbs;
+  /** When set, replaces blurbs with one labeled block (e.g. SUMMARY + body) */
+  summaryBlock?: SummaryBlock;
   testimonial: Testimonial;
+  /** When true, no rule above the ROLE / Primary Users / Focus row */
+  hideMetaTopBorder?: boolean;
+  /** Vertical gap between that meta row and Problem / testimonial block (default gap-10) */
+  metaSectionStackGap?: string;
+  /** Optional mini case study (e.g. VEHR) after summary + quote */
+  caseStudyHighlights?: CaseStudyHighlightsData;
 }
 
 export default function ProjectSection({
@@ -94,7 +109,11 @@ export default function ProjectSection({
   narrowSingleFeatureByPx,
   meta,
   blurbs,
+  summaryBlock,
   testimonial,
+  hideMetaTopBorder = false,
+  metaSectionStackGap = "gap-10",
+  caseStudyHighlights,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
   const [showPlayOverlay, setShowPlayOverlay] = useState(hasPlayOverlay);
@@ -104,6 +123,87 @@ export default function ProjectSection({
     setShowPlayOverlay(false);
     videoRef.current?.play();
   };
+
+  const hasCaseStudyHighlights =
+    Boolean(caseStudyHighlights && caseStudyHighlights.frames.length > 0);
+
+  const lowerContentRow = (
+    <div className="flex w-full flex-col gap-10 md:flex-row md:items-start md:gap-10">
+      {summaryBlock && (
+        <div className="w-full min-w-0 flex-1 text-left md:max-w-[50%]">
+          <div className="flex flex-col gap-1.5">
+            <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+              {summaryBlock.label}
+            </span>
+            <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+              {summaryBlock.body}
+            </p>
+          </div>
+        </div>
+      )}
+      {!summaryBlock && blurbs && (
+        <div className="flex w-full min-w-0 flex-col gap-6 text-left md:w-1/2">
+          <div className="flex flex-col gap-1.5">
+            <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+              Problem
+            </span>
+            <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+              {blurbs.problem}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+              Solution
+            </span>
+            <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+              {blurbs.solution}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+              Why it matters
+            </span>
+            <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+              {blurbs.whyItMatters}
+            </span>
+          </div>
+        </div>
+      )}
+      <div
+        className={`flex min-w-0 flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8 ${
+          blurbs || summaryBlock ? "w-full md:w-1/2" : "w-full"
+        }`}
+      >
+        <blockquote className="font-serif font-normal text-[16px] md:text-[22px] leading-[1.5] md:leading-[1.45] text-black">
+          {testimonial.quote}
+        </blockquote>
+
+        <div className="flex items-center gap-4">
+          {testimonial.avatarSrc ? (
+            <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden shrink-0">
+              <Image
+                src={testimonial.avatarSrc}
+                alt={testimonial.name}
+                fill
+                className="object-cover rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="w-[52px] h-[52px] rounded-full bg-[#D4D4D4] shrink-0" />
+          )}
+
+          <div className="flex flex-col gap-0.5">
+            <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
+              {testimonial.name}
+            </span>
+            <span className="font-sans font-normal text-[16px] leading-[1.5] text-black/50">
+              {testimonial.title}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <article className="flex flex-col gap-16 w-full">
@@ -296,10 +396,14 @@ export default function ProjectSection({
       )}
 
       {/* Metadata + lower content (50/50 when blurbs present) */}
-      <div className="flex flex-col gap-10 w-full">
+      <div className={`flex w-full flex-col ${metaSectionStackGap}`}>
 
         {/* Metadata — horizontal on desktop, vertical stack on mobile */}
-        <div className="flex flex-col border-t border-black/10 pt-8 gap-0 md:flex-row md:gap-0">
+        <div
+          className={`flex flex-col gap-0 md:flex-row md:gap-0 ${
+            hideMetaTopBorder ? "pt-0" : "border-t border-black/10 pt-8"
+          }`}
+        >
           {meta.map((item, i) => (
             <div
               key={i}
@@ -330,70 +434,15 @@ export default function ProjectSection({
           ))}
         </div>
 
-        {/* Lower content: 50/50 on desktop (summary left, quote right); stacked on mobile */}
-        <div className="flex flex-col gap-10 md:flex-row md:gap-10 w-full">
-          {blurbs && (
-            <div className="flex flex-col gap-6 w-full md:w-1/2 min-w-0 text-left">
-              <div className="flex flex-col gap-1.5">
-                <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-                  Problem
-                </span>
-                <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-                  {blurbs.problem}
-                </span>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-                  Solution
-                </span>
-                <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-                  {blurbs.solution}
-                </span>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-                  Why it matters
-                </span>
-                <span className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-                  {blurbs.whyItMatters}
-                </span>
-              </div>
-            </div>
-          )}
-          <div
-            className={`rounded-2xl border border-black/10 p-10 flex flex-col gap-8 bg-white/50 min-w-0 ${
-              blurbs ? "w-full md:w-1/2" : "w-full"
-            }`}
-          >
-            <blockquote className="font-serif font-normal text-[16px] md:text-[22px] leading-[1.5] md:leading-[1.45] text-black">
-              {testimonial.quote}
-            </blockquote>
-
-            <div className="flex items-center gap-4">
-              {testimonial.avatarSrc ? (
-                <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden shrink-0">
-                  <Image
-                    src={testimonial.avatarSrc}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover rounded-full"
-                  />
-                </div>
-              ) : (
-                <div className="w-[52px] h-[52px] rounded-full bg-[#D4D4D4] shrink-0" />
-              )}
-
-              <div className="flex flex-col gap-0.5">
-                <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
-                  {testimonial.name}
-                </span>
-                <span className="font-sans font-normal text-[16px] leading-[1.5] text-black/50">
-                  {testimonial.title}
-                </span>
-              </div>
-            </div>
+        {/* Lower content + optional HIGHLIGHTS: tighter stack when highlights follow summary/quote */}
+        {hasCaseStudyHighlights ? (
+          <div className="flex w-full flex-col gap-6 sm:gap-7">
+            {lowerContentRow}
+            <CaseStudyHighlights data={caseStudyHighlights!} />
           </div>
-        </div>
+        ) : (
+          lowerContentRow
+        )}
       </div>
     </article>
   );

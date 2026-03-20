@@ -14,22 +14,118 @@ const vehrProject = {
   descriptor: "Visualizing longitudinal patient health information",
   heroImage: "/images/vehr-hero.png",
   heroImageAlt: "VEHR Technologies — patient timeline interface on iPad",
-  heroVideo: "/images/vehr-hero.mp4",
-  heroVideoInset: { left: "2.554%", top: "3.272%", width: "94.955%", height: "92.869%" },
-  heroVideoPoster: "/images/vehr-hero-cover.png",
   featureImages: [],
-  heroPrototypeLink: { href: "https://visual-ehr.vercel.app/", icon: "/images/prototype-arrow.png" },
+  caseStudyHighlights: {
+    frames: [
+      {
+        id: "problem",
+        title: "Problem",
+        summary:
+          "Current EHRs often force clinicians to piece together fragmented information, scan dense lists without clear signal, and mentally reconstruct the patient story across disconnected views.",
+        images: [
+          {
+            src: "/images/vehr/problem1.png",
+            modalPrimarySrc: "/images/vehr/problem1a.png",
+            alt: "Fragmented, uncoupled data in clinical workflows",
+            thumbnailTitle: "Fragmented, uncoupled data",
+            modalTitle: "Fragmented, uncoupled data",
+            modalBody:
+              "Clinicians often have to piece together patient information across disconnected screens, forcing them to reconstruct the patient story manually.",
+          },
+          {
+            src: "/images/vehr/problem2.png",
+            modalPrimarySrc: "/images/vehr/problem2a.png",
+            alt: "Overload without insight",
+            thumbnailTitle: "Overload, without insight",
+            modalTitle: "Overload, without insight",
+            modalBody:
+              "Dense lists and source-based views expose a great deal of data, but make patterns, priorities, and meaningful change harder to see.",
+          },
+          {
+            src: "/images/vehr/problem3.png",
+            modalPrimarySrc: "/images/vehr/problem3a.png",
+            alt: "Mental model mismatch",
+            thumbnailTitle: "Mental model mismatch",
+            modalTitle: "Mental model mismatch",
+            modalBody:
+              "Traditional EHR structures reflect data sources more than clinical reasoning, creating friction when clinicians are trying to understand problems over time.",
+          },
+        ],
+      },
+      {
+        id: "solution",
+        title: "Solution",
+        summary:
+          "The concept replaces fragmented, source-based chart review with a unified longitudinal view organized around problems, change over time, and patient context.",
+        images: [
+          {
+            src: "/images/vehr/research1.png",
+            alt: "Problem-oriented summary view",
+            thumbnailTitle: "Problem-oriented summary",
+            modalTitle: "Problem-oriented summary",
+            modalBody:
+              "Organizes the record around active conditions and key changes instead of forcing clinicians to gather signal across separate tabs.",
+          },
+          {
+            src: "/images/vehr/research2.png",
+            alt: "Longitudinal timeline of clinical data",
+            thumbnailTitle: "Longitudinal timeline",
+            modalTitle: "Longitudinal timeline",
+            modalBody:
+              "Encounters, vitals, diagnoses, and patient-reported data align across time, making relationships and change easier to interpret.",
+          },
+          {
+            src: "/images/vehr/research3.png",
+            alt: "Patient-reported outcome detail",
+            thumbnailTitle: "Outcome detail",
+            modalTitle: "Patient-reported outcome detail",
+            modalBody:
+              "Interval-based summaries make patient-reported outcomes easier to scan while preserving severity, trend, and underlying observations.",
+          },
+        ],
+      },
+      {
+        id: "whyItMatters",
+        title: "Why it matters",
+        summary:
+          "When the record is organized around problems and time, patterns become easier to see, chart review becomes less fragmented, and patient-reported signals become more usable in day-to-day decisions.",
+        images: [
+          {
+            src: "/images/vehr/patterns.png",
+            alt: "Patterns and signal across the chart",
+            thumbnailTitle: "Clearer patterns",
+            modalTitle: "A clearer picture of patient change",
+            modalBody:
+              "Acute-care visits, elevated vitals, higher symptom burden, and worse lab values cluster in one period, then improve across follow-up. The timeline makes that change visible in one place instead of forcing clinicians to reconstruct it across separate screens.",
+          },
+          {
+            src: "/images/vehr/treatment.png",
+            alt: "Treatment context in the longitudinal timeline",
+            thumbnailTitle: "Treatment context, in place",
+            modalTitle: "Treatment context, in place",
+            modalBody:
+              "Medication status is visible in the timeline, while in-context detail clarifies dose state and timing when needed. That helps clinicians interpret treatment without leaving the longitudinal view.",
+          },
+          {
+            src: "/images/vehr/voice.png",
+            alt: "Patient-reported symptoms in clinical context",
+            thumbnailTitle: "Patient voice in clinical context",
+            modalTitle: "Patient voice in clinical context",
+            modalBody:
+              "Patient-reported symptoms appear in context, with summaries that make severity, trend, and supporting observations easier to interpret over time. That helps patient voice inform the clinical picture instead of sitting in a separate silo.",
+          },
+        ],
+      },
+    ],
+  },
   meta: [
     { label: "Role", value: "Product Design Lead" },
     { label: "Primary Users", value: "Clinicians & care teams" },
     { label: "Focus", value: "Patterns, change, and context" },
   ],
-  blurbs: {
-    problem: "Important clinical patterns are often buried across disconnected parts of the EHR.",
-    solution:
-      "I designed a unified charting view that brings encounters, vitals, labs, medications, and patient-reported symptoms into one visual timeline.",
-    whyItMatters:
-      "This helps clinicians see relationships across the record faster and understand the patient's trajectory with less chart digging.",
+  summaryBlock: {
+    label: "SUMMARY",
+    body: "I collaborated with a practicing physician to rethink the cognitive burden of conventional EHRs. The concept replaces tabbed, source-oriented records with a problem-oriented timeline that helps clinicians review charts more efficiently and understand the patient more quickly.",
   },
   testimonial: {
     quote:
@@ -44,7 +140,7 @@ const freseniusProject = {
   projectLabel: "Fresenius Medical Care",
   projectLogo: "/images/fresenius-project-logo.png",
   projectDate: "2022-2023",
-  title: "Human Factors Rigor",
+  title: "Modernizing In-clinic Refills",
   descriptor:
     "Digitizing In-clinic Refills for 2,800+ clinics and 43,000+ patients",
   heroImage: "/images/fresenius-hero.png",
@@ -148,7 +244,7 @@ const ascensionProject = {
   projectLabel: "Dell Children's Health Plan",
   projectLogo: "/images/ascension-project-logo.png",
   projectDate: "2023-2024",
-  title: "Care Access Modernization",
+  title: "Responsive Care Access",
   descriptor: "Responsive portal for 40,000+ members",
   heroImage: "/images/dellchildrens-laptop-hero.png",
   heroImageAlt: "Dell Children's Health Plan — laptop view",
@@ -198,12 +294,16 @@ export default function Home() {
             >
               Selected work
             </h2>
-            <ProjectSection {...vehrProject} />
-            <div className="mt-28 md:mt-36 lg:mt-40">
+            <ProjectSection
+              {...vehrProject}
+              hideMetaTopBorder
+              metaSectionStackGap="gap-16"
+            />
+            <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection {...freseniusProject} />
             </div>
             {/* <ProjectSection {...vinylHealthProject} /> */}
-            <div className="mt-28 md:mt-36 lg:mt-40">
+            <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection {...ascensionProject} narrowSingleFeatureByPx={232} />
             </div>
 
