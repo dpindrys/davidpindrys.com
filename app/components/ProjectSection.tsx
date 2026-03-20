@@ -44,6 +44,8 @@ interface Blurbs {
 interface SummaryBlock {
   label: string;
   body: string;
+  /** Optional line below body: same type scale as body, styled as a text link */
+  prototypeLink?: { href: string; label: string };
 }
 
 interface ProjectSectionProps {
@@ -138,6 +140,36 @@ export default function ProjectSection({
             <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
               {summaryBlock.body}
             </p>
+            {summaryBlock.prototypeLink ? (
+              <p className="mt-3 font-sans font-normal text-[16px] leading-[1.5]">
+                <a
+                  href={summaryBlock.prototypeLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-black underline decoration-black/35 underline-offset-[0.2em] transition-colors hover:decoration-black/70"
+                  aria-label={`${summaryBlock.prototypeLink.label} (opens in new tab)`}
+                >
+                  <span>{summaryBlock.prototypeLink.label}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="shrink-0 text-black/70"
+                    aria-hidden
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              </p>
+            ) : null}
           </div>
         </div>
       )}

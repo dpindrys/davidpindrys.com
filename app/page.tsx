@@ -126,6 +126,10 @@ const vehrProject = {
   summaryBlock: {
     label: "SUMMARY",
     body: "I collaborated with a practicing physician to rethink the cognitive burden of conventional EHRs. The concept replaces tabbed, source-oriented records with a problem-oriented timeline that helps clinicians review charts more efficiently and understand the patient more quickly.",
+    prototypeLink: {
+      href: "https://visual-ehr.vercel.app/",
+      label: "Explore the prototype",
+    },
   },
   testimonial: {
     quote:
