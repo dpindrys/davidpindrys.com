@@ -8,6 +8,7 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
+import { createPortal } from "react-dom";
 
 export interface CaseStudyHighlightImage {
   src?: string;
@@ -89,6 +90,11 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
   const baseId = useId();
   const [activeFrame, setActiveFrame] = useState(0);
   const [modal, setModal] = useState<ModalState>(null);
+  const [portalReady, setPortalReady] = useState(false);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
 
   const frameCount = frames.length;
   const current = frames[activeFrame];
@@ -310,16 +316,19 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
         </div>
       </section>
 
-      {modal && modalImg && (
-        <div
-          className="fixed inset-0 z-[100] flex cursor-pointer max-[800px]:min-h-0 max-[800px]:flex-col max-[800px]:bg-[#FAFAFA] min-[801px]:items-center min-[801px]:justify-center min-[801px]:bg-black/80 min-[801px]:p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={`${baseId}-modal-title`}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) closeModal();
-          }}
-        >
+      {portalReady &&
+        modal &&
+        modalImg &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[100] m-0 flex cursor-pointer max-[800px]:h-[100dvh] max-[800px]:min-h-[100dvh] max-[800px]:w-full max-[800px]:min-w-0 max-[800px]:flex-col max-[800px]:bg-[#FAFAFA] max-[800px]:p-0 min-[801px]:items-center min-[801px]:justify-center min-[801px]:bg-black/80 min-[801px]:p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`${baseId}-modal-title`}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) closeModal();
+            }}
+          >
           <button
             type="button"
             className={`absolute right-4 top-4 z-[102] max-[800px]:right-4 max-[800px]:top-[max(1rem,env(safe-area-inset-top))] min-[801px]:right-6 min-[801px]:top-6 ${modalSquareBtnClass}`}
@@ -338,7 +347,7 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
             <>
               <button
                 type="button"
-                className={`absolute left-4 top-1/2 z-[102] hidden -translate-y-1/2 min-[801px]:inline-flex min-[801px]:left-6 ${modalSquareBtnClass}`}
+                className={`absolute left-4 top-1/2 z-[102] max-[800px]:hidden min-[801px]:inline-flex min-[801px]:left-6 -translate-y-1/2 ${modalSquareBtnClass}`}
                 aria-label="Previous item"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -349,7 +358,7 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
               </button>
               <button
                 type="button"
-                className={`absolute right-4 top-1/2 z-[102] hidden -translate-y-1/2 min-[801px]:inline-flex min-[801px]:right-6 ${modalSquareBtnClass}`}
+                className={`absolute right-4 top-1/2 z-[102] max-[800px]:hidden min-[801px]:inline-flex min-[801px]:right-6 -translate-y-1/2 ${modalSquareBtnClass}`}
                 aria-label="Next item"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -455,8 +464,9 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
               </button>
             </div>
           ) : null}
-        </div>
-      )}
+        </div>,
+          document.body
+        )}
     </>
   );
 }
