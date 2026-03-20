@@ -1,3 +1,3 @@
-/** Local section labels (e.g. How we can work together, Selected work) */
+/** Local section labels — same typographic treatment as ROLE / SUMMARY markers */
 export const sectionHeadingClass =
-  "font-sans font-bold text-[15px] leading-tight tracking-tight text-[#666]";
+  "font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800";

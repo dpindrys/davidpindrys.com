@@ -27,6 +27,7 @@ const vehrProject = {
             src: "/images/vehr/problem1.png",
             modalPrimarySrc: "/images/vehr/problem1a.png",
             alt: "Fragmented, uncoupled data in clinical workflows",
+            caption: "Source: Epic Systems interface screenshot",
             thumbnailTitle: "Fragmented, uncoupled data",
             modalTitle: "Fragmented, uncoupled data",
             modalBody:
@@ -36,6 +37,7 @@ const vehrProject = {
             src: "/images/vehr/problem2.png",
             modalPrimarySrc: "/images/vehr/problem2a.png",
             alt: "Overload without insight",
+            caption: "Source: Epic Systems interface screenshot",
             thumbnailTitle: "Overload, without insight",
             modalTitle: "Overload, without insight",
             modalBody:
@@ -45,6 +47,7 @@ const vehrProject = {
             src: "/images/vehr/problem3.png",
             modalPrimarySrc: "/images/vehr/problem3a.png",
             alt: "Mental model mismatch",
+            caption: "Source: Epic Systems interface screenshot",
             thumbnailTitle: "Mental model mismatch",
             modalTitle: "Mental model mismatch",
             modalBody:

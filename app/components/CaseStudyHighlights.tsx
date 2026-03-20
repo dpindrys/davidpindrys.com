@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
-  type TouchEvent as ReactTouchEvent,
 } from "react";
 
 export interface CaseStudyHighlightImage {
@@ -136,35 +135,46 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
     setActiveFrame(frameIndex);
   }, [modal, frames, modalTotal]);
 
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
 
-  const handleModalTouchStart = useCallback((e: ReactTouchEvent) => {
-    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  }, []);
+  /** Mobile (≤800px): horizontal swipe on modal body to change slide (native listeners avoid touch-action conflicts). */
+  useEffect(() => {
+    if (!modal) return;
+    const el = modalScrollRef.current;
+    if (!el) return;
 
-  const handleModalTouchEnd = useCallback(
-    (e: ReactTouchEvent) => {
-      if (!touchStart.current) return;
+    let startX = 0;
+    let startY = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
       if (typeof window !== "undefined" && window.matchMedia("(min-width: 801px)").matches) {
-        touchStart.current = null;
         return;
       }
-      if (modalTotal <= 1) {
-        touchStart.current = null;
-        return;
-      }
+      if (modalTotal <= 1) return;
+      if (e.changedTouches.length !== 1) return;
       const endX = e.changedTouches[0].clientX;
       const endY = e.changedTouches[0].clientY;
-      const dx = endX - touchStart.current.x;
-      const dy = endY - touchStart.current.y;
-      touchStart.current = null;
-      if (Math.abs(dx) < 48) return;
-      if (Math.abs(dx) < Math.abs(dy)) return;
+      const dx = endX - startX;
+      const dy = endY - startY;
+      if (Math.abs(dx) < 40) return;
+      if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
       if (dx > 0) goModalImage(-1);
       else goModalImage(1);
-    },
-    [goModalImage, modalTotal]
-  );
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [modal, modalTotal, goModalImage]);
 
   useEffect(() => {
     if (!modal) return;
@@ -238,8 +248,8 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
                   onClick={() => setActiveFrame(i)}
                   className={`min-h-[44px] border-b pb-1 pt-0.5 text-left font-sans text-[15px] leading-snug transition-colors sm:text-[16px] ${
                     selected
-                      ? "-mb-px border-[#00AAFF] border-b-2 font-semibold text-black"
-                      : "border-black/15 font-normal text-black/55 hover:border-black/25 hover:text-black/80"
+                      ? "cursor-default -mb-px border-[#00AAFF] border-b-2 font-semibold text-black"
+                      : "cursor-pointer border-black/15 font-normal text-black/55 hover:border-black/25 hover:text-black/80"
                   }`}
                 >
                   {f.title}
@@ -258,16 +268,16 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
               {current.summary}
             </p>
 
-            <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:grid lg:grid-cols-3 lg:gap-3 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden">
+            <div className="flex flex-col gap-4 max-[800px]:w-full min-[801px]:grid min-[801px]:grid-cols-3 min-[801px]:gap-3">
               {current.images.map((img, idx) => (
                 <div
                   key={`${current.id}-${idx}`}
-                  className="flex w-[min(100%,min(280px,calc(100vw-4rem)))] shrink-0 snap-center flex-col items-center gap-1.5 lg:w-auto lg:min-w-0 lg:snap-none"
+                  className="flex w-full flex-col items-center gap-1.5 min-[801px]:min-w-0"
                 >
                   <button
                     type="button"
                     onClick={() => openModal(activeFrame, idx)}
-                    className="relative block w-full min-w-0 cursor-zoom-in border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-0"
+                    className="relative block w-full min-w-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-0"
                     aria-label={`Open details: ${modalHeading(img)}`}
                   >
                     {img.placeholder || !img.src ? (
@@ -302,7 +312,7 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
 
       {modal && modalImg && (
         <div
-          className="fixed inset-0 z-[100] flex max-[800px]:min-h-0 max-[800px]:flex-col max-[800px]:bg-[#FAFAFA] min-[801px]:items-center min-[801px]:justify-center min-[801px]:bg-black/80 min-[801px]:p-4"
+          className="fixed inset-0 z-[100] flex cursor-pointer max-[800px]:min-h-0 max-[800px]:flex-col max-[800px]:bg-[#FAFAFA] min-[801px]:items-center min-[801px]:justify-center min-[801px]:bg-black/80 min-[801px]:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby={`${baseId}-modal-title`}
@@ -352,10 +362,9 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
           ) : null}
 
           <div
-            className="relative z-[101] flex min-h-0 w-full touch-pan-y flex-col overflow-y-auto rounded-sm border border-black/[0.06] bg-[#FAFAFA] shadow-[0_24px_80px_rgba(0,0,0,0.2)] max-[800px]:mt-0 max-[800px]:max-h-none max-[800px]:min-h-0 max-[800px]:flex-1 max-[800px]:rounded-none max-[800px]:border-0 max-[800px]:shadow-none max-[800px]:pt-16 max-[800px]:pb-28 min-[801px]:mt-10 min-[801px]:max-h-[min(90vh,100%)] min-[801px]:max-w-3xl min-[801px]:flex-none"
+            ref={modalScrollRef}
+            className="relative z-[101] flex min-h-0 w-full cursor-default flex-col overflow-y-auto overscroll-y-contain rounded-sm border border-black/[0.06] bg-[#FAFAFA] shadow-[0_24px_80px_rgba(0,0,0,0.2)] max-[800px]:mt-0 max-[800px]:max-h-none max-[800px]:min-h-0 max-[800px]:flex-1 max-[800px]:rounded-none max-[800px]:border-0 max-[800px]:shadow-none max-[800px]:pt-16 max-[800px]:pb-28 min-[801px]:mt-10 min-[801px]:max-h-[min(90vh,100%)] min-[801px]:max-w-3xl min-[801px]:flex-none"
             onClick={(e) => e.stopPropagation()}
-            onTouchStart={handleModalTouchStart}
-            onTouchEnd={handleModalTouchEnd}
           >
             <div className="flex flex-col gap-8 px-6 py-10 sm:px-10 sm:py-12 md:gap-10 max-[800px]:px-5 max-[800px]:pb-8 max-[800px]:pt-4">
               <div className="flex flex-col gap-4">
@@ -388,12 +397,19 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
                     );
                   }
                   return (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={primarySrc}
-                      alt={modalImg.alt}
-                      className="w-full max-h-[min(52vh,560px)] object-contain object-top max-[800px]:max-h-[min(45vh,420px)]"
-                    />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={primarySrc}
+                        alt={modalImg.alt}
+                        className="w-full max-h-[min(52vh,560px)] object-contain object-top max-[800px]:max-h-[min(45vh,420px)]"
+                      />
+                      {modalImg.caption ? (
+                        <p className="mt-2 font-sans text-[13px] leading-snug text-black/55">
+                          {modalImg.caption}
+                        </p>
+                      ) : null}
+                    </>
                   );
                 })()}
 
@@ -411,7 +427,7 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
 
           {modalTotal > 1 ? (
             <div
-              className="fixed inset-x-0 bottom-0 z-[102] flex items-center justify-center gap-8 border-t border-black/[0.08] bg-[#FAFAFA] px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] max-[800px]:flex min-[801px]:hidden"
+              className="fixed inset-x-0 bottom-0 z-[102] flex cursor-default items-center justify-center gap-8 border-t border-black/[0.08] bg-[#FAFAFA] px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] max-[800px]:flex min-[801px]:hidden"
               role="group"
               aria-label="Previous and next item"
             >
