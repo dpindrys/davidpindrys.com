@@ -16,7 +16,7 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "David Pindrys — Healthcare Product Design",
+  title: "David Pindrys, Healthcare Product Design",
   description:
     "Portfolio of David Pindrys, a product designer focused on clinical tools, healthcare workflows, and human factors.",
 };

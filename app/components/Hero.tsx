@@ -62,7 +62,7 @@ export default function Hero() {
             href="https://cal.com/dpindrys/30min"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Joining your team — schedule a hiring conversation (opens in new tab)"
+            aria-label="Joining your team, schedule a hiring conversation (opens in new tab)"
             className="flex flex-col rounded-2xl border-2 border-[#005077] bg-white p-5 md:p-6 min-h-0 h-full text-left no-underline shadow-none hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0F0F0]"
           >
             <h3 className="font-sans font-bold text-[16px] leading-snug text-black">
@@ -79,7 +79,7 @@ export default function Hero() {
             href="https://cal.com/dpindrys/15min"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Supporting your project — schedule a project intro (opens in new tab)"
+            aria-label="Supporting your project, schedule a project intro (opens in new tab)"
             className="flex flex-col rounded-2xl border-2 border-[#005077] bg-white p-5 md:p-6 min-h-0 h-full text-left no-underline shadow-none hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0F0F0]"
           >
             <h3 className="font-sans font-bold text-[16px] leading-snug text-black">

@@ -6,9 +6,39 @@ import {
   useId,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
+
+/** Position for a video layered on the modal primary image (percent or px, relative to the image wrapper) */
+export interface ModalVideoInset {
+  left?: string;
+  top?: string;
+  width?: string;
+  height?: string;
+  right?: string;
+  bottom?: string;
+}
+
+/** Default: right half of the still, flush bottom, 55px taller than the image (extends above). */
+const DEFAULT_MODAL_VIDEO_INSET: ModalVideoInset = {
+  left: "50%",
+  right: "0",
+  top: "-55px",
+  bottom: "0",
+};
+
+function modalVideoInsetStyle(inset: ModalVideoInset): CSSProperties {
+  const s: CSSProperties = {};
+  if (inset.left !== undefined) s.left = inset.left;
+  if (inset.top !== undefined) s.top = inset.top;
+  if (inset.right !== undefined) s.right = inset.right;
+  if (inset.bottom !== undefined) s.bottom = inset.bottom;
+  if (inset.width !== undefined) s.width = inset.width;
+  if (inset.height !== undefined) s.height = inset.height;
+  return s;
+}
 
 export interface CaseStudyHighlightImage {
   src?: string;
@@ -25,6 +55,10 @@ export interface CaseStudyHighlightImage {
   modalPrimarySrc?: string;
   /** Optional secondary supporting image or crop in the modal */
   modalSecondarySrc?: string;
+  /** Optional video drawn on top of the modal primary image (e.g. wireframe animation over a composite still) */
+  modalVideoSrc?: string;
+  /** Position of the video over the modal image (wrapper is the relative container around the still) */
+  modalVideoInset?: ModalVideoInset;
 }
 
 export interface CaseStudyHighlightFrame {
@@ -81,20 +115,35 @@ function modalHeading(img: CaseStudyHighlightImage): string {
   );
 }
 
-/** Square nav / close control — same footprint at all breakpoints */
+/** Square nav / close control, same footprint at all breakpoints */
 const modalSquareBtnClass =
   "inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-black/10 bg-white text-xl leading-none text-black/80 shadow-sm transition-colors hover:bg-black/[0.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25";
 
-export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlightsData }) {
+const sectionMarkerClass =
+  "font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800";
+
+export default function CaseStudyHighlights({
+  data,
+  showHighlightsLabel = true,
+}: {
+  data: CaseStudyHighlightsData;
+  /** Renders the small editorial “HIGHLIGHTS” marker above the tab row */
+  showHighlightsLabel?: boolean;
+}) {
   const { frames } = data;
   const baseId = useId();
   const [activeFrame, setActiveFrame] = useState(0);
   const [modal, setModal] = useState<ModalState>(null);
   const [portalReady, setPortalReady] = useState(false);
+  const [modalVideoLoadError, setModalVideoLoadError] = useState(false);
 
   useEffect(() => {
     setPortalReady(true);
   }, []);
+
+  useEffect(() => {
+    if (!modal) setModalVideoLoadError(false);
+  }, [modal]);
 
   const frameCount = frames.length;
   const current = frames[activeFrame];
@@ -122,6 +171,9 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
       ? frames[modalLocal.frameIndex].images[modalLocal.imageIndex]
       : null;
 
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+  const modalVideoRef = useRef<HTMLVideoElement>(null);
+
   const goModalImage = useCallback(
     (dir: -1 | 1) => {
       setModal((m) => {
@@ -141,7 +193,15 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
     setActiveFrame(frameIndex);
   }, [modal, frames, modalTotal]);
 
-  const modalScrollRef = useRef<HTMLDivElement>(null);
+  /** Ensure modal video plays after the portal mounts the video element. */
+  useEffect(() => {
+    if (!modal || !modalImg?.modalVideoSrc) return;
+    setModalVideoLoadError(false);
+    const t = window.setTimeout(() => {
+      modalVideoRef.current?.play().catch(() => {});
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, [modal, modalImg?.modalVideoSrc]);
 
   /** Mobile (≤800px): horizontal swipe on modal body to change slide (native listeners avoid touch-action conflicts). */
   useEffect(() => {
@@ -226,6 +286,14 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
 
   if (!frames.length) return null;
 
+  const thumbCount = current.images.length;
+  const thumbGridClass =
+    thumbCount <= 1
+      ? "flex flex-col gap-4 max-[800px]:w-full min-[801px]:mx-auto min-[801px]:max-w-xl min-[801px]:grid min-[801px]:grid-cols-1 min-[801px]:gap-3"
+      : thumbCount === 2
+        ? "flex flex-col gap-4 max-[800px]:w-full min-[801px]:mx-auto min-[801px]:max-w-4xl min-[801px]:grid min-[801px]:grid-cols-2 min-[801px]:gap-3"
+        : "flex flex-col gap-4 max-[800px]:w-full min-[801px]:grid min-[801px]:grid-cols-3 min-[801px]:gap-3";
+
   return (
     <>
       <section
@@ -235,6 +303,9 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
         aria-label="Case study"
       >
         <div className="flex flex-col gap-5 sm:gap-6">
+          {showHighlightsLabel ? (
+            <span className={sectionMarkerClass}>Highlights</span>
+          ) : null}
           <div
             role="tablist"
             aria-label="Frames"
@@ -274,7 +345,7 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
               {current.summary}
             </p>
 
-            <div className="flex flex-col gap-4 max-[800px]:w-full min-[801px]:grid min-[801px]:grid-cols-3 min-[801px]:gap-3">
+            <div className={thumbGridClass}>
               {current.images.map((img, idx) => (
                 <div
                   key={`${current.id}-${idx}`}
@@ -407,12 +478,63 @@ export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlight
                   }
                   return (
                     <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={primarySrc}
-                        alt={modalImg.alt}
-                        className="w-full max-h-[min(52vh,560px)] object-contain object-top max-[800px]:max-h-[min(45vh,420px)]"
-                      />
+                      <div
+                        className={
+                          modalImg.modalVideoSrc
+                            ? "w-full overflow-visible pt-[55px]"
+                            : "w-full"
+                        }
+                      >
+                        <div className="relative w-full overflow-visible">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={primarySrc}
+                            alt={modalImg.alt}
+                            className={`relative z-0 w-full max-h-[min(52vh,560px)] object-contain max-[800px]:max-h-[min(45vh,420px)] ${
+                              modalImg.modalVideoSrc ? "object-bottom" : "object-top"
+                            }`}
+                          />
+                          {modalImg.modalVideoSrc ? (
+                            <div
+                              className="pointer-events-none absolute z-10 overflow-hidden rounded-r-md"
+                              style={modalVideoInsetStyle({
+                                ...DEFAULT_MODAL_VIDEO_INSET,
+                                ...modalImg.modalVideoInset,
+                              })}
+                              aria-hidden
+                            >
+                              <video
+                                ref={modalVideoRef}
+                                src={modalImg.modalVideoSrc}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="auto"
+                                className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                onLoadedData={(e) => {
+                                  setModalVideoLoadError(false);
+                                  void e.currentTarget.play().catch(() => {});
+                                }}
+                                onError={() => setModalVideoLoadError(true)}
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                      {modalImg.modalVideoSrc && modalVideoLoadError ? (
+                        <p className="font-sans text-[13px] leading-snug text-red-700/90" role="alert">
+                          Video did not load. Add the file to{" "}
+                          <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
+                            public{modalImg.modalVideoSrc}
+                          </code>{" "}
+                          (Next.js serves files from the{" "}
+                          <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
+                            public
+                          </code>{" "}
+                          folder at the site root).
+                        </p>
+                      ) : null}
                       {modalImg.caption ? (
                         <p className="mt-2 font-sans text-[13px] leading-snug text-black/55">
                           {modalImg.caption}

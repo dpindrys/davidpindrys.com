@@ -118,7 +118,7 @@ export default function Carousel({ slides, caption }: CarouselProps) {
   const legacyCaption = s?.caption ?? caption;
   const prevIndex = (activeIndex - 1 + total) % total;
   const nextIndex = (activeIndex + 1) % total;
-  // Key by slideIndex so the same slide DOM element is reused when it moves left/center/right — enables smooth transform transition
+  // Key by slideIndex so the same slide DOM element is reused when it moves left/center/right; enables smooth transform transition
   const slots: { position: "left" | "center" | "right"; slideIndex: number }[] = [
     { position: "left", slideIndex: prevIndex },
     { position: "center", slideIndex: activeIndex },
@@ -237,7 +237,7 @@ export default function Carousel({ slides, caption }: CarouselProps) {
           })}
         </div>
 
-        {/* Dots — 44px hit area, 12px circle; loop-aware */}
+        {/* Dots: 44px hit area, 12px circle; loop-aware */}
         <div className="mt-4 flex gap-2.5 justify-center items-center">
           {slides.map((_, i) => (
             <button

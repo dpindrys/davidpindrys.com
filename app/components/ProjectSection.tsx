@@ -89,6 +89,8 @@ interface ProjectSectionProps {
   metaSectionStackGap?: string;
   /** Optional mini case study (e.g. VEHR) after summary + quote */
   caseStudyHighlights?: CaseStudyHighlightsData;
+  /** When false, hides the small “HIGHLIGHTS” label above the tab row */
+  caseStudyHighlightsShowLabel?: boolean;
 }
 
 export default function ProjectSection({
@@ -116,6 +118,7 @@ export default function ProjectSection({
   hideMetaTopBorder = false,
   metaSectionStackGap = "gap-10",
   caseStudyHighlights,
+  caseStudyHighlightsShowLabel,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
   const [showPlayOverlay, setShowPlayOverlay] = useState(hasPlayOverlay);
@@ -240,7 +243,7 @@ export default function ProjectSection({
   return (
     <article className="flex flex-col gap-16 w-full">
 
-      {/* Label · Title · Descriptor — 20px between each */}
+      {/* Label · Title · Descriptor, 20px between each */}
       <div className="flex flex-col gap-5 w-full">
         <div className="flex w-full items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-3">
@@ -282,10 +285,10 @@ export default function ProjectSection({
         <img
           src={heroImage}
           alt={heroImageAlt}
-          className="w-full h-auto rounded-2xl block"
+          className="block h-auto w-full"
         />
 
-        {/* Video overlay — clip wrapper hides black bars, video overflows inside */}
+        {/* Video overlay: clip wrapper hides black bars, video overflows inside */}
         {heroVideo && heroVideoInset && (
           <div
             className="absolute overflow-hidden rounded-[1%]"
@@ -353,12 +356,12 @@ export default function ProjectSection({
           <img
             src={heroOverlayImage}
             alt={heroOverlayImageAlt ?? ""}
-            className="absolute bottom-0 right-0 h-[90%] w-auto object-contain drop-shadow-2xl"
+            className="absolute bottom-0 right-0 h-[90%] w-auto object-contain"
           />
         )}
       </div>
 
-      {/* View prototype button — below hero, above the line; centered, same size as descriptor/subtitle */}
+      {/* View prototype button: below hero, above the line; centered, same size as descriptor/subtitle */}
       {heroPrototypeLink && (
         <div className="flex justify-center">
           <a
@@ -376,14 +379,14 @@ export default function ProjectSection({
         </div>
       )}
 
-      {/* Carousel (optional) — between hero and feature images; sits on line above ROLE when present */}
+      {/* Carousel (optional): between hero and feature images; sits on line above ROLE when present */}
       {carousel && carousel.slides.length > 0 && (
         <div className="-mb-10">
           <Carousel slides={carousel.slides} caption={carousel.caption} />
         </div>
       )}
 
-      {/* Feature thumbnails with labels — only if any images; single image = full width, flush with line above ROLE */}
+      {/* Feature thumbnails with labels: only if any images; single image = full width, flush with line above ROLE */}
       {featureImages.length > 0 && (
       <div className={featureImages.length === 1 ? "w-full -mb-16" : "grid grid-cols-3 gap-8 w-full"}>
         {featureImages.map((img, i) => {
@@ -430,7 +433,7 @@ export default function ProjectSection({
       {/* Metadata + lower content (50/50 when blurbs present) */}
       <div className={`flex w-full flex-col ${metaSectionStackGap}`}>
 
-        {/* Metadata — horizontal on desktop, vertical stack on mobile */}
+        {/* Metadata: horizontal on desktop, vertical stack on mobile */}
         <div
           className={`flex flex-col gap-0 md:flex-row md:gap-0 ${
             hideMetaTopBorder ? "pt-0" : "border-t border-black/10 pt-8"
@@ -470,7 +473,10 @@ export default function ProjectSection({
         {hasCaseStudyHighlights ? (
           <div className="flex w-full flex-col gap-6 sm:gap-7">
             {lowerContentRow}
-            <CaseStudyHighlights data={caseStudyHighlights!} />
+            <CaseStudyHighlights
+              data={caseStudyHighlights!}
+              showHighlightsLabel={caseStudyHighlightsShowLabel ?? true}
+            />
           </div>
         ) : (
           lowerContentRow

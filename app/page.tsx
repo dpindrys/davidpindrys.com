@@ -4,7 +4,6 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
-import type { CarouselSlide } from "./components/Carousel";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -13,7 +12,7 @@ const vehrProject = {
   title: "Clinical Sensemaking",
   descriptor: "Visualizing longitudinal patient health information",
   heroImage: "/images/vehr-hero.png",
-  heroImageAlt: "VEHR Technologies — patient timeline interface on iPad",
+  heroImageAlt: "VEHR Technologies, patient timeline interface on iPad",
   featureImages: [],
   caseStudyHighlights: {
     frames: [
@@ -151,58 +150,122 @@ const freseniusProject = {
   descriptor:
     "Digitizing In-clinic Refills for 2,800+ clinics and 43,000+ patients",
   heroImage: "/images/fresenius-hero.png",
-  heroImageAlt: "Fresenius Medical Care — in-clinic refill interface on iPad",
-  carousel: {
-    slides: [
-      {
-        type: "image",
-        src: "/images/fresenius-user.png",
-        alt: "Nurses in a refill workflow context",
-        captionTitle: "Ethnographic study",
-        captionBody: "Observed a refill workflow with many details nurses had to track.",
-        width: 512,
-        height: 384,
-      },
-      {
-        type: "video",
-        src: "/images/fresenius-objectwireframe.mp4",
-        captionTitle: "Object mapping",
-        captionBody: "Mapped every object into a wireframe to ensure complete coverage.",
-        height: 535,
-      },
-      {
-        type: "image",
-        src: "/images/fresenius-datelabel.png",
-        alt: "Date display in refill interface",
-        captionTitle: "User testing",
-        captionBody: "Tested date display and found nurses preferred exact dates over relative labels.",
-        width: 512,
-        height: 491,
-      },
-      {
-        type: "image",
-        src: "/images/fresenius-addresses.png",
-        alt: "Address management in refill dashboard",
-        captionTitle: "Edge-case design",
-        captionBody: "Brought address management into the dashboard to keep nurses in the refill flow.",
-        width: 740,
-        height: 573,
-      },
-    ] satisfies CarouselSlide[],
-  },
+  heroImageAlt: "Fresenius Medical Care, in-clinic refill interface on iPad",
   featureImages: [],
   meta: [
     { label: "Role", value: "Senior UX Designer" },
     { label: "Primary Users", value: "Nurses and dietitians" },
     { label: "Focus", value: "Safety, accuracy, and throughput" },
   ],
-  blurbs: {
-    problem:
-      "Clinic workflows relied on manual, scattered intake and review steps that slowed staff down and increased the risk medication delays or mishandling.",
-    solution:
-      "I led research and design for a digital in-clinic refill workflow that reduced cognitive load, streamlined staff work, and improved patient oversight.",
-    whyItMatters:
-      "Staff reported roughly 70% faster refills across 2,800+ clinics, supporting 43,000+ patients.",
+  summaryBlock: {
+    label: "SUMMARY",
+    body:
+      "Clinic workflows relied on manual, scattered intake and review steps that slowed staff and increased risk. I led research and design for a digital in-clinic refill workflow that reduced cognitive load, streamlined handoffs, and improved patient oversight. Staff reported roughly 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
+  },
+  caseStudyHighlights: {
+    frames: [
+      {
+        id: "challenge",
+        title: "Challenge",
+        summary:
+          "Digitizing refill work meant translating a manual, coordination-heavy process into a digital workflow without losing the context nurses needed to act safely and confidently.",
+        images: [
+          {
+            src: "/images/frx/raf.png",
+            modalPrimarySrc: "/images/frx/raf.jpg",
+            alt: "Reliance on RAF forms in the refill workflow",
+            thumbnailTitle: "Reliance on RAF forms",
+            modalTitle: "Reliance on RAF forms",
+            modalBody:
+              "Critical refill details were carried through paper RAF forms and supporting artifacts, creating delays, increasing manual effort, and introducing opportunities for error.",
+          },
+          {
+            src: "/images/frx/objects.png",
+            modalPrimarySrc: "/images/frx/objects.jpg",
+            alt: "Many moving objects in the refill workflow",
+            thumbnailTitle: "Many moving objects",
+            modalTitle: "Many moving objects",
+            modalBody:
+              "Refill work involved multiple objects, dependencies, and decision points, from patient and medication details to refill status, addresses, and supporting forms, making the workflow hard to track and coordinate.",
+          },
+          {
+            src: "/images/frx/context.png",
+            modalPrimarySrc: "/images/frx/context.jpg",
+            alt: "Context without overload",
+            thumbnailTitle: "Context without overload",
+            modalTitle: "Context without overload",
+            modalBody:
+              "The first digital refill workflow had to provide enough information for confident next-step decisions without overwhelming staff. The challenge was preserving essential context while deciding what to emphasize, what to defer, and how to reduce clutter without losing trust.",
+          },
+        ],
+      },
+      {
+        id: "solution",
+        title: "Solution",
+        summary:
+          "The redesigned refill workflow brought the core objects, steps, and decision points into a clearer shared structure that was easier for staff to follow and support.",
+        images: [
+          {
+            src: "/images/frx/structuring.png",
+            modalPrimarySrc: "/images/frx/structuring.png",
+            alt: "Structuring the objects, object grid and wireframe composite",
+            thumbnailTitle: "Structuring the objects",
+            modalTitle: "Structuring the objects",
+            modalBody:
+              "We mapped the core objects involved in refill work, clarified how they related to one another, and used that model to shape a clearer, more buildable digital workflow.",
+            modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
+          },
+          {
+            src: "/images/fresenius-hero.png",
+            alt: "Digitizing the workflow in CareTeamHub",
+            thumbnailTitle: "Digitizing the workflow",
+            modalTitle: "Digitizing the workflow",
+            modalBody:
+              "The refill process was brought into CareTeamHub, where nurses already worked daily, replacing fragmented manual coordination with a more structured in-product workflow.",
+          },
+          {
+            placeholder: true,
+            alt: "Progressive disclosure of key details",
+            thumbnailTitle: "Progressive disclosure of key details",
+            modalTitle: "Progressive disclosure of key details",
+            modalBody:
+              "The workflow kept essential information in one view so nurses could stay oriented, while revealing additional detail as needed. This reduced clutter without hiding the context required to make the next decision.",
+          },
+        ],
+      },
+      {
+        id: "whyItMatters",
+        title: "Why it matters",
+        summary:
+          "The redesign reduced ambiguity in a high-friction clinical workflow, helping staff follow refill work more confidently and making the process better suited for scale.",
+        images: [
+          {
+            placeholder: true,
+            alt: "Less manual coordination",
+            thumbnailTitle: "Less manual coordination",
+            modalTitle: "Less manual coordination",
+            modalBody:
+              "Bringing refill work into one structured workflow reduced dependence on paper forms, scattered artifacts, and phone-based coordination.",
+          },
+          {
+            placeholder: true,
+            alt: "Clearer next steps",
+            thumbnailTitle: "Clearer next steps",
+            modalTitle: "Clearer next steps",
+            modalBody:
+              "By surfacing only the information needed for the next decision, the workflow made refill progress easier to follow and reduced uncertainty about what needed to happen next.",
+          },
+          {
+            placeholder: true,
+            alt: "Better support for scale",
+            thumbnailTitle: "Better support for scale",
+            modalTitle: "Better support for scale",
+            modalBody:
+              "A clearer digital structure made the refill process easier to support across thousands of patients and many clinics, reducing friction in a workflow that had previously depended on manual workarounds.",
+          },
+        ],
+      },
+    ],
   },
   testimonial: {
     quote:
@@ -213,7 +276,7 @@ const freseniusProject = {
   },
 };
 
-/* Vinyl Health — commented out for now
+/* Vinyl Health, commented out for now
 const vinylHealthProject = {
   projectLabel: "Vinyl Health",
   projectLogo: "/images/vinylhealth-project-logo.png",
@@ -253,25 +316,118 @@ const ascensionProject = {
   projectDate: "2023-2024",
   title: "Responsive Care Access",
   descriptor: "Responsive portal for 40,000+ members",
-  heroImage: "/images/dellchildrens-laptop-hero.png",
-  heroImageAlt: "Dell Children's Health Plan — laptop view",
-  heroOverlayImage: "/images/dellchildrens-mobile-hero.png",
-  heroOverlayImageAlt: "Dell Children's Health Plan — mobile view",
-  featureImages: [
-    { src: "/images/dell-screens.png", alt: "Dell Children's Health Plan portal screens", label: "" },
-  ],
+  heroImage: "/images/dellchildrens-hero.png",
+  heroImageAlt: "Dell Children's Health Plan, responsive member portal",
+  featureImages: [],
   meta: [
     { label: "Role", value: "Senior Product Designer" },
     { label: "Primary Users", value: "Patients & caregivers" },
     { label: "Focus", value: "Access, usability, and compliance" },
   ],
-  blurbs: {
-    problem:
-      "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements.",
-    solution:
-      "I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability.",
-    whyItMatters:
-      "The portal met Medicaid guidelines and continued serving 40,000+ members.",
+  summaryBlock: {
+    label: "SUMMARY",
+    body:
+      "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
+  },
+  caseStudyHighlights: {
+    frames: [
+      {
+        id: "problem",
+        title: "Problem",
+        summary:
+          "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements.",
+        images: [
+          {
+            placeholder: true,
+            alt: "Legacy portal experience",
+            thumbnailTitle: "Legacy portal experience",
+            modalTitle: "Legacy portal experience",
+            modalBody:
+              "Placeholder, replace with a screen or artifact that shows the prior portal state and limitations.",
+          },
+          {
+            placeholder: true,
+            alt: "Compliance and Medicaid requirements",
+            thumbnailTitle: "Compliance gaps",
+            modalTitle: "Compliance gaps",
+            modalBody:
+              "Placeholder, replace with evidence of where the experience fell short of Medicaid expectations.",
+          },
+          {
+            placeholder: true,
+            alt: "Member-facing functionality",
+            thumbnailTitle: "Limited member tools",
+            modalTitle: "Limited member tools",
+            modalBody:
+              "Placeholder, replace with a view that highlights missing or weak member workflows before the redesign.",
+          },
+        ],
+      },
+      {
+        id: "solution",
+        title: "Solution",
+        summary:
+          "I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability.",
+        images: [
+          {
+            placeholder: true,
+            alt: "Responsive portal experience",
+            thumbnailTitle: "Responsive portal",
+            modalTitle: "Responsive portal",
+            modalBody:
+              "Placeholder, replace with a representative responsive layout across breakpoints.",
+          },
+          {
+            placeholder: true,
+            alt: "Expanded member workflows",
+            thumbnailTitle: "Expanded workflows",
+            modalTitle: "Expanded workflows",
+            modalBody:
+              "Placeholder, replace with flows such as care team designation, ID card, or prior auth.",
+          },
+          {
+            placeholder: true,
+            alt: "Lean team delivery",
+            thumbnailTitle: "Shipping with a lean team",
+            modalTitle: "Shipping with a lean team",
+            modalBody:
+              "Placeholder, replace with a timeline, milestone, or collaboration artifact if helpful.",
+          },
+        ],
+      },
+      {
+        id: "whyItMatters",
+        title: "Why it matters",
+        summary:
+          "The portal met Medicaid guidelines and continued serving 40,000+ members.",
+        images: [
+          {
+            placeholder: true,
+            alt: "Medicaid guidelines met",
+            thumbnailTitle: "Guidelines met",
+            modalTitle: "Guidelines met",
+            modalBody:
+              "Placeholder, replace with a compliance or outcomes note tied to Medicaid requirements.",
+          },
+          {
+            placeholder: true,
+            alt: "Members served",
+            thumbnailTitle: "40,000+ members",
+            modalTitle: "40,000+ members",
+            modalBody:
+              "Placeholder, replace with scale or reach context for the live portal.",
+          },
+          {
+            placeholder: true,
+            alt: "Sustained service",
+            thumbnailTitle: "Sustained service",
+            modalTitle: "Sustained service",
+            modalBody:
+              "Placeholder, replace with continuity or support story after launch.",
+          },
+        ],
+      },
+    ],
   },
   testimonial: {
     quote:
@@ -307,11 +463,19 @@ export default function Home() {
               metaSectionStackGap="gap-16"
             />
             <div className="mt-56 md:mt-72 lg:mt-80">
-              <ProjectSection {...freseniusProject} />
+              <ProjectSection
+                {...freseniusProject}
+                hideMetaTopBorder
+                metaSectionStackGap="gap-16"
+              />
             </div>
             {/* <ProjectSection {...vinylHealthProject} /> */}
             <div className="mt-56 md:mt-72 lg:mt-80">
-              <ProjectSection {...ascensionProject} narrowSingleFeatureByPx={232} />
+              <ProjectSection
+                {...ascensionProject}
+                hideMetaTopBorder
+                metaSectionStackGap="gap-16"
+              />
             </div>
 
           </div>
