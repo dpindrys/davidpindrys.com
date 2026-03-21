@@ -33,24 +33,24 @@ const vehrProject = {
               "Patient information is often split across separate views for labs, notes, medications, encounters, and other data sources. Clinicians have to stitch those pieces together manually to understand what has been happening over time.",
           },
           {
-            src: "/images/vehr/problem2.png",
-            modalPrimarySrc: "/images/vehr/problem2a.png",
-            alt: "Overload without insight",
-            caption: "Source: Epic Systems interface screenshot",
-            thumbnailTitle: "Overload, without insight",
-            modalTitle: "Overload, without insight",
-            modalBody:
-              "Dense lists and source-based views expose a great deal of data, but make patterns, priorities, and meaningful change harder to see.",
-          },
-          {
             src: "/images/vehr/problem3.png",
             modalPrimarySrc: "/images/vehr/problem3a.png",
-            alt: "Mental model mismatch",
+            alt: "Mental model mismatch between EHR structure and clinical reasoning",
             caption: "Epic Systems interface screenshot",
             thumbnailTitle: "Mental model mismatch",
             modalTitle: "Mental model mismatch",
             modalBody:
               "Most EHR structures mirror how data is stored, not how clinicians think. Clinical reasoning is problem-oriented and time-based, so source-driven navigation creates friction when users are trying to understand a patient's condition in context.",
+          },
+          {
+            src: "/images/vehr/problem2.png",
+            modalPrimarySrc: "/images/vehr/problem2a.png",
+            alt: "Dense data with weak clinical signal",
+            caption: "Source: Epic Systems interface screenshot",
+            thumbnailTitle: "Dense data, weak signal",
+            modalTitle: "Dense data, weak signal",
+            modalBody:
+              "Even when EHRs try to visualize patient data, the result may still be difficult to interpret. Overlapping trends and missing clinical context make it hard to see what is changing, what matters now, and how the patient is doing overall.",
           },
         ],
       },
@@ -61,14 +61,6 @@ const vehrProject = {
           "The concept replaces fragmented, source-based chart review with a unified longitudinal view organized around problems, change over time, and patient context.",
         images: [
           {
-            src: "/images/vehr/research1.png",
-            alt: "Problem-oriented summary view",
-            thumbnailTitle: "Problem-oriented summary",
-            modalTitle: "Problem-oriented summary",
-            modalBody:
-              "Organizes the record around active conditions, key changes, and current status so clinicians can understand the case without gathering signal across separate tabs.",
-          },
-          {
             src: "/images/vehr/research2.png",
             alt: "Longitudinal timeline of clinical data",
             thumbnailTitle: "Longitudinal timeline",
@@ -77,12 +69,20 @@ const vehrProject = {
               "Encounters, vitals, diagnoses, and patient-reported data align across time, making relationships and change easier to interpret.",
           },
           {
-            src: "/images/vehr/research3.png",
-            alt: "Patient-reported outcome detail",
-            thumbnailTitle: "Outcome detail",
-            modalTitle: "Patient-reported outcome detail",
+            src: "/images/vehr/research1.png",
+            alt: "Problem-oriented summary view",
+            thumbnailTitle: "Problem-oriented summary",
+            modalTitle: "Problem-oriented summary",
             modalBody:
-              "Interval-based summaries make patient-reported outcomes easier to scan while preserving severity, trend, and the underlying observations behind each score.",
+              "Organizes the record around active conditions, key changes, and current status so clinicians can understand the case without gathering signal across separate tabs.",
+          },
+          {
+            src: "/images/vehr/research3.png",
+            alt: "Signal first, detail on demand across clinical heat map views",
+            thumbnailTitle: "Signal first, detail on demand",
+            modalTitle: "Signal first, detail on demand",
+            modalBody:
+              "A common heat map structure makes clinical patterns easier to recognize across labs, vitals, medications, and patient-reported outcomes. Visual intensity surfaces what may need attention, embedded values preserve precision, and deeper layers of detail remain available without overwhelming the primary view.",
           },
         ],
       },
@@ -94,27 +94,27 @@ const vehrProject = {
         images: [
           {
             src: "/images/vehr/patterns.png",
-            alt: "Patterns and signal across the chart",
-            thumbnailTitle: "Clearer patterns",
-            modalTitle: "A clearer picture of patient change",
+            alt: "Signal-first scanning across clinical data types",
+            thumbnailTitle: "Signal first, detail on demand",
+            modalTitle: "Signal first, detail on demand",
             modalBody:
-              "Acute visits, elevated vitals, worsening symptom burden, and abnormal labs can be seen together in one view. That makes change easier to recognize and reduces the effort required to reconstruct the clinical picture across separate screens.",
+              "A common visual structure helps clinicians scan for what matters across data types. Color intensity surfaces severity and change at a glance, visible values preserve precision, and deeper detail remains available when needed.",
           },
           {
             src: "/images/vehr/treatment.png",
-            alt: "Treatment context in the longitudinal timeline",
-            thumbnailTitle: "Treatment context, in place",
-            modalTitle: "Treatment context, in place",
+            alt: "Clinical context aligned across time in a longitudinal view",
+            thumbnailTitle: "Context aligned across time",
+            modalTitle: "Context aligned across time",
             modalBody:
-              "Medication status remains visible in the timeline, with in-context detail available when needed. That helps clinicians interpret treatment response more efficiently without leaving the longitudinal view.",
+              "Clinical events and supporting data stay connected in a shared longitudinal view, making relationships between symptoms, treatment, and physiological change easier to interpret over time.",
           },
           {
             src: "/images/vehr/voice.png",
-            alt: "Patient-reported symptoms in clinical context",
-            thumbnailTitle: "Patient voice in clinical context",
-            modalTitle: "Patient voice in clinical context",
+            alt: "Related clinical data and outcomes in one view",
+            thumbnailTitle: "A clearer picture of patient change",
+            modalTitle: "A clearer picture of patient change",
             modalBody:
-              "Patient-reported symptoms appear alongside the rest of the clinical picture, with summaries that make severity, trend, and supporting observations easier to interpret over time. That makes patient-reported data more usable in day-to-day decisions.",
+              "Related encounters, vitals, diagnoses, labs, medications, and patient-reported outcomes appear together in one view. That makes meaningful change easier to recognize without reconstructing the clinical picture across separate screens.",
           },
         ],
       },
@@ -203,33 +203,40 @@ const freseniusProject = {
         id: "solution",
         title: "Solution",
         summary:
-          "The redesigned refill workflow organized the core objects, steps, and decisions into a clearer shared structure that was easier for staff to follow, easier for teams to support, and easier to build reliably.",
+          "I worked with stakeholders, engineers, and users to clarify the core objects involved in making refills, test key workflow assumptions, and shape a refill experience that brought essential details into one place for safer, more confident action.",
         images: [
+          // 1) Object model: existing structuring artifact + wireframe video
           {
             src: "/images/frx/structuring.png",
             modalPrimarySrc: "/images/frx/structuring.png",
-            alt: "Structuring the objects, object grid and wireframe composite",
+            alt: "Structuring refill objects: relationships and workflow foundation",
             thumbnailTitle: "Structuring the objects",
             modalTitle: "Structuring the objects",
             modalBody:
-              "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. We identified dozens of system objects involved in refill work, prioritized the core objects staff actually needed to act on, aligned the object model with data relationships, tested object clarity and actions with users, and used that structure to unblock front-end development.",
+              "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. That work helped identify the core objects staff needed to act on, align the workflow with data relationships, and give engineering a clearer foundation to build from.",
             modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
           },
+          // 2) Iteration: TODO replace with annotated prototype (red/green) when ready; using context image as stub
+          {
+            src: "/images/frx/context.png",
+            modalPrimarySrc: "/images/frx/context.jpg",
+            alt: "Prototype used to test refill workflow assumptions",
+            thumbnailTitle: "Testing and refining the workflow",
+            modalTitle: "Testing and refining the workflow",
+            modalBody:
+              "Early prototypes helped expose which assumptions about refill actions, status visibility, and date selection were working and which were not. User testing showed where nurses hesitated, what they scanned for first, and what needed to change before the workflow could support confident next-step decisions.",
+            caption:
+              "Green annotations mark assumptions that held up in testing. Red annotations mark assumptions that needed to change.",
+          },
+          // 3) Higher-fidelity unified flow
           {
             src: "/images/fresenius-hero.png",
-            alt: "Digitizing the workflow in CareTeamHub",
-            thumbnailTitle: "Digitizing the workflow",
-            modalTitle: "Digitizing the workflow",
+            modalPrimarySrc: "/images/fresenius-hero.png",
+            alt: "Refill workflow with request details, dates, shipping, and status in one place",
+            thumbnailTitle: "Bringing key details into one place",
+            modalTitle: "Bringing key details into one place",
             modalBody:
-              "The refill process was brought into CareTeamHub, where nurses already worked, replacing fragmented manual coordination with a more structured in-product workflow. Staff no longer had to manage refill work through disconnected forms, follow-up steps, and handoffs outside the product, and the workflow became easier to track, act on, and support in one place.",
-          },
-          {
-            placeholder: true,
-            alt: "Progressive disclosure of key details",
-            thumbnailTitle: "Progressive disclosure of key details",
-            modalTitle: "Progressive disclosure of key details",
-            modalBody:
-              "Essential refill information stayed visible in one view so nurses could remain oriented, while additional detail appeared only when needed. This reduced clutter without removing the context required for safe next-step decisions.",
+              "The final refill workflow kept essential details visible in one place so nurses could stay oriented while acting. Refill status, date selection, shipping context, and confirmation details were brought together in a clearer flow that reduced clutter without removing information needed for safe next-step decisions.",
           },
         ],
       },
