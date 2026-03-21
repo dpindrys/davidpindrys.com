@@ -245,7 +245,7 @@ export default function ProjectSection({
 
       {/* Label · Title · Descriptor, 20px between each */}
       <div className="flex flex-col gap-5 w-full">
-        <div className="flex w-full items-center justify-between gap-4">
+        <div className="flex min-h-8 w-full flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <div className="flex min-w-0 items-center gap-3">
             {projectLogo && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -256,13 +256,13 @@ export default function ProjectSection({
                 aria-hidden="true"
               />
             )}
-            <span className="font-sans text-[20px] font-bold leading-[1.21] text-black">
+            <span className="font-sans text-[20px] font-bold leading-none text-black">
               {projectLabel}
             </span>
           </div>
           {projectDate ? (
             <p
-              className="shrink-0 text-right font-sans text-[clamp(16px,1.9vw,28px)] font-normal leading-[1.4] text-black/70"
+              className="shrink-0 text-right font-sans text-[clamp(16px,1.9vw,28px)] font-normal leading-none text-black/70"
               aria-label={`Project years: ${projectDate}`}
             >
               {projectDate}

@@ -56,17 +56,17 @@ export default function Hero() {
 
       {/* Gap below label matches Selected work → project logo (page.tsx h2 mb-*) */}
       <div className="flex w-full flex-col gap-2 md:gap-5 lg:gap-10">
-        <h2 className={sectionHeadingClass}>How we can work together</h2>
+        <h2 className={sectionHeadingClass}>Ways to work with me</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full items-stretch">
           <a
             href="https://cal.com/dpindrys/30min"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Joining your team, schedule a hiring conversation (opens in new tab)"
+            aria-label="On your team, schedule a hiring conversation (opens in new tab)"
             className="flex flex-col rounded-2xl border-2 border-[#005077] bg-white p-5 md:p-6 min-h-0 h-full text-left no-underline shadow-none hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0F0F0]"
           >
             <h3 className="font-sans font-bold text-[16px] leading-snug text-black">
-              Joining your team
+              On your team
             </h3>
             <p className="mt-1.5 font-sans font-normal text-[15px] leading-[1.45] text-black/75">
               For full-time, contract, or fractional opportunities.
@@ -79,14 +79,14 @@ export default function Hero() {
             href="https://cal.com/dpindrys/15min"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Supporting your project, schedule a project intro (opens in new tab)"
+            aria-label="Project-based, schedule a project intro (opens in new tab)"
             className="flex flex-col rounded-2xl border-2 border-[#005077] bg-white p-5 md:p-6 min-h-0 h-full text-left no-underline shadow-none hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0F0F0]"
           >
             <h3 className="font-sans font-bold text-[16px] leading-snug text-black">
-              Supporting your project
+              Project-based
             </h3>
             <p className="mt-1.5 font-sans font-normal text-[15px] leading-[1.45] text-black/75">
-              For freelance, consulting, or project-based support.
+              Freelance, consulting, or scoped project support.
             </p>
             <span className="mt-auto pt-5 font-sans font-semibold text-[15px] leading-snug text-black">
               Schedule a project intro →
