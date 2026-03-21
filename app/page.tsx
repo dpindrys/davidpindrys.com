@@ -355,7 +355,7 @@ const vinylHealthProject = {
 */
 
 const ascensionProject = {
-  projectLabel: "Dell Children's Health Plan",
+  projectLabel: "Ascension Health",
   projectLogo: "/images/ascension-project-logo.png",
   projectDate: "2023-2024",
   title: "Responsive Care Access",
