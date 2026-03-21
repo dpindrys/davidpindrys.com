@@ -40,6 +40,20 @@ function modalVideoInsetStyle(inset: ModalVideoInset): CSSProperties {
   return s;
 }
 
+/** On-page text-led highlight (no image yet); quote + attribution in a compact chip */
+export interface TextHighlightChip {
+  quote: string;
+  attribution: string;
+}
+
+/** Featured testimonial block in the modal */
+export interface ModalTestimonial {
+  quote: string;
+  attribution: string;
+  /** Optional square headshot to the left of the attribution line */
+  avatarSrc?: string;
+}
+
 export interface CaseStudyHighlightImage {
   src?: string;
   alt: string;
@@ -47,10 +61,20 @@ export interface CaseStudyHighlightImage {
   placeholder?: boolean;
   /** Short editorial label under the thumbnail (page-level) */
   thumbnailTitle?: string;
+  /** Optional second line under the thumbnail title (short quote or proof fragment) */
+  thumbnailSubtitle?: string;
+  /** Text-led card: title + quote chip + attribution (skips empty image placeholder) */
+  textHighlight?: TextHighlightChip;
   /** Modal headline; falls back to thumbnailTitle or caption */
   modalTitle?: string;
   /** Supporting copy in the modal */
   modalBody?: string;
+  /** Optional quoted lines shown below the modal body (e.g. staff feedback) */
+  modalQuoteLines?: string[];
+  /** Stronger testimonial cards below the body (replaces quote-lines styling when set) */
+  modalTestimonials?: ModalTestimonial[];
+  /** When true, no image/video block is shown in the modal (e.g. evidence-only Why it matters) */
+  omitModalMedia?: boolean;
   /** Optional larger or alternate primary image in the modal */
   modalPrimarySrc?: string;
   /** Optional secondary supporting image or crop in the modal */
@@ -121,6 +145,9 @@ const modalSquareBtnClass =
 
 const sectionMarkerClass =
   "font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800";
+
+/** Fresenius “Why it matters” proof blocks */
+const WHY_QUOTE_FILL = "#076A8F";
 
 export default function CaseStudyHighlights({
   data,
@@ -357,15 +384,30 @@ export default function CaseStudyHighlights({
                     className="relative block w-full min-w-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-0"
                     aria-label={`Open details: ${modalHeading(img)}`}
                   >
-                    {img.placeholder || !img.src ? (
-                      <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 px-4 py-8">
-                        <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-black/45">
-                          Placeholder
-                        </span>
-                        <span className="text-center font-sans text-[13px] leading-snug text-black/55">
-                          {img.thumbnailTitle ?? img.caption ?? img.alt}
-                        </span>
+                    {img.textHighlight ? (
+                      <div className="flex w-full flex-col gap-2.5">
+                        {img.thumbnailTitle ? (
+                          <span className="w-full text-center font-sans text-[12px] font-semibold leading-snug tracking-[0.01em] text-black/85">
+                            {img.thumbnailTitle}
+                          </span>
+                        ) : null}
+                        <div
+                          className="flex min-h-[5.5rem] flex-col justify-between px-3.5 py-3 text-center font-sans"
+                          style={{ backgroundColor: WHY_QUOTE_FILL }}
+                        >
+                          <p className="text-[14px] font-semibold leading-snug text-white">
+                            {img.textHighlight.quote}
+                          </p>
+                          <p className="mt-2.5 text-[11px] font-medium leading-snug text-white/85">
+                            {img.textHighlight.attribution}
+                          </p>
+                        </div>
                       </div>
+                    ) : img.placeholder || !img.src ? (
+                      <div
+                        className="aspect-[4/3] w-full bg-[#E4E4E4]"
+                        aria-hidden
+                      />
                     ) : (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -375,10 +417,19 @@ export default function CaseStudyHighlights({
                       />
                     )}
                   </button>
-                  {img.thumbnailTitle ? (
-                    <span className="w-full text-center font-sans text-[12px] leading-snug tracking-[0.01em] text-black/55">
-                      {img.thumbnailTitle}
-                    </span>
+                  {!img.textHighlight ? (
+                    <div className="flex w-full flex-col items-center gap-1">
+                      {img.thumbnailTitle ? (
+                        <span className="w-full text-center font-sans text-[12px] leading-snug tracking-[0.01em] text-black/55">
+                          {img.thumbnailTitle}
+                        </span>
+                      ) : null}
+                      {img.thumbnailSubtitle ? (
+                        <span className="w-full text-center font-sans text-[11px] leading-snug tracking-[0.01em] text-black/45">
+                          {img.thumbnailSubtitle}
+                        </span>
+                      ) : null}
+                    </div>
                   ) : null}
                 </div>
               ))}
@@ -459,8 +510,59 @@ export default function CaseStudyHighlights({
                     {modalImg.modalBody}
                   </p>
                 ) : null}
+                {modalImg.modalTestimonials && modalImg.modalTestimonials.length > 0 ? (
+                  <div
+                    className={
+                      modalImg.modalTestimonials.length >= 2
+                        ? "mt-1 flex max-w-2xl flex-row gap-px bg-white"
+                        : "mt-1 flex max-w-2xl flex-col"
+                    }
+                  >
+                    {modalImg.modalTestimonials.map((t, qi) => (
+                      <div
+                        key={qi}
+                        className="flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
+                        style={{ backgroundColor: WHY_QUOTE_FILL }}
+                      >
+                        <p className="text-[15px] font-semibold leading-[1.45] text-white sm:text-[16px]">
+                          {t.quote}
+                        </p>
+                        <div className="mt-3 flex min-w-0 items-center gap-2.5">
+                          {t.avatarSrc ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={t.avatarSrc}
+                              alt=""
+                              className="h-9 w-9 shrink-0 rounded-full object-cover"
+                              width={36}
+                              height={36}
+                            />
+                          ) : null}
+                          <p className="min-w-0 text-[12px] font-medium leading-snug text-white/85 sm:text-[13px]">
+                            {t.attribution}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                {!modalImg.modalTestimonials?.length &&
+                modalImg.modalQuoteLines &&
+                modalImg.modalQuoteLines.length > 0 ? (
+                  <div className="mt-4 flex max-w-2xl flex-col gap-3 border-l-2 border-black/10 pl-4">
+                    {modalImg.modalQuoteLines.map((line, qi) => (
+                      <p
+                        key={qi}
+                        className="font-sans text-[15px] font-normal leading-[1.55] text-black/80"
+                      >
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
               </div>
 
+              {!modalImg.omitModalMedia ? (
               <div className="flex flex-col gap-6">
                 {(() => {
                   const primarySrc = modalImg.modalPrimarySrc ?? modalImg.src;
@@ -553,6 +655,7 @@ export default function CaseStudyHighlights({
                   />
                 ) : null}
               </div>
+              ) : null}
             </div>
           </div>
 

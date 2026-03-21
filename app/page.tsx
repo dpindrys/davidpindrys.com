@@ -10,7 +10,7 @@ const vehrProject = {
   projectLogo: "/images/VEHR-project-logo.png",
   projectDate: "2024",
   title: "Clinical Sensemaking",
-  descriptor: "Visualizing longitudinal patient health information",
+  descriptor: "A problem-oriented view of patient history over time",
   heroImage: "/images/vehr-hero.png",
   heroImageAlt: "VEHR Technologies, patient timeline interface on iPad",
   featureImages: [],
@@ -20,17 +20,17 @@ const vehrProject = {
         id: "problem",
         title: "Problem",
         summary:
-          "Current EHRs often force clinicians to piece together fragmented information, scan dense lists without clear signal, and mentally reconstruct the patient story across disconnected views.",
+          "Conventional EHRs often make chart review harder than it should be. Clinicians must piece together fragmented data across separate screens, scan dense source-based views, and reconstruct the patient story for themselves.",
         images: [
           {
             src: "/images/vehr/problem1.png",
             modalPrimarySrc: "/images/vehr/problem1a.png",
             alt: "Fragmented, uncoupled data in clinical workflows",
-            caption: "Source: Epic Systems interface screenshot",
+            caption: "Epic Systems interface screenshot",
             thumbnailTitle: "Fragmented, uncoupled data",
             modalTitle: "Fragmented, uncoupled data",
             modalBody:
-              "Clinicians often have to piece together patient information across disconnected screens, forcing them to reconstruct the patient story manually.",
+              "Patient information is often split across separate views for labs, notes, medications, encounters, and other data sources. Clinicians have to stitch those pieces together manually to understand what has been happening over time.",
           },
           {
             src: "/images/vehr/problem2.png",
@@ -46,11 +46,11 @@ const vehrProject = {
             src: "/images/vehr/problem3.png",
             modalPrimarySrc: "/images/vehr/problem3a.png",
             alt: "Mental model mismatch",
-            caption: "Source: Epic Systems interface screenshot",
+            caption: "Epic Systems interface screenshot",
             thumbnailTitle: "Mental model mismatch",
             modalTitle: "Mental model mismatch",
             modalBody:
-              "Traditional EHR structures reflect data sources more than clinical reasoning, creating friction when clinicians are trying to understand problems over time.",
+              "Most EHR structures mirror how data is stored, not how clinicians think. Clinical reasoning is problem-oriented and time-based, so source-driven navigation creates friction when users are trying to understand a patient's condition in context.",
           },
         ],
       },
@@ -66,7 +66,7 @@ const vehrProject = {
             thumbnailTitle: "Problem-oriented summary",
             modalTitle: "Problem-oriented summary",
             modalBody:
-              "Organizes the record around active conditions and key changes instead of forcing clinicians to gather signal across separate tabs.",
+              "Organizes the record around active conditions, key changes, and current status so clinicians can understand the case without gathering signal across separate tabs.",
           },
           {
             src: "/images/vehr/research2.png",
@@ -82,7 +82,7 @@ const vehrProject = {
             thumbnailTitle: "Outcome detail",
             modalTitle: "Patient-reported outcome detail",
             modalBody:
-              "Interval-based summaries make patient-reported outcomes easier to scan while preserving severity, trend, and underlying observations.",
+              "Interval-based summaries make patient-reported outcomes easier to scan while preserving severity, trend, and the underlying observations behind each score.",
           },
         ],
       },
@@ -90,7 +90,7 @@ const vehrProject = {
         id: "whyItMatters",
         title: "Why it matters",
         summary:
-          "When the record is organized around problems and time, patterns become easier to see, chart review becomes less fragmented, and patient-reported signals become more usable in day-to-day decisions.",
+          "Organizing the record around problems and time makes important patterns easier to see, reduces fragmentation in chart review, and helps patient-reported data contribute more directly to clinical decisions.",
         images: [
           {
             src: "/images/vehr/patterns.png",
@@ -98,7 +98,7 @@ const vehrProject = {
             thumbnailTitle: "Clearer patterns",
             modalTitle: "A clearer picture of patient change",
             modalBody:
-              "Acute-care visits, elevated vitals, higher symptom burden, and worse lab values cluster in one period, then improve across follow-up. The timeline makes that change visible in one place instead of forcing clinicians to reconstruct it across separate screens.",
+              "Acute visits, elevated vitals, worsening symptom burden, and abnormal labs can be seen together in one view. That makes change easier to recognize and reduces the effort required to reconstruct the clinical picture across separate screens.",
           },
           {
             src: "/images/vehr/treatment.png",
@@ -106,7 +106,7 @@ const vehrProject = {
             thumbnailTitle: "Treatment context, in place",
             modalTitle: "Treatment context, in place",
             modalBody:
-              "Medication status is visible in the timeline, while in-context detail clarifies dose state and timing when needed. That helps clinicians interpret treatment without leaving the longitudinal view.",
+              "Medication status remains visible in the timeline, with in-context detail available when needed. That helps clinicians interpret treatment response more efficiently without leaving the longitudinal view.",
           },
           {
             src: "/images/vehr/voice.png",
@@ -114,7 +114,7 @@ const vehrProject = {
             thumbnailTitle: "Patient voice in clinical context",
             modalTitle: "Patient voice in clinical context",
             modalBody:
-              "Patient-reported symptoms appear in context, with summaries that make severity, trend, and supporting observations easier to interpret over time. That helps patient voice inform the clinical picture instead of sitting in a separate silo.",
+              "Patient-reported symptoms appear alongside the rest of the clinical picture, with summaries that make severity, trend, and supporting observations easier to interpret over time. That makes patient-reported data more usable in day-to-day decisions.",
           },
         ],
       },
@@ -122,12 +122,12 @@ const vehrProject = {
   },
   meta: [
     { label: "Role", value: "Product Design Lead" },
-    { label: "Primary Users", value: "Clinicians & care teams" },
+    { label: "Primary Users", value: "Clinicians and care teams" },
     { label: "Focus", value: "Patterns, change, and context" },
   ],
   summaryBlock: {
     label: "SUMMARY",
-    body: "I collaborated with a practicing physician to rethink the cognitive burden of conventional EHRs. The concept replaces tabbed, source-oriented records with a problem-oriented timeline that helps clinicians review charts more efficiently and understand the patient more quickly.",
+    body: "I collaborated with a practicing physician to rethink how clinicians review patient histories in traditional EHRs. VEHR is a concept for problem-oriented chart review that brings encounters, symptoms, labs, and other signals into a longitudinal view, helping clinicians see patterns, relationships, and change over time.",
     prototypeLink: {
       href: "https://visual-ehr.vercel.app/",
       label: "Explore the prototype",
@@ -148,9 +148,9 @@ const freseniusProject = {
   projectDate: "2022-2023",
   title: "Modernizing In-clinic Refills",
   descriptor:
-    "Digitizing In-clinic Refills for 2,800+ clinics and 43,000+ patients",
+    "Digitizing a manual refill workflow across 2,800+ clinics and 43,000+ patients",
   heroImage: "/images/fresenius-hero.png",
-  heroImageAlt: "Fresenius Medical Care, in-clinic refill interface on iPad",
+  heroImageAlt: "Fresenius refill workflow interface",
   featureImages: [],
   meta: [
     { label: "Role", value: "Senior UX Designer" },
@@ -160,7 +160,7 @@ const freseniusProject = {
   summaryBlock: {
     label: "SUMMARY",
     body:
-      "Clinic workflows relied on manual, scattered intake and review steps that slowed staff and increased risk. I led research and design for a digital in-clinic refill workflow that reduced cognitive load, streamlined handoffs, and improved patient oversight. Staff reported roughly 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
+      "Clinic refill workflows depended on manual, fragmented intake and review steps that slowed staff, complicated handoffs, and made oversight harder. I led research and design for a digital in-clinic refill workflow that replaced a RAF-form-heavy process with a clearer, more efficient system for nurses and dietitians. Staff reported roughly 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
   },
   caseStudyHighlights: {
     frames: [
@@ -168,7 +168,7 @@ const freseniusProject = {
         id: "challenge",
         title: "Challenge",
         summary:
-          "Digitizing refill work meant translating a manual, coordination-heavy process into a digital workflow without losing the context nurses needed to act safely and confidently.",
+          "Digitizing refill work meant translating a manual, coordination-heavy process into a digital workflow without losing the context nurses and dietitians needed to act safely and confidently.",
         images: [
           {
             src: "/images/frx/raf.png",
@@ -177,7 +177,7 @@ const freseniusProject = {
             thumbnailTitle: "Reliance on RAF forms",
             modalTitle: "Reliance on RAF forms",
             modalBody:
-              "Critical refill details were carried through paper RAF forms and supporting artifacts, creating delays, increasing manual effort, and introducing opportunities for error.",
+              "Critical refill details were tracked through weekly RAF forms listing patients who needed refills, along with supporting paperwork and follow-up steps. The process was hard to track, easy to delay, and dependent on manual handoffs that increased the chance of missed details and error.",
           },
           {
             src: "/images/frx/objects.png",
@@ -186,7 +186,7 @@ const freseniusProject = {
             thumbnailTitle: "Many moving objects",
             modalTitle: "Many moving objects",
             modalBody:
-              "Refill work involved multiple objects, dependencies, and decision points, from patient and medication details to refill status, addresses, and supporting forms, making the workflow hard to track and coordinate.",
+              "Refill work involved multiple data objects, dependencies, and stakeholders, including nurses, dietitians, pharmacists, patient information, medication details, refill status, addresses, and supporting forms. Coordinating all of it across systems and handoffs made the workflow difficult to manage reliably.",
           },
           {
             src: "/images/frx/context.png",
@@ -195,7 +195,7 @@ const freseniusProject = {
             thumbnailTitle: "Context without overload",
             modalTitle: "Context without overload",
             modalBody:
-              "The first digital refill workflow had to provide enough information for confident next-step decisions without overwhelming staff. The challenge was preserving essential context while deciding what to emphasize, what to defer, and how to reduce clutter without losing trust.",
+              "The digital workflow needed to give staff enough context to make safe next-step decisions without recreating the clutter of the manual process. The design challenge was deciding what to surface, what to defer, and how to keep essential refill context visible without overwhelming users.",
           },
         ],
       },
@@ -203,7 +203,7 @@ const freseniusProject = {
         id: "solution",
         title: "Solution",
         summary:
-          "The redesigned refill workflow brought the core objects, steps, and decision points into a clearer shared structure that was easier for staff to follow and support.",
+          "The redesigned refill workflow organized the core objects, steps, and decisions into a clearer shared structure that was easier for staff to follow, easier for teams to support, and easier to build reliably.",
         images: [
           {
             src: "/images/frx/structuring.png",
@@ -212,7 +212,7 @@ const freseniusProject = {
             thumbnailTitle: "Structuring the objects",
             modalTitle: "Structuring the objects",
             modalBody:
-              "We mapped the core objects involved in refill work, clarified how they related to one another, and used that model to shape a clearer, more buildable digital workflow.",
+              "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. We identified dozens of system objects involved in refill work, prioritized the core objects staff actually needed to act on, aligned the object model with data relationships, tested object clarity and actions with users, and used that structure to unblock front-end development.",
             modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
           },
           {
@@ -221,7 +221,7 @@ const freseniusProject = {
             thumbnailTitle: "Digitizing the workflow",
             modalTitle: "Digitizing the workflow",
             modalBody:
-              "The refill process was brought into CareTeamHub, where nurses already worked daily, replacing fragmented manual coordination with a more structured in-product workflow.",
+              "The refill process was brought into CareTeamHub, where nurses already worked, replacing fragmented manual coordination with a more structured in-product workflow. Staff no longer had to manage refill work through disconnected forms, follow-up steps, and handoffs outside the product, and the workflow became easier to track, act on, and support in one place.",
           },
           {
             placeholder: true,
@@ -229,7 +229,7 @@ const freseniusProject = {
             thumbnailTitle: "Progressive disclosure of key details",
             modalTitle: "Progressive disclosure of key details",
             modalBody:
-              "The workflow kept essential information in one view so nurses could stay oriented, while revealing additional detail as needed. This reduced clutter without hiding the context required to make the next decision.",
+              "Essential refill information stayed visible in one view so nurses could remain oriented, while additional detail appeared only when needed. This reduced clutter without removing the context required for safe next-step decisions.",
           },
         ],
       },
@@ -237,31 +237,75 @@ const freseniusProject = {
         id: "whyItMatters",
         title: "Why it matters",
         summary:
-          "The redesign reduced ambiguity in a high-friction clinical workflow, helping staff follow refill work more confidently and making the process better suited for scale.",
+          "The digital refill workflow reduced time spent on refill coordination while making key details easier to track, review, and act on in daily clinic work.",
         images: [
           {
-            placeholder: true,
-            alt: "Less manual coordination",
-            thumbnailTitle: "Less manual coordination",
-            modalTitle: "Less manual coordination",
+            src: "/images/frx/saving.png",
+            alt: "Faster refill work",
+            thumbnailTitle: "Faster refill work",
+            modalTitle: "Faster refill work",
             modalBody:
-              "Bringing refill work into one structured workflow reduced dependence on paper forms, scattered artifacts, and phone-based coordination.",
+              "Staff reported roughly 70% faster refill work after the manual process was brought into CareTeamHub. In larger programs, that translated into meaningful weekly time savings and fewer calls to pharmacy.",
+            modalTestimonials: [
+              {
+                quote:
+                  "Using this feature eliminates the need to call pharmacy... they would be on the phone at least 15 min or more.",
+                attribution: "Shun D. Price, Facility Admin",
+                avatarSrc: "/images/frx/shaun.avif",
+              },
+              {
+                quote:
+                  "Realistically on a big program you're saving 2-3 hours per week.",
+                attribution: "Tara E. Towe, Home Therapies RN",
+                avatarSrc: "/images/frx/tara.avif",
+              },
+            ],
+            omitModalMedia: true,
           },
           {
-            placeholder: true,
-            alt: "Clearer next steps",
-            thumbnailTitle: "Clearer next steps",
-            modalTitle: "Clearer next steps",
+            src: "/images/frx/quick.png",
+            alt: "Better workflow support",
+            thumbnailTitle: "Better workflow support",
+            modalTitle: "Better workflow support",
             modalBody:
-              "By surfacing only the information needed for the next decision, the workflow made refill progress easier to follow and reduced uncertainty about what needed to happen next.",
+              "Staff described the workflow as easier, quicker, and simpler to use in the course of normal refill work. Clear refill status, dates, and next steps helped reduce friction in a high-volume workflow.",
+            modalTestimonials: [
+              {
+                quote:
+                  "My nurses have used the refill self-service and are very pleased with the easiness and reduction in time it takes.",
+                attribution: "Lyndsay A. Rodgers, Clinical Services Initiatives Mgr",
+                avatarSrc: "/images/frx/lyndsay.avif",
+              },
+              {
+                quote:
+                  "We all love it. Very convenient, quick way to review refills.",
+                attribution: "Krystal D. Antu, Dietitian",
+                avatarSrc: "/images/frx/krystal.avif",
+              },
+            ],
+            omitModalMedia: true,
           },
           {
-            placeholder: true,
-            alt: "Better support for scale",
-            thumbnailTitle: "Better support for scale",
-            modalTitle: "Better support for scale",
+            src: "/images/frx/shipment.png",
+            alt: "Stronger day-to-day oversight",
+            thumbnailTitle: "Stronger day-to-day oversight",
+            modalTitle: "Stronger day-to-day oversight",
             modalBody:
-              "A clearer digital structure made the refill process easier to support across thousands of patients and many clinics, reducing friction in a workflow that had previously depended on manual workarounds.",
+              "Bringing refill work into one workflow gave staff better visibility into shipment status, refill timing, and active refill needs. That made it easier to respond to patients and manage work without relying on fragmented handoffs.",
+            modalTestimonials: [
+              {
+                quote: "The feature to track shipments is invaluable.",
+                attribution: "Natisha Winegarner, HT RN",
+                avatarSrc: "/images/frx/natisha.avif",
+              },
+              {
+                quote:
+                  "Quick... was able to see shipment, call patient back within minutes.",
+                attribution: "Pat Denton, Home Therapies Program Manager",
+                avatarSrc: "/images/frx/pat.avif",
+              },
+            ],
+            omitModalMedia: true,
           },
         ],
       },
