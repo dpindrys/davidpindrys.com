@@ -61,7 +61,7 @@ const vehrProject = {
           "The concept replaces fragmented, source-based chart review with a unified longitudinal view organized around problems, change over time, and patient context.",
         images: [
           {
-            src: "/images/vehr/research2.png",
+            src: "/images/vehr/timeline.png",
             alt: "Longitudinal timeline of clinical data",
             thumbnailTitle: "Longitudinal timeline",
             modalTitle: "Longitudinal timeline",
@@ -378,7 +378,7 @@ const ascensionProject = {
     body:
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
   },
-  caseStudyHighlights: {
+  /* caseStudyHighlights: {
     frames: [
       {
         id: "problem",
@@ -477,7 +477,7 @@ const ascensionProject = {
         ],
       },
     ],
-  },
+  }, */
   testimonial: {
     quote:
       '"David designed previously unavailable Ascension portal workflows (care team/PCP designation, ID card requests, prior auth) and partnered effectively across product, engineering, and data to keep delivery moving."',

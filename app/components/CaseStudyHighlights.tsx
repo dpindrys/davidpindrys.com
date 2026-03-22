@@ -649,21 +649,13 @@ export default function CaseStudyHighlights({
                   }
                   return (
                     <>
-                      <div
-                        className={
-                          modalImg.modalVideoSrc
-                            ? "w-full overflow-visible pt-[55px]"
-                            : "w-full"
-                        }
-                      >
-                        <div className="relative w-full overflow-visible">
+                      <div className="w-full">
+                        <div className="relative w-full">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={primarySrc}
                             alt={modalImg.alt}
-                            className={`relative z-0 w-full max-h-[min(52vh,560px)] object-contain max-[800px]:max-h-[min(45vh,420px)] ${
-                              modalImg.modalVideoSrc ? "object-bottom" : "object-top"
-                            }`}
+                            className="relative z-0 block h-auto w-full"
                           />
                           {modalImg.modalVideoSrc ? (
                             <div
@@ -720,7 +712,7 @@ export default function CaseStudyHighlights({
                   <img
                     src={modalImg.modalSecondarySrc}
                     alt="Supporting detail"
-                    className="w-full max-h-[40vh] object-contain object-top opacity-95"
+                    className="block h-auto w-full"
                   />
                 ) : null}
               </div>
