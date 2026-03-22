@@ -215,28 +215,26 @@ const freseniusProject = {
             modalBody:
               "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. That work helped identify the core objects staff needed to act on, align the workflow with data relationships, and give engineering a clearer foundation to build from.",
             modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
+            modalSideBySide: true,
           },
-          // 2) Iteration: TODO replace with annotated prototype (red/green) when ready; using context image as stub
           {
-            src: "/images/frx/context.png",
-            modalPrimarySrc: "/images/frx/context.jpg",
-            alt: "Prototype used to test refill workflow assumptions",
+            src: "/images/frx/testing.png",
+            modalPrimarySrc: "/images/frx/testing.png",
+            alt: "Annotated prototype used to test refill workflow assumptions",
             thumbnailTitle: "Testing and refining the workflow",
             modalTitle: "Testing and refining the workflow",
             modalBody:
-              "Early prototypes helped expose which assumptions about refill actions, status visibility, and date selection were working and which were not. User testing showed where nurses hesitated, what they scanned for first, and what needed to change before the workflow could support confident next-step decisions.",
-            caption:
-              "Green annotations mark assumptions that held up in testing. Red annotations mark assumptions that needed to change.",
+              "Early prototypes helped test key assumptions about refill actions, status visibility, and date selection. Sessions with nurses revealed where the workflow created hesitation, what information they looked for first, and which changes were needed to support faster, more confident decisions.",
           },
-          // 3) Higher-fidelity unified flow
           {
-            src: "/images/fresenius-hero.png",
-            modalPrimarySrc: "/images/fresenius-hero.png",
+            src: "/images/frx/oneplace.png",
             alt: "Refill workflow with request details, dates, shipping, and status in one place",
             thumbnailTitle: "Bringing key details into one place",
             modalTitle: "Bringing key details into one place",
             modalBody:
-              "The final refill workflow kept essential details visible in one place so nurses could stay oriented while acting. Refill status, date selection, shipping context, and confirmation details were brought together in a clearer flow that reduced clutter without removing information needed for safe next-step decisions.",
+              "The final refill workflow allowed nurses to complete the task without leaving the page or becoming separated from the information they needed. As each step opened within the same view, prior context remained accessible, making it easier to move forward, verify details, and stay oriented throughout the refill.",
+            modalVideoSrc: "/images/frx/fresenius.mp4",
+            modalVideoOnly: true,
           },
         ],
       },

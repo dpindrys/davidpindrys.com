@@ -83,6 +83,10 @@ export interface CaseStudyHighlightImage {
   modalVideoSrc?: string;
   /** Position of the video over the modal image (wrapper is the relative container around the still) */
   modalVideoInset?: ModalVideoInset;
+  /** When true, render modalVideoSrc as standalone full-width video (no underlying still image) */
+  modalVideoOnly?: boolean;
+  /** When true, show image (left half, cropped) and video (right) side by side at equal height */
+  modalSideBySide?: boolean;
 }
 
 export interface CaseStudyHighlightFrame {
@@ -524,7 +528,7 @@ export default function CaseStudyHighlights({
                         className="flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
                         style={{ backgroundColor: WHY_QUOTE_FILL }}
                       >
-                        <p className="text-[15px] font-semibold leading-[1.45] text-white sm:text-[16px]">
+                        <p className="text-[17px] font-semibold leading-[1.45] text-white sm:text-[18px]">
                           {t.quote}
                         </p>
                         <div className="mt-3 flex min-w-0 items-center gap-2.5">
@@ -564,7 +568,72 @@ export default function CaseStudyHighlights({
 
               {!modalImg.omitModalMedia ? (
               <div className="flex flex-col gap-6">
-                {(() => {
+                {modalImg.modalVideoOnly && modalImg.modalVideoSrc ? (
+                  <div className="w-full">
+                    <video
+                      ref={modalVideoRef}
+                      src={modalImg.modalVideoSrc}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      className="w-full"
+                      onLoadedData={(e) => {
+                        setModalVideoLoadError(false);
+                        void e.currentTarget.play().catch(() => {});
+                      }}
+                      onError={() => setModalVideoLoadError(true)}
+                    />
+                    {modalVideoLoadError ? (
+                      <p className="mt-2 font-sans text-[13px] leading-snug text-red-700/90" role="alert">
+                        Video did not load. Add the file to{" "}
+                        <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
+                          public{modalImg.modalVideoSrc}
+                        </code>{" "}
+                        (Next.js serves files from the{" "}
+                        <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
+                          public
+                        </code>{" "}
+                        folder at the site root).
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+                {modalImg.modalSideBySide && modalImg.modalVideoSrc ? (() => {
+                  const sbsPrimary = modalImg.modalPrimarySrc ?? modalImg.src;
+                  if (!sbsPrimary) return null;
+                  return (
+                    <div className="flex w-full gap-4">
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={sbsPrimary}
+                          alt={modalImg.alt}
+                          className="h-full w-full object-cover object-left"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <video
+                          ref={modalVideoRef}
+                          src={modalImg.modalVideoSrc}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="auto"
+                          className="h-full w-full object-cover object-left"
+                          onLoadedData={(e) => {
+                            setModalVideoLoadError(false);
+                            void e.currentTarget.play().catch(() => {});
+                          }}
+                          onError={() => setModalVideoLoadError(true)}
+                        />
+                      </div>
+                    </div>
+                  );
+                })() : null}
+                {!modalImg.modalVideoOnly && !modalImg.modalSideBySide ? (() => {
                   const primarySrc = modalImg.modalPrimarySrc ?? modalImg.src;
                   if (!primarySrc) {
                     return (
@@ -644,7 +713,7 @@ export default function CaseStudyHighlights({
                       ) : null}
                     </>
                   );
-                })()}
+                })() : null}
 
                 {modalImg.modalSecondarySrc ? (
                   // eslint-disable-next-line @next/next/no-img-element
