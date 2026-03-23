@@ -327,7 +327,7 @@ export default function CaseStudyHighlights({
       <section
         tabIndex={0}
         onKeyDown={onSectionKeyDown}
-        className="w-full outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F6F4]"
+        className="w-full outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-4 focus-visible:ring-offset-[#F4F2EE]"
         aria-label="Case study"
       >
         <div className="flex flex-col gap-5 sm:gap-6">

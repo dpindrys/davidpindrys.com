@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${ebGaramond.variable}`} suppressHydrationWarning>
-      <body className="bg-[#F6F6F4] text-black font-sans">
+      <body className="bg-[#F4F2EE] text-black font-sans">
         <div className="h-5 w-full bg-[#00AAFF]" aria-hidden="true" />
         {children}
       </body>
