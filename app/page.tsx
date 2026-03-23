@@ -491,7 +491,7 @@ const ascensionProject = {
 export default function Home() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F0F0F0]">
+      <main className="min-h-screen overflow-x-visible bg-[#F6F6F4]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
           <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-12 pb-32 overflow-x-visible">
 

@@ -139,13 +139,16 @@ function BeforeAfterPanel({
 
 function MobilePanel() {
   return (
-    <BeforeAfterPanel
-      imageSrc="/images/dellchildrens/mobile.png"
-      imageAlt="Dell Children's responsive mobile portal"
-      title="Placeholder title"
-      paragraphs={[
-        "Placeholder: text for the mobile tab will be provided.",
-      ]}
-    />
+    <div className="flex w-full flex-col gap-3">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/dellchildrens/mobile.png"
+        alt="Dell Children's responsive mobile portal"
+        className="block h-auto w-full"
+      />
+      <p className="font-sans text-[15px] font-normal leading-[1.4] text-black/50">
+        Placeholder caption for the mobile view.
+      </p>
+    </div>
   );
 }

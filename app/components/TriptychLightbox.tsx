@@ -63,7 +63,7 @@ export default function TriptychLightbox({ items }: { items: TriptychItem[] }) {
             key={`${item.src}-${i}`}
             type="button"
             onClick={() => setOpenIndex(i)}
-            className="relative aspect-[16/10] w-full min-w-0 cursor-zoom-in overflow-hidden bg-transparent shadow-none outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F0F0F0]"
+            className="relative aspect-[16/10] w-full min-w-0 cursor-zoom-in overflow-hidden bg-transparent shadow-none outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F6F6F4]"
             aria-label={`View larger: ${item.alt}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
