@@ -10,6 +10,11 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import {
+  HIGHLIGHT_TAB_BAR_WRAPPER_CLASS,
+  HIGHLIGHT_TAB_LIST_CLASS,
+  highlightTabButtonClass,
+} from "./highlightTabStyles";
 
 /** Position for a video layered on the modal primary image (percent or px, relative to the image wrapper) */
 export interface ModalVideoInset {
@@ -147,20 +152,10 @@ function modalHeading(img: CaseStudyHighlightImage): string {
 const modalSquareBtnClass =
   "inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-black/10 bg-white text-xl leading-none text-black/80 shadow-sm transition-colors hover:bg-black/[0.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25";
 
-const sectionMarkerClass =
-  "font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800";
-
 /** Fresenius “Why it matters” proof blocks */
 const WHY_QUOTE_FILL = "#076A8F";
 
-export default function CaseStudyHighlights({
-  data,
-  showHighlightsLabel = true,
-}: {
-  data: CaseStudyHighlightsData;
-  /** Renders the small editorial “HIGHLIGHTS” marker above the tab row */
-  showHighlightsLabel?: boolean;
-}) {
+export default function CaseStudyHighlights({ data }: { data: CaseStudyHighlightsData }) {
   const { frames } = data;
   const baseId = useId();
   const [activeFrame, setActiveFrame] = useState(0);
@@ -331,36 +326,31 @@ export default function CaseStudyHighlights({
         aria-label="Case study"
       >
         <div className="flex flex-col gap-5 sm:gap-6">
-          {showHighlightsLabel ? (
-            <span className={sectionMarkerClass}>Highlights</span>
-          ) : null}
-          <div
-            role="tablist"
-            aria-label="Frames"
-            className="flex flex-wrap gap-x-6 gap-y-1 sm:gap-x-8"
-          >
-            {frames.map((f, i) => {
-              const selected = i === activeFrame;
-              return (
-                <button
-                  key={f.id}
-                  type="button"
-                  role="tab"
-                  id={`${baseId}-tab-${i}`}
-                  aria-selected={selected}
-                  aria-controls={`${baseId}-panel-${i}`}
-                  tabIndex={selected ? 0 : -1}
-                  onClick={() => setActiveFrame(i)}
-                  className={`min-h-[44px] border-b pb-1 pt-0.5 text-left font-sans text-[15px] leading-snug transition-colors sm:text-[16px] ${
-                    selected
-                      ? "cursor-default -mb-px border-[#00AAFF] border-b-2 font-semibold text-black"
-                      : "cursor-pointer border-black/15 font-normal text-black/55 hover:border-black/25 hover:text-black/80"
-                  }`}
-                >
-                  {f.title}
-                </button>
-              );
-            })}
+          <div className={HIGHLIGHT_TAB_BAR_WRAPPER_CLASS}>
+            <div
+              role="tablist"
+              aria-label="Case study sections"
+              className={HIGHLIGHT_TAB_LIST_CLASS}
+            >
+              {frames.map((f, i) => {
+                const selected = i === activeFrame;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="tab"
+                    id={`${baseId}-tab-${i}`}
+                    aria-selected={selected}
+                    aria-controls={`${baseId}-panel-${i}`}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setActiveFrame(i)}
+                    className={highlightTabButtonClass(selected)}
+                  >
+                    {f.title}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="grid w-full">

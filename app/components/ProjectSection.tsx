@@ -89,8 +89,6 @@ interface ProjectSectionProps {
   metaSectionStackGap?: string;
   /** Optional mini case study (e.g. VEHR) after summary + quote */
   caseStudyHighlights?: CaseStudyHighlightsData;
-  /** When false, hides the small “HIGHLIGHTS” label above the tab row */
-  caseStudyHighlightsShowLabel?: boolean;
   /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
   children?: ReactNode;
 }
@@ -120,7 +118,6 @@ export default function ProjectSection({
   hideMetaTopBorder = false,
   metaSectionStackGap = "gap-10",
   caseStudyHighlights,
-  caseStudyHighlightsShowLabel,
   children,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
@@ -477,10 +474,7 @@ export default function ProjectSection({
           <div className="flex w-full flex-col gap-6 sm:gap-7">
             {lowerContentRow}
             {hasCaseStudyHighlights && (
-              <CaseStudyHighlights
-                data={caseStudyHighlights!}
-                showHighlightsLabel={caseStudyHighlightsShowLabel ?? true}
-              />
+              <CaseStudyHighlights data={caseStudyHighlights!} />
             )}
             {children}
           </div>

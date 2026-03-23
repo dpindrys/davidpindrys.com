@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useId } from "react";
-
-const sectionMarkerClass =
-  "font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800";
+import {
+  HIGHLIGHT_TAB_BAR_WRAPPER_CLASS,
+  HIGHLIGHT_TAB_LIST_CLASS,
+  highlightTabButtonClass,
+} from "./highlightTabStyles";
 
 interface Tab {
   id: string;
@@ -46,35 +48,31 @@ export default function DellChildrensHighlights() {
 
   return (
     <section className="flex w-full flex-col gap-5 sm:gap-6">
-      <span className={sectionMarkerClass}>Highlights</span>
-
-      <div
-        role="tablist"
-        aria-label="Frames"
-        className="flex flex-wrap gap-x-6 gap-y-1 sm:gap-x-8"
-      >
-        {tabs.map((t, i) => {
-          const selected = i === active;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              id={`${baseId}-tab-${i}`}
-              aria-selected={selected}
-              aria-controls={`${baseId}-panel-${i}`}
-              tabIndex={selected ? 0 : -1}
-              onClick={() => setActive(i)}
-              className={`min-h-[44px] border-b pb-1 pt-0.5 text-left font-sans text-[15px] leading-snug transition-colors sm:text-[16px] ${
-                selected
-                  ? "cursor-default -mb-px border-[#00AAFF] border-b-2 font-semibold text-black"
-                  : "cursor-pointer border-black/15 font-normal text-black/55 hover:border-black/25 hover:text-black/80"
-              }`}
-            >
-              {t.title}
-            </button>
-          );
-        })}
+      <div className={HIGHLIGHT_TAB_BAR_WRAPPER_CLASS}>
+        <div
+          role="tablist"
+          aria-label="Dell Children’s highlights"
+          className={HIGHLIGHT_TAB_LIST_CLASS}
+        >
+          {tabs.map((t, i) => {
+            const selected = i === active;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                id={`${baseId}-tab-${i}`}
+                aria-selected={selected}
+                aria-controls={`${baseId}-panel-${i}`}
+                tabIndex={selected ? 0 : -1}
+                onClick={() => setActive(i)}
+                className={highlightTabButtonClass(selected)}
+              >
+                {t.title}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="grid w-full">
