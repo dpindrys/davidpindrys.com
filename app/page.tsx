@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
+import DellChildrensHighlights from "./components/DellChildrensHighlights";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -524,7 +525,9 @@ export default function Home() {
                 {...ascensionProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
-              />
+              >
+                <DellChildrensHighlights />
+              </ProjectSection>
             </div>
 
           </div>

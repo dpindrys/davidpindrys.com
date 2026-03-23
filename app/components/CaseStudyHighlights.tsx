@@ -177,8 +177,6 @@ export default function CaseStudyHighlights({
   }, [modal]);
 
   const frameCount = frames.length;
-  const current = frames[activeFrame];
-
   const goPrevFrame = useCallback(() => {
     setActiveFrame((i) => (i - 1 + frameCount) % frameCount);
   }, [frameCount]);
@@ -317,11 +315,10 @@ export default function CaseStudyHighlights({
 
   if (!frames.length) return null;
 
-  const thumbCount = current.images.length;
-  const thumbGridClass =
-    thumbCount <= 1
+  const thumbGridClassFor = (count: number) =>
+    count <= 1
       ? "flex flex-col gap-4 max-[800px]:w-full min-[801px]:mx-auto min-[801px]:max-w-xl min-[801px]:grid min-[801px]:grid-cols-1 min-[801px]:gap-3"
-      : thumbCount === 2
+      : count === 2
         ? "flex flex-col gap-4 max-[800px]:w-full min-[801px]:mx-auto min-[801px]:max-w-4xl min-[801px]:grid min-[801px]:grid-cols-2 min-[801px]:gap-3"
         : "flex flex-col gap-4 max-[800px]:w-full min-[801px]:grid min-[801px]:grid-cols-3 min-[801px]:gap-3";
 
@@ -351,7 +348,7 @@ export default function CaseStudyHighlights({
                   role="tab"
                   id={`${baseId}-tab-${i}`}
                   aria-selected={selected}
-                  aria-controls={`${baseId}-panel`}
+                  aria-controls={`${baseId}-panel-${i}`}
                   tabIndex={selected ? 0 : -1}
                   onClick={() => setActiveFrame(i)}
                   className={`min-h-[44px] border-b pb-1 pt-0.5 text-left font-sans text-[15px] leading-snug transition-colors sm:text-[16px] ${
@@ -366,78 +363,89 @@ export default function CaseStudyHighlights({
             })}
           </div>
 
-          <div
-            role="tabpanel"
-            id={`${baseId}-panel`}
-            aria-labelledby={`${baseId}-tab-${activeFrame}`}
-            className="flex flex-col gap-5 transition-opacity duration-200 ease-out motion-reduce:transition-none"
-          >
-            <p className="w-full font-sans font-normal text-[16px] leading-[1.5] text-black">
-              {current.summary}
-            </p>
+          <div className="grid w-full">
+            {frames.map((frame, fi) => (
+              <div
+                key={frame.id}
+                role="tabpanel"
+                id={`${baseId}-panel-${fi}`}
+                aria-labelledby={`${baseId}-tab-${fi}`}
+                className="col-start-1 row-start-1 flex flex-col gap-5 transition-opacity duration-200 ease-out motion-reduce:transition-none"
+                style={{
+                  visibility: fi === activeFrame ? "visible" : "hidden",
+                  opacity: fi === activeFrame ? 1 : 0,
+                }}
+                aria-hidden={fi !== activeFrame}
+              >
+                <p className="w-full font-sans font-normal text-[16px] leading-[1.5] text-black">
+                  {frame.summary}
+                </p>
 
-            <div className={thumbGridClass}>
-              {current.images.map((img, idx) => (
-                <div
-                  key={`${current.id}-${idx}`}
-                  className="flex w-full flex-col items-center gap-1.5 min-[801px]:min-w-0"
-                >
-                  <button
-                    type="button"
-                    onClick={() => openModal(activeFrame, idx)}
-                    className="relative block w-full min-w-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-0"
-                    aria-label={`Open details: ${modalHeading(img)}`}
-                  >
-                    {img.textHighlight ? (
-                      <div className="flex w-full flex-col gap-2.5">
-                        {img.thumbnailTitle ? (
-                          <span className="w-full text-center font-sans text-[12px] font-semibold leading-snug tracking-[0.01em] text-black/85">
-                            {img.thumbnailTitle}
-                          </span>
-                        ) : null}
-                        <div
-                          className="flex min-h-[5.5rem] flex-col justify-between px-3.5 py-3 text-center font-sans"
-                          style={{ backgroundColor: WHY_QUOTE_FILL }}
-                        >
-                          <p className="text-[14px] font-semibold leading-snug text-white">
-                            {img.textHighlight.quote}
-                          </p>
-                          <p className="mt-2.5 text-[11px] font-medium leading-snug text-white/85">
-                            {img.textHighlight.attribution}
-                          </p>
+                <div className={thumbGridClassFor(frame.images.length)}>
+                  {frame.images.map((img, idx) => (
+                    <div
+                      key={`${frame.id}-${idx}`}
+                      className="flex w-full flex-col items-center gap-1.5 min-[801px]:min-w-0"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => openModal(fi, idx)}
+                        className="relative block w-full min-w-0 cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-0"
+                        aria-label={`Open details: ${modalHeading(img)}`}
+                        tabIndex={fi === activeFrame ? 0 : -1}
+                      >
+                        {img.textHighlight ? (
+                          <div className="flex w-full flex-col gap-2.5">
+                            {img.thumbnailTitle ? (
+                              <span className="w-full text-center font-sans text-[12px] font-semibold leading-snug tracking-[0.01em] text-black/85">
+                                {img.thumbnailTitle}
+                              </span>
+                            ) : null}
+                            <div
+                              className="flex min-h-[5.5rem] flex-col justify-between px-3.5 py-3 text-center font-sans"
+                              style={{ backgroundColor: WHY_QUOTE_FILL }}
+                            >
+                              <p className="text-[14px] font-semibold leading-snug text-white">
+                                {img.textHighlight.quote}
+                              </p>
+                              <p className="mt-2.5 text-[11px] font-medium leading-snug text-white/85">
+                                {img.textHighlight.attribution}
+                              </p>
+                            </div>
+                          </div>
+                        ) : img.placeholder || !img.src ? (
+                          <div
+                            className="aspect-[4/3] w-full bg-[#E4E4E4]"
+                            aria-hidden
+                          />
+                        ) : (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={img.src}
+                            alt={img.alt}
+                            className="block h-auto w-full max-w-full align-top"
+                          />
+                        )}
+                      </button>
+                      {!img.textHighlight ? (
+                        <div className="flex w-full flex-col items-center gap-1">
+                          {img.thumbnailTitle ? (
+                            <span className="w-full text-center font-sans text-[12px] leading-snug tracking-[0.01em] text-black/55">
+                              {img.thumbnailTitle}
+                            </span>
+                          ) : null}
+                          {img.thumbnailSubtitle ? (
+                            <span className="w-full text-center font-sans text-[11px] leading-snug tracking-[0.01em] text-black/45">
+                              {img.thumbnailSubtitle}
+                            </span>
+                          ) : null}
                         </div>
-                      </div>
-                    ) : img.placeholder || !img.src ? (
-                      <div
-                        className="aspect-[4/3] w-full bg-[#E4E4E4]"
-                        aria-hidden
-                      />
-                    ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={img.src}
-                        alt={img.alt}
-                        className="block h-auto w-full max-w-full align-top"
-                      />
-                    )}
-                  </button>
-                  {!img.textHighlight ? (
-                    <div className="flex w-full flex-col items-center gap-1">
-                      {img.thumbnailTitle ? (
-                        <span className="w-full text-center font-sans text-[12px] leading-snug tracking-[0.01em] text-black/55">
-                          {img.thumbnailTitle}
-                        </span>
-                      ) : null}
-                      {img.thumbnailSubtitle ? (
-                        <span className="w-full text-center font-sans text-[11px] leading-snug tracking-[0.01em] text-black/45">
-                          {img.thumbnailSubtitle}
-                        </span>
                       ) : null}
                     </div>
-                  ) : null}
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

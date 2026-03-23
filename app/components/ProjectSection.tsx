@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import Image from "next/image";
 import Carousel, { type CarouselSlide } from "./Carousel";
 import CaseStudyHighlights, { type CaseStudyHighlightsData } from "./CaseStudyHighlights";
@@ -91,6 +91,8 @@ interface ProjectSectionProps {
   caseStudyHighlights?: CaseStudyHighlightsData;
   /** When false, hides the small “HIGHLIGHTS” label above the tab row */
   caseStudyHighlightsShowLabel?: boolean;
+  /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
+  children?: ReactNode;
 }
 
 export default function ProjectSection({
@@ -119,6 +121,7 @@ export default function ProjectSection({
   metaSectionStackGap = "gap-10",
   caseStudyHighlights,
   caseStudyHighlightsShowLabel,
+  children,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
   const [showPlayOverlay, setShowPlayOverlay] = useState(hasPlayOverlay);
@@ -470,13 +473,16 @@ export default function ProjectSection({
         </div>
 
         {/* Lower content + optional HIGHLIGHTS: tighter stack when highlights follow summary/quote */}
-        {hasCaseStudyHighlights ? (
+        {hasCaseStudyHighlights || children ? (
           <div className="flex w-full flex-col gap-6 sm:gap-7">
             {lowerContentRow}
-            <CaseStudyHighlights
-              data={caseStudyHighlights!}
-              showHighlightsLabel={caseStudyHighlightsShowLabel ?? true}
-            />
+            {hasCaseStudyHighlights && (
+              <CaseStudyHighlights
+                data={caseStudyHighlights!}
+                showHighlightsLabel={caseStudyHighlightsShowLabel ?? true}
+              />
+            )}
+            {children}
           </div>
         ) : (
           lowerContentRow
