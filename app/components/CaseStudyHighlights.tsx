@@ -123,6 +123,16 @@ export interface CaseStudyHighlightsData {
    * Other case studies (e.g. Fresenius) pass a full map for their frame ids.
    */
   compositeRows?: Record<string, number[][]>;
+  /**
+   * Modal chrome above section tabs: project title (left) and company (right) on desktop;
+   * on small screens, company only (left) plus a section dropdown instead of tabs.
+   */
+  modalBrandHeader?: {
+    projectTitle: string;
+    company: string;
+    /** Optional centered body-sized line above the title/company row */
+    intro?: string;
+  };
 }
 
 /** Default VEHR layout: row of image indices; split rows are 50/50 on md+. */
@@ -670,6 +680,7 @@ const CaseStudyHighlights = forwardRef<
     frames,
     modalPresentation = "slides",
     compositeRows: compositeRowsFromData,
+    modalBrandHeader: brandHeader,
   } = data;
   /** Used only when `modalPresentation === "composite-vehr"` (same layout component as VEHR). */
   const compositeRowsByFrameId =
@@ -886,7 +897,11 @@ const CaseStudyHighlights = forwardRef<
             className="fixed inset-0 z-[100] m-0 flex cursor-pointer max-[800px]:h-[100dvh] max-[800px]:min-h-[100dvh] max-[800px]:w-screen max-[800px]:max-w-[100vw] max-[800px]:min-w-0 max-[800px]:flex-col max-[800px]:bg-[#FAFAFA] max-[800px]:p-0 min-[801px]:items-center min-[801px]:justify-center min-[801px]:bg-black/80 min-[801px]:p-6"
             role="dialog"
             aria-modal="true"
-            aria-labelledby={`${baseId}-modal-title`}
+            aria-labelledby={
+              brandHeader
+                ? `${baseId}-modal-brand-title`
+                : `${baseId}-modal-title`
+            }
             onClick={(e) => {
               if (e.target === e.currentTarget) closeModal();
             }}
@@ -915,40 +930,141 @@ const CaseStudyHighlights = forwardRef<
             onClick={(e) => e.stopPropagation()}
           >
             <header className="shrink-0 border-b border-black/[0.08] bg-[#FAFAFA] px-4 pb-0 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
+              {brandHeader ? (
+                <p id={`${baseId}-modal-brand-title`} className="sr-only">
+                  {brandHeader.projectTitle} — {brandHeader.company}
+                </p>
+              ) : null}
+              {brandHeader?.intro ? (
+                <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/80 text-center px-1 pb-3">
+                  {brandHeader.intro}
+                </p>
+              ) : null}
+              {brandHeader ? (
+                <div className="mb-3 hidden min-[801px]:flex min-w-0 flex-row items-baseline justify-between gap-4">
+                  <p className="min-w-0 font-sans text-[16px] font-semibold leading-[1.5] text-black text-left">
+                    {brandHeader.projectTitle}
+                  </p>
+                  <p className="shrink-0 font-sans text-[16px] font-semibold leading-[1.5] text-black text-right">
+                    {brandHeader.company}
+                  </p>
+                </div>
+              ) : null}
               <div className="flex items-start justify-between gap-3">
-                <nav
-                  className="min-w-0 flex-1"
-                  aria-label="Case study sections"
-                >
-                  <ul className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2" role="tablist">
-                    {frames.map((frame, fi) => {
-                      const active =
-                        modal.kind === "composite"
-                          ? modal.frameIndex === fi
-                          : modalLocal !== null && modalLocal.frameIndex === fi;
-                      return (
-                        <li key={frame.id} role="presentation">
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={active}
-                            className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
-                              active
-                                ? "border-black text-black"
-                                : "border-transparent text-black/45 hover:text-black/75"
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              goToFrameTab(fi);
-                            }}
-                          >
-                            {frame.title}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </nav>
+                <div className="flex min-w-0 flex-1 flex-col gap-2">
+                  {brandHeader ? (
+                    <p className="min-[801px]:hidden font-sans text-[16px] font-semibold leading-[1.5] text-black text-left">
+                      {brandHeader.company}
+                    </p>
+                  ) : null}
+                  <nav
+                    className="min-w-0 flex-1"
+                    aria-label="Case study sections"
+                  >
+                    {modalPresentation === "composite-vehr" ? (
+                      <>
+                        <ul
+                          className={`flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2 ${
+                            brandHeader ? "hidden min-[801px]:flex" : "flex"
+                          }`}
+                          role="tablist"
+                        >
+                          {frames.map((frame, fi) => {
+                            const active =
+                              modal.kind === "composite"
+                                ? modal.frameIndex === fi
+                                : modalLocal !== null &&
+                                  modalLocal.frameIndex === fi;
+                            return (
+                              <li key={frame.id} role="presentation">
+                                <button
+                                  type="button"
+                                  role="tab"
+                                  aria-selected={active}
+                                  className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
+                                    active
+                                      ? "border-black text-black"
+                                      : "border-transparent text-black/45 hover:text-black/75"
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    goToFrameTab(fi);
+                                  }}
+                                >
+                                  {frame.title}
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                        {brandHeader ? (
+                          <label className="min-[801px]:hidden">
+                            <span className="sr-only">Case study section</span>
+                            <select
+                              className="mt-0.5 w-full appearance-none rounded-lg border border-black/15 bg-white py-2.5 pl-3 pr-8 font-sans text-[16px] font-normal leading-[1.5] text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25"
+                              style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "right 0.65rem center",
+                              }}
+                              aria-label="Case study section"
+                              value={
+                                modal.kind === "composite"
+                                  ? modal.frameIndex
+                                  : modalLocal?.frameIndex ?? 0
+                              }
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                goToFrameTab(
+                                  Number.parseInt(e.target.value, 10)
+                                );
+                              }}
+                            >
+                              {frames.map((frame, fi) => (
+                                <option key={frame.id} value={fi}>
+                                  {frame.title}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        ) : null}
+                      </>
+                    ) : (
+                      <ul
+                        className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2"
+                        role="tablist"
+                      >
+                        {frames.map((frame, fi) => {
+                          const active =
+                            modal.kind === "composite"
+                              ? modal.frameIndex === fi
+                              : modalLocal !== null &&
+                                modalLocal.frameIndex === fi;
+                          return (
+                            <li key={frame.id} role="presentation">
+                              <button
+                                type="button"
+                                role="tab"
+                                aria-selected={active}
+                                className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
+                                  active
+                                    ? "border-black text-black"
+                                    : "border-transparent text-black/45 hover:text-black/75"
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  goToFrameTab(fi);
+                                }}
+                              >
+                                {frame.title}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </nav>
+                </div>
                 <button
                   type="button"
                   className={`shrink-0 ${modalCloseButtonClass}`}

@@ -8,11 +8,11 @@ const vinylProject = {
   projectLabel: "Vinyl Health",
   projectLogo: "/images/vinyl-logo.png",
   projectDate: "2025-2026",
-  title: "Patient-centered AI",
+  title: "Source-backed AI Summaries",
   descriptor:
-    "Building clinical trust through transparent, source-grounded summaries",
+    "Helping clinicians get quick context without losing sight of the underlying data",
   heroImage: "/images/vinyl-hero.png",
-  heroImageAlt: "Vinyl Health, patient-centered AI interface",
+  heroImageAlt: "Vinyl Health, source-backed AI summaries interface",
   featureImages: [],
   meta: [
     { label: "Role", value: "Product Design Lead" },
@@ -53,6 +53,10 @@ const vehrProject = {
   featureImages: [],
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
+    modalBrandHeader: {
+      projectTitle: "Clinical Sensemaking",
+      company: "VEHR Technologies",
+    },
     frames: [
       {
         id: "problem",
@@ -181,6 +185,10 @@ const freseniusProject = {
   },
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
+    modalBrandHeader: {
+      projectTitle: "Modernizing In-clinic Refills",
+      company: "Fresenius Medical Care",
+    },
     compositeRows: {
       challenge: [[0, 1]],
       mapping: [[0, 1]],
