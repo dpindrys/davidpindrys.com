@@ -17,7 +17,7 @@ const vinylProject = {
   meta: [
     { label: "Role", value: "Product Design Lead" },
     { label: "Primary Users", value: "Clinicians and care teams" },
-    { label: "Focus", value: "Trust and patient needs" },
+    { label: "Focus", value: "Trust, oversight, and patient needs" },
   ],
   summaryBlock: {
     label: "SUMMARY",
@@ -167,7 +167,7 @@ const freseniusProject = {
   meta: [
     { label: "Role", value: "Senior UX Designer" },
     { label: "Primary Users", value: "Nurses and dietitians" },
-    { label: "Focus", value: "Safety, accuracy, and throughput" },
+    { label: "Focus", value: "Speed, safety, accuracy" },
   ],
   summaryBlock: {
     label: "SUMMARY",
@@ -407,7 +407,7 @@ const ascensionProject = {
   meta: [
     { label: "Role", value: "Senior Product Designer" },
     { label: "Primary Users", value: "Patients & caregivers" },
-    { label: "Focus", value: "Access, usability, and compliance" },
+    { label: "Focus", value: "Accessibility, support, and compliance" },
   ],
   summaryBlock: {
     label: "SUMMARY",
