@@ -22,13 +22,14 @@ const vinylProject = {
   summaryBlock: {
     label: "SUMMARY",
     body: "I led product design for a clinician-facing platform that surfaces AI-generated patient summaries grounded in source encounter data, helping care teams orient faster and trust what they see.",
-    team: "Clinical SME, product lead, engineering lead",
+    team: "Clinical SME, product lead, engineering lead, and myself",
   },
   testimonial: {
     quote: (
       <>
         <span className="font-semibold">Contribution</span>
-        {" "}Translated complex patient records into a dashboard experience that balanced quick understanding with clinical trust.
+        <br />
+        Translated patient-reported and clinical data into a dashboard experience that balanced quick understanding with clinical trust.
       </>
     ),
   },
@@ -135,7 +136,7 @@ const vehrProject = {
   summaryBlock: {
     label: "SUMMARY",
     body: "I worked with a practicing physician to design a chart review workflow that makes dense patient data over time easier to interpret, and delivered scalable components now being implemented by his development team.",
-    team: "Founding clinical lead, engineering team",
+    team: "Founding clinical lead, engineering team, and myself",
     prototypeLink: {
       href: "https://visual-ehr.vercel.app/",
       label: "Open prototype",
@@ -169,7 +170,7 @@ const freseniusProject = {
     label: "SUMMARY",
     body:
       "I led research and design for a digital in-clinic refill workflow that helped nurses and dietitians complete refills faster and with more patient oversight. Staff reported 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
-    team: "Product manager, business systems analyst, Salesforce engineers, data team",
+    team: "Product manager, business systems analyst, Salesforce engineers, data team, and myself",
   },
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
@@ -409,7 +410,7 @@ const ascensionProject = {
     label: "SUMMARY",
     body:
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
-    team: "Product manager, product lead, front and data engineers",
+    team: "Product manager, product lead, front and data engineers, and myself",
   },
   caseStudyHighlights: {
     frames: [

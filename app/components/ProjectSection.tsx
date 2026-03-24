@@ -144,7 +144,7 @@ export default function ProjectSection({
   const caseStudyRef = useRef<CaseStudyHighlightsHandle>(null);
 
   const lowerContentRow = (
-    <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-2 md:items-stretch md:gap-10">
+    <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-2 md:items-start md:gap-10">
       {summaryBlock && (
         <div
           className={
@@ -254,7 +254,7 @@ export default function ProjectSection({
         </div>
       )}
       <div className="flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8">
-        <blockquote className="font-sans font-normal text-[16px] md:text-[22px] leading-[1.5] md:leading-[1.45] text-black">
+        <blockquote className="font-sans font-normal text-[16px] leading-[1.5] text-black">
           {testimonial.quote}
         </blockquote>
 
