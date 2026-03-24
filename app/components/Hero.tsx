@@ -13,7 +13,7 @@ export default function Hero() {
           href="mailto:dpindrys@gmail.com"
           className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white hover:opacity-90 transition-opacity"
         >
-          <span>Email me</span>
+          <span>Send me and email</span>
           <svg
             width="22"
             height="18"
@@ -34,7 +34,7 @@ export default function Hero() {
           rel="noopener noreferrer"
           className={`inline-flex h-12 items-center gap-2 rounded-2xl px-4 font-sans font-semibold text-[16px] leading-none text-black ${SECONDARY_OUTLINE_INTERACTIVE}`}
         >
-          <span>My LinkedIn</span>
+          <span>Connect on LinkedIn</span>
           <span
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0174AF] font-bold text-[15px] leading-none text-white select-none shrink-0"
             style={{ fontFamily: "Arial, sans-serif" }}

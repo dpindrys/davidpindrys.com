@@ -4,6 +4,36 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
+const vinylProject = {
+  projectLabel: "Vinyl Health",
+  projectLogo: "/images/vinyl-logo.png",
+  projectDate: "2025",
+  title: "Patient-centered AI",
+  descriptor:
+    "Building clinical trust through transparent, source-grounded summaries",
+  heroImage: "/images/vinyl-hero.png",
+  heroImageAlt: "Vinyl Health, patient-centered AI interface",
+  featureImages: [],
+  meta: [
+    { label: "Role", value: "Product Design Lead" },
+    { label: "Primary Users", value: "Clinicians and care teams" },
+    { label: "Focus", value: "Trust and patient needs" },
+  ],
+  summaryBlock: {
+    label: "SUMMARY",
+    body: "I led product design for a clinician-facing platform that surfaces AI-generated patient summaries grounded in source encounter data, helping care teams orient faster and trust what they see.",
+    team: "Clinical SME, product lead, engineering lead",
+  },
+  testimonial: {
+    quote: (
+      <>
+        <span className="font-semibold">Contribution</span>
+        {" "}Translated complex patient records into a dashboard experience that balanced quick understanding with clinical trust.
+      </>
+    ),
+  },
+};
+
 const vehrProject = {
   projectLabel: "VEHR Technologies",
   projectLogo: "/images/VEHR-project-logo.png",
@@ -105,6 +135,7 @@ const vehrProject = {
   summaryBlock: {
     label: "SUMMARY",
     body: "I worked with a practicing physician to design a chart review workflow that makes dense patient data over time easier to interpret, and delivered scalable components now being implemented by his development team.",
+    team: "Founding clinical lead, engineering team",
     prototypeLink: {
       href: "https://visual-ehr.vercel.app/",
       label: "Open prototype",
@@ -138,6 +169,7 @@ const freseniusProject = {
     label: "SUMMARY",
     body:
       "I led research and design for a digital in-clinic refill workflow that helped nurses and dietitians complete refills faster and with more patient oversight. Staff reported 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
+    team: "Product manager, business systems analyst, Salesforce engineers, data team",
   },
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
@@ -377,6 +409,7 @@ const ascensionProject = {
     label: "SUMMARY",
     body:
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
+    team: "Product manager, product lead, front and data engineers",
   },
   caseStudyHighlights: {
     frames: [
@@ -507,10 +540,17 @@ export default function Home() {
               Selected work
             </h2>
             <ProjectSection
-              {...vehrProject}
+              {...vinylProject}
               hideMetaTopBorder
               metaSectionStackGap="gap-16"
             />
+            <div className="mt-56 md:mt-72 lg:mt-80">
+              <ProjectSection
+                {...vehrProject}
+                hideMetaTopBorder
+                metaSectionStackGap="gap-16"
+              />
+            </div>
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
                 {...freseniusProject}
@@ -524,6 +564,7 @@ export default function Home() {
                 {...ascensionProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
+                caseStudyComingSoon
               />
             </div>
 

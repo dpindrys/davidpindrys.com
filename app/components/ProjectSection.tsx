@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, type ReactNode } from "react";
+import { useState, useRef, type ReactNode, type JSX } from "react";
 import Image from "next/image";
 import Carousel, { type CarouselSlide } from "./Carousel";
 import CaseStudyHighlights, {
@@ -19,9 +19,9 @@ interface MetaItem {
 }
 
 interface Testimonial {
-  quote: string;
-  name: string;
-  title: string;
+  quote: ReactNode;
+  name?: string;
+  title?: string;
   avatarSrc?: string;
   logoSrc?: string;
 }
@@ -49,6 +49,7 @@ interface Blurbs {
 interface SummaryBlock {
   label: string;
   body: string;
+  team?: string;
   /** Optional primary button below body, bottom-aligned with the testimonial column on desktop */
   prototypeLink?: { href: string; label: string };
 }
@@ -94,6 +95,8 @@ interface ProjectSectionProps {
   metaSectionStackGap?: string;
   /** Optional mini case study (e.g. VEHR) after summary + quote */
   caseStudyHighlights?: CaseStudyHighlightsData;
+  /** Show a disabled "Details soon" button instead of "View details" */
+  caseStudyComingSoon?: boolean;
   /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
   children?: ReactNode;
 }
@@ -123,6 +126,7 @@ export default function ProjectSection({
   hideMetaTopBorder = false,
   metaSectionStackGap = "gap-10",
   caseStudyHighlights,
+  caseStudyComingSoon = false,
   children,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
@@ -149,17 +153,29 @@ export default function ProjectSection({
               : "flex min-h-0 w-full flex-col text-left"
           }
         >
-          <div className="flex flex-col gap-1.5 shrink-0">
-            <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-              {summaryBlock.label}
-            </span>
-            <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-              {summaryBlock.body}
-            </p>
+          <div className="flex flex-col gap-6 shrink-0">
+            <div className="flex flex-col gap-1.5">
+              <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+                {summaryBlock.label}
+              </span>
+              <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+                {summaryBlock.body}
+              </p>
+            </div>
+            {summaryBlock.team && (
+              <div className="flex flex-col gap-1.5">
+                <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+                  TEAM
+                </span>
+                <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+                  {summaryBlock.team}
+                </p>
+              </div>
+            )}
           </div>
-          {hasCaseStudyHighlights || summaryBlock.prototypeLink ? (
+          {hasCaseStudyHighlights || caseStudyComingSoon || summaryBlock.prototypeLink ? (
             <div className="mt-6 flex shrink-0 flex-wrap gap-3 md:mt-auto md:pt-6">
-              {hasCaseStudyHighlights ? (
+              {hasCaseStudyHighlights && !caseStudyComingSoon ? (
                 <button
                   type="button"
                   onClick={() => caseStudyRef.current?.openFirstProblemModal()}
@@ -167,6 +183,16 @@ export default function ProjectSection({
                 >
                   View details
                   <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-white" />
+                </button>
+              ) : null}
+              {caseStudyComingSoon ? (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex h-12 shrink-0 cursor-not-allowed items-center gap-2 rounded-2xl border-2 border-black/10 bg-black/5 px-4 font-sans font-semibold text-[16px] leading-none text-black/30"
+                >
+                  Details soon
+                  <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-black/30" frontFill="rgba(0,0,0,0.05)" />
                 </button>
               ) : null}
               {summaryBlock.prototypeLink ? (
@@ -232,29 +258,33 @@ export default function ProjectSection({
           {testimonial.quote}
         </blockquote>
 
-        <div className="flex items-center gap-4">
-          {testimonial.avatarSrc ? (
-            <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden shrink-0">
-              <Image
-                src={testimonial.avatarSrc}
-                alt={testimonial.name}
-                fill
-                className="object-cover rounded-full"
-              />
-            </div>
-          ) : (
-            <div className="w-[52px] h-[52px] rounded-full bg-[#D4D4D4] shrink-0" />
-          )}
+        {testimonial.name && (
+          <div className="flex items-center gap-4">
+            {testimonial.avatarSrc ? (
+              <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden shrink-0">
+                <Image
+                  src={testimonial.avatarSrc}
+                  alt={testimonial.name}
+                  fill
+                  className="object-cover rounded-full"
+                />
+              </div>
+            ) : (
+              <div className="w-[52px] h-[52px] rounded-full bg-[#D4D4D4] shrink-0" />
+            )}
 
-          <div className="flex flex-col gap-0.5">
-            <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
-              {testimonial.name}
-            </span>
-            <span className="font-sans font-normal text-[16px] leading-[1.5] text-black/50">
-              {testimonial.title}
-            </span>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
+                {testimonial.name}
+              </span>
+              {testimonial.title && (
+                <span className="font-sans font-normal text-[16px] leading-[1.5] text-black/50">
+                  {testimonial.title}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -268,13 +298,13 @@ export default function ProjectSection({
           <h1 className="min-w-0 flex-1 font-sans text-[clamp(30px,4.5vw,62px)] font-semibold leading-[1.305] text-black md:pr-4">
             {title}
           </h1>
-          <div className="flex min-w-0 shrink-0 items-baseline justify-end gap-3 text-right md:max-w-[min(100%,20rem)]">
+          <div className="flex min-w-0 shrink-0 items-center justify-end gap-3 text-right md:max-w-[min(100%,20rem)]">
             {projectLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={projectLogo}
                 alt=""
-                className="h-8 w-9 shrink-0 object-contain"
+                className="h-8 w-auto shrink-0 object-contain"
                 aria-hidden="true"
               />
             ) : null}
@@ -299,7 +329,7 @@ export default function ProjectSection({
       </div>
 
       {/* Hero image */}
-      <div className="relative w-full">
+      <div className="relative w-full overflow-hidden rounded-2xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={heroImage}

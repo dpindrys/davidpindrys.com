@@ -1,9 +1,11 @@
 /** Copy-style icon: rear sheet outline, front sheet white fill (for primary CTA on blue) */
 export default function ViewCaseStudyIcon({
   className = "h-[18px] w-[18px] shrink-0 text-current",
+  frontFill = "white",
   "aria-hidden": ariaHidden = true,
 }: {
   className?: string;
+  frontFill?: string;
   "aria-hidden"?: boolean;
 }) {
   return (
@@ -33,7 +35,7 @@ export default function ViewCaseStudyIcon({
         width="12"
         height="12"
         rx="2"
-        fill="white"
+        fill={frontFill}
         stroke="currentColor"
         strokeWidth="1.75"
         strokeLinejoin="round"
