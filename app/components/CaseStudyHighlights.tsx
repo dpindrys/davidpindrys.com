@@ -76,6 +76,8 @@ export interface CaseStudyHighlightImage {
   modalQuoteLines?: string[];
   /** Stronger testimonial cards below the body (replaces quote-lines styling when set) */
   modalTestimonials?: ModalTestimonial[];
+  /** When true, hide title/body/source in modal for this item. */
+  hideModalCopy?: boolean;
   /** When true, no image/video block is shown in the modal (e.g. evidence-only Why it matters) */
   omitModalMedia?: boolean;
   /** Optional larger or alternate primary image in the modal */
@@ -88,6 +90,10 @@ export interface CaseStudyHighlightImage {
   modalVideoInset?: ModalVideoInset;
   /** When true, render modalVideoSrc as standalone full-width video (no underlying still image) */
   modalVideoOnly?: boolean;
+  /** Optional transform/style override for standalone modal videos (e.g. clip bottom to align with paired still). */
+  modalVideoOnlyStyle?: CSSProperties;
+  /** Optional wrapper style for standalone modal video frame (e.g. force aspect ratio for masked crop). */
+  modalVideoOnlyFrameStyle?: CSSProperties;
   /** When true, show image (left half, cropped) and video (right) side by side at equal height */
   modalSideBySide?: boolean;
 }
@@ -106,17 +112,23 @@ export interface CaseStudyHighlightFrame {
 
 export interface CaseStudyHighlightsData {
   frames: CaseStudyHighlightFrame[];
-  /** `composite-vehr`: one scroll per tab with VEHR multi-row layout. Default: slide-by-slide. */
+  /**
+   * `composite-vehr`: tabbed modal with `VehrCompositeFrameContent` (50/50 splits on md+ where configured).
+   * Default: slide-by-slide.
+   */
   modalPresentation?: "slides" | "composite-vehr";
+  /**
+   * When `modalPresentation` is `composite-vehr`, optional per-frame row layout (image indices per row).
+   * If omitted, uses the default VEHR layout (`problem` / `solution` / `whyItMatters` split rows).
+   * Other case studies (e.g. Fresenius) pass a full map for their frame ids.
+   */
+  compositeRows?: Record<string, number[][]>;
 }
 
-/** VEHR: row of image indices; top rows are split 50/50 on md+, last row full width. */
-const VEHR_COMPOSITE_ROWS: Record<string, number[][]> = {
-  /** Mental model mismatch (left) + Dense data (right) */
+/** Default VEHR layout: row of image indices; split rows are 50/50 on md+. */
+const DEFAULT_COMPOSITE_ROWS_VEHR: Record<string, number[][]> = {
   problem: [[0, 1]],
-  /** Longitudinal timeline (left) + Signal first (right) */
   solution: [[0, 1]],
-  /** Faster recognition (left) + More informed review (right) */
   whyItMatters: [[0, 1]],
 };
 
@@ -194,7 +206,10 @@ function ModalMediaBlock({
   return (
     <div className="flex flex-col gap-6">
       {modalImg.modalVideoOnly && modalImg.modalVideoSrc ? (
-        <div className={`w-full ${modalMediaFrameClass}`}>
+        <div
+          className={`w-full ${modalMediaFrameClass}`}
+          style={modalImg.modalVideoOnlyFrameStyle}
+        >
           <video
             ref={modalVideoRef}
             src={modalImg.modalVideoSrc}
@@ -203,7 +218,8 @@ function ModalMediaBlock({
             loop
             playsInline
             preload="auto"
-            className="w-full"
+            className="block w-full"
+            style={modalImg.modalVideoOnlyStyle}
             onLoadedData={(e) => {
               setModalVideoLoadError(false);
               void e.currentTarget.play().catch(() => {});
@@ -340,10 +356,73 @@ type VehrCompositeProps = {
   modalVideoRef: React.RefObject<HTMLVideoElement | null>;
   modalVideoLoadError: boolean;
   setModalVideoLoadError: (v: boolean) => void;
+  /** Per-frame row groupings (image indices). */
+  compositeRowsByFrameId: Record<string, number[][]>;
 };
 
 const modalImageSourceClass =
   "mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/50";
+
+/** Fresenius “Why it matters” / Impact proof blocks */
+const WHY_QUOTE_FILL = "#076A8F";
+
+/** Testimonials + quote lines below modal body (slides + composite). */
+function ModalCopyFollowups({ img }: { img: CaseStudyHighlightImage }) {
+  return (
+    <>
+      {img.modalTestimonials && img.modalTestimonials.length > 0 ? (
+        <div
+          className={
+            img.modalTestimonials.length >= 2
+              ? "mt-1 flex w-full min-w-0 flex-row gap-px bg-white"
+              : "mt-1 flex w-full flex-col"
+          }
+        >
+          {img.modalTestimonials.map((t, qi) => (
+            <div
+              key={qi}
+              className="flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
+              style={{ backgroundColor: WHY_QUOTE_FILL }}
+            >
+              <p className="text-[17px] font-semibold leading-[1.45] text-white sm:text-[18px]">
+                {t.quote}
+              </p>
+              <div className="mt-3 flex min-w-0 items-center gap-2.5">
+                {t.avatarSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={t.avatarSrc}
+                    alt=""
+                    className="h-9 w-9 shrink-0 rounded-full object-cover"
+                    width={36}
+                    height={36}
+                  />
+                ) : null}
+                <p className="min-w-0 text-[12px] font-medium leading-snug text-white/85 sm:text-[13px]">
+                  {t.attribution}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {!img.modalTestimonials?.length &&
+      img.modalQuoteLines &&
+      img.modalQuoteLines.length > 0 ? (
+        <div className="mt-4 flex flex-col gap-3 border-l-2 border-black/10 pl-4">
+          {img.modalQuoteLines.map((line, qi) => (
+            <p
+              key={qi}
+              className="font-sans text-[15px] font-normal leading-[1.55] text-black/80"
+            >
+              {line}
+            </p>
+          ))}
+        </div>
+      ) : null}
+    </>
+  );
+}
 
 function VehrCompositeFrameContent({
   frame,
@@ -351,9 +430,10 @@ function VehrCompositeFrameContent({
   modalVideoRef,
   modalVideoLoadError,
   setModalVideoLoadError,
+  compositeRowsByFrameId,
 }: VehrCompositeProps) {
   const rows =
-    VEHR_COMPOSITE_ROWS[frame.id] ??
+    compositeRowsByFrameId[frame.id] ??
     frame.images.map((_, i) => [i] as number[]);
 
   return (
@@ -367,21 +447,27 @@ function VehrCompositeFrameContent({
           if (!img) return null;
           const titleId =
             ri === 0 ? `${baseId}-modal-title` : undefined;
+          const showCopy = !img.hideModalCopy;
           const copyBlock = (
             <div className="w-full min-w-0">
-              <h2
-                id={titleId}
-                className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
-              >
-                {modalHeading(img)}
-              </h2>
-              {img.modalBody ? (
-                <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                  {img.modalBody}
-                </p>
-              ) : null}
-              {img.modalImageSource ? (
-                <p className={modalImageSourceClass}>{img.modalImageSource}</p>
+              {showCopy ? (
+                <>
+                  <h2
+                    id={titleId}
+                    className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                  >
+                    {modalHeading(img)}
+                  </h2>
+                  {img.modalBody ? (
+                    <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
+                      {img.modalBody}
+                    </p>
+                  ) : null}
+                  {img.modalImageSource ? (
+                    <p className={modalImageSourceClass}>{img.modalImageSource}</p>
+                  ) : null}
+                  <ModalCopyFollowups img={img} />
+                </>
               ) : null}
             </div>
           );
@@ -398,8 +484,14 @@ function VehrCompositeFrameContent({
           return (
             <div key={`row-${ri}`} className="w-full">
               <div className="flex min-w-0 flex-col gap-3">
-                {mediaBlock}
-                {copyBlock}
+                {!img.omitModalMedia ? (
+                  <>
+                    {mediaBlock}
+                    {copyBlock}
+                  </>
+                ) : (
+                  copyBlock
+                )}
               </div>
             </div>
           );
@@ -418,30 +510,40 @@ function VehrCompositeFrameContent({
                   ri === 0 && imageIndex === row[0]
                     ? `${baseId}-modal-title`
                     : undefined;
+                const showCopy = !img.hideModalCopy;
 
                 const copyBlock = (
                   <div className="w-full">
-                    <h2
-                      id={titleId}
-                      className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
-                    >
-                      {modalHeading(img)}
-                    </h2>
-                    {img.modalBody ? (
-                      <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                        {img.modalBody}
-                      </p>
-                    ) : null}
-                    {img.modalImageSource ? (
-                      <p className={modalImageSourceClass}>
-                        {img.modalImageSource}
-                      </p>
+                    {showCopy ? (
+                      <>
+                        <h2
+                          id={titleId}
+                          className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                        >
+                          {modalHeading(img)}
+                        </h2>
+                        {img.modalBody ? (
+                          <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
+                            {img.modalBody}
+                          </p>
+                        ) : null}
+                        {img.modalImageSource ? (
+                          <p className={modalImageSourceClass}>
+                            {img.modalImageSource}
+                          </p>
+                        ) : null}
+                        <ModalCopyFollowups img={img} />
+                      </>
                     ) : null}
                   </div>
                 );
 
                 const mediaBlock = (
-                  <div className="w-full shrink-0">
+                  <div
+                    className={`w-full shrink-0 ${
+                      !showCopy ? "md:flex md:min-h-0 md:flex-1" : ""
+                    }`}
+                  >
                     <ModalMediaBlock
                       modalImg={img}
                       modalVideoRef={modalVideoRef}
@@ -457,12 +559,14 @@ function VehrCompositeFrameContent({
                     className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col"
                   >
                     <div className="flex min-h-0 min-w-0 flex-col gap-3 md:flex-1 md:min-h-0 md:gap-0">
-                      <div className="shrink-0">{copyBlock}</div>
-                      <div
-                        className="hidden min-h-0 flex-1 md:block"
-                        aria-hidden
-                      />
-                      {mediaBlock}
+                      {showCopy ? <div className="shrink-0">{copyBlock}</div> : null}
+                      {showCopy ? (
+                        <div
+                          className="hidden min-h-0 flex-1 md:block"
+                          aria-hidden
+                        />
+                      ) : null}
+                      {!img.omitModalMedia ? mediaBlock : null}
                     </div>
                   </div>
                 );
@@ -511,14 +615,18 @@ function NavChevron({ direction }: { direction: "left" | "right" }) {
   );
 }
 
-/** Fresenius “Why it matters” proof blocks */
-const WHY_QUOTE_FILL = "#076A8F";
-
 const CaseStudyHighlights = forwardRef<
   CaseStudyHighlightsHandle,
   { data: CaseStudyHighlightsData }
 >(function CaseStudyHighlights({ data }, ref) {
-  const { frames, modalPresentation = "slides" } = data;
+  const {
+    frames,
+    modalPresentation = "slides",
+    compositeRows: compositeRowsFromData,
+  } = data;
+  /** Used only when `modalPresentation === "composite-vehr"` (same layout component as VEHR). */
+  const compositeRowsByFrameId =
+    compositeRowsFromData ?? DEFAULT_COMPOSITE_ROWS_VEHR;
   const baseId = useId();
   const [modal, setModal] = useState<ModalState>(null);
   const [portalReady, setPortalReady] = useState(false);
@@ -820,79 +928,32 @@ const CaseStudyHighlights = forwardRef<
                     modalVideoRef={modalVideoRef}
                     modalVideoLoadError={modalVideoLoadError}
                     setModalVideoLoadError={setModalVideoLoadError}
+                    compositeRowsByFrameId={compositeRowsByFrameId}
                   />
                 </div>
               ) : modal.kind === "slides" && modalImg && modalLocal ? (
                 <div className="flex flex-col gap-8 px-5 py-8 sm:px-8 sm:py-10 md:gap-10">
-                  <div className="flex w-full min-w-0 flex-col gap-3">
-                    <h2
-                      id={`${baseId}-modal-title`}
-                      className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
-                    >
-                      {modalHeading(modalImg)}
-                    </h2>
-                    {modalImg.modalBody ? (
-                      <p className="font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                        {modalImg.modalBody}
-                      </p>
-                    ) : null}
-                    {modalImg.modalImageSource ? (
-                      <p className={modalImageSourceClass}>
-                        {modalImg.modalImageSource}
-                      </p>
-                    ) : null}
-                    {modalImg.modalTestimonials &&
-                    modalImg.modalTestimonials.length > 0 ? (
-                      <div
-                        className={
-                          modalImg.modalTestimonials.length >= 2
-                            ? "mt-1 flex w-full min-w-0 flex-row gap-px bg-white"
-                            : "mt-1 flex w-full flex-col"
-                        }
+                  {!modalImg.hideModalCopy ? (
+                    <div className="flex w-full min-w-0 flex-col gap-3">
+                      <h2
+                        id={`${baseId}-modal-title`}
+                        className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
                       >
-                        {modalImg.modalTestimonials.map((t, qi) => (
-                          <div
-                            key={qi}
-                            className="flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
-                            style={{ backgroundColor: WHY_QUOTE_FILL }}
-                          >
-                            <p className="text-[17px] font-semibold leading-[1.45] text-white sm:text-[18px]">
-                              {t.quote}
-                            </p>
-                            <div className="mt-3 flex min-w-0 items-center gap-2.5">
-                              {t.avatarSrc ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={t.avatarSrc}
-                                  alt=""
-                                  className="h-9 w-9 shrink-0 rounded-full object-cover"
-                                  width={36}
-                                  height={36}
-                                />
-                              ) : null}
-                              <p className="min-w-0 text-[12px] font-medium leading-snug text-white/85 sm:text-[13px]">
-                                {t.attribution}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : null}
-                    {!modalImg.modalTestimonials?.length &&
-                    modalImg.modalQuoteLines &&
-                    modalImg.modalQuoteLines.length > 0 ? (
-                      <div className="mt-4 flex flex-col gap-3 border-l-2 border-black/10 pl-4">
-                        {modalImg.modalQuoteLines.map((line, qi) => (
-                          <p
-                            key={qi}
-                            className="font-sans text-[15px] font-normal leading-[1.55] text-black/80"
-                          >
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
+                        {modalHeading(modalImg)}
+                      </h2>
+                      {modalImg.modalBody ? (
+                        <p className="font-sans text-[16px] font-normal leading-[1.6] text-black/75">
+                          {modalImg.modalBody}
+                        </p>
+                      ) : null}
+                      {modalImg.modalImageSource ? (
+                        <p className={modalImageSourceClass}>
+                          {modalImg.modalImageSource}
+                        </p>
+                      ) : null}
+                      <ModalCopyFollowups img={modalImg} />
+                    </div>
+                  ) : null}
                   {!modalImg.omitModalMedia ? (
                     <ModalMediaBlock
                       modalImg={modalImg}

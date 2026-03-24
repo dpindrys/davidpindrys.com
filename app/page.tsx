@@ -140,6 +140,14 @@ const freseniusProject = {
       "I led research and design for a digital in-clinic refill workflow that helped nurses and dietitians complete refills faster and with more patient oversight. Staff reported 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
   },
   caseStudyHighlights: {
+    modalPresentation: "composite-vehr" as const,
+    compositeRows: {
+      challenge: [[0, 1]],
+      mapping: [[0, 1]],
+      testing: [[0]],
+      solution: [[0]],
+      impact: [[0], [1], [2]],
+    },
     frames: [
       {
         id: "challenge",
@@ -151,38 +159,28 @@ const freseniusProject = {
             src: "/images/frx/raf.png",
             modalPrimarySrc: "/images/frx/raf.jpg",
             alt: "Reliance on RAF forms in the refill workflow",
-            thumbnailTitle: "Reliance on RAF forms",
-            modalTitle: "Reliance on RAF forms",
+            thumbnailTitle: "Reliance on weekly forms",
+            modalTitle: "Reliance on weekly forms",
             modalBody:
-              "Critical refill details were tracked through weekly RAF forms listing patients who needed refills, along with supporting paperwork and follow-up steps. The process was hard to track, easy to delay, and dependent on manual handoffs that increased the chance of missed details and error.",
+              "Critical refill details were tracked through weekly refill forms with medication and patient details, making the process harder to track, easier to delay, and more vulnerable to missed details.",
           },
           {
             src: "/images/frx/objects.png",
             modalPrimarySrc: "/images/frx/objects.jpg",
             alt: "Many moving objects in the refill workflow",
-            thumbnailTitle: "Many moving objects",
-            modalTitle: "Many moving objects",
+            thumbnailTitle: "Many moving parts",
+            modalTitle: "Many moving parts",
             modalBody:
-              "Refill work involved multiple data objects, dependencies, and stakeholders, including nurses, dietitians, pharmacists, patient information, medication details, refill status, addresses, and supporting forms. Coordinating all of it across systems and handoffs made the workflow difficult to manage reliably.",
-          },
-          {
-            src: "/images/frx/context.png",
-            modalPrimarySrc: "/images/frx/context.jpg",
-            alt: "Context without overload",
-            thumbnailTitle: "Context without overload",
-            modalTitle: "Context without overload",
-            modalBody:
-              "The digital workflow needed to give staff enough context to make safe next-step decisions without recreating the clutter of the manual process. The design challenge was deciding what to surface, what to defer, and how to keep essential refill context visible without overwhelming users.",
+              "The work spanned clinical, product, engineering, and operational needs. I helped align those perspectives into a refill workflow that was practical, clear, and buildable.",
           },
         ],
       },
       {
-        id: "solution",
-        title: "Solution",
+        id: "mapping",
+        title: "Mapping",
         summary:
-          "I worked with stakeholders, engineers, and users to clarify the core objects involved in making refills, test key workflow assumptions, and shape a refill experience that brought essential details into one place for safer, more confident action.",
+          "We mapped the objects involved in refill work and used that structure to align the workflow with data relationships and engineering needs.",
         images: [
-          // 1) Object model: existing structuring artifact + wireframe video
           {
             src: "/images/frx/structuring.png",
             modalPrimarySrc: "/images/frx/structuring.png",
@@ -191,18 +189,43 @@ const freseniusProject = {
             modalTitle: "Structuring the objects",
             modalBody:
               "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. That work helped identify the core objects staff needed to act on, align the workflow with data relationships, and give engineering a clearer foundation to build from.",
-            modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
-            modalSideBySide: true,
           },
+          {
+            src: "/images/frx/structuring.png",
+            alt: "Object mapping wireframe animation",
+            modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
+            modalVideoOnly: true,
+            modalVideoOnlyStyle: {
+              objectPosition: "top center",
+            },
+            modalVideoOnlyFrameStyle: {
+              height: "100%",
+            },
+            hideModalCopy: true,
+          },
+        ],
+      },
+      {
+        id: "testing",
+        title: "Testing",
+        summary:
+          "Prototypes with nurses revealed where the workflow created hesitation and what to change for faster, more confident decisions.",
+        images: [
           {
             src: "/images/frx/testing.png",
             modalPrimarySrc: "/images/frx/testing.png",
             alt: "Annotated prototype used to test refill workflow assumptions",
             thumbnailTitle: "Testing and refining the workflow",
             modalTitle: "Testing and refining the workflow",
-            modalBody:
-              "Early prototypes helped test key assumptions about refill actions, status visibility, and date selection. Sessions with nurses revealed where the workflow created hesitation, what information they looked for first, and which changes were needed to support faster, more confident decisions.",
           },
+        ],
+      },
+      {
+        id: "solution",
+        title: "Solution",
+        summary:
+          "The final workflow kept essential context in one place so nurses could complete refills without losing orientation.",
+        images: [
           {
             src: "/images/frx/oneplace.png",
             alt: "Refill workflow with request details, dates, shipping, and status in one place",
@@ -216,10 +239,10 @@ const freseniusProject = {
         ],
       },
       {
-        id: "whyItMatters",
-        title: "Why it matters",
+        id: "impact",
+        title: "Impact",
         summary:
-          "The digital refill workflow reduced time spent on refill coordination while making key details easier to track, review, and act on in daily clinic work.",
+          "The digital refill workflow reduced coordination time while making key details easier to track, review, and act on in daily clinic work.",
         images: [
           {
             src: "/images/frx/saving.png",
