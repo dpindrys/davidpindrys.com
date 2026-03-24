@@ -146,7 +146,7 @@ const freseniusProject = {
       mapping: [[0, 1]],
       testing: [[0]],
       solution: [[0]],
-      impact: [[0], [1], [2]],
+      impact: [[0, 1, 2]],
     },
     frames: [
       {
@@ -277,15 +277,15 @@ const freseniusProject = {
             modalTestimonials: [
               {
                 quote:
-                  "My nurses have used the refill self-service and are very pleased with the easiness and reduction in time it takes.",
-                attribution: "Lyndsay A. Rodgers, Clinical Services Initiatives Mgr",
-                avatarSrc: "/images/frx/lyndsay.avif",
-              },
-              {
-                quote:
                   "We all love it. Very convenient, quick way to review refills.",
                 attribution: "Krystal D. Antu, Dietitian",
                 avatarSrc: "/images/frx/krystal.avif",
+              },
+              {
+                quote:
+                  "My nurses have used the refill self-service and are very pleased with the easiness and reduction in time it takes.",
+                attribution: "Lyndsay A. Rodgers, Clinical Services Initiatives Mgr",
+                avatarSrc: "/images/frx/lyndsay.avif",
               },
             ],
             omitModalMedia: true,

@@ -367,24 +367,44 @@ const modalImageSourceClass =
 const WHY_QUOTE_FILL = "#076A8F";
 
 /** Testimonials + quote lines below modal body (slides + composite). */
-function ModalCopyFollowups({ img }: { img: CaseStudyHighlightImage }) {
+function ModalCopyFollowups({
+  img,
+  stackTestimonials = false,
+  subtleTestimonials = false,
+}: {
+  img: CaseStudyHighlightImage;
+  stackTestimonials?: boolean;
+  subtleTestimonials?: boolean;
+}) {
   return (
     <>
       {img.modalTestimonials && img.modalTestimonials.length > 0 ? (
         <div
           className={
-            img.modalTestimonials.length >= 2
-              ? "mt-1 flex w-full min-w-0 flex-row gap-px bg-white"
-              : "mt-1 flex w-full flex-col"
+            stackTestimonials
+              ? "mt-3 flex w-full flex-col gap-3"
+              : img.modalTestimonials.length >= 2
+                ? "mt-1 flex w-full min-w-0 flex-row gap-px bg-white"
+                : "mt-1 flex w-full flex-col"
           }
         >
           {img.modalTestimonials.map((t, qi) => (
             <div
               key={qi}
-              className="flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
-              style={{ backgroundColor: WHY_QUOTE_FILL }}
+              className={
+                subtleTestimonials
+                  ? "flex min-h-0 min-w-0 flex-1 flex-col justify-between rounded-xl border border-black/[0.12] bg-[#F7F7F7] px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
+                  : "flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
+              }
+              style={subtleTestimonials ? undefined : { backgroundColor: WHY_QUOTE_FILL }}
             >
-              <p className="text-[17px] font-semibold leading-[1.45] text-white sm:text-[18px]">
+              <p
+                className={
+                  subtleTestimonials
+                    ? "text-[16px] font-medium leading-[1.55] text-black/80 sm:text-[17px]"
+                    : "text-[17px] font-semibold leading-[1.45] text-white sm:text-[18px]"
+                }
+              >
                 {t.quote}
               </p>
               <div className="mt-3 flex min-w-0 items-center gap-2.5">
@@ -398,7 +418,13 @@ function ModalCopyFollowups({ img }: { img: CaseStudyHighlightImage }) {
                     height={36}
                   />
                 ) : null}
-                <p className="min-w-0 text-[12px] font-medium leading-snug text-white/85 sm:text-[13px]">
+                <p
+                  className={
+                    subtleTestimonials
+                      ? "min-w-0 text-[12px] font-medium leading-snug text-black/60 sm:text-[13px]"
+                      : "min-w-0 text-[12px] font-medium leading-snug text-white/85 sm:text-[13px]"
+                  }
+                >
                   {t.attribution}
                 </p>
               </div>
@@ -440,6 +466,7 @@ function VehrCompositeFrameContent({
     <div className="flex min-h-0 flex-1 flex-col gap-8 md:gap-10">
       {rows.map((row, ri) => {
         const isSplitRow = row.length > 1;
+        const isImpactFrame = frame.id === "impact";
 
         if (!isSplitRow) {
           const imageIndex = row[0];
@@ -466,7 +493,11 @@ function VehrCompositeFrameContent({
                   {img.modalImageSource ? (
                     <p className={modalImageSourceClass}>{img.modalImageSource}</p>
                   ) : null}
-                  <ModalCopyFollowups img={img} />
+                  <ModalCopyFollowups
+                    img={img}
+                    stackTestimonials={isImpactFrame}
+                    subtleTestimonials={isImpactFrame}
+                  />
                 </>
               ) : null}
             </div>
@@ -513,7 +544,13 @@ function VehrCompositeFrameContent({
                 const showCopy = !img.hideModalCopy;
 
                 const copyBlock = (
-                  <div className="w-full">
+                  <div
+                    className={
+                      isImpactFrame
+                        ? "flex h-full w-full min-h-0 flex-col"
+                        : "w-full"
+                    }
+                  >
                     {showCopy ? (
                       <>
                         <h2
@@ -532,7 +569,13 @@ function VehrCompositeFrameContent({
                             {img.modalImageSource}
                           </p>
                         ) : null}
-                        <ModalCopyFollowups img={img} />
+                        <div className={isImpactFrame ? "mt-4 md:mt-auto" : ""}>
+                          <ModalCopyFollowups
+                            img={img}
+                            stackTestimonials={isImpactFrame}
+                            subtleTestimonials={isImpactFrame}
+                          />
+                        </div>
                       </>
                     ) : null}
                   </div>
@@ -559,8 +602,12 @@ function VehrCompositeFrameContent({
                     className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col"
                   >
                     <div className="flex min-h-0 min-w-0 flex-col gap-3 md:flex-1 md:min-h-0 md:gap-0">
-                      {showCopy ? <div className="shrink-0">{copyBlock}</div> : null}
                       {showCopy ? (
+                        <div className={isImpactFrame ? "min-h-0 md:flex-1" : "shrink-0"}>
+                          {copyBlock}
+                        </div>
+                      ) : null}
+                      {showCopy && !img.omitModalMedia ? (
                         <div
                           className="hidden min-h-0 flex-1 md:block"
                           aria-hidden
