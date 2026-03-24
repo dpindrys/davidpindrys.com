@@ -23,6 +23,10 @@ const vinylProject = {
     label: "SUMMARY",
     body: "I led product design for a clinician-facing platform that surfaces AI-generated patient summaries grounded in source encounter data, helping care teams orient faster and trust what they see.",
     team: "Clinical SME, product lead, engineering lead, and myself",
+    prototypeLink: {
+      href: "https://vinylhealth.vercel.app/",
+      label: "Open prototype",
+    },
   },
   testimonial: {
     quote: (
