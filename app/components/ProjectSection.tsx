@@ -253,12 +253,12 @@ export default function ProjectSection({
           </div>
         </div>
       )}
-      <div className="flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8">
-        <blockquote className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-          {testimonial.quote}
-        </blockquote>
+      {testimonial.name ? (
+        <div className="flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8">
+          <blockquote className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+            {testimonial.quote}
+          </blockquote>
 
-        {testimonial.name && (
           <div className="flex items-center gap-4">
             {testimonial.avatarSrc ? (
               <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden shrink-0">
@@ -284,8 +284,14 @@ export default function ProjectSection({
               )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex min-h-0 w-full flex-col text-left">
+          <div className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+            {testimonial.quote}
+          </div>
+        </div>
+      )}
     </div>
   );
 

@@ -26,11 +26,14 @@ const vinylProject = {
   },
   testimonial: {
     quote: (
-      <>
-        <span className="font-semibold">Contribution</span>
-        <br />
-        Translated patient-reported and clinical data into a dashboard experience that balanced quick understanding with clinical trust.
-      </>
+      <div className="flex flex-col gap-1.5">
+        <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+          Contribution
+        </span>
+        <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
+          Translated patient-reported and clinical data into a dashboard experience that balanced quick understanding with clinical trust.
+        </p>
+      </div>
     ),
   },
 };
