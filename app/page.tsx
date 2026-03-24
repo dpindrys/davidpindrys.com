@@ -7,7 +7,7 @@ import ProjectSection from "./components/ProjectSection";
 const vinylProject = {
   projectLabel: "Vinyl Health",
   projectLogo: "/images/vinyl-logo.png",
-  projectDate: "2025",
+  projectDate: "2025-2026",
   title: "Patient-centered AI",
   descriptor:
     "Building clinical trust through transparent, source-grounded summaries",
