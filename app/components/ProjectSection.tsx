@@ -334,14 +334,27 @@ export default function ProjectSection({
         </div>
       </div>
 
-      {/* Hero image */}
+      {/* Hero image or full-bleed hero video */}
       <div className="relative w-full overflow-hidden rounded-2xl">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={heroImage}
-          alt={heroImageAlt}
-          className="block h-auto w-full"
-        />
+        {heroVideo && !heroVideoInset ? (
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="block h-auto w-full"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={heroImage}
+            alt={heroImageAlt}
+            className="block h-auto w-full"
+          />
+        )}
 
         {/* Video overlay: clip wrapper hides black bars, video overflows inside */}
         {heroVideo && heroVideoInset && (

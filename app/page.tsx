@@ -547,6 +547,7 @@ export default function Home() {
               {...vinylProject}
               hideMetaTopBorder
               metaSectionStackGap="gap-16"
+              caseStudyComingSoon
             />
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
