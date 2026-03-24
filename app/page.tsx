@@ -4,8 +4,6 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
-import DellChildrensHighlights from "./components/DellChildrensHighlights";
-
 const vehrProject = {
   projectLabel: "VEHR Technologies",
   projectLogo: "/images/VEHR-project-logo.png",
@@ -16,32 +14,24 @@ const vehrProject = {
   heroImageAlt: "VEHR Technologies, patient timeline interface on iPad",
   featureImages: [],
   caseStudyHighlights: {
+    modalPresentation: "composite-vehr" as const,
     frames: [
       {
         id: "problem",
         title: "Problem",
         summary:
-          "Conventional EHRs often make chart review harder than it should be. Clinicians must piece together fragmented data across separate screens, scan dense source-based views, and reconstruct the patient story for themselves.",
+          "Most EHRs reflect how data is stored, not how clinicians think—and dense views can obscure what is changing and what needs attention.",
         images: [
-          {
-            src: "/images/vehr/problem1.png",
-            modalPrimarySrc: "/images/vehr/problem1a.png",
-            alt: "Fragmented, uncoupled data in clinical workflows",
-            caption: "Epic Systems interface screenshot",
-            thumbnailTitle: "Fragmented, uncoupled data",
-            modalTitle: "Fragmented, uncoupled data",
-            modalBody:
-              "Patient information is often split across separate views for labs, notes, medications, encounters, and other data sources. Clinicians have to stitch those pieces together manually to understand what has been happening over time.",
-          },
           {
             src: "/images/vehr/problem3.png",
             modalPrimarySrc: "/images/vehr/problem3a.png",
             alt: "Mental model mismatch between EHR structure and clinical reasoning",
-            caption: "Epic Systems interface screenshot",
             thumbnailTitle: "Mental model mismatch",
             modalTitle: "Mental model mismatch",
             modalBody:
-              "Most EHR structures mirror how data is stored, not how clinicians think. Clinical reasoning is problem-oriented and time-based, so source-driven navigation creates friction when users are trying to understand a patient's condition in context.",
+              "Most EHRs reflect how data is stored, not how clinicians think. Source-driven navigation creates friction when clinicians need to understand a patient in context.",
+            modalImageSource:
+              "Image source: Epic Systems interface screenshot.",
           },
           {
             src: "/images/vehr/problem2.png",
@@ -51,7 +41,9 @@ const vehrProject = {
             thumbnailTitle: "Dense data, weak signal",
             modalTitle: "Dense data, weak signal",
             modalBody:
-              "Even when EHRs try to visualize patient data, the result may still be difficult to interpret. Overlapping trends and missing clinical context make it hard to see what is changing, what matters now, and how the patient is doing overall.",
+              "Even when EHRs visualize patient data, overlapping trends and missing context can make it hard to see what is changing and what needs attention.",
+            modalImageSource:
+              "Image source: Epic Systems interface screenshot.",
           },
         ],
       },
@@ -59,31 +51,23 @@ const vehrProject = {
         id: "solution",
         title: "Solution",
         summary:
-          "The concept replaces fragmented, source-based chart review with a unified longitudinal view organized around problems, change over time, and patient context.",
+          "A longitudinal view aligns encounters and outcomes over time, paired with a unified visual structure that surfaces signals first while keeping detail accessible for care planning.",
         images: [
           {
             src: "/images/vehr/timeline.png",
-            alt: "Longitudinal timeline of clinical data",
-            thumbnailTitle: "Longitudinal timeline",
-            modalTitle: "Longitudinal timeline",
+            alt: "Longitudinal view of clinical data over time",
+            thumbnailTitle: "Longitudinal view",
+            modalTitle: "Longitudinal view",
             modalBody:
-              "Encounters, vitals, diagnoses, and patient-reported data align across time, making relationships and change easier to interpret.",
-          },
-          {
-            src: "/images/vehr/research1.png",
-            alt: "Problem-oriented summary view",
-            thumbnailTitle: "Problem-oriented summary",
-            modalTitle: "Problem-oriented summary",
-            modalBody:
-              "Organizes the record around active conditions, key changes, and current status so clinicians can understand the case without gathering signal across separate tabs.",
+              "Encounters, vitals, diagnoses, and patient-reported data align across time, making change and clinical relationships easier to interpret.",
           },
           {
             src: "/images/vehr/research3.png",
-            alt: "Signal first, detail on demand across clinical heat map views",
+            alt: "Signal first, detail on demand with unified visual structure",
             thumbnailTitle: "Signal first, detail on demand",
             modalTitle: "Signal first, detail on demand",
             modalBody:
-              "A common heat map structure makes clinical patterns easier to recognize across labs, vitals, medications, and patient-reported outcomes. Visual intensity surfaces what may need attention, embedded values preserve precision, and deeper layers of detail remain available without overwhelming the primary view.",
+              "A unified visual structure helps clinicians spot patterns and abnormalities quickly, while preserving access to the detail needed for care planning.",
           },
         ],
       },
@@ -91,31 +75,23 @@ const vehrProject = {
         id: "whyItMatters",
         title: "Why it matters",
         summary:
-          "Organizing the record around problems and time makes important patterns easier to see, reduces fragmentation in chart review, and helps patient-reported data contribute more directly to clinical decisions.",
+          "Faster recognition of what needs attention and more informed review in less time—without stitching the clinical picture together across separate screens.",
         images: [
           {
             src: "/images/vehr/patterns.png",
-            alt: "Signal-first scanning across clinical data types",
-            thumbnailTitle: "Signal first, detail on demand",
-            modalTitle: "Signal first, detail on demand",
+            alt: "Faster recognition of clinical signals and change",
+            thumbnailTitle: "Faster recognition of what needs attention",
+            modalTitle: "Faster recognition of what needs attention",
             modalBody:
-              "A common visual structure helps clinicians scan for what matters across data types. Color intensity surfaces severity and change at a glance, visible values preserve precision, and deeper detail remains available when needed.",
-          },
-          {
-            src: "/images/vehr/treatment.png",
-            alt: "Clinical context aligned across time in a longitudinal view",
-            thumbnailTitle: "Context aligned across time",
-            modalTitle: "Context aligned across time",
-            modalBody:
-              "Clinical events and supporting data stay connected in a shared longitudinal view, making relationships between symptoms, treatment, and physiological change easier to interpret over time.",
+              "Clinicians can scan for meaningful change more quickly without stitching together the clinical picture across separate screens.",
           },
           {
             src: "/images/vehr/voice.png",
-            alt: "Related clinical data and outcomes in one view",
-            thumbnailTitle: "A clearer picture of patient change",
-            modalTitle: "A clearer picture of patient change",
+            alt: "More informed clinical review with connected context",
+            thumbnailTitle: "More informed review in less time",
+            modalTitle: "More informed review in less time",
             modalBody:
-              "Related encounters, vitals, diagnoses, labs, medications, and patient-reported outcomes appear together in one view. That makes meaningful change easier to recognize without reconstructing the clinical picture across separate screens.",
+              "Keeping related data and context connected in one view reduces chart digging and supports clearer, more confident interpretation.",
           },
         ],
       },
@@ -128,10 +104,10 @@ const vehrProject = {
   ],
   summaryBlock: {
     label: "SUMMARY",
-    body: "I collaborated with a practicing physician to rethink how clinicians review patient histories in traditional EHRs. VEHR is a concept for problem-oriented chart review that brings encounters, symptoms, labs, and other signals into a longitudinal view, helping clinicians see patterns, relationships, and change over time.",
+    body: "I worked with a practicing physician to design a chart review workflow that makes dense patient data over time easier to interpret, and delivered scalable components now being implemented by his development team.",
     prototypeLink: {
       href: "https://visual-ehr.vercel.app/",
-      label: "Explore the prototype",
+      label: "Open prototype",
     },
   },
   testimonial: {
@@ -161,7 +137,7 @@ const freseniusProject = {
   summaryBlock: {
     label: "SUMMARY",
     body:
-      "Clinic refill workflows depended on manual, fragmented intake and review steps that slowed staff, complicated handoffs, and made oversight harder. I led research and design for a digital in-clinic refill workflow that replaced a RAF-form-heavy process with a clearer, more efficient system for nurses and dietitians. Staff reported roughly 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
+      "I led research and design for a digital in-clinic refill workflow that helped nurses and dietitians complete refills faster and with more patient oversight. Staff reported 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
   },
   caseStudyHighlights: {
     frames: [
@@ -379,7 +355,7 @@ const ascensionProject = {
     body:
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
   },
-  /* caseStudyHighlights: {
+  caseStudyHighlights: {
     frames: [
       {
         id: "problem",
@@ -478,7 +454,7 @@ const ascensionProject = {
         ],
       },
     ],
-  }, */
+  },
   testimonial: {
     quote:
       '"David designed previously unavailable Ascension portal workflows (care team/PCP designation, ID card requests, prior auth) and partnered effectively across product, engineering, and data to keep delivery moving."',
@@ -525,9 +501,7 @@ export default function Home() {
                 {...ascensionProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
-              >
-                <DellChildrensHighlights />
-              </ProjectSection>
+              />
             </div>
 
           </div>

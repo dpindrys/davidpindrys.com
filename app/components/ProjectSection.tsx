@@ -3,7 +3,12 @@
 import { useState, useRef, type ReactNode } from "react";
 import Image from "next/image";
 import Carousel, { type CarouselSlide } from "./Carousel";
-import CaseStudyHighlights, { type CaseStudyHighlightsData } from "./CaseStudyHighlights";
+import CaseStudyHighlights, {
+  type CaseStudyHighlightsData,
+  type CaseStudyHighlightsHandle,
+} from "./CaseStudyHighlights";
+import { SECONDARY_OUTLINE_INTERACTIVE } from "./buttonTokens";
+import ViewCaseStudyIcon from "./ViewCaseStudyIcon";
 
 interface MetaItem {
   label: string;
@@ -44,7 +49,7 @@ interface Blurbs {
 interface SummaryBlock {
   label: string;
   body: string;
-  /** Optional line below body: same type scale as body, styled as a text link */
+  /** Optional primary button below body, bottom-aligned with the testimonial column on desktop */
   prototypeLink?: { href: string; label: string };
 }
 
@@ -132,31 +137,51 @@ export default function ProjectSection({
   const hasCaseStudyHighlights =
     Boolean(caseStudyHighlights && caseStudyHighlights.frames.length > 0);
 
+  const caseStudyRef = useRef<CaseStudyHighlightsHandle>(null);
+
   const lowerContentRow = (
-    <div className="flex w-full flex-col gap-10 md:flex-row md:items-start md:gap-10">
+    <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-2 md:items-stretch md:gap-10">
       {summaryBlock && (
-        <div className="w-full min-w-0 flex-1 text-left md:max-w-[50%]">
-          <div className="flex flex-col gap-1.5">
+        <div
+          className={
+            hasCaseStudyHighlights || summaryBlock.prototypeLink
+              ? "flex min-h-0 w-full flex-col gap-6 text-left md:h-full md:min-h-0 md:gap-0"
+              : "flex min-h-0 w-full flex-col text-left"
+          }
+        >
+          <div className="flex flex-col gap-1.5 shrink-0">
             <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
               {summaryBlock.label}
             </span>
             <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
               {summaryBlock.body}
             </p>
-            {summaryBlock.prototypeLink ? (
-              <p className="mt-3 font-sans font-normal text-[16px] leading-[1.5]">
+          </div>
+          {hasCaseStudyHighlights || summaryBlock.prototypeLink ? (
+            <div className="mt-6 flex shrink-0 flex-wrap gap-3 md:mt-auto md:pt-6">
+              {hasCaseStudyHighlights ? (
+                <button
+                  type="button"
+                  onClick={() => caseStudyRef.current?.openFirstProblemModal()}
+                  className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                >
+                  View details
+                  <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-white" />
+                </button>
+              ) : null}
+              {summaryBlock.prototypeLink ? (
                 <a
                   href={summaryBlock.prototypeLink.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-black underline decoration-black/35 underline-offset-[0.2em] transition-colors hover:decoration-black/70"
+                  className={`inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl px-4 font-sans font-semibold text-[16px] leading-none text-black transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${SECONDARY_OUTLINE_INTERACTIVE}`}
                   aria-label={`${summaryBlock.prototypeLink.label} (opens in new tab)`}
                 >
                   <span>{summaryBlock.prototypeLink.label}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -166,18 +191,16 @@ export default function ProjectSection({
                     className="shrink-0 text-black/70"
                     aria-hidden
                   >
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                    <polyline points="15 3 21 3 21 9" />
-                    <line x1="10" y1="14" x2="21" y2="3" />
+                    <path d="M7 17L17 7M17 7H10M17 7V15" />
                   </svg>
                 </a>
-              </p>
-            ) : null}
-          </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       )}
       {!summaryBlock && blurbs && (
-        <div className="flex w-full min-w-0 flex-col gap-6 text-left md:w-1/2">
+        <div className="flex min-h-0 w-full flex-col gap-6 text-left">
           <div className="flex flex-col gap-1.5">
             <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
               Problem
@@ -204,12 +227,8 @@ export default function ProjectSection({
           </div>
         </div>
       )}
-      <div
-        className={`flex min-w-0 flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8 ${
-          blurbs || summaryBlock ? "w-full md:w-1/2" : "w-full"
-        }`}
-      >
-        <blockquote className="font-serif font-normal text-[16px] md:text-[22px] leading-[1.5] md:leading-[1.45] text-black">
+      <div className="flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8">
+        <blockquote className="font-sans font-normal text-[16px] md:text-[22px] leading-[1.5] md:leading-[1.45] text-black">
           {testimonial.quote}
         </blockquote>
 
@@ -243,11 +262,14 @@ export default function ProjectSection({
   return (
     <article className="flex flex-col gap-16 w-full">
 
-      {/* Label · Title · Descriptor, 20px between each */}
-      <div className="flex flex-col gap-5 w-full">
-        <div className="flex min-h-8 w-full flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <div className="flex min-w-0 items-center gap-3">
-            {projectLogo && (
+      {/* Row 1: title | logo+name (baselines aligned with title’s visual baseline). Row 2: subtitle | date */}
+      <div className="flex w-full flex-col gap-2">
+        <div className="flex w-full flex-col gap-4 md:flex-row md:items-baseline md:justify-between md:gap-8">
+          <h1 className="min-w-0 flex-1 font-sans text-[clamp(30px,4.5vw,62px)] font-semibold leading-[1.305] text-black md:pr-4">
+            {title}
+          </h1>
+          <div className="flex min-w-0 shrink-0 items-baseline justify-end gap-3 text-right md:max-w-[min(100%,20rem)]">
+            {projectLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={projectLogo}
@@ -255,28 +277,25 @@ export default function ProjectSection({
                 className="h-8 w-9 shrink-0 object-contain"
                 aria-hidden="true"
               />
-            )}
-            <span className="font-sans text-[20px] font-bold leading-none text-black">
+            ) : null}
+            <span className="font-sans text-[20px] font-bold leading-[1.2] text-black">
               {projectLabel}
             </span>
           </div>
+        </div>
+        <div className="flex w-full flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-8">
+          <p className="max-w-[1170px] flex-1 font-sans text-[16px] font-normal leading-[1.5] text-black/70 md:pr-4">
+            {descriptor}
+          </p>
           {projectDate ? (
             <p
-              className="shrink-0 text-right font-sans text-[clamp(16px,1.9vw,28px)] font-normal leading-none text-black/70"
+              className="shrink-0 text-right font-sans text-[16px] font-normal leading-[1.5] text-black/70 md:max-w-[min(100%,20rem)]"
               aria-label={`Project years: ${projectDate}`}
             >
               {projectDate}
             </p>
           ) : null}
         </div>
-
-        <h2 className="font-serif font-normal text-[clamp(36px,5.5vw,75px)] leading-[1.305] text-black">
-          {title}
-        </h2>
-
-        <p className="font-sans font-normal text-[clamp(16px,1.9vw,28px)] leading-[1.4] text-black/70 max-w-[1170px]">
-          {descriptor}
-        </p>
       </div>
 
       {/* Hero image */}
@@ -342,7 +361,7 @@ export default function ProjectSection({
                     <img
                       src={heroVideoPlayButton}
                       alt="Play Demo"
-                      className="relative z-10 w-auto h-14 object-contain drop-shadow-md hover:opacity-90"
+                      className="relative z-10 w-auto h-14 object-contain hover:opacity-90"
                     />
                   )}
                 </button>
@@ -368,7 +387,7 @@ export default function ProjectSection({
             href={heroPrototypeLink.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 h-20 px-10 rounded-2xl border-2 border-[#005077] bg-[#00AAFF] font-sans font-semibold text-[clamp(16px,1.9vw,28px)] leading-[1.21] text-white hover:opacity-80 transition-opacity"
+            className="inline-flex min-h-11 items-center gap-2.5 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 py-2.5 font-sans font-semibold text-[16px] leading-snug text-white hover:opacity-80 transition-opacity"
           >
             <span>View prototype</span>
             {heroPrototypeLink.icon && (
@@ -474,7 +493,7 @@ export default function ProjectSection({
           <div className="flex w-full flex-col gap-6 sm:gap-7">
             {lowerContentRow}
             {hasCaseStudyHighlights && (
-              <CaseStudyHighlights data={caseStudyHighlights!} />
+              <CaseStudyHighlights ref={caseStudyRef} data={caseStudyHighlights!} />
             )}
             {children}
           </div>

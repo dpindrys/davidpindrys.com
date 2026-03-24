@@ -2,7 +2,8 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "EB Garamond", ui-serif, Georgia, serif;
+  /* Kept for any legacy font-serif utilities; matches Inter */
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --color-bg: #F4F2EE;
   --color-ink: #000000;
