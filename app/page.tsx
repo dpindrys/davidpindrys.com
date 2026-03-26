@@ -556,10 +556,9 @@ export default function Home() {
               Selected work
             </h2>
             <ProjectSection
-              {...vinylProject}
+              {...freseniusProject}
               hideMetaTopBorder
               metaSectionStackGap="gap-16"
-              caseStudyComingSoon
             />
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
@@ -570,9 +569,10 @@ export default function Home() {
             </div>
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
-                {...freseniusProject}
+                {...vinylProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
+                caseStudyComingSoon
               />
             </div>
             {/* <ProjectSection {...vinylHealthProject} /> */}

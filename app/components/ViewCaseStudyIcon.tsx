@@ -1,7 +1,7 @@
-/** Copy-style icon: rear sheet outline, front sheet white fill (for primary CTA on blue) */
+/** Simple filled rounded square (for View details CTA) */
 export default function ViewCaseStudyIcon({
   className = "h-[18px] w-[18px] shrink-0 text-current",
-  frontFill = "white",
+  frontFill = "currentColor",
   "aria-hidden": ariaHidden = true,
 }: {
   className?: string;
@@ -16,29 +16,13 @@ export default function ViewCaseStudyIcon({
       className={className}
       aria-hidden={ariaHidden}
     >
-      {/* Beneath: outline only */}
       <rect
-        x="3"
-        y="9"
-        width="12"
-        height="12"
-        rx="2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
-      />
-      {/* Top / front: white fill + stroke */}
-      <rect
-        x="9"
-        y="3"
-        width="12"
-        height="12"
-        rx="2"
+        x="5"
+        y="5"
+        width="14"
+        height="14"
+        rx="3"
         fill={frontFill}
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
       />
     </svg>
   );
