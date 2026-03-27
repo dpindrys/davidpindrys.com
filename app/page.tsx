@@ -10,7 +10,7 @@ const vinylProject = {
   projectDate: "2025-2026",
   title: "Source-backed AI Summaries",
   descriptor:
-    "Helping clinicians get quick context without losing sight of the underlying data",
+    "Helping clinicians get quick context without losing sight of the underlying data for AI-first startup",
   heroImage: "/images/vinyl-hero.png",
   heroImageAlt: "Vinyl Health, source-backed AI summaries interface",
   featureImages: [],
@@ -47,7 +47,8 @@ const vehrProject = {
   projectLogo: "/images/VEHR-project-logo.png",
   projectDate: "2024",
   title: "Clinical Sensemaking",
-  descriptor: "A problem-oriented view of patient history over time",
+  descriptor:
+    "A problem-oriented view of patient history over time for a clinician-led startup",
   heroImage: "/images/vehr-hero.png",
   heroImageAlt: "VEHR Technologies, patient timeline interface on iPad",
   featureImages: [],
@@ -412,7 +413,8 @@ const ascensionProject = {
   projectLogo: "/images/ascension-project-logo.png",
   projectDate: "2023-2024",
   title: "Responsive Care Access",
-  descriptor: "Responsive portal for 40,000+ members",
+  descriptor:
+    "Responsive portal for 40,000+ members for Dell Children's Health Plan",
   heroImage: "/images/dellchildrens-hero.png",
   heroImageAlt: "Dell Children's Health Plan, responsive member portal",
   featureImages: [],
