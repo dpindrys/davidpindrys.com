@@ -95,7 +95,7 @@ interface ProjectSectionProps {
   metaSectionStackGap?: string;
   /** Optional mini case study (e.g. VEHR) after summary + quote */
   caseStudyHighlights?: CaseStudyHighlightsData;
-  /** Show a disabled "Details soon" button instead of "View details" */
+  /** Show a disabled "Details soon" button instead of "More info" */
   caseStudyComingSoon?: boolean;
   /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
   children?: ReactNode;
@@ -181,7 +181,7 @@ export default function ProjectSection({
                   onClick={() => caseStudyRef.current?.openFirstProblemModal()}
                   className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
                 >
-                  View details
+                  More info
                   <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-white" />
                 </button>
               ) : null}
@@ -192,7 +192,7 @@ export default function ProjectSection({
                   className="inline-flex h-12 shrink-0 cursor-not-allowed items-center gap-2 rounded-2xl border-2 border-black/10 bg-black/5 px-4 font-sans font-semibold text-[16px] leading-none text-black/30"
                 >
                   Details soon
-                  <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-black/30" frontFill="rgba(0,0,0,0.05)" />
+                  <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-black/30" />
                 </button>
               ) : null}
               {summaryBlock.prototypeLink ? (

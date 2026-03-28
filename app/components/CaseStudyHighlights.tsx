@@ -53,6 +53,12 @@ export interface ModalTestimonial {
   attribution: string;
   /** Optional square headshot to the left of the attribution line */
   avatarSrc?: string;
+  /**
+   * In a side-by-side pair (`modalTestimonials.length >= 2`), stretched cards share row height.
+   * `between` (default): quote top, attribution bottom.
+   * `center`: quote + attribution grouped and vertically centered (for short quotes).
+   */
+  contentAlign?: "between" | "center";
 }
 
 export interface CaseStudyHighlightImage {
@@ -70,8 +76,17 @@ export interface CaseStudyHighlightImage {
   modalTitle?: string;
   /** Supporting copy in the modal */
   modalBody?: string;
+  /** Multiple body paragraphs (when set, used instead of `modalBody`) */
+  modalBodyParagraphs?: string[];
   /** Optional attribution under modal body (same size as body, typically lighter) */
   modalImageSource?: string;
+  /** Caption below modal image or video (editorial context, not the heading) */
+  modalMediaCaption?: string;
+  /**
+   * Optional Tailwind classes on the framed media box (e.g. `aspect-[4/3]`) so paired
+   * columns (still + video) can share height and clip video with object-cover.
+   */
+  modalMediaFrameAspectClass?: string;
   /** Optional quoted lines shown below the modal body (e.g. staff feedback) */
   modalQuoteLines?: string[];
   /** Stronger testimonial cards below the body (replaces quote-lines styling when set) */
@@ -124,8 +139,8 @@ export interface CaseStudyHighlightsData {
    */
   compositeRows?: Record<string, number[][]>;
   /**
-   * Modal chrome above section tabs: project title (left) and company (right) on desktop;
-   * on small screens, company only (left) plus a section dropdown instead of tabs.
+   * Modal chrome above section tabs: project title and company on the left, separated by " / ",
+   * with the close control on the right in the same row; tabs sit on the row below.
    */
   modalBrandHeader?: {
     projectTitle: string;
@@ -202,84 +217,145 @@ type ModalMediaBlockProps = {
   modalVideoRef: React.RefObject<HTMLVideoElement | null>;
   modalVideoLoadError: boolean;
   setModalVideoLoadError: (v: boolean) => void;
+  /** When true, caption is omitted so the parent can align captions in a shared row (e.g. Mapping grid). */
+  omitCaption?: boolean;
+  /**
+   * When true with `modalVideoOnly`, the framed video expands to fill the parent height
+   * (e.g. CSS grid cell spanning copy + still rows). Video uses object-cover; aspect ratio preserved with clipping.
+   */
+  videoFillGridCell?: boolean;
+  /**
+   * Challenge split-row: pull media up by ~½ of the copy↔media gap and add space under the frame so captions stay aligned.
+   */
+  challengeSplitMedia?: boolean;
 };
 
 /** Primary image / video / side-by-side / secondary — shared by slide and composite modals. */
+const modalCaptionClass =
+  "mt-1.5 font-sans text-[12px] font-normal leading-snug text-black/55 sm:text-[13px]";
+
+const modalCaptionTextClass =
+  "font-sans text-[12px] font-normal leading-snug text-black/55 sm:text-[13px]";
+
 function ModalMediaBlock({
   modalImg,
   modalVideoRef,
   modalVideoLoadError,
   setModalVideoLoadError,
+  omitCaption = false,
+  videoFillGridCell = false,
+  challengeSplitMedia = false,
 }: ModalMediaBlockProps) {
   if (modalImg.omitModalMedia) return null;
 
+  const captionClassName = challengeSplitMedia
+    ? `mt-4 ${modalCaptionTextClass}`
+    : modalCaptionClass;
+
+  const caption =
+    !omitCaption &&
+    modalImg.modalMediaCaption != null &&
+    modalImg.modalMediaCaption !== "" ? (
+      <p className={captionClassName}>{modalImg.modalMediaCaption}</p>
+    ) : null;
+
+  const useFillHeightVideo =
+    modalImg.modalVideoOnly && videoFillGridCell;
+
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      className={`flex w-full min-w-0 flex-col gap-4 ${
+        useFillHeightVideo ? "h-full min-h-0" : ""
+      }`}
+    >
       {modalImg.modalVideoOnly && modalImg.modalVideoSrc ? (
         <div
-          className={`w-full ${modalMediaFrameClass}`}
-          style={modalImg.modalVideoOnlyFrameStyle}
+          className={`flex w-full min-w-0 flex-col ${
+            useFillHeightVideo ? "h-full min-h-0" : ""
+          }`}
         >
-          <video
-            ref={modalVideoRef}
-            src={modalImg.modalVideoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            className="block w-full"
-            style={modalImg.modalVideoOnlyStyle}
-            onLoadedData={(e) => {
-              setModalVideoLoadError(false);
-              void e.currentTarget.play().catch(() => {});
+          <div
+            data-modal-framed-media
+            className={`w-full max-w-none ${modalMediaFrameClass} ${
+              useFillHeightVideo
+                ? "min-h-0 flex-1 overflow-hidden"
+                : modalImg.modalMediaFrameAspectClass ?? ""
+            }`}
+            style={{
+              ...modalImg.modalVideoOnlyFrameStyle,
             }}
-            onError={() => setModalVideoLoadError(true)}
-          />
-          {modalVideoLoadError ? (
-            <p className="mt-2 font-sans text-[13px] leading-snug text-red-700/90" role="alert">
-              Video did not load. Add the file to{" "}
-              <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
-                public{modalImg.modalVideoSrc}
-              </code>
-            </p>
-          ) : null}
+          >
+            <video
+              ref={modalVideoRef}
+              src={modalImg.modalVideoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className={
+                useFillHeightVideo
+                  ? "block h-full min-h-0 w-full object-cover object-top"
+                  : modalImg.modalMediaFrameAspectClass
+                    ? "block h-full min-h-0 w-full object-cover object-top"
+                    : "block w-full"
+              }
+              style={modalImg.modalVideoOnlyStyle}
+              onLoadedData={(e) => {
+                setModalVideoLoadError(false);
+                void e.currentTarget.play().catch(() => {});
+              }}
+              onError={() => setModalVideoLoadError(true)}
+            />
+            {modalVideoLoadError ? (
+              <p className="mt-2 font-sans text-[13px] leading-snug text-red-700/90" role="alert">
+                Video did not load. Add the file to{" "}
+                <code className="rounded bg-black/[0.06] px-1 py-0.5 text-[12px]">
+                  public{modalImg.modalVideoSrc}
+                </code>
+              </p>
+            ) : null}
+          </div>
+          {caption}
         </div>
       ) : null}
       {modalImg.modalSideBySide && modalImg.modalVideoSrc ? (() => {
         const sbsPrimary = modalImg.modalPrimarySrc ?? modalImg.src;
         if (!sbsPrimary) return null;
         return (
-          <div className="flex w-full items-end gap-4">
-            <div
-              className={`min-w-0 flex-1 overflow-hidden ${modalMediaFrameClass}`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={sbsPrimary}
-                alt={modalImg.alt}
-                className="h-full w-full object-cover object-left"
-              />
+          <div className="flex flex-col">
+            <div className="flex w-full items-end gap-4">
+              <div
+                className={`min-w-0 flex-1 overflow-hidden ${modalMediaFrameClass}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={sbsPrimary}
+                  alt={modalImg.alt}
+                  className="h-full w-full object-cover object-left"
+                />
+              </div>
+              <div
+                className={`min-w-0 flex-1 overflow-hidden ${modalMediaFrameClass}`}
+              >
+                <video
+                  ref={modalVideoRef}
+                  src={modalImg.modalVideoSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="h-full w-full object-cover object-left"
+                  onLoadedData={(e) => {
+                    setModalVideoLoadError(false);
+                    void e.currentTarget.play().catch(() => {});
+                  }}
+                  onError={() => setModalVideoLoadError(true)}
+                />
+              </div>
             </div>
-            <div
-              className={`min-w-0 flex-1 overflow-hidden ${modalMediaFrameClass}`}
-            >
-              <video
-                ref={modalVideoRef}
-                src={modalImg.modalVideoSrc}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                className="h-full w-full object-cover object-left"
-                onLoadedData={(e) => {
-                  setModalVideoLoadError(false);
-                  void e.currentTarget.play().catch(() => {});
-                }}
-                onError={() => setModalVideoLoadError(true)}
-              />
-            </div>
+            {caption}
           </div>
         );
       })() : null}
@@ -298,14 +374,29 @@ function ModalMediaBlock({
           );
         }
         return (
-          <>
-            <div className={`w-full ${modalMediaFrameClass}`}>
-              <div className="relative w-full">
+          <div className="flex w-full min-w-0 flex-col">
+            <div
+              data-modal-framed-media
+              className={`w-full ${modalMediaFrameClass} ${modalImg.modalMediaFrameAspectClass ?? ""} ${
+                challengeSplitMedia ? "-mt-2.5 md:-mt-2.5" : ""
+              }`}
+            >
+              <div
+                className={
+                  modalImg.modalMediaFrameAspectClass
+                    ? "relative h-full min-h-0 w-full"
+                    : "relative w-full"
+                }
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={primarySrc}
                   alt={modalImg.alt}
-                  className="relative z-0 block h-auto w-full"
+                  className={
+                    modalImg.modalMediaFrameAspectClass
+                      ? "relative z-0 block h-full w-full object-contain object-top"
+                      : "relative z-0 block h-auto w-full"
+                  }
                 />
                 {modalImg.modalVideoSrc ? (
                   <div
@@ -343,7 +434,8 @@ function ModalMediaBlock({
                 </code>
               </p>
             ) : null}
-          </>
+            {caption}
+          </div>
         );
       })() : null}
       {modalImg.modalSecondarySrc ? (
@@ -373,6 +465,27 @@ type VehrCompositeProps = {
 const modalImageSourceClass =
   "mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/50";
 
+const modalBodyTextClass =
+  "font-sans text-[16px] font-normal leading-[1.6] text-black/75";
+
+function ModalBodyBlocks({ img }: { img: CaseStudyHighlightImage }) {
+  if (img.modalBodyParagraphs && img.modalBodyParagraphs.length > 0) {
+    return (
+      <div className="mt-2 flex flex-col gap-3">
+        {img.modalBodyParagraphs.map((para, i) => (
+          <p key={i} className={modalBodyTextClass}>
+            {para}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  if (img.modalBody) {
+    return <p className={`mt-2 ${modalBodyTextClass}`}>{img.modalBody}</p>;
+  }
+  return null;
+}
+
 /** Fresenius “Why it matters” / Impact proof blocks */
 const WHY_QUOTE_FILL = "#076A8F";
 
@@ -386,25 +499,52 @@ function ModalCopyFollowups({
   stackTestimonials?: boolean;
   subtleTestimonials?: boolean;
 }) {
+  const testimonials = img.modalTestimonials;
   return (
     <>
-      {img.modalTestimonials && img.modalTestimonials.length > 0 ? (
+      {testimonials && testimonials.length > 0 ? (
         <div
           className={
             stackTestimonials
-              ? "mt-3 flex w-full flex-col gap-3"
-              : img.modalTestimonials.length >= 2
-                ? "mt-1 flex w-full min-w-0 flex-row gap-px bg-white"
+              ? testimonials.length >= 2
+                ? "flex min-h-0 w-full flex-1 flex-col justify-end gap-3"
+                : "mt-3 flex w-full flex-col gap-3"
+              : testimonials.length >= 2
+                ? "mt-1 flex w-full min-w-0 flex-row items-stretch gap-px bg-white"
                 : "mt-1 flex w-full flex-col"
           }
         >
-          {img.modalTestimonials.map((t, qi) => (
+          {testimonials.map((t, qi) => {
+            const alignCenter = t.contentAlign === "center";
+            const growInStack =
+              stackTestimonials && testimonials.length >= 2 && alignCenter;
+            return (
             <div
               key={qi}
               className={
                 subtleTestimonials
-                  ? "flex min-h-0 min-w-0 flex-1 flex-col justify-between rounded-xl border border-black/[0.12] bg-[#F7F7F7] px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
-                  : "flex min-h-0 min-w-0 flex-1 flex-col justify-between px-4 py-4 text-left font-sans sm:px-5 sm:py-5"
+                  ? `flex min-h-0 min-w-0 flex-col rounded-xl border border-black/[0.12] bg-[#F7F7F7] px-4 py-4 text-left font-sans sm:px-5 sm:py-5 ${
+                      alignCenter ? "justify-center gap-3" : "justify-between"
+                    } ${
+                      stackTestimonials && testimonials.length >= 2
+                        ? growInStack
+                          ? "min-h-0 flex-1"
+                          : "shrink-0"
+                        : testimonials.length >= 2
+                          ? "flex-1 self-stretch"
+                          : ""
+                    }`
+                  : `flex min-h-0 min-w-0 flex-col px-4 py-4 text-left font-sans sm:px-5 sm:py-5 ${
+                      alignCenter ? "justify-center gap-3" : "justify-between"
+                    } ${
+                      stackTestimonials && testimonials.length >= 2
+                        ? growInStack
+                          ? "min-h-0 flex-1"
+                          : "shrink-0"
+                        : testimonials.length >= 2
+                          ? "flex-1 self-stretch"
+                          : ""
+                    }`
               }
               style={subtleTestimonials ? undefined : { backgroundColor: WHY_QUOTE_FILL }}
             >
@@ -417,7 +557,13 @@ function ModalCopyFollowups({
               >
                 {t.quote}
               </p>
-              <div className="mt-3 flex min-w-0 items-center gap-2.5">
+              <div
+                className={
+                  alignCenter
+                    ? "flex min-w-0 items-center gap-2.5"
+                    : "mt-3 flex min-w-0 items-center gap-2.5"
+                }
+              >
                 {t.avatarSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -439,7 +585,8 @@ function ModalCopyFollowups({
                 </p>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : null}
       {!img.modalTestimonials?.length &&
@@ -473,10 +620,12 @@ function VehrCompositeFrameContent({
     frame.images.map((_, i) => [i] as number[]);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-8 md:gap-10">
+    <div className="flex min-h-0 flex-1 flex-col gap-5 md:gap-6">
       {rows.map((row, ri) => {
         const isSplitRow = row.length > 1;
         const isImpactFrame = frame.id === "impact";
+        const isThirdTwoThirdsLayout =
+          frame.id === "testing" || frame.id === "solution";
 
         if (!isSplitRow) {
           const imageIndex = row[0];
@@ -495,11 +644,7 @@ function VehrCompositeFrameContent({
                   >
                     {modalHeading(img)}
                   </h2>
-                  {img.modalBody ? (
-                    <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                      {img.modalBody}
-                    </p>
-                  ) : null}
+                  <ModalBodyBlocks img={img} />
                   {img.modalImageSource ? (
                     <p className={modalImageSourceClass}>{img.modalImageSource}</p>
                   ) : null}
@@ -522,9 +667,25 @@ function VehrCompositeFrameContent({
               />
             </div>
           );
+          if (
+            isThirdTwoThirdsLayout &&
+            !img.omitModalMedia &&
+            showCopy
+          ) {
+            return (
+              <div key={`row-${ri}`} className="w-full">
+                <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-start md:gap-6">
+                  <div className="w-full min-w-0 md:w-1/3 md:shrink-0">
+                    {copyBlock}
+                  </div>
+                  <div className="w-full min-w-0 md:w-2/3">{mediaBlock}</div>
+                </div>
+              </div>
+            );
+          }
           return (
             <div key={`row-${ri}`} className="w-full">
-              <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex min-w-0 flex-col gap-5">
                 {!img.omitModalMedia ? (
                   <>
                     {mediaBlock}
@@ -538,12 +699,76 @@ function VehrCompositeFrameContent({
           );
         }
 
+        if (isSplitRow && frame.id === "mapping" && row.length === 2) {
+          const imgStill = frame.images[row[0]];
+          const imgVideo = frame.images[row[1]];
+          if (!imgStill || !imgVideo) return null;
+          const titleId = ri === 0 ? `${baseId}-modal-title` : undefined;
+          const leftCaptionText = imgStill.modalMediaCaption?.trim();
+          const rightCaptionText = imgVideo.modalMediaCaption?.trim();
+          return (
+            <div
+              key={`row-${ri}`}
+              className="flex min-h-0 flex-1 flex-col gap-0"
+            >
+              <div className="grid min-h-0 w-full min-w-0 grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-5 md:gap-y-5">
+                <div className="col-start-1 row-start-1 min-w-0 md:col-start-1 md:row-start-1">
+                  <div className="w-full min-w-0">
+                    <h2
+                      id={titleId}
+                      className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                    >
+                      {modalHeading(imgStill)}
+                    </h2>
+                    <ModalBodyBlocks img={imgStill} />
+                    {imgStill.modalImageSource ? (
+                      <p className={modalImageSourceClass}>
+                        {imgStill.modalImageSource}
+                      </p>
+                    ) : null}
+                    <ModalCopyFollowups img={imgStill} />
+                  </div>
+                </div>
+                <div className="col-start-1 row-start-2 min-w-0 md:col-start-1 md:row-start-2">
+                  <ModalMediaBlock
+                    modalImg={imgStill}
+                    modalVideoRef={modalVideoRef}
+                    modalVideoLoadError={modalVideoLoadError}
+                    setModalVideoLoadError={setModalVideoLoadError}
+                    omitCaption
+                  />
+                </div>
+                <div className="col-start-1 row-start-3 min-w-0 md:col-start-1 md:row-start-3">
+                  {leftCaptionText ? (
+                    <p className={modalCaptionClass}>{leftCaptionText}</p>
+                  ) : null}
+                </div>
+                <div className="col-start-1 row-start-4 flex min-h-0 w-full min-w-0 md:col-start-2 md:row-span-2 md:row-start-1">
+                  <ModalMediaBlock
+                    modalImg={imgVideo}
+                    modalVideoRef={modalVideoRef}
+                    modalVideoLoadError={modalVideoLoadError}
+                    setModalVideoLoadError={setModalVideoLoadError}
+                    omitCaption
+                    videoFillGridCell
+                  />
+                </div>
+                <div className="col-start-1 row-start-5 min-w-0 md:col-start-2 md:row-start-3">
+                  {rightCaptionText ? (
+                    <p className={modalCaptionClass}>{rightCaptionText}</p>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
         return (
           <div
             key={`row-${ri}`}
             className="flex min-h-0 flex-1 flex-col gap-0"
           >
-            <div className="flex min-h-0 flex-1 flex-col gap-8 md:flex-row md:gap-6 md:items-stretch">
+            <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-5 md:flex-row md:gap-5 md:items-stretch">
               {row.map((imageIndex) => {
                 const img = frame.images[imageIndex];
                 if (!img) return null;
@@ -552,34 +777,57 @@ function VehrCompositeFrameContent({
                     ? `${baseId}-modal-title`
                     : undefined;
                 const showCopy = !img.hideModalCopy;
+                const isChallengeSplit =
+                  frame.id === "challenge" && isSplitRow;
 
                 const copyBlock = (
                   <div
                     className={
                       isImpactFrame
-                        ? "flex h-full w-full min-h-0 flex-col"
+                        ? "flex h-full min-h-0 w-full flex-col"
                         : "w-full"
                     }
                   >
                     {showCopy ? (
                       <>
-                        <h2
-                          id={titleId}
-                          className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                        {isImpactFrame ? (
+                          <div className="min-w-0 shrink-0">
+                            <h2
+                              id={titleId}
+                              className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                            >
+                              {modalHeading(img)}
+                            </h2>
+                            <ModalBodyBlocks img={img} />
+                            {img.modalImageSource ? (
+                              <p className={modalImageSourceClass}>
+                                {img.modalImageSource}
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <>
+                            <h2
+                              id={titleId}
+                              className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                            >
+                              {modalHeading(img)}
+                            </h2>
+                            <ModalBodyBlocks img={img} />
+                            {img.modalImageSource ? (
+                              <p className={modalImageSourceClass}>
+                                {img.modalImageSource}
+                              </p>
+                            ) : null}
+                          </>
+                        )}
+                        <div
+                          className={
+                            isImpactFrame
+                              ? "mt-6 flex min-h-0 flex-1 flex-col md:mt-10"
+                              : ""
+                          }
                         >
-                          {modalHeading(img)}
-                        </h2>
-                        {img.modalBody ? (
-                          <p className="mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                            {img.modalBody}
-                          </p>
-                        ) : null}
-                        {img.modalImageSource ? (
-                          <p className={modalImageSourceClass}>
-                            {img.modalImageSource}
-                          </p>
-                        ) : null}
-                        <div className={isImpactFrame ? "mt-4 md:mt-auto" : ""}>
                           <ModalCopyFollowups
                             img={img}
                             stackTestimonials={isImpactFrame}
@@ -593,7 +841,7 @@ function VehrCompositeFrameContent({
 
                 const mediaBlock = (
                   <div
-                    className={`w-full shrink-0 ${
+                    className={`w-full min-w-0 shrink-0 ${
                       !showCopy ? "md:flex md:min-h-0 md:flex-1" : ""
                     }`}
                   >
@@ -602,6 +850,7 @@ function VehrCompositeFrameContent({
                       modalVideoRef={modalVideoRef}
                       modalVideoLoadError={modalVideoLoadError}
                       setModalVideoLoadError={setModalVideoLoadError}
+                      challengeSplitMedia={isChallengeSplit}
                     />
                   </div>
                 );
@@ -611,7 +860,9 @@ function VehrCompositeFrameContent({
                     key={`${ri}-${imageIndex}`}
                     className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col"
                   >
-                    <div className="flex min-h-0 min-w-0 flex-col gap-3 md:flex-1 md:min-h-0 md:gap-0">
+                    <div
+                      className="flex min-h-0 min-w-0 flex-col gap-4 md:flex-1 md:min-h-0 md:gap-5"
+                    >
                       {showCopy ? (
                         <div className={isImpactFrame ? "min-h-0 md:flex-1" : "shrink-0"}>
                           {copyBlock}
@@ -930,141 +1181,31 @@ const CaseStudyHighlights = forwardRef<
             onClick={(e) => e.stopPropagation()}
           >
             <header className="shrink-0 border-b border-black/[0.08] bg-[#FAFAFA] px-4 pb-0 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
-              {brandHeader ? (
-                <p id={`${baseId}-modal-brand-title`} className="sr-only">
-                  {brandHeader.projectTitle} — {brandHeader.company}
-                </p>
-              ) : null}
               {brandHeader?.intro ? (
                 <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/80 text-center px-1 pb-3">
                   {brandHeader.intro}
                 </p>
               ) : null}
-              {brandHeader ? (
-                <div className="mb-3 hidden min-[801px]:flex min-w-0 flex-row items-baseline justify-between gap-4">
-                  <p className="min-w-0 font-sans text-[16px] font-semibold leading-[1.5] text-black text-left">
-                    {brandHeader.projectTitle}
-                  </p>
-                  <p className="shrink-0 font-sans text-[16px] font-semibold leading-[1.5] text-black text-right">
-                    {brandHeader.company}
-                  </p>
-                </div>
-              ) : null}
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 flex-1 flex-col gap-2">
-                  {brandHeader ? (
-                    <p className="min-[801px]:hidden font-sans text-[16px] font-semibold leading-[1.5] text-black text-left">
-                      {brandHeader.company}
-                    </p>
-                  ) : null}
-                  <nav
-                    className="min-w-0 flex-1"
-                    aria-label="Case study sections"
+              <div className="mb-2 flex min-w-0 items-start justify-between gap-3 sm:mb-3">
+                {brandHeader ? (
+                  <p
+                    id={`${baseId}-modal-brand-title`}
+                    className="min-w-0 flex-1 font-sans text-[16px] leading-[1.5] text-left"
                   >
-                    {modalPresentation === "composite-vehr" ? (
-                      <>
-                        <ul
-                          className={`flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2 ${
-                            brandHeader ? "hidden min-[801px]:flex" : "flex"
-                          }`}
-                          role="tablist"
-                        >
-                          {frames.map((frame, fi) => {
-                            const active =
-                              modal.kind === "composite"
-                                ? modal.frameIndex === fi
-                                : modalLocal !== null &&
-                                  modalLocal.frameIndex === fi;
-                            return (
-                              <li key={frame.id} role="presentation">
-                                <button
-                                  type="button"
-                                  role="tab"
-                                  aria-selected={active}
-                                  className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
-                                    active
-                                      ? "border-black text-black"
-                                      : "border-transparent text-black/45 hover:text-black/75"
-                                  }`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    goToFrameTab(fi);
-                                  }}
-                                >
-                                  {frame.title}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                        {brandHeader ? (
-                          <label className="min-[801px]:hidden">
-                            <span className="sr-only">Case study section</span>
-                            <select
-                              className="mt-0.5 w-full appearance-none rounded-lg border border-black/15 bg-white py-2.5 pl-3 pr-8 font-sans text-[16px] font-normal leading-[1.5] text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25"
-                              style={{
-                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "right 0.65rem center",
-                              }}
-                              aria-label="Case study section"
-                              value={
-                                modal.kind === "composite"
-                                  ? modal.frameIndex
-                                  : modalLocal?.frameIndex ?? 0
-                              }
-                              onChange={(e) => {
-                                e.stopPropagation();
-                                goToFrameTab(
-                                  Number.parseInt(e.target.value, 10)
-                                );
-                              }}
-                            >
-                              {frames.map((frame, fi) => (
-                                <option key={frame.id} value={fi}>
-                                  {frame.title}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
-                        ) : null}
-                      </>
-                    ) : (
-                      <ul
-                        className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2"
-                        role="tablist"
-                      >
-                        {frames.map((frame, fi) => {
-                          const active =
-                            modal.kind === "composite"
-                              ? modal.frameIndex === fi
-                              : modalLocal !== null &&
-                                modalLocal.frameIndex === fi;
-                          return (
-                            <li key={frame.id} role="presentation">
-                              <button
-                                type="button"
-                                role="tab"
-                                aria-selected={active}
-                                className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
-                                  active
-                                    ? "border-black text-black"
-                                    : "border-transparent text-black/45 hover:text-black/75"
-                                }`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  goToFrameTab(fi);
-                                }}
-                              >
-                                {frame.title}
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </nav>
-                </div>
+                    <span className="font-semibold text-black">
+                      {brandHeader.projectTitle}
+                    </span>
+                    <span className="font-normal text-black/35" aria-hidden>
+                      {" "}
+                      /{" "}
+                    </span>
+                    <span className="font-semibold text-black/45">
+                      {brandHeader.company}
+                    </span>
+                  </p>
+                ) : (
+                  <span className="min-w-0 flex-1" aria-hidden />
+                )}
                 <button
                   type="button"
                   className={`shrink-0 ${modalCloseButtonClass}`}
@@ -1077,6 +1218,110 @@ const CaseStudyHighlights = forwardRef<
                   <span aria-hidden>×</span>
                 </button>
               </div>
+              <nav className="min-w-0 pb-1" aria-label="Case study sections">
+                {modalPresentation === "composite-vehr" ? (
+                  <>
+                    <ul
+                      className={`flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2 ${
+                        brandHeader ? "hidden min-[801px]:flex" : "flex"
+                      }`}
+                      role="tablist"
+                    >
+                      {frames.map((frame, fi) => {
+                        const active =
+                          modal.kind === "composite"
+                            ? modal.frameIndex === fi
+                            : modalLocal !== null &&
+                              modalLocal.frameIndex === fi;
+                        return (
+                          <li key={frame.id} role="presentation">
+                            <button
+                              type="button"
+                              role="tab"
+                              aria-selected={active}
+                              className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
+                                active
+                                  ? "border-black text-black"
+                                  : "border-transparent text-black/45 hover:text-black/75"
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                goToFrameTab(fi);
+                              }}
+                            >
+                              {frame.title}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    {brandHeader ? (
+                      <label className="min-[801px]:hidden">
+                        <span className="sr-only">Case study section</span>
+                        <select
+                          className="mt-0.5 w-full appearance-none rounded-lg border border-black/15 bg-white py-2.5 pl-3 pr-8 font-sans text-[16px] font-normal leading-[1.5] text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "right 0.65rem center",
+                          }}
+                          aria-label="Case study section"
+                          value={
+                            modal.kind === "composite"
+                              ? modal.frameIndex
+                              : modalLocal?.frameIndex ?? 0
+                          }
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            goToFrameTab(
+                              Number.parseInt(e.target.value, 10)
+                            );
+                          }}
+                        >
+                          {frames.map((frame, fi) => (
+                            <option key={frame.id} value={fi}>
+                              {frame.title}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ) : null}
+                  </>
+                ) : (
+                  <ul
+                    className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-2"
+                    role="tablist"
+                  >
+                    {frames.map((frame, fi) => {
+                      const active =
+                        modal.kind === "composite"
+                          ? modal.frameIndex === fi
+                          : modalLocal !== null &&
+                            modalLocal.frameIndex === fi;
+                      return (
+                        <li key={frame.id} role="presentation">
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={active}
+                            className={`border-b-2 px-2 py-2.5 font-sans text-[16px] font-semibold leading-[1.5] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
+                              active
+                                ? "border-black text-black"
+                                : "border-transparent text-black/45 hover:text-black/75"
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              goToFrameTab(fi);
+                            }}
+                          >
+                            {frame.title}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </nav>
             </header>
 
             <div
@@ -1084,7 +1329,7 @@ const CaseStudyHighlights = forwardRef<
               className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain"
             >
               {modal.kind === "composite" ? (
-                <div className="flex min-h-full flex-1 flex-col px-5 pb-[100px] pt-6 sm:px-8 sm:pt-8">
+                <div className="flex min-h-full flex-1 flex-col px-5 pb-16 pt-4 sm:px-8 sm:pb-20 sm:pt-5">
                   <VehrCompositeFrameContent
                     frame={frames[modal.frameIndex]}
                     baseId={baseId}
@@ -1104,11 +1349,7 @@ const CaseStudyHighlights = forwardRef<
                       >
                         {modalHeading(modalImg)}
                       </h2>
-                      {modalImg.modalBody ? (
-                        <p className="font-sans text-[16px] font-normal leading-[1.6] text-black/75">
-                          {modalImg.modalBody}
-                        </p>
-                      ) : null}
+                      <ModalBodyBlocks img={modalImg} />
                       {modalImg.modalImageSource ? (
                         <p className={modalImageSourceClass}>
                           {modalImg.modalImageSource}

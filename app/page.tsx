@@ -211,7 +211,8 @@ const freseniusProject = {
             thumbnailTitle: "Reliance on weekly forms",
             modalTitle: "Reliance on weekly forms",
             modalBody:
-              "Critical refill details were tracked through weekly refill forms with medication and patient details, making the process harder to track, easier to delay, and more vulnerable to missed details.",
+              "Critical refill details were tracked through weekly refill forms with medication and patient details, making the process difficult to track, prone to delays, and more vulnerable to missed details.",
+            modalMediaCaption: "Nurse showing me the weekly refill forms",
           },
           {
             src: "/images/frx/objects.png",
@@ -220,7 +221,9 @@ const freseniusProject = {
             thumbnailTitle: "Many moving parts",
             modalTitle: "Many moving parts",
             modalBody:
-              "The work spanned clinical, product, engineering, and operational needs. I helped align those perspectives into a refill workflow that was practical, clear, and buildable.",
+              "The work spanned clinical, product, engineering, and operational needs. I helped align those perspectives into an experience that was practical, clear, and buildable.",
+            modalMediaCaption:
+              "Nurse explaining the difficulty in keeping track of refills",
           },
         ],
       },
@@ -238,6 +241,8 @@ const freseniusProject = {
             modalTitle: "Structuring the objects",
             modalBody:
               "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. That work helped identify the core objects staff needed to act on, align the workflow with data relationships, and give engineering a clearer foundation to build from.",
+            modalMediaCaption:
+              "Object oriented UX map for nouns, attributes, actions in the system",
           },
           {
             src: "/images/frx/structuring.png",
@@ -247,10 +252,9 @@ const freseniusProject = {
             modalVideoOnlyStyle: {
               objectPosition: "top center",
             },
-            modalVideoOnlyFrameStyle: {
-              height: "100%",
-            },
             hideModalCopy: true,
+            modalMediaCaption:
+              "Object map translated to wireframe for testing",
           },
         ],
       },
@@ -265,7 +269,12 @@ const freseniusProject = {
             modalPrimarySrc: "/images/frx/testing.png",
             alt: "Annotated prototype used to test refill workflow assumptions",
             thumbnailTitle: "Testing and refining the workflow",
-            modalTitle: "Testing and refining the workflow",
+            modalTitle: "Testing Information Hierarchy",
+            modalBodyParagraphs: [
+              "Built with an SLDS-based mid-fidelity system, these prototypes helped test hierarchy and interaction design.",
+              "Testing showed that showing only the information needed for the next decision reduced scanning burden.",
+              "We also learned that hiding the date behind Today/Later added friction, so the final design showed the date field with today preselected.",
+            ],
           },
         ],
       },
@@ -279,9 +288,9 @@ const freseniusProject = {
             src: "/images/frx/oneplace.png",
             alt: "Refill workflow with request details, dates, shipping, and status in one place",
             thumbnailTitle: "Bringing key details into one place",
-            modalTitle: "Bringing key details into one place",
+            modalTitle: "Keeping Key Information in View",
             modalBody:
-              "The final refill workflow allowed nurses to complete the task without leaving the page or becoming separated from the information they needed. As each step opened within the same view, prior context remained accessible, making it easier to move forward, verify details, and stay oriented throughout the refill.",
+              "The final solution kept essential refill information visible at all times while progressively disclosing the workflow only when users needed to act. This balanced quick scanning with focused task completion, helping nurses and dietitians move through refills with minimal friction.",
             modalVideoSrc: "/images/frx/fresenius.mp4",
             modalVideoOnly: true,
           },
@@ -299,7 +308,7 @@ const freseniusProject = {
             thumbnailTitle: "Faster refill work",
             modalTitle: "Faster refill work",
             modalBody:
-              "Staff reported roughly 70% faster refill work after the manual process was brought into CareTeamHub. In larger programs, that translated into meaningful weekly time savings and fewer calls to pharmacy.",
+              "Staff reported a 70% decrease in time-to-refill after the manual process was brought into CareTeamHub.",
             modalTestimonials: [
               {
                 quote:
@@ -322,7 +331,7 @@ const freseniusProject = {
             thumbnailTitle: "Better workflow support",
             modalTitle: "Better workflow support",
             modalBody:
-              "Staff described the workflow as easier, quicker, and simpler to use in the course of normal refill work. Clear refill status, dates, and next steps helped reduce friction in a high-volume workflow.",
+              "The workflow was described as easier, quicker, and simpler to use than the previous refill-making process.",
             modalTestimonials: [
               {
                 quote:
@@ -345,7 +354,7 @@ const freseniusProject = {
             thumbnailTitle: "Stronger day-to-day oversight",
             modalTitle: "Stronger day-to-day oversight",
             modalBody:
-              "Bringing refill work into one workflow gave staff better visibility into shipment status, refill timing, and active refill needs. That made it easier to respond to patients and manage work without relying on fragmented handoffs.",
+              "Bringing refill work into one workflow gave staff better visibility into shipment status, refill timing, and active refill needs. That made it easier to check refill status throughout the entire refill workflow.",
             modalTestimonials: [
               {
                 quote: "The feature to track shipments is invaluable.",
@@ -357,6 +366,7 @@ const freseniusProject = {
                   "Quick... was able to see shipment, call patient back within minutes.",
                 attribution: "Pat Denton, Home Therapies Program Manager",
                 avatarSrc: "/images/frx/pat.avif",
+                contentAlign: "center" as const,
               },
             ],
             omitModalMedia: true,
