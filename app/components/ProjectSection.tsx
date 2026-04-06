@@ -67,6 +67,10 @@ interface ProjectSectionProps {
   heroOverlayImageAlt?: string;
   /** Video to play inside the device screen on the hero image */
   heroVideo?: string;
+  /** Optional transform applied to full-bleed heroVideo (e.g. to crop a 1px edge artifact) */
+  heroVideoTransform?: string;
+  /** Optional clip-path applied to full-bleed heroVideo (e.g. inset crop) */
+  heroVideoClipPath?: string;
   /** Position of the device screen as percentages of the hero image size */
   heroVideoInset?: VideoInset;
   /** Optional screenshot/poster shown over video until "Play Demo" is clicked */
@@ -112,6 +116,8 @@ export default function ProjectSection({
   heroOverlayImage,
   heroOverlayImageAlt,
   heroVideo,
+  heroVideoTransform,
+  heroVideoClipPath,
   heroVideoInset,
   heroVideoPoster,
   heroVideoPlayButton,
@@ -344,6 +350,11 @@ export default function ProjectSection({
             loop
             playsInline
             className="block h-auto w-full"
+            style={{
+              transform: heroVideoTransform,
+              transformOrigin: heroVideoTransform ? "center" : undefined,
+              clipPath: heroVideoClipPath,
+            }}
           >
             <source src={heroVideo} type="video/mp4" />
           </video>

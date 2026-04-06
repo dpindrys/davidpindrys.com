@@ -172,6 +172,10 @@ const freseniusProject = {
     "Digitizing a manual refill workflow across 2,800+ clinics and 43,000+ patients",
   heroImage: "/images/fresenius-hero.png",
   heroImageAlt: "Fresenius refill workflow interface",
+  heroVideo: "/images/frx/fresenius.mp4",
+  // Slightly shrink for equal side gutters; crop 1px off the left edge to remove artifact.
+  heroVideoTransform: "scale(0.985)",
+  heroVideoClipPath: "inset(0 0 0 1px round 16px)",
   featureImages: [],
   meta: [
     { label: "Role", value: "Senior UX Designer" },
