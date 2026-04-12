@@ -624,8 +624,11 @@ function VehrCompositeFrameContent({
       {rows.map((row, ri) => {
         const isSplitRow = row.length > 1;
         const isImpactFrame = frame.id === "impact";
-        const isThirdTwoThirdsLayout =
-          frame.id === "testing" || frame.id === "solution";
+        /**
+         * Single-row: text left (~30%) + media right (~70%), sm+.
+         * Excludes Fresenius-style Impact (text-led cards; see `omitModalMedia` fallback below).
+         */
+        const isCopyLeftMediaRightLayout = frame.id !== "impact";
 
         if (!isSplitRow) {
           const imageIndex = row[0];
@@ -668,17 +671,15 @@ function VehrCompositeFrameContent({
             </div>
           );
           if (
-            isThirdTwoThirdsLayout &&
+            isCopyLeftMediaRightLayout &&
             !img.omitModalMedia &&
             showCopy
           ) {
             return (
               <div key={`row-${ri}`} className="w-full">
-                <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-start md:gap-6">
-                  <div className="w-full min-w-0 md:w-1/3 md:shrink-0">
-                    {copyBlock}
-                  </div>
-                  <div className="w-full min-w-0 md:w-2/3">{mediaBlock}</div>
+                <div className="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] sm:items-start sm:gap-x-8 sm:gap-y-0">
+                  <div className="min-w-0">{copyBlock}</div>
+                  <div className="min-w-0">{mediaBlock}</div>
                 </div>
               </div>
             );
@@ -699,63 +700,184 @@ function VehrCompositeFrameContent({
           );
         }
 
+        /** Fresenius Mapping: copy (~30%) top-aligned; still image, then MP4 (~70%), captions under each. */
         if (isSplitRow && frame.id === "mapping" && row.length === 2) {
           const imgStill = frame.images[row[0]];
           const imgVideo = frame.images[row[1]];
           if (!imgStill || !imgVideo) return null;
           const titleId = ri === 0 ? `${baseId}-modal-title` : undefined;
-          const leftCaptionText = imgStill.modalMediaCaption?.trim();
-          const rightCaptionText = imgVideo.modalMediaCaption?.trim();
+
+          return (
+            <div key={`row-${ri}`} className="w-full">
+              <div className="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] sm:items-start sm:gap-x-8 sm:gap-y-0">
+                <div className="min-w-0 self-start">
+                  {!imgStill.hideModalCopy ? (
+                    <>
+                      <h2
+                        id={titleId}
+                        className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                      >
+                        {modalHeading(imgStill)}
+                      </h2>
+                      <ModalBodyBlocks img={imgStill} />
+                      {imgStill.modalImageSource ? (
+                        <p className={modalImageSourceClass}>
+                          {imgStill.modalImageSource}
+                        </p>
+                      ) : null}
+                      <ModalCopyFollowups img={imgStill} />
+                    </>
+                  ) : null}
+                </div>
+                <div className="flex min-w-0 flex-col gap-6 self-start">
+                  {!imgStill.omitModalMedia ? (
+                    <ModalMediaBlock
+                      modalImg={imgStill}
+                      modalVideoRef={modalVideoRef}
+                      modalVideoLoadError={modalVideoLoadError}
+                      setModalVideoLoadError={setModalVideoLoadError}
+                    />
+                  ) : null}
+                  {!imgVideo.omitModalMedia ? (
+                    <ModalMediaBlock
+                      modalImg={imgVideo}
+                      modalVideoRef={modalVideoRef}
+                      modalVideoLoadError={modalVideoLoadError}
+                      setModalVideoLoadError={setModalVideoLoadError}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        /**
+         * Two-image tabs (Problem / Solution / Why it matters): stacked 30/70 bands — each
+         * heading+body top-aligns with its media; captions via `modalMediaCaption` under media.
+         */
+        if (
+          isSplitRow &&
+          row.length === 2 &&
+          (frame.id === "problem" ||
+            frame.id === "solution" ||
+            frame.id === "whyItMatters")
+        ) {
+          const imgTop = frame.images[row[0]];
+          const imgBottom = frame.images[row[1]];
+          if (!imgTop || !imgBottom) return null;
+          const titleId = ri === 0 ? `${baseId}-modal-title` : undefined;
+
+          const problemPairRow = (
+            img: CaseStudyHighlightImage,
+            headingId: string | undefined
+          ) => (
+            <div
+              key={img.src ?? img.modalTitle ?? img.alt}
+              className="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] sm:items-start sm:gap-x-8"
+            >
+              <div className="min-w-0 self-start">
+                {!img.hideModalCopy ? (
+                  <>
+                    <h2
+                      id={headingId}
+                      className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                    >
+                      {modalHeading(img)}
+                    </h2>
+                    <ModalBodyBlocks img={img} />
+                    <ModalCopyFollowups img={img} />
+                  </>
+                ) : null}
+              </div>
+              <div className="min-w-0 self-start">
+                {!img.omitModalMedia ? (
+                  <ModalMediaBlock
+                    modalImg={img}
+                    modalVideoRef={modalVideoRef}
+                    modalVideoLoadError={modalVideoLoadError}
+                    setModalVideoLoadError={setModalVideoLoadError}
+                  />
+                ) : null}
+              </div>
+            </div>
+          );
+
           return (
             <div
               key={`row-${ri}`}
-              className="flex min-h-0 flex-1 flex-col gap-0"
+              className="flex w-full flex-col gap-10 sm:gap-12"
             >
-              <div className="grid min-h-0 w-full min-w-0 grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-5 md:gap-y-5">
-                <div className="col-start-1 row-start-1 min-w-0 md:col-start-1 md:row-start-1">
-                  <div className="w-full min-w-0">
-                    <h2
-                      id={titleId}
-                      className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
-                    >
-                      {modalHeading(imgStill)}
-                    </h2>
-                    <ModalBodyBlocks img={imgStill} />
-                    {imgStill.modalImageSource ? (
-                      <p className={modalImageSourceClass}>
-                        {imgStill.modalImageSource}
-                      </p>
-                    ) : null}
-                    <ModalCopyFollowups img={imgStill} />
-                  </div>
-                </div>
-                <div className="col-start-1 row-start-2 min-w-0 md:col-start-1 md:row-start-2">
-                  <ModalMediaBlock
-                    modalImg={imgStill}
-                    modalVideoRef={modalVideoRef}
-                    modalVideoLoadError={modalVideoLoadError}
-                    setModalVideoLoadError={setModalVideoLoadError}
-                    omitCaption
-                  />
-                </div>
-                <div className="col-start-1 row-start-3 min-w-0 md:col-start-1 md:row-start-3">
-                  {leftCaptionText ? (
-                    <p className={modalCaptionClass}>{leftCaptionText}</p>
+              {problemPairRow(imgTop, titleId)}
+              {problemPairRow(imgBottom, undefined)}
+            </div>
+          );
+        }
+
+        /**
+         * Two-up rows: all headings + body copy in one column (~30%), both media items
+         * stacked in the other (~70%). All composite tabs except Impact; Mapping uses the branch above.
+         */
+        if (isSplitRow && row.length === 2 && frame.id !== "impact") {
+          const imgA = frame.images[row[0]];
+          const imgB = frame.images[row[1]];
+          if (!imgA || !imgB) return null;
+          const titleId = ri === 0 ? `${baseId}-modal-title` : undefined;
+
+          return (
+            <div key={`row-${ri}`} className="w-full">
+              <div className="grid w-full min-w-0 grid-cols-1 gap-8 sm:grid-cols-[minmax(0,3fr)_minmax(0,7fr)] sm:items-start sm:gap-x-8 sm:gap-y-0">
+                <div className="flex min-w-0 flex-col gap-8">
+                  {!imgA.hideModalCopy ? (
+                    <div className="min-w-0">
+                      <h2
+                        id={titleId}
+                        className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                      >
+                        {modalHeading(imgA)}
+                      </h2>
+                      <ModalBodyBlocks img={imgA} />
+                      {imgA.modalImageSource ? (
+                        <p className={modalImageSourceClass}>
+                          {imgA.modalImageSource}
+                        </p>
+                      ) : null}
+                      <ModalCopyFollowups img={imgA} />
+                    </div>
+                  ) : null}
+                  {!imgB.hideModalCopy ? (
+                    <div className="min-w-0">
+                      <h2
+                        className="font-sans text-[16px] font-semibold leading-[1.5] text-black"
+                      >
+                        {modalHeading(imgB)}
+                      </h2>
+                      <ModalBodyBlocks img={imgB} />
+                      {imgB.modalImageSource ? (
+                        <p className={modalImageSourceClass}>
+                          {imgB.modalImageSource}
+                        </p>
+                      ) : null}
+                      <ModalCopyFollowups img={imgB} />
+                    </div>
                   ) : null}
                 </div>
-                <div className="col-start-1 row-start-4 flex min-h-0 w-full min-w-0 md:col-start-2 md:row-span-2 md:row-start-1">
-                  <ModalMediaBlock
-                    modalImg={imgVideo}
-                    modalVideoRef={modalVideoRef}
-                    modalVideoLoadError={modalVideoLoadError}
-                    setModalVideoLoadError={setModalVideoLoadError}
-                    omitCaption
-                    videoFillGridCell
-                  />
-                </div>
-                <div className="col-start-1 row-start-5 min-w-0 md:col-start-2 md:row-start-3">
-                  {rightCaptionText ? (
-                    <p className={modalCaptionClass}>{rightCaptionText}</p>
+                <div className="flex min-w-0 flex-col gap-6">
+                  {!imgA.omitModalMedia ? (
+                    <ModalMediaBlock
+                      modalImg={imgA}
+                      modalVideoRef={modalVideoRef}
+                      modalVideoLoadError={modalVideoLoadError}
+                      setModalVideoLoadError={setModalVideoLoadError}
+                    />
+                  ) : null}
+                  {!imgB.omitModalMedia ? (
+                    <ModalMediaBlock
+                      modalImg={imgB}
+                      modalVideoRef={modalVideoRef}
+                      modalVideoLoadError={modalVideoLoadError}
+                      setModalVideoLoadError={setModalVideoLoadError}
+                    />
                   ) : null}
                 </div>
               </div>

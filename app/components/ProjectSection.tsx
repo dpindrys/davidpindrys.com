@@ -101,6 +101,8 @@ interface ProjectSectionProps {
   caseStudyHighlights?: CaseStudyHighlightsData;
   /** Show a disabled "Details soon" button instead of "More info" */
   caseStudyComingSoon?: boolean;
+  /** Label for the case study opener (default "More info") */
+  caseStudyCtaLabel?: string;
   /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
   children?: ReactNode;
 }
@@ -133,6 +135,7 @@ export default function ProjectSection({
   metaSectionStackGap = "gap-10",
   caseStudyHighlights,
   caseStudyComingSoon = false,
+  caseStudyCtaLabel = "More info",
   children,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
@@ -187,7 +190,7 @@ export default function ProjectSection({
                   onClick={() => caseStudyRef.current?.openFirstProblemModal()}
                   className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
                 >
-                  More info
+                  {caseStudyCtaLabel}
                   <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-white" />
                 </button>
               ) : null}

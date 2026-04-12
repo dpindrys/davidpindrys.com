@@ -7,7 +7,7 @@ import ProjectSection from "./components/ProjectSection";
 const vinylProject = {
   projectLabel: "Vinyl Health",
   projectLogo: "/images/vinyl-logo.png",
-  projectDate: "2025-2026",
+  projectDate: "2025",
   title: "Source-backed AI Summaries",
   descriptor:
     "Helping clinicians get quick context without losing sight of the underlying data for AI-first startup",
@@ -23,10 +23,6 @@ const vinylProject = {
     label: "SUMMARY",
     body: "I led product design for a clinician-facing platform that surfaces AI-generated patient summaries grounded in source encounter data, helping care teams orient faster and trust what they see.",
     team: "Clinical SME, product lead, engineering lead, and myself",
-    prototypeLink: {
-      href: "https://vinylhealth.vercel.app/",
-      label: "Open prototype",
-    },
   },
   testimonial: {
     quote: (
@@ -73,7 +69,7 @@ const vehrProject = {
             modalTitle: "Mental model mismatch",
             modalBody:
               "Most EHRs reflect how data is stored, not how clinicians think. Source-driven navigation creates friction when clinicians need to understand a patient in context.",
-            modalImageSource:
+            modalMediaCaption:
               "Image source: Epic Systems interface screenshot.",
           },
           {
@@ -85,8 +81,7 @@ const vehrProject = {
             modalTitle: "Dense data, weak signal",
             modalBody:
               "Even when EHRs visualize patient data, overlapping trends and missing context can make it hard to see what is changing and what needs attention.",
-            modalImageSource:
-              "Image source: Epic Systems interface screenshot.",
+            modalMediaCaption: "Source: Epic Systems interface screenshot",
           },
         ],
       },
@@ -195,7 +190,7 @@ const freseniusProject = {
       company: "Fresenius Medical Care",
     },
     compositeRows: {
-      challenge: [[0, 1]],
+      challenge: [[0]],
       mapping: [[0, 1]],
       testing: [[0]],
       solution: [[0]],
@@ -217,17 +212,6 @@ const freseniusProject = {
             modalBody:
               "Critical refill details were tracked through weekly refill forms with medication and patient details, making the process difficult to track, prone to delays, and more vulnerable to missed details.",
             modalMediaCaption: "Nurse showing me the weekly refill forms",
-          },
-          {
-            src: "/images/frx/objects.png",
-            modalPrimarySrc: "/images/frx/objects.jpg",
-            alt: "Many moving objects in the refill workflow",
-            thumbnailTitle: "Many moving parts",
-            modalTitle: "Many moving parts",
-            modalBody:
-              "The work spanned clinical, product, engineering, and operational needs. I helped align those perspectives into an experience that was practical, clear, and buildable.",
-            modalMediaCaption:
-              "Nurse explaining the difficulty in keeping track of refills",
           },
         ],
       },
@@ -423,9 +407,9 @@ const vinylHealthProject = {
 */
 
 const ascensionProject = {
-  projectLabel: "Ascension Health",
+  projectLabel: "Ascension",
   projectLogo: "/images/ascension-project-logo.png",
-  projectDate: "2023-2024",
+  projectDate: "2023",
   title: "Responsive Care Access",
   descriptor:
     "Responsive portal for 40,000+ members for Dell Children's Health Plan",
@@ -444,6 +428,14 @@ const ascensionProject = {
     team: "Product manager, product lead, front and data engineers, and myself",
   },
   caseStudyHighlights: {
+    modalPresentation: "composite-vehr" as const,
+    modalBrandHeader: {
+      projectTitle: "Responsive Care Access",
+      company: "Ascension",
+    },
+    compositeRows: {
+      problem: [[0]],
+    },
     frames: [
       {
         id: "problem",
@@ -452,28 +444,11 @@ const ascensionProject = {
           "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements.",
         images: [
           {
-            placeholder: true,
-            alt: "Legacy portal experience",
+            src: "/images/dellchildrens/before.png",
+            modalPrimarySrc: "/images/dellchildrens/before.png",
+            alt: "Legacy member portal before redesign",
             thumbnailTitle: "Legacy portal experience",
             modalTitle: "Legacy portal experience",
-            modalBody:
-              "Placeholder, replace with a screen or artifact that shows the prior portal state and limitations.",
-          },
-          {
-            placeholder: true,
-            alt: "Compliance and Medicaid requirements",
-            thumbnailTitle: "Compliance gaps",
-            modalTitle: "Compliance gaps",
-            modalBody:
-              "Placeholder, replace with evidence of where the experience fell short of Medicaid expectations.",
-          },
-          {
-            placeholder: true,
-            alt: "Member-facing functionality",
-            thumbnailTitle: "Limited member tools",
-            modalTitle: "Limited member tools",
-            modalBody:
-              "Placeholder, replace with a view that highlights missing or weak member workflows before the redesign.",
           },
         ],
       },
@@ -506,6 +481,54 @@ const ascensionProject = {
             modalTitle: "Shipping with a lean team",
             modalBody:
               "Placeholder, replace with a timeline, milestone, or collaboration artifact if helpful.",
+          },
+        ],
+      },
+      {
+        id: "careTeam",
+        title: "Care team",
+        summary:
+          "Members can designate a care team and primary care provider through flows that were previously unavailable in the legacy portal.",
+        images: [
+          {
+            placeholder: true,
+            alt: "Care team and PCP designation",
+            thumbnailTitle: "Care team designation",
+            modalTitle: "Care team designation",
+            modalBody:
+              "Placeholder, replace with screens for care team or PCP designation in the new portal.",
+          },
+          {
+            placeholder: true,
+            alt: "PCP selection confirmation",
+            thumbnailTitle: "PCP selection",
+            modalTitle: "PCP selection",
+            modalBody:
+              "Placeholder, replace with confirmation or summary step for the selected provider.",
+          },
+        ],
+      },
+      {
+        id: "idCards",
+        title: "ID cards",
+        summary:
+          "ID card requests were brought into the digital experience so members could complete requests without unnecessary friction.",
+        images: [
+          {
+            placeholder: true,
+            alt: "ID card request flow",
+            thumbnailTitle: "ID card requests",
+            modalTitle: "ID card requests",
+            modalBody:
+              "Placeholder, replace with the member-facing ID card request flow.",
+          },
+          {
+            placeholder: true,
+            alt: "ID card status or delivery",
+            thumbnailTitle: "Request status",
+            modalTitle: "Request status",
+            modalBody:
+              "Placeholder, replace with status, delivery, or follow-up views if helpful.",
           },
         ],
       },
@@ -572,7 +595,7 @@ export default function Home() {
               Selected work
             </h2>
             <ProjectSection
-              {...freseniusProject}
+              {...vinylProject}
               hideMetaTopBorder
               metaSectionStackGap="gap-16"
             />
@@ -585,21 +608,19 @@ export default function Home() {
             </div>
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
-                {...vinylProject}
-                hideMetaTopBorder
-                metaSectionStackGap="gap-16"
-                caseStudyComingSoon
-              />
-            </div>
-            {/* <ProjectSection {...vinylHealthProject} /> */}
-            <div className="mt-56 md:mt-72 lg:mt-80">
-              <ProjectSection
                 {...ascensionProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
-                caseStudyComingSoon
               />
             </div>
+            <div className="mt-56 md:mt-72 lg:mt-80">
+              <ProjectSection
+                {...freseniusProject}
+                hideMetaTopBorder
+                metaSectionStackGap="gap-16"
+              />
+            </div>
+            {/* <ProjectSection {...vinylHealthProject} /> */}
 
           </div>
         </div>

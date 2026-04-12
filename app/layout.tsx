@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import BookCall from "./components/BookCall";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className="bg-[#F4F2EE] text-black font-sans">
         <div className="h-5 w-full bg-[#00AAFF]" aria-hidden="true" />
         {children}
+        <BookCall />
       </body>
     </html>
   );
