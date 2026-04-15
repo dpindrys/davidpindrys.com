@@ -4,39 +4,6 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
-const vinylProject = {
-  projectLabel: "Vinyl Health",
-  projectLogo: "/images/vinyl-logo.png",
-  projectDate: "2025",
-  title: "Source-backed AI Summaries",
-  descriptor:
-    "Helping clinicians get quick context without losing sight of the underlying data for AI-first startup",
-  heroImage: "/images/vinyl-hero.png",
-  heroImageAlt: "Vinyl Health, source-backed AI summaries interface",
-  featureImages: [],
-  meta: [
-    { label: "Role", value: "Product Design Lead" },
-    { label: "Primary Users", value: "Clinicians and care teams" },
-    { label: "Focus", value: "Trust, oversight, and patient needs" },
-  ],
-  summaryBlock: {
-    label: "SUMMARY",
-    body: "I led product design for a clinician-facing platform that surfaces AI-generated patient summaries grounded in source encounter data, helping care teams orient faster and trust what they see.",
-    team: "Clinical SME, product lead, engineering lead, and myself",
-  },
-  testimonial: {
-    quote: (
-      <div className="flex flex-col gap-1.5">
-        <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-          Contribution
-        </span>
-        <p className="font-sans font-normal text-[16px] leading-[1.5] text-black">
-          Translated patient-reported and clinical data into a dashboard experience that balanced quick understanding with clinical trust.
-        </p>
-      </div>
-    ),
-  },
-};
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -372,40 +339,6 @@ const freseniusProject = {
   },
 };
 
-/* Vinyl Health, commented out for now
-const vinylHealthProject = {
-  projectLabel: "Vinyl Health",
-  projectLogo: "/images/vinylhealth-project-logo.png",
-  title: "Care-centered Product Design",
-  descriptor: "Clinician dashboard and AI summaries for complex-care patients",
-  heroImage: "/images/vinylhealth-hero.png",
-  heroImageAlt: "Vinyl Health project hero",
-  featureImages: [
-    { src: "", alt: "", label: "Feature 1" },
-    { src: "", alt: "", label: "Feature 2" },
-    { src: "", alt: "", label: "Feature 3" },
-  ],
-  meta: [
-    { label: "Role", value: "Lead Product Designer" },
-    { label: "Primary Users", value: "Clinicians caring for patients with complex needs" },
-    { label: "Focus", value: "Trust, orientation, and continuity" },
-  ],
-  blurbs: {
-    problem:
-      "A patient's personal details, clinical or self-reported baseline, and follow-up plans are often fragmented across systems, making it harder for clinicians and care teams to quickly orient and trust what they are seeing.",
-    solution:
-      "I designed a clinician-facing dashboard that brings a patient's story, goals, and needs into one clearer view, with AI summaries grounded in source encounter data.",
-    whyItMatters:
-      "This helps teams stay aligned, understand what matters faster, and reduce repeated effort across follow-up and coordination.",
-  },
-  testimonial: {
-    quote: '"Placeholder testimonial quote."',
-    name: "Name",
-    title: "Title, Vinyl Health",
-  },
-};
-*/
-
 const ascensionProject = {
   projectLabel: "Ascension",
   projectLogo: "/images/ascension-project-logo.png",
@@ -459,28 +392,15 @@ const ascensionProject = {
           "I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability.",
         images: [
           {
-            placeholder: true,
-            alt: "Responsive portal experience",
+            src: "/images/dellchildrens/after.png",
+            modalPrimarySrc: "/images/dellchildrens/after.png",
+            alt: "Responsive member portal after redesign",
             thumbnailTitle: "Responsive portal",
             modalTitle: "Responsive portal",
             modalBody:
-              "Placeholder, replace with a representative responsive layout across breakpoints.",
-          },
-          {
-            placeholder: true,
-            alt: "Expanded member workflows",
-            thumbnailTitle: "Expanded workflows",
-            modalTitle: "Expanded workflows",
-            modalBody:
-              "Placeholder, replace with flows such as care team designation, ID card, or prior auth.",
-          },
-          {
-            placeholder: true,
-            alt: "Lean team delivery",
-            thumbnailTitle: "Shipping with a lean team",
-            modalTitle: "Shipping with a lean team",
-            modalBody:
-              "Placeholder, replace with a timeline, milestone, or collaboration artifact if helpful.",
+              "I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability.",
+            modalImageOverlaySrc: "/images/dellchildrens/home-mobile.png",
+            modalImageOverlayAlt: "Home experience on mobile",
           },
         ],
       },
@@ -491,20 +411,13 @@ const ascensionProject = {
           "Members can designate a care team and primary care provider through flows that were previously unavailable in the legacy portal.",
         images: [
           {
-            placeholder: true,
-            alt: "Care team and PCP designation",
-            thumbnailTitle: "Care team designation",
+            src: "/images/dellchildrens/change-mobile.png",
+            modalPrimarySrc: "/images/dellchildrens/change-mobile.png",
+            alt: "Care team designation on mobile",
+            thumbnailTitle: "Care team",
             modalTitle: "Care team designation",
             modalBody:
-              "Placeholder, replace with screens for care team or PCP designation in the new portal.",
-          },
-          {
-            placeholder: true,
-            alt: "PCP selection confirmation",
-            thumbnailTitle: "PCP selection",
-            modalTitle: "PCP selection",
-            modalBody:
-              "Placeholder, replace with confirmation or summary step for the selected provider.",
+              "Members can designate a care team and primary care provider through flows that were previously unavailable in the legacy portal.",
           },
         ],
       },
@@ -515,20 +428,18 @@ const ascensionProject = {
           "ID card requests were brought into the digital experience so members could complete requests without unnecessary friction.",
         images: [
           {
-            placeholder: true,
-            alt: "ID card request flow",
+            src: "/images/dellchildrens/change-mobile.png",
+            modalPrimarySrc: "/images/dellchildrens/change-mobile.png",
+            alt: "ID card request flow on mobile",
             thumbnailTitle: "ID card requests",
             modalTitle: "ID card requests",
             modalBody:
-              "Placeholder, replace with the member-facing ID card request flow.",
-          },
-          {
-            placeholder: true,
-            alt: "ID card status or delivery",
-            thumbnailTitle: "Request status",
-            modalTitle: "Request status",
-            modalBody:
-              "Placeholder, replace with status, delivery, or follow-up views if helpful.",
+              "ID card requests were brought into the digital experience so members could complete requests without unnecessary friction.",
+            modalVideoSrc: "/images/dellchildrens/idcards.mov",
+            modalVideoOnly: true,
+            modalVideoOnlyStyle: {
+              objectPosition: "top center",
+            },
           },
         ],
       },
@@ -594,12 +505,7 @@ export default function Home() {
             >
               Selected work
             </h2>
-            <ProjectSection
-              {...vinylProject}
-              hideMetaTopBorder
-              metaSectionStackGap="gap-16"
-            />
-            <div className="mt-56 md:mt-72 lg:mt-80">
+            <div className="mt-10 md:mt-14 lg:mt-16">
               <ProjectSection
                 {...vehrProject}
                 hideMetaTopBorder
@@ -620,7 +526,6 @@ export default function Home() {
                 metaSectionStackGap="gap-16"
               />
             </div>
-            {/* <ProjectSection {...vinylHealthProject} /> */}
 
           </div>
         </div>

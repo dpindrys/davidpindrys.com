@@ -30,7 +30,8 @@ export default function Hero() {
   return (
     <section className="flex w-full flex-col gap-10">
       <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
-        I design digital healthcare products that make complex clinical workflows clearer, safer, and easier to use.
+        I design digital healthcare products that make complex clinical workflows
+        clearer, safer, and easier to use.
       </h1>
 
       {/* CTAs */}

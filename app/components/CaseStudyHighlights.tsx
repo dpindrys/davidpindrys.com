@@ -99,6 +99,9 @@ export interface CaseStudyHighlightImage {
   modalPrimarySrc?: string;
   /** Optional secondary supporting image or crop in the modal */
   modalSecondarySrc?: string;
+  /** Optional still image overlaid on the bottom-right of the primary modal image (e.g. phone mockup) */
+  modalImageOverlaySrc?: string;
+  modalImageOverlayAlt?: string;
   /** Optional video drawn on top of the modal primary image (e.g. wireframe animation over a composite still) */
   modalVideoSrc?: string;
   /** Position of the video over the modal image (wrapper is the relative container around the still) */
@@ -211,6 +214,10 @@ function modalHeading(img: CaseStudyHighlightImage): string {
 /** Light frame around modal imagery (shared by all media variants) */
 const modalMediaFrameClass =
   "overflow-hidden rounded-xl border border-black/[0.12] bg-white";
+
+/** Same frame but visible overflow so image overlays can extend past the right edge */
+const modalMediaFrameClassOverflowVisible =
+  "overflow-visible rounded-xl border border-black/[0.12] bg-white";
 
 type ModalMediaBlockProps = {
   modalImg: CaseStudyHighlightImage;
@@ -377,7 +384,11 @@ function ModalMediaBlock({
           <div className="flex w-full min-w-0 flex-col">
             <div
               data-modal-framed-media
-              className={`w-full ${modalMediaFrameClass} ${modalImg.modalMediaFrameAspectClass ?? ""} ${
+              className={`w-full ${
+                modalImg.modalImageOverlaySrc
+                  ? modalMediaFrameClassOverflowVisible
+                  : modalMediaFrameClass
+              } ${modalImg.modalMediaFrameAspectClass ?? ""} ${
                 challengeSplitMedia ? "-mt-2.5 md:-mt-2.5" : ""
               }`}
             >
@@ -398,6 +409,16 @@ function ModalMediaBlock({
                       : "relative z-0 block h-auto w-full"
                   }
                 />
+                {modalImg.modalImageOverlaySrc ? (
+                  <div className="pointer-events-none absolute inset-0 z-10 flex items-end justify-end">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={modalImg.modalImageOverlaySrc}
+                      alt={modalImg.modalImageOverlayAlt ?? ""}
+                      className="block h-[calc(100%-220px)] w-auto max-h-[calc(100%-220px)] translate-x-5"
+                    />
+                  </div>
+                ) : null}
                 {modalImg.modalVideoSrc ? (
                   <div
                     className="pointer-events-none absolute z-10 overflow-hidden rounded-r-lg"
