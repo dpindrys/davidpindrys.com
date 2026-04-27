@@ -42,7 +42,7 @@ export default function Hero() {
           className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
           aria-label={copied ? "Email copied to clipboard" : "Copy email to clipboard"}
         >
-          <span>{copied ? "dpindrys@gmail.com" : "Copy email"}</span>
+          <span>{copied ? "dpindrys@gmail.com" : "Copy my email"}</span>
           {copied ? (
             <svg
               width="22"
