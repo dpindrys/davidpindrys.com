@@ -170,6 +170,37 @@ export type CaseStudyHighlightsHandle = {
   openFirstProblemModal: () => void;
 };
 
+function clampInt(n: number, min: number, max: number): number {
+  if (!Number.isFinite(n)) return min;
+  return Math.min(max, Math.max(min, Math.trunc(n)));
+}
+
+function compositePageCountForFrame(
+  frame: CaseStudyHighlightFrame,
+  compositeRowsByFrameId: Record<string, number[][]>
+): number {
+  // Only these VEHR-style composite tabs are paginated 1-up in our modal.
+  if (
+    frame.id !== "problem" &&
+    frame.id !== "solution" &&
+    frame.id !== "whyItMatters" &&
+    frame.id !== "mismatchOverload" &&
+    frame.id !== "researchMapping" &&
+    frame.id !== "domainArchitecture" &&
+    frame.id !== "burdensomeNoVisibility" &&
+    frame.id !== "mappingWireframing" &&
+    frame.id !== "prototypingDeploying"
+  ) {
+    return 1;
+  }
+  const rows =
+    compositeRowsByFrameId[frame.id] ??
+    frame.images.map((_, i) => [i] as number[]);
+  // The 1-up pagination is enabled when the tab has a single split row with 2 items.
+  const hasTwoUpRow = rows.some((r) => r.length === 2);
+  return hasTwoUpRow ? 2 : 1;
+}
+
 function totalImageCount(frames: CaseStudyHighlightFrame[]): number {
   return frames.reduce((sum, f) => sum + f.images.length, 0);
 }
@@ -481,6 +512,11 @@ type VehrCompositeProps = {
   setModalVideoLoadError: (v: boolean) => void;
   /** Per-frame row groupings (image indices). */
   compositeRowsByFrameId: Record<string, number[][]>;
+  /** Per-frame “page” index for composite tabs that show one highlight at a time. */
+  compositePageIndexByFrameId: Record<string, number | undefined>;
+  setCompositePageIndexByFrameId: React.Dispatch<
+    React.SetStateAction<Record<string, number | undefined>>
+  >;
 };
 
 const modalImageSourceClass =
@@ -635,16 +671,20 @@ function VehrCompositeFrameContent({
   modalVideoLoadError,
   setModalVideoLoadError,
   compositeRowsByFrameId,
+  compositePageIndexByFrameId,
+  setCompositePageIndexByFrameId,
 }: VehrCompositeProps) {
   const rows =
     compositeRowsByFrameId[frame.id] ??
     frame.images.map((_, i) => [i] as number[]);
+  const selectedPageIndex = compositePageIndexByFrameId[frame.id] ?? 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-5 md:gap-6">
       {rows.map((row, ri) => {
         const isSplitRow = row.length > 1;
-        const isImpactFrame = frame.id === "impact";
+        const isImpactFrame =
+          frame.id === "impact" || frame.id === "impactValidation";
         /**
          * Single-row: text left (~30%) + media right (~70%), sm+.
          * Excludes Fresenius-style Impact (text-led cards; see `omitModalMedia` fallback below).
@@ -782,11 +822,18 @@ function VehrCompositeFrameContent({
           row.length === 2 &&
           (frame.id === "problem" ||
             frame.id === "solution" ||
-            frame.id === "whyItMatters")
+            frame.id === "whyItMatters" ||
+            frame.id === "mismatchOverload" ||
+            frame.id === "researchMapping" ||
+            frame.id === "domainArchitecture" ||
+            frame.id === "burdensomeNoVisibility" ||
+            frame.id === "mappingWireframing" ||
+            frame.id === "prototypingDeploying")
         ) {
-          const imgTop = frame.images[row[0]];
-          const imgBottom = frame.images[row[1]];
-          if (!imgTop || !imgBottom) return null;
+          const pageCount = 2;
+          const safePageIndex = clampInt(selectedPageIndex, 0, pageCount - 1);
+          const img = frame.images[row[safePageIndex]];
+          if (!img) return null;
           const titleId = ri === 0 ? `${baseId}-modal-title` : undefined;
 
           const problemPairRow = (
@@ -829,8 +876,39 @@ function VehrCompositeFrameContent({
               key={`row-${ri}`}
               className="flex w-full flex-col gap-10 sm:gap-12"
             >
-              {problemPairRow(imgTop, titleId)}
-              {problemPairRow(imgBottom, undefined)}
+              {problemPairRow(img, titleId)}
+              <div className="flex w-full justify-center">
+                <div
+                  className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.10] bg-white px-3 py-1.5 font-sans text-[13px] leading-none text-black/55"
+                  role="group"
+                  aria-label="Page"
+                >
+                  {[0, 1].map((pi) => {
+                    const active = pi === safePageIndex;
+                    return (
+                      <button
+                        key={pi}
+                        type="button"
+                        className={`px-1.5 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25 ${
+                          active
+                            ? "font-semibold text-black"
+                            : "font-medium text-black/45 hover:text-black/70"
+                        }`}
+                        aria-current={active ? "page" : undefined}
+                        aria-label={`Page ${pi + 1} of ${pageCount}`}
+                        onClick={() => {
+                          setCompositePageIndexByFrameId((prev) => ({
+                            ...prev,
+                            [frame.id]: pi,
+                          }));
+                        }}
+                      >
+                        {pi + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           );
         }
@@ -1083,6 +1161,16 @@ const CaseStudyHighlights = forwardRef<
   const [modal, setModal] = useState<ModalState>(null);
   const [portalReady, setPortalReady] = useState(false);
   const [modalVideoLoadError, setModalVideoLoadError] = useState(false);
+  const [compositePageIndexByFrameId, setCompositePageIndexByFrameId] = useState<
+    Record<string, number | undefined>
+  >({});
+  const compositePageIndexByFrameIdRef = useRef<Record<string, number | undefined>>(
+    {}
+  );
+
+  useEffect(() => {
+    compositePageIndexByFrameIdRef.current = compositePageIndexByFrameId;
+  }, [compositePageIndexByFrameId]);
 
   useEffect(() => {
     setPortalReady(true);
@@ -1100,6 +1188,7 @@ const CaseStudyHighlights = forwardRef<
       openFirstProblemModal: () => {
         if (!frames[0]?.images?.length) return;
         if (modalPresentation === "composite-vehr") {
+          setCompositePageIndexByFrameId({});
           setModal({ kind: "composite", frameIndex: 0 });
         } else {
           setModal({
@@ -1132,10 +1221,34 @@ const CaseStudyHighlights = forwardRef<
       if (m.kind === "composite") {
         const n = frames.length;
         if (n <= 1) return m;
-        return {
-          kind: "composite",
-          frameIndex: (m.frameIndex - 1 + n) % n,
-        };
+        const currentFrame = frames[m.frameIndex];
+        const currentFrameId = currentFrame?.id ?? "";
+        const currentPageCount = currentFrame
+          ? compositePageCountForFrame(currentFrame, compositeRowsByFrameId)
+          : 1;
+        const currentPageIndex =
+          compositePageIndexByFrameIdRef.current[currentFrameId] ?? 0;
+
+        if (currentPageCount > 1 && currentPageIndex > 0) {
+          setCompositePageIndexByFrameId((prev) => ({
+            ...prev,
+            [currentFrameId]: currentPageIndex - 1,
+          }));
+          return m;
+        }
+
+        const prevFrameIndex = (m.frameIndex - 1 + n) % n;
+        const prevFrame = frames[prevFrameIndex];
+        const prevFrameId = prevFrame?.id ?? "";
+        const prevPageCount = prevFrame
+          ? compositePageCountForFrame(prevFrame, compositeRowsByFrameId)
+          : 1;
+
+        setCompositePageIndexByFrameId((prev) => ({
+          ...prev,
+          [prevFrameId]: Math.max(0, prevPageCount - 1),
+        }));
+        return { kind: "composite", frameIndex: prevFrameIndex };
       }
       const total = totalImageCount(frames);
       if (total <= 1) return m;
@@ -1144,7 +1257,7 @@ const CaseStudyHighlights = forwardRef<
         globalIndex: (m.globalIndex - 1 + total) % total,
       };
     });
-  }, [frames]);
+  }, [frames, compositeRowsByFrameId]);
 
   const goNext = useCallback(() => {
     setModal((m) => {
@@ -1152,10 +1265,30 @@ const CaseStudyHighlights = forwardRef<
       if (m.kind === "composite") {
         const n = frames.length;
         if (n <= 1) return m;
-        return {
-          kind: "composite",
-          frameIndex: (m.frameIndex + 1) % n,
-        };
+        const currentFrame = frames[m.frameIndex];
+        const currentFrameId = currentFrame?.id ?? "";
+        const currentPageCount = currentFrame
+          ? compositePageCountForFrame(currentFrame, compositeRowsByFrameId)
+          : 1;
+        const currentPageIndex =
+          compositePageIndexByFrameIdRef.current[currentFrameId] ?? 0;
+
+        if (currentPageCount > 1 && currentPageIndex < currentPageCount - 1) {
+          setCompositePageIndexByFrameId((prev) => ({
+            ...prev,
+            [currentFrameId]: currentPageIndex + 1,
+          }));
+          return m;
+        }
+
+        const nextFrameIndex = (m.frameIndex + 1) % n;
+        const nextFrame = frames[nextFrameIndex];
+        const nextFrameId = nextFrame?.id ?? "";
+        setCompositePageIndexByFrameId((prev) => ({
+          ...prev,
+          [nextFrameId]: 0,
+        }));
+        return { kind: "composite", frameIndex: nextFrameIndex };
       }
       const total = totalImageCount(frames);
       if (total <= 1) return m;
@@ -1164,12 +1297,16 @@ const CaseStudyHighlights = forwardRef<
         globalIndex: (m.globalIndex + 1) % total,
       };
     });
-  }, [frames]);
+  }, [frames, compositeRowsByFrameId]);
 
   const goToFrameTab = useCallback(
     (frameIndex: number) => {
       if (!frames[frameIndex]?.images?.length) return;
       if (modalPresentation === "composite-vehr") {
+        setCompositePageIndexByFrameId((prev) => ({
+          ...prev,
+          [frames[frameIndex].id]: 0,
+        }));
         setModal({ kind: "composite", frameIndex: frameIndex });
       } else {
         setModal({
@@ -1189,6 +1326,9 @@ const CaseStudyHighlights = forwardRef<
   }, [
     modal?.kind === "slides" ? modal.globalIndex : modal?.frameIndex,
     modal,
+    modal?.kind === "composite"
+      ? compositePageIndexByFrameId[frames[modal.frameIndex]?.id ?? ""]
+      : null,
   ]);
 
   /** Ensure modal video plays after the portal mounts the video element. */
@@ -1480,6 +1620,10 @@ const CaseStudyHighlights = forwardRef<
                     modalVideoLoadError={modalVideoLoadError}
                     setModalVideoLoadError={setModalVideoLoadError}
                     compositeRowsByFrameId={compositeRowsByFrameId}
+                    compositePageIndexByFrameId={compositePageIndexByFrameId}
+                    setCompositePageIndexByFrameId={
+                      setCompositePageIndexByFrameId
+                    }
                   />
                 </div>
               ) : modal.kind === "slides" && modalImg && modalLocal ? (

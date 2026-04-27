@@ -65,6 +65,10 @@ interface ProjectSectionProps {
   heroImageAlt: string;
   heroOverlayImage?: string;
   heroOverlayImageAlt?: string;
+  /** Tailwind class controlling overlay image height (defaults to h-[90%]) */
+  heroOverlayImageHeightClass?: string;
+  /** Positive number shifts overlay further right (px). */
+  heroOverlayImageRightOffsetPx?: number;
   /** Video to play inside the device screen on the hero image */
   heroVideo?: string;
   /** Optional transform applied to full-bleed heroVideo (e.g. to crop a 1px edge artifact) */
@@ -117,6 +121,8 @@ export default function ProjectSection({
   heroImageAlt,
   heroOverlayImage,
   heroOverlayImageAlt,
+  heroOverlayImageHeightClass = "h-[90%]",
+  heroOverlayImageRightOffsetPx = 0,
   heroVideo,
   heroVideoTransform,
   heroVideoClipPath,
@@ -200,7 +206,7 @@ export default function ProjectSection({
                   disabled
                   className="inline-flex h-12 shrink-0 cursor-not-allowed items-center gap-2 rounded-2xl border-2 border-black/10 bg-black/5 px-4 font-sans font-semibold text-[16px] leading-none text-black/30"
                 >
-                  Details soon
+                  {caseStudyCtaLabel}
                   <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-black/30" />
                 </button>
               ) : null}
@@ -344,31 +350,33 @@ export default function ProjectSection({
       </div>
 
       {/* Hero image or full-bleed hero video */}
-      <div className="relative w-full overflow-hidden rounded-2xl">
-        {heroVideo && !heroVideoInset ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="block h-auto w-full"
-            style={{
-              transform: heroVideoTransform,
-              transformOrigin: heroVideoTransform ? "center" : undefined,
-              clipPath: heroVideoClipPath,
-            }}
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-        ) : (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={heroImage}
-            alt={heroImageAlt}
-            className="block h-auto w-full"
-          />
-        )}
+      <div className="relative w-full overflow-visible">
+        <div className="relative w-full overflow-hidden rounded-2xl">
+          {heroVideo && !heroVideoInset ? (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="block h-auto w-full"
+              style={{
+                transform: heroVideoTransform,
+                transformOrigin: heroVideoTransform ? "center" : undefined,
+                clipPath: heroVideoClipPath,
+              }}
+            >
+              <source src={heroVideo} type="video/mp4" />
+            </video>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={heroImage}
+              alt={heroImageAlt}
+              className="block h-auto w-full"
+            />
+          )}
+        </div>
 
         {/* Video overlay: clip wrapper hides black bars, video overflows inside */}
         {heroVideo && heroVideoInset && (
@@ -438,7 +446,13 @@ export default function ProjectSection({
           <img
             src={heroOverlayImage}
             alt={heroOverlayImageAlt ?? ""}
-            className="absolute bottom-0 right-0 h-[90%] w-auto object-contain"
+            className={`absolute bottom-0 w-auto object-contain ${heroOverlayImageHeightClass}`}
+            style={{
+              right:
+                heroOverlayImageRightOffsetPx > 0
+                  ? `-${heroOverlayImageRightOffsetPx}px`
+                  : "0px",
+            }}
           />
         )}
       </div>

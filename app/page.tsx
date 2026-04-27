@@ -21,51 +21,88 @@ const vehrProject = {
       projectTitle: "Clinical Sensemaking",
       company: "VEHR Technologies",
     },
+    compositeRows: {
+      mismatchOverload: [[0, 1]],
+      researchMapping: [[0, 1]],
+      timelineSolution: [[0]],
+      domainArchitecture: [[0, 1]],
+      impactValidation: [[0]],
+    },
     frames: [
       {
-        id: "problem",
-        title: "Problem",
+        id: "mismatchOverload",
+        title: "Mismatch & Overload",
         summary:
           "Most EHRs reflect how data is stored, not how clinicians think—and dense views can obscure what is changing and what needs attention.",
         images: [
           {
-            src: "/images/vehr/problem3.png",
-            modalPrimarySrc: "/images/vehr/problem3a.png",
+            src: "/images/vehr/mismatch.png",
+            modalPrimarySrc: "/images/vehr/mismatch.png",
             alt: "Mental model mismatch between EHR structure and clinical reasoning",
-            thumbnailTitle: "Mental model mismatch",
-            modalTitle: "Mental model mismatch",
+            thumbnailTitle: "Mental Model Mismatch",
+            modalTitle: "Mental Model Mismatch",
             modalBody:
-              "Most EHRs reflect how data is stored, not how clinicians think. Source-driven navigation creates friction when clinicians need to understand a patient in context.",
-            modalMediaCaption:
-              "Image source: Epic Systems interface screenshot.",
+              "Most EHRs organize by data source, not clinical reasoning. Tab-based navigation creates friction when clinicians need to build a patient story across time.",
           },
           {
-            src: "/images/vehr/problem2.png",
-            modalPrimarySrc: "/images/vehr/problem2a.png",
+            src: "/images/vehr/overload.png",
+            modalPrimarySrc: "/images/vehr/overload.png",
             alt: "Dense data with weak clinical signal",
-            caption: "Source: Epic Systems interface screenshot",
-            thumbnailTitle: "Dense data, weak signal",
-            modalTitle: "Dense data, weak signal",
+            thumbnailTitle: "Overload without Insight",
+            modalTitle: "Overload without Insight",
             modalBody:
-              "Even when EHRs visualize patient data, overlapping trends and missing context can make it hard to see what is changing and what needs attention.",
-            modalMediaCaption: "Source: Epic Systems interface screenshot",
+              "Even when data is visualized, overlapping trends without context make it hard to identify what's changing and what needs attention.",
           },
         ],
       },
       {
-        id: "solution",
-        title: "Solution",
+        id: "researchMapping",
+        title: "Research & Mapping",
         summary:
-          "A longitudinal view aligns encounters and outcomes over time, paired with a unified visual structure that surfaces signals first while keeping detail accessible for care planning.",
+          "Understanding clinician sensemaking and mapping the domain made it possible to design around problems and relationships instead of isolated data fields.",
+        images: [
+          {
+            src: "/images/vehr/note.png",
+            alt: "Clinician-led research artifacts for workflow and sensemaking",
+            thumbnailTitle: "Clinician-led Research",
+            modalTitle: "Clinician-led Research",
+            modalBody:
+              "I worked directly with Dr. Cole Marolf, a practicing PCP, to understand how clinicians construct patient narratives over time. We examined how he builds context from fragmented EHR data during chart review.",
+          },
+          {
+            src: "/images/vehr/map.png",
+            alt: "Mapping the domain: problems, events, outcomes, and relationships",
+            thumbnailTitle: "Mapping the Clinical Workflow",
+            modalTitle: "Mapping the Clinical Workflow",
+            modalBody:
+              "We mapped the clinical entities and relationships that drive decision-making (diagnoses, treatments, outcomes, timeline) to ensure the interface aligned with clinical reasoning, not database structure.",
+          },
+        ],
+      },
+      {
+        id: "timelineSolution",
+        title: "Timeline Solution",
+        summary:
+          "A longitudinal view aligns encounters and outcomes over time so clinicians can see patterns and change without chart digging.",
         images: [
           {
             src: "/images/vehr/timeline.png",
             alt: "Longitudinal view of clinical data over time",
-            thumbnailTitle: "Longitudinal view",
-            modalTitle: "Longitudinal view",
-            modalBody:
-              "Encounters, vitals, diagnoses, and patient-reported data align across time, making change and clinical relationships easier to interpret.",
+            thumbnailTitle: "Longitudinal Patient Data",
+            modalTitle: "Longitudinal Patient Data",
+            modalBodyParagraphs: [
+              "Encounters, vitals, diagnoses, and patient-reported data align across a shared timeline, making clinical relationships and patterns visible at a glance.",
+              "Clinicians can scan vertically to see correlations at a moment in time, or horizontally to track a single domain's trajectory.",
+            ],
           },
+        ],
+      },
+      {
+        id: "domainArchitecture",
+        title: "Domain Architecture",
+        summary:
+          "A unified visual structure surfaces signal first while keeping detail accessible, so clinicians stay oriented as they move from overview to action.",
+        images: [
           {
             src: "/images/vehr/research3.png",
             alt: "Signal first, detail on demand with unified visual structure",
@@ -74,29 +111,36 @@ const vehrProject = {
             modalBody:
               "A unified visual structure helps clinicians spot patterns and abnormalities quickly, while preserving access to the detail needed for care planning.",
           },
+          {
+            src: "/images/vehr/voice2.png",
+            alt: "Domain-aligned structure keeps context connected for decisions",
+            thumbnailTitle: "Context stays connected",
+            modalTitle: "Context stays connected",
+            modalBody:
+              "Keeping related problems, notes, and outcomes connected in one structure reduces chart digging and supports clearer, more confident review.",
+          },
         ],
       },
       {
-        id: "whyItMatters",
-        title: "Why it matters",
+        id: "impactValidation",
+        title: "Impact & Validation",
         summary:
-          "Faster recognition of what needs attention and more informed review in less time—without stitching the clinical picture together across separate screens.",
+          "Validation from a practicing clinician and founder after reviewing early concepts and prototypes.",
         images: [
           {
-            src: "/images/vehr/patterns.png",
-            alt: "Faster recognition of clinical signals and change",
-            thumbnailTitle: "Faster recognition of what needs attention",
-            modalTitle: "Faster recognition of what needs attention",
-            modalBody:
-              "Clinicians can scan for meaningful change more quickly without stitching together the clinical picture across separate screens.",
-          },
-          {
-            src: "/images/vehr/voice.png",
-            alt: "More informed clinical review with connected context",
-            thumbnailTitle: "More informed review in less time",
-            modalTitle: "More informed review in less time",
-            modalBody:
-              "Keeping related data and context connected in one view reduces chart digging and supports clearer, more confident interpretation.",
+            alt: "Impact & Validation",
+            thumbnailTitle: "Impact & Validation",
+            modalTitle: "Impact & Validation",
+            omitModalMedia: true,
+            modalTestimonials: [
+              {
+                quote:
+                  "\"David brought design expertise to our early concepts, identifying core workflow needs and adding novel solutions - especially the heatmap visualization, which balances data density with clarity better than anything I've seen in practice.\"",
+                attribution:
+                  "— Dr. Cole Marolf, Practicing Clinician & Founder, VEHR Technologies",
+                avatarSrc: "/images/cole.png",
+              },
+            ],
           },
         ],
       },
@@ -157,73 +201,81 @@ const freseniusProject = {
       company: "Fresenius Medical Care",
     },
     compositeRows: {
+      burdensomeNoVisibility: [[0, 1]],
       challenge: [[0]],
-      mapping: [[0, 1]],
-      testing: [[0]],
-      solution: [[0]],
+      mappingWireframing: [[0, 1]],
+      prototypingDeploying: [[0, 1]],
       impact: [[0, 1, 2]],
     },
     frames: [
       {
-        id: "challenge",
-        title: "Challenge",
+        id: "burdensomeNoVisibility",
+        title: "Burdensom & No Visibility",
         summary:
-          "Digitizing refill work meant translating a manual, coordination-heavy process into a digital workflow without losing the context nurses and dietitians needed to act safely and confidently.",
+          "Before digitization, refills were manual, coordination-heavy, and opaque—creating administrative burden and forcing clinics to chase status by phone.",
         images: [
           {
-            src: "/images/frx/raf.png",
-            modalPrimarySrc: "/images/frx/raf.jpg",
-            alt: "Reliance on RAF forms in the refill workflow",
-            thumbnailTitle: "Reliance on weekly forms",
-            modalTitle: "Reliance on weekly forms",
+            src: "/images/frx/raf3.png",
+            alt: "Paper RAF forms and manual refill coordination",
+            thumbnailTitle: "Administrative Burden",
+            modalTitle: "Administrative Burden",
             modalBody:
-              "Critical refill details were tracked through weekly refill forms with medication and patient details, making the process difficult to track, prone to delays, and more vulnerable to missed details.",
-            modalMediaCaption: "Nurse showing me the weekly refill forms",
+              "Nurses spent 15+ minutes per refill managing paper forms and 2-3 hours per week on refill coordination - time pulled directly from patient care. The manual workflow (receiving faxes, printing, tracking clipboards, signing forms, re-faxing) transformed what should be a simple authorization into a multi-step administrative task.",
+          },
+          {
+            src: "/images/frx/disconnected.png",
+            alt: "Clinics lacked access to pharmacy processing status",
+            thumbnailTitle: "Visibility Gap",
+            modalTitle: "Status Visibility Gap",
+            modalBody:
+              "Once RAF forms were faxed to the pharmacy, nurses had zero visibility into processing status. The pharmacy's digital system tracked every step (received, processing, filled, shipped), but clinics had no access, forcing nurses to make phone calls for basic status updates: \"Did you get it? Is it processing? When will it ship?\"",
           },
         ],
       },
       {
-        id: "mapping",
-        title: "Mapping",
+        id: "mappingWireframing",
+        title: "Mapping and Wireframing",
         summary:
-          "We mapped the objects involved in refill work and used that structure to align the workflow with data relationships and engineering needs.",
+          "We mapped the objects involved in refill work and validated the structure with users before committing to UI hierarchy and interaction design.",
         images: [
           {
             src: "/images/frx/structuring.png",
             modalPrimarySrc: "/images/frx/structuring.png",
             alt: "Structuring refill objects: relationships and workflow foundation",
-            thumbnailTitle: "Structuring the objects",
-            modalTitle: "Structuring the objects",
+            thumbnailTitle: "Object Map",
+            modalTitle: "Object Map",
             modalBody:
-              "We mapped the many objects involved in refill work, clarified how they related to one another, and used that structure to shape a more coherent digital workflow. That work helped identify the core objects staff needed to act on, align the workflow with data relationships, and give engineering a clearer foundation to build from.",
+              "I built an object map before wireframing to establish the data model and surface edge cases early. Mapping the core entities - PATIENT, MED, SCRIPT, REFILL, ADDRESS, USER - revealed complexity that would have derailed development if caught later: patients with multiple addresses, medications with different refill frequencies, scripts with expiration dates. This gave engineering a clear foundation and prevented mid-build data model changes.",
             modalMediaCaption:
               "Object oriented UX map for nouns, attributes, actions in the system",
           },
           {
             src: "/images/frx/structuring.png",
-            alt: "Object mapping wireframe animation",
+            alt: "Wireframe emerging from object-map validation",
             modalVideoSrc: "/images/frx/fresenius-objectwireframe.mp4",
             modalVideoOnly: true,
             modalVideoOnlyStyle: {
               objectPosition: "top center",
             },
-            hideModalCopy: true,
+            thumbnailTitle: "Wireframe",
+            modalTitle: "Wireframe",
+            modalBody:
+              "I tested the object map with users to validate what information nurses actually needed before committing to UI structure. This wireframe emerged from that validation work - refill lists organized by medication with clear status indicators and defined action paths. The object-first approach meant front-end development started with a validated data structure, not guesswork about what fields to display.",
             modalMediaCaption:
               "Object map translated to wireframe for testing",
           },
         ],
       },
       {
-        id: "testing",
-        title: "Testing",
+        id: "prototypingDeploying",
+        title: "Prototyping and Deploying",
         summary:
-          "Prototypes with nurses revealed where the workflow created hesitation and what to change for faster, more confident decisions.",
+          "Mid-fidelity prototypes validated information hierarchy before final delivery, which kept key context in view while reducing scanning burden.",
         images: [
           {
-            src: "/images/frx/testing.png",
-            modalPrimarySrc: "/images/frx/testing.png",
-            alt: "Annotated prototype used to test refill workflow assumptions",
-            thumbnailTitle: "Testing and refining the workflow",
+            src: "/images/frx/prototype.png",
+            alt: "Mid-fidelity prototype for testing information hierarchy",
+            thumbnailTitle: "Testing Information Hierarchy",
             modalTitle: "Testing Information Hierarchy",
             modalBodyParagraphs: [
               "Built with an SLDS-based mid-fidelity system, these prototypes helped test hierarchy and interaction design.",
@@ -231,18 +283,10 @@ const freseniusProject = {
               "We also learned that hiding the date behind Today/Later added friction, so the final design showed the date field with today preselected.",
             ],
           },
-        ],
-      },
-      {
-        id: "solution",
-        title: "Solution",
-        summary:
-          "The final workflow kept essential context in one place so nurses could complete refills without losing orientation.",
-        images: [
           {
             src: "/images/frx/oneplace.png",
             alt: "Refill workflow with request details, dates, shipping, and status in one place",
-            thumbnailTitle: "Bringing key details into one place",
+            thumbnailTitle: "Keeping Key Information in View",
             modalTitle: "Keeping Key Information in View",
             modalBody:
               "The final solution kept essential refill information visible at all times while progressively disclosing the workflow only when users needed to act. This balanced quick scanning with focused task completion, helping nurses and dietitians move through refills with minimal friction.",
@@ -348,6 +392,10 @@ const ascensionProject = {
     "Responsive portal for 40,000+ members for Dell Children's Health Plan",
   heroImage: "/images/dellchildrens-hero.png",
   heroImageAlt: "Dell Children's Health Plan, responsive member portal",
+  heroOverlayImage: "/images/dellchildrens/home-mobile.png",
+  heroOverlayImageAlt: "Dell Children's portal home screen on mobile",
+  heroOverlayImageHeightClass: "h-[50%]",
+  heroOverlayImageRightOffsetPx: 50,
   featureImages: [],
   meta: [
     { label: "Role", value: "Senior Product Designer" },
@@ -360,6 +408,8 @@ const ascensionProject = {
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
     team: "Product manager, product lead, front and data engineers, and myself",
   },
+  caseStudyComingSoon: true,
+  caseStudyCtaLabel: "Coming soon",
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
     modalBrandHeader: {
@@ -514,14 +564,14 @@ export default function Home() {
             </div>
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
-                {...ascensionProject}
+                {...freseniusProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
               />
             </div>
             <div className="mt-56 md:mt-72 lg:mt-80">
               <ProjectSection
-                {...freseniusProject}
+                {...ascensionProject}
                 hideMetaTopBorder
                 metaSectionStackGap="gap-16"
               />
