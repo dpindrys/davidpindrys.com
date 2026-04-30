@@ -20,7 +20,7 @@ export default function Header() {
 
       {/* Right: Download Resume */}
       <a
-        href="https://drive.google.com/file/d/1Dcr0y-lbKcVsWfLN-oRvVAIakoNPJSfB/view?usp=sharing"
+        href="https://drive.google.com/file/d/173pcNgsW5rZd-Z2qe73FmClUY6XfQURo/view?usp=sharing"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2.5 font-sans font-bold text-[20px] leading-[1.21] text-black hover:opacity-60 transition-opacity"
