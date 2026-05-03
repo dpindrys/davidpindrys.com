@@ -2,6 +2,7 @@
 
 import { useState, useRef, type ReactNode, type JSX } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Carousel, { type CarouselSlide } from "./Carousel";
 import CaseStudyHighlights, {
   type CaseStudyHighlightsData,
@@ -63,6 +64,8 @@ interface ProjectSectionProps {
   descriptor: string;
   heroImage: string;
   heroImageAlt: string;
+  /** Optional href that makes the hero image clickable */
+  heroHref?: string;
   heroOverlayImage?: string;
   heroOverlayImageAlt?: string;
   /** Tailwind class controlling overlay image height (defaults to h-[90%]) */
@@ -109,6 +112,8 @@ interface ProjectSectionProps {
   caseStudyCtaLabel?: string;
   /** Custom content rendered after the summary/quote row (used for project-specific layouts) */
   children?: ReactNode;
+  /** When false, hides meta row, summary/testimonial row, highlights, and children below hero/features */
+  showProjectFooter?: boolean;
 }
 
 export default function ProjectSection({
@@ -119,6 +124,7 @@ export default function ProjectSection({
   descriptor,
   heroImage,
   heroImageAlt,
+  heroHref,
   heroOverlayImage,
   heroOverlayImageAlt,
   heroOverlayImageHeightClass = "h-[90%]",
@@ -143,6 +149,7 @@ export default function ProjectSection({
   caseStudyComingSoon = false,
   caseStudyCtaLabel = "More info",
   children,
+  showProjectFooter = true,
 }: ProjectSectionProps) {
   const hasPlayOverlay = Boolean(heroVideoPoster || heroVideoPlayButton);
   const [showPlayOverlay, setShowPlayOverlay] = useState(hasPlayOverlay);
@@ -368,6 +375,19 @@ export default function ProjectSection({
             >
               <source src={heroVideo} type="video/mp4" />
             </video>
+          ) : heroHref ? (
+            <Link
+              href={heroHref}
+              aria-label="Open case study"
+              className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroImage}
+                alt={heroImageAlt}
+                className="block h-auto w-full"
+              />
+            </Link>
           ) : (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -527,57 +547,58 @@ export default function ProjectSection({
       )}
 
       {/* Metadata + lower content (50/50 when blurbs present) */}
-      <div className={`flex w-full flex-col ${metaSectionStackGap}`}>
-
-        {/* Metadata: horizontal on desktop, vertical stack on mobile */}
-        <div
-          className={`flex flex-col gap-0 md:flex-row md:gap-0 ${
-            hideMetaTopBorder ? "pt-0" : "border-t border-black/10 pt-8"
-          }`}
-        >
-          {meta.map((item, i) => (
-            <div
-              key={i}
-              className="flex flex-col gap-1.5 py-6 border-b border-black/10 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 md:py-0 md:flex-1 md:pr-8 md:last:pr-0 md:pl-8 md:first:pl-0"
-            >
-              <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
-                {item.label}
-              </span>
-              {item.href ? (
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans font-semibold text-[16px] leading-[1.5] text-black hover:underline inline-flex items-center gap-1.5"
-                >
-                  {item.value}
-                  {item.icon && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.icon} alt="" className="w-4 h-4 object-contain" aria-hidden />
-                  )}
-                </a>
-              ) : (
-                <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
-                  {item.value}
+      {showProjectFooter ? (
+        <div className={`flex w-full flex-col ${metaSectionStackGap}`}>
+          {/* Metadata: horizontal on desktop, vertical stack on mobile */}
+          <div
+            className={`flex flex-col gap-0 md:flex-row md:gap-0 ${
+              hideMetaTopBorder ? "pt-0" : "border-t border-black/10 pt-8"
+            }`}
+          >
+            {meta.map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-1.5 py-6 border-b border-black/10 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 md:py-0 md:flex-1 md:pr-8 md:last:pr-0 md:pl-8 md:first:pl-0"
+              >
+                <span className="font-sans font-normal text-[12px] uppercase tracking-[0.12em] text-gray-800">
+                  {item.label}
                 </span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Lower content + optional HIGHLIGHTS: tighter stack when highlights follow summary/quote */}
-        {hasCaseStudyHighlights || children ? (
-          <div className="flex w-full flex-col gap-6 sm:gap-7">
-            {lowerContentRow}
-            {hasCaseStudyHighlights && (
-              <CaseStudyHighlights ref={caseStudyRef} data={caseStudyHighlights!} />
-            )}
-            {children}
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans font-semibold text-[16px] leading-[1.5] text-black hover:underline inline-flex items-center gap-1.5"
+                  >
+                    {item.value}
+                    {item.icon && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={item.icon} alt="" className="w-4 h-4 object-contain" aria-hidden />
+                    )}
+                  </a>
+                ) : (
+                  <span className="font-sans font-semibold text-[16px] leading-[1.5] text-black">
+                    {item.value}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
-        ) : (
-          lowerContentRow
-        )}
-      </div>
+
+          {/* Lower content + optional HIGHLIGHTS: tighter stack when highlights follow summary/quote */}
+          {hasCaseStudyHighlights || children ? (
+            <div className="flex w-full flex-col gap-6 sm:gap-7">
+              {lowerContentRow}
+              {hasCaseStudyHighlights && (
+                <CaseStudyHighlights ref={caseStudyRef} data={caseStudyHighlights!} />
+              )}
+              {children}
+            </div>
+          ) : (
+            lowerContentRow
+          )}
+        </div>
+      ) : null}
     </article>
   );
 }

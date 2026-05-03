@@ -1,15 +1,53 @@
-export default function Header() {
+import Link from "next/link";
+
+type HeaderProps = {
+  leftVariant?: "profile" | "back";
+  backHref?: string;
+  backAriaLabel?: string;
+};
+
+export default function Header({
+  leftVariant = "profile",
+  backHref = "/",
+  backAriaLabel = "Back",
+}: HeaderProps) {
   return (
     <header className="flex items-center justify-between w-full">
       {/* Left: avatar + name + location */}
       <div className="flex items-center gap-5">
-        {/* Profile photo */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/profile.png"
-          alt="David Pindrys"
-          className="w-[63px] h-[63px] rounded-full object-cover shrink-0"
-        />
+        {leftVariant === "profile" ? (
+          <>
+            {/* Profile photo */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/profile.png"
+              alt="David Pindrys"
+              className="w-[63px] h-[63px] rounded-full object-cover shrink-0"
+            />
+          </>
+        ) : (
+          <Link
+            href={backHref}
+            aria-label={backAriaLabel}
+            className="flex w-[63px] h-[63px] shrink-0 items-center justify-center rounded-full border-2 border-[#0078B3] bg-[#00AAFF] hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="text-white"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </Link>
+        )}
         <span className="font-sans text-[20px] leading-[1.21] text-black tracking-tight">
           <span className="font-bold">David Pindrys</span>
           <span className="hidden md:inline font-normal">
