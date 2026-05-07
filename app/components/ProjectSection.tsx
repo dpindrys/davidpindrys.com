@@ -360,21 +360,45 @@ export default function ProjectSection({
       <div className="relative w-full overflow-visible">
         <div className="relative w-full overflow-hidden rounded-2xl">
           {heroVideo && !heroVideoInset ? (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="block h-auto w-full"
-              style={{
-                transform: heroVideoTransform,
-                transformOrigin: heroVideoTransform ? "center" : undefined,
-                clipPath: heroVideoClipPath,
-              }}
-            >
-              <source src={heroVideo} type="video/mp4" />
-            </video>
+            heroHref ? (
+              <Link
+                href={heroHref}
+                aria-label="Open case study"
+                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+              >
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="block h-auto w-full"
+                  style={{
+                    transform: heroVideoTransform,
+                    transformOrigin: heroVideoTransform ? "center" : undefined,
+                    clipPath: heroVideoClipPath,
+                  }}
+                >
+                  <source src={heroVideo} type="video/mp4" />
+                </video>
+              </Link>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="block h-auto w-full"
+                style={{
+                  transform: heroVideoTransform,
+                  transformOrigin: heroVideoTransform ? "center" : undefined,
+                  clipPath: heroVideoClipPath,
+                }}
+              >
+                <source src={heroVideo} type="video/mp4" />
+              </video>
+            )
           ) : heroHref ? (
             <Link
               href={heroHref}

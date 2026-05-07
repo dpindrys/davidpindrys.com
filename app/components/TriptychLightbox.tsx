@@ -78,7 +78,7 @@ export default function TriptychLightbox({ items }: { items: TriptychItem[] }) {
 
       {openIndex !== null && items[openIndex] && (
         <div
-          className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/90 p-3 sm:p-6"
+          className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/80 p-3 sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label={`Image ${openIndex + 1} of ${items.length}. Use arrow keys to navigate.`}

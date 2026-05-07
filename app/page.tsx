@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import ProjectSection from "./components/ProjectSection";
+import Link from "next/link";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -30,6 +31,7 @@ const freseniusProject = {
     "Digitizing a manual refill workflow across 2,800+ clinics and 43,000+ patients",
   heroImage: "/images/fresenius-hero.png",
   heroImageAlt: "Fresenius refill workflow interface",
+  heroHref: "/case-studies/frx",
   heroVideo: "/images/frx/fresenius.mp4",
   // Slightly shrink for equal side gutters; crop 1px off the left edge to remove artifact.
   heroVideoTransform: "scale(0.985)",
@@ -136,7 +138,7 @@ const freseniusProject = {
             ],
           },
           {
-            src: "/images/frx/oneplace.png",
+            src: "/images/frx-hero.png",
             alt: "Refill workflow with request details, dates, shipping, and status in one place",
             thumbnailTitle: "Keeping Key Information in View",
             modalTitle: "Keeping Key Information in View",
@@ -233,6 +235,7 @@ const freseniusProject = {
     title: "Principal UX Architect, Fresenius Medical Care",
     avatarSrc: "/images/larissa.png",
   },
+  showProjectFooter: false,
 };
 
 const ascensionProject = {
@@ -399,31 +402,116 @@ export default function Home() {
             <div className="mt-28 md:mt-36 lg:mt-44">
               <Hero />
             </div>
-            <div className="mt-16 md:mt-20 lg:mt-24 w-screen max-w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] overflow-x-visible md:ml-0 md:mr-0 md:w-full md:max-w-none">
+            <div className="mt-16 md:mt-20 lg:mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 lg:w-[calc(100%+8rem)] lg:-mx-16 overflow-x-visible">
               <LogoStrip />
             </div>
             <h2
-              className={`${sectionHeadingClass} mt-16 text-left md:mt-20 lg:mt-24 mb-2 md:mb-5 lg:mb-10`}
+              className={`${sectionHeadingClass} mt-16 text-left md:mt-20 lg:mt-24 mb-1.5 md:mb-3 lg:mb-4`}
             >
               Selected work
             </h2>
-            <div className="mt-10 md:mt-14 lg:mt-16">
-              <ProjectSection {...vehrProject} hideMetaTopBorder />
-            </div>
-            <div className="mt-56 md:mt-72 lg:mt-80">
-              <ProjectSection
-                {...freseniusProject}
-                hideMetaTopBorder
-                metaSectionStackGap="gap-16"
-              />
-            </div>
-            <div className="mt-56 md:mt-72 lg:mt-80">
-              <ProjectSection
-                {...ascensionProject}
-                hideMetaTopBorder
-                metaSectionStackGap="gap-16"
-              />
-            </div>
+            <section className="mt-6 md:mt-8 lg:mt-10">
+              <div className="grid w-full grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-10 lg:gap-12">
+                {/* Left column: VEHR (top) + Dell Children's (bottom) */}
+                <div className="flex w-full flex-col gap-10 lg:gap-12">
+                  <Link
+                    href="/case-studies/visual-ehr"
+                    aria-label="Open VEHR case study"
+                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  >
+                    <div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={vehrProject.heroImage}
+                        alt={vehrProject.heroImageAlt}
+                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
+                      />
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2">
+                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                        {vehrProject.title}
+                      </h3>
+                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
+                        {vehrProject.descriptor}
+                      </p>
+                    </div>
+                  </Link>
+
+                  <article className="rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)]">
+                    <div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={ascensionProject.heroImage}
+                        alt={ascensionProject.heroImageAlt}
+                        className="block w-full h-auto rounded-2xl border border-t-0 border-black/10 bg-white/40"
+                      />
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2">
+                      <h3 className="font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black">
+                        {ascensionProject.title}
+                      </h3>
+                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
+                        {ascensionProject.descriptor}
+                      </p>
+                    </div>
+                  </article>
+                </div>
+
+                {/* Right column: FRx + OVCP */}
+                <div className="flex w-full flex-col gap-10 lg:gap-12">
+                  <Link
+                    href="/case-studies/frx"
+                    aria-label="Open Fresenius case study"
+                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  >
+                    <div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/images/frx-hero.png"
+                        alt="Fresenius refill workflow keeping key information in one place"
+                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
+                      />
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2">
+                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                        {freseniusProject.title}
+                      </h3>
+                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
+                        {freseniusProject.descriptor}
+                      </p>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/case-studies/ovcp"
+                    aria-label="Open OVCP case study"
+                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  >
+                    <div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/images/ovcp-hero.png"
+                        alt="Problem list reconciliation workflow"
+                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
+                      />
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2">
+                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                        Reconciling the Problem List
+                      </h3>
+                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
+                        Helping clinicians reduce diagnostic clutter through a faster, more meaningful
+                        problem-list reconciliation workflow.
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </section>
 
           </div>
         </div>
