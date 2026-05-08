@@ -38,9 +38,9 @@ const freseniusProject = {
   heroVideoClipPath: "inset(0 0 0 1px round 16px)",
   featureImages: [],
   meta: [
-    { label: "Role", value: "Senior UX Designer" },
-    { label: "Primary Users", value: "Nurses and dietitians" },
-    { label: "Focus", value: "Speed, safety, accuracy" },
+    { label: "Role", value: "Senior UX Design Lead" },
+    { label: "Timeline", value: "6 months" },
+    { label: "Status", value: "Launched enterprise-wide" },
   ],
   summaryBlock: {
     label: "SUMMARY",
@@ -485,11 +485,7 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  <Link
-                    href="/case-studies/ovcp"
-                    aria-label="Open OVCP case study"
-                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                  >
+                  <article className="rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)]">
                     <div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -508,7 +504,7 @@ export default function Home() {
                         problem-list reconciliation workflow.
                       </p>
                     </div>
-                  </Link>
+                  </article>
                 </div>
               </div>
             </section>

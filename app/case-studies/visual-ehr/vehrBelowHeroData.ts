@@ -1,9 +1,9 @@
 import type { CaseStudyHighlightsData } from "../../components/CaseStudyHighlights";
 
 export const vehrBelowHeroMeta = [
-  { label: "Role", value: "Product Design Lead" },
-  { label: "Primary Users", value: "Clinicians and care teams" },
-  { label: "Focus", value: "Patterns, change, and context" },
+  { label: "Role", value: "Founding Product Design Lead" },
+  { label: "Timeline", value: "4 months" },
+  { label: "Status", value: "In development" },
 ] as const;
 
 export const vehrBelowHeroSummaryBlock = {

@@ -1,7 +1,7 @@
 export const frxBelowHeroMeta = [
-  { label: "Role", value: "Senior UX Designer" },
-  { label: "Primary Users", value: "Nurses and dietitians" },
-  { label: "Focus", value: "Speed, safety, accuracy" },
+  { label: "Role", value: "Senior UX Design Lead" },
+  { label: "Timeline", value: "6 months" },
+  { label: "Status", value: "Launched enterprise-wide" },
 ] as const;
 
 export const frxBelowHeroSummaryBlock = {

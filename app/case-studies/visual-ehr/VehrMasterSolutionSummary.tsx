@@ -38,7 +38,19 @@ function StepRow({
   );
 }
 
-const masterSolutionRows = [
+type MasterSolutionRow = {
+  num: string;
+  layer: string;
+  question: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+  payoff: boolean;
+  /** When set, the visual is wrapped in a jump link to this section id. */
+  scrollTargetId?: string;
+};
+
+const masterSolutionRows: MasterSolutionRow[] = [
   {
     num: "1",
     layer: "Patient Overview",
@@ -49,7 +61,6 @@ const masterSolutionRows = [
     imageAlt:
       "VEHR patient overview: risks, monitored and stable conditions, and care context",
     payoff: false,
-    scrollTargetId: "vehr-master-problem-heading",
   },
   {
     num: "2",
@@ -108,7 +119,7 @@ const masterSolutionRows = [
     payoff: true,
     scrollTargetId: "vehr-full-prototype-eyebrow",
   },
-] as const;
+];
 
 const visualLinkClass =
   "group block w-full min-w-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]";
@@ -143,13 +154,26 @@ export default function VehrMasterSolutionSummary() {
               <p className={`${stepBodyClass} mt-3`}>{row.description}</p>
             </div>
             <div className="w-full min-w-0">
-              <a
-                href={`#${row.scrollTargetId}`}
-                className={visualLinkClass}
-                aria-label={`Jump to ${row.layer}`}
-              >
+              {row.scrollTargetId ? (
+                <a
+                  href={`#${row.scrollTargetId}`}
+                  className={visualLinkClass}
+                  aria-label={`Jump to ${row.layer}`}
+                >
+                  <div
+                    className={`${visualShellClass} transition-shadow duration-200 group-hover:shadow-[0_16px_48px_-20px_rgba(0,0,0,0.14),0_6px_16px_-6px_rgba(0,0,0,0.08)] ${row.payoff ? "ring-2 ring-black/[0.12] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.18),0_6px_16px_-6px_rgba(0,0,0,0.1)]" : ""}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={row.imageSrc}
+                      alt={row.imageAlt}
+                      className={thumbClass}
+                    />
+                  </div>
+                </a>
+              ) : (
                 <div
-                  className={`${visualShellClass} transition-shadow duration-200 group-hover:shadow-[0_16px_48px_-20px_rgba(0,0,0,0.14),0_6px_16px_-6px_rgba(0,0,0,0.08)] ${row.payoff ? "ring-2 ring-black/[0.12] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.18),0_6px_16px_-6px_rgba(0,0,0,0.1)]" : ""}`}
+                  className={`${visualShellClass} ${row.payoff ? "ring-2 ring-black/[0.12] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.18),0_6px_16px_-6px_rgba(0,0,0,0.1)]" : ""}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -158,7 +182,7 @@ export default function VehrMasterSolutionSummary() {
                     className={thumbClass}
                   />
                 </div>
-              </a>
+              )}
             </div>
           </StepRow>
         ))}
