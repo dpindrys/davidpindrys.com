@@ -4,98 +4,165 @@ import type { ReactNode } from "react";
 
 import {
   FrxProcessRowShell,
-  mediaCardClass,
   rowBodyClass,
   rowHeadingClass,
 } from "../frx/FrxExtendedSections";
 
 import {
+  MEDICATION_FIGURE_AXIS_DATES,
   MedicationTimelineStrip,
-  SHARED_AXIS_DATES,
-  sharedMedicationRows,
-  toTooltipDate,
-  VehrMedicationHoldTooltipChrome,
+  medHoldTooltipDetail,
+  medicationFigureRows,
+  TimelineColumnTooltipAnchor,
+  toSigTooltipHeaderDate,
+  toSigTooltipSinceDate,
+  VehrKeyValueHoldTooltipChrome,
+  VehrSigMedicationTooltipChrome,
   VehrSharedAxisDateRow,
   type SharedMedicationRow,
 } from "./DesignLogicFromSignal";
 
-const metforminRow = sharedMedicationRows[0]!;
-/** Column where Metformin shows the inline dose (Aug 18). */
-const METFORMIN_DOSE_COL = 5;
+/** Sep 10 — 10 mg after 20 mg therapeutic (reduction below target). */
+const LISINOPRIL_REDUCTION_COL = 2;
+
+/** Same as FRX `mediaCardClass` but `overflow-visible` so timeline tooltips aren’t clipped. */
+const medicationChartCardClass =
+  "overflow-visible rounded-2xl border border-black/10 bg-white p-4 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)] md:p-5";
 
 function MedicationSolutionFigure({
   rows,
+  axisDates,
   tooltipDemo,
 }: {
   rows: readonly SharedMedicationRow[];
-  tooltipDemo?: { medId: string; col: number };
+  axisDates: readonly string[];
+  tooltipDemo?: {
+    medId: string;
+    col: number;
+    placement?: "above" | "below";
+    /** Custom tooltip body for the medication demo (e.g. subtherapeutic reduction). */
+    detail?: "subtherapeutic-reduction";
+  };
 }) {
+  const colCount = rows[0]?.cells.length ?? 0;
   const showTip =
     tooltipDemo &&
+    colCount === axisDates.length &&
     rows.some((r) => r.id === tooltipDemo.medId);
 
+  const tipPlacement = tooltipDemo?.placement ?? "above";
+  const panelPlacement = tipPlacement === "below" ? "below" : "above";
+
   return (
-    <div className="w-full" aria-hidden>
-      <div className="w-full overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch]">
-        <div className="grid min-w-[560px] grid-cols-1 gap-3 md:min-w-0 md:grid-cols-[1fr_112px] md:gap-2.5">
-          <div className="min-w-0">
-            <div className="space-y-1.5">
-              {rows.map((mrow) => {
-                const tipThisRow = showTip && tooltipDemo!.medId === mrow.id;
-                const doseCell =
-                  tipThisRow && tooltipDemo
-                    ? mrow.cells[tooltipDemo.col]
-                    : undefined;
-                return (
+    <div className={`w-full ${showTip ? "relative z-10" : ""}`} aria-hidden>
+      {/*
+        overflow-x-auto forces overflow-y to compute to auto (CSS), which clips
+        absolutely positioned tooltips. When the demo tooltip is shown, keep
+        overflow visible so the panel can extend past the card. */}
+      <div
+        className={
+          showTip
+            ? "w-full overflow-visible pb-0.5"
+            : "w-full overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch]"
+        }
+      >
+        <div
+          className={
+            colCount <= 4 ? "min-w-[280px] md:min-w-0" : "min-w-[560px] md:min-w-0"
+          }
+        >
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_112px] md:gap-2.5">
+            <div className="min-w-0">
+              <div className="space-y-1.5">
+                {rows.map((mrow) => {
+                  const tipThisRow = showTip && tooltipDemo!.medId === mrow.id;
+                  const tipCell =
+                    tipThisRow && tooltipDemo
+                      ? mrow.cells[tooltipDemo.col]
+                      : undefined;
+                  const axisLabel = tooltipDemo
+                    ? (axisDates[tooltipDemo.col] ?? "")
+                    : "";
+                  const showSigTooltip =
+                    tipThisRow &&
+                    tooltipDemo &&
+                    tipCell?.kind === "dose" &&
+                    tooltipDemo.detail === "subtherapeutic-reduction";
+                  const showKvTooltip =
+                    tipThisRow &&
+                    tooltipDemo &&
+                    tipCell?.kind === "dose" &&
+                    tooltipDemo.detail !== "subtherapeutic-reduction";
+                  return (
+                    <div
+                      key={mrow.id}
+                      className={`relative isolate flex min-h-[52px] items-center px-0.5 md:min-h-[60px] ${
+                        tipThisRow
+                          ? "rounded-[4px] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.88),0_4px_14px_-4px_rgba(0,0,0,0.22)]"
+                          : ""
+                      }`}
+                    >
+                      {showSigTooltip ? (
+                        <TimelineColumnTooltipAnchor
+                          globalColIndex={tooltipDemo!.col}
+                          colStart={0}
+                          visibleColCount={axisDates.length}
+                          placement={tipPlacement}
+                        >
+                          <VehrSigMedicationTooltipChrome
+                            medicationName={mrow.name}
+                            headerDate={toSigTooltipHeaderDate(axisLabel)}
+                            sigLine="10 mg · PO · daily"
+                            doseState="Below typical dose range."
+                            sinceDate={toSigTooltipSinceDate(axisLabel)}
+                            panelPlacement={panelPlacement}
+                          />
+                        </TimelineColumnTooltipAnchor>
+                      ) : null}
+                      {showKvTooltip ? (
+                        <TimelineColumnTooltipAnchor
+                          globalColIndex={tooltipDemo!.col}
+                          colStart={0}
+                          visibleColCount={axisDates.length}
+                          placement={tipPlacement}
+                        >
+                          <VehrKeyValueHoldTooltipChrome
+                            panelPlacement={panelPlacement}
+                            {...medHoldTooltipDetail(
+                              mrow,
+                              tipCell!,
+                              tooltipDemo!.col,
+                              axisDates,
+                            )}
+                          />
+                        </TimelineColumnTooltipAnchor>
+                      ) : null}
+                      <div className="pointer-events-none w-full">
+                        <MedicationTimelineStrip cells={mrow.cells} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-4 border-t border-black/10">
+                <VehrSharedAxisDateRow labels={axisDates} />
+              </div>
+            </div>
+
+            <div className="hidden md:flex flex-col">
+              <div className="grid gap-1.5">
+                {rows.map((mrow) => (
                   <div
                     key={mrow.id}
-                    className={`relative isolate flex min-h-[52px] items-center px-0.5 md:min-h-[60px] ${
-                      tipThisRow
-                        ? "rounded-[4px] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.88),0_4px_14px_-4px_rgba(0,0,0,0.22)]"
-                        : ""
-                    }`}
+                    className="flex min-h-[52px] w-full items-center justify-start font-sans text-[11px] font-semibold leading-tight text-black/65 md:min-h-[60px] md:text-[12px]"
                   >
-                    {tipThisRow && doseCell?.kind === "dose" && tooltipDemo ? (
-                      <div
-                        className="pointer-events-none absolute bottom-[calc(100%+6px)] z-20 w-[min(280px,calc(100vw-3rem))] max-w-[280px] -translate-x-1/2"
-                        style={{
-                          left: `${((tooltipDemo.col + 0.5) / SHARED_AXIS_DATES.length) * 100}%`,
-                        }}
-                      >
-                        <VehrMedicationHoldTooltipChrome
-                          name={mrow.name}
-                          date={toTooltipDate(
-                            SHARED_AXIS_DATES[tooltipDemo.col] ?? "",
-                          )}
-                          doseLine={doseCell.label ?? "—"}
-                        />
-                      </div>
-                    ) : null}
-                    <div className="pointer-events-none w-full">
-                      <MedicationTimelineStrip cells={mrow.cells} />
-                    </div>
+                    {mrow.name}
                   </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 border-t border-black/10">
-              <VehrSharedAxisDateRow />
-            </div>
-          </div>
-
-          <div className="hidden md:flex flex-col">
-            <div className="grid gap-1.5">
-              {rows.map((mrow) => (
-                <div
-                  key={mrow.id}
-                  className="flex min-h-[52px] w-full items-center justify-start font-sans text-[11px] font-semibold leading-tight text-black/65 md:min-h-[60px] md:text-[12px]"
-                >
-                  {mrow.name}
-                </div>
-              ))}
-            </div>
-            <div className="invisible mt-4 border-t border-black/10">
-              <VehrSharedAxisDateRow />
+                ))}
+              </div>
+              <div className="invisible mt-4 border-t border-black/10">
+                <VehrSharedAxisDateRow labels={axisDates} />
+              </div>
             </div>
           </div>
         </div>
@@ -116,7 +183,7 @@ function MedicationSolutionFigure({
 }
 
 function VisualCard({ children }: { children: ReactNode }) {
-  return <div className={mediaCardClass}>{children}</div>;
+  return <div className={medicationChartCardClass}>{children}</div>;
 }
 
 export default function VehrMedicationsSolutionRows() {
@@ -135,7 +202,10 @@ export default function VehrMedicationsSolutionRows() {
         }
       >
         <VisualCard>
-          <MedicationSolutionFigure rows={sharedMedicationRows} />
+          <MedicationSolutionFigure
+            rows={medicationFigureRows}
+            axisDates={MEDICATION_FIGURE_AXIS_DATES}
+          />
         </VisualCard>
       </FrxProcessRowShell>
 
@@ -151,7 +221,10 @@ export default function VehrMedicationsSolutionRows() {
         }
       >
         <VisualCard>
-          <MedicationSolutionFigure rows={[metforminRow]} />
+          <MedicationSolutionFigure
+            rows={medicationFigureRows}
+            axisDates={MEDICATION_FIGURE_AXIS_DATES}
+          />
         </VisualCard>
       </FrxProcessRowShell>
 
@@ -168,8 +241,14 @@ export default function VehrMedicationsSolutionRows() {
       >
         <VisualCard>
           <MedicationSolutionFigure
-            rows={[metforminRow]}
-            tooltipDemo={{ medId: "metformin", col: METFORMIN_DOSE_COL }}
+            rows={medicationFigureRows}
+            axisDates={MEDICATION_FIGURE_AXIS_DATES}
+            tooltipDemo={{
+              medId: "lisinopril",
+              col: LISINOPRIL_REDUCTION_COL,
+              placement: "above",
+              detail: "subtherapeutic-reduction",
+            }}
           />
         </VisualCard>
       </FrxProcessRowShell>

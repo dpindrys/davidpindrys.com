@@ -41,6 +41,11 @@ export const SHARED_AXIS_DATES = [
   "Sep 14",
 ] as const;
 
+/** Medication solution figures — same four dates as `VISIT_DATES` / matrix sections above. */
+export const MEDICATION_FIGURE_AXIS_DATES = VISIT_DATES;
+
+export const MEDICATION_FIGURE_COLUMN_COUNT = MEDICATION_FIGURE_AXIS_DATES.length;
+
 export const SHARED_AXIS_COLUMN_COUNT = SHARED_AXIS_DATES.length;
 
 /** Vertical column rhythm — matches section rules (`border-black/10` above labs/meds). */
@@ -90,9 +95,9 @@ export const sharedMedicationRows: readonly SharedMedicationRow[] = [
     cells: [
       { kind: "active" },
       { kind: "active" },
+      { kind: "dose", label: "10 mg", doseOn: "light" },
       { kind: "active" },
-      { kind: "dose", label: "30 mg", doseOn: "dark" },
-      { kind: "active" },
+      { kind: "dose", label: "20 mg", doseOn: "dark" },
       { kind: "active" },
       { kind: "active" },
       { kind: "active" },
@@ -102,7 +107,54 @@ export const sharedMedicationRows: readonly SharedMedicationRow[] = [
   {
     id: "atorvastatin",
     name: "Atorvastatin",
-    cells: Array.from({ length: 9 }, () => ({ kind: "active" as const })),
+    cells: [
+      { kind: "active" },
+      { kind: "active" },
+      { kind: "active" },
+      { kind: "active" },
+      { kind: "active" },
+      { kind: "dose", label: "40 mg", doseOn: "light" },
+      { kind: "inactive" },
+      { kind: "inactive" },
+      { kind: "inactive" },
+    ],
+  },
+] as const;
+
+/**
+ * Medication rows for portfolio solution figures — four columns on
+ * `MEDICATION_FIGURE_AXIS_DATES` (matches matrix / visit date styling above).
+ */
+export const medicationFigureRows: readonly SharedMedicationRow[] = [
+  {
+    id: "metformin",
+    name: "Metformin",
+    cells: [
+      { kind: "dose", label: "1000mg", doseOn: "dark" },
+      { kind: "active" },
+      { kind: "active" },
+      { kind: "active" },
+    ],
+  },
+  {
+    id: "lisinopril",
+    name: "Lisinopril",
+    cells: [
+      { kind: "dose", label: "10 mg", doseOn: "light" },
+      { kind: "dose", label: "20 mg", doseOn: "dark" },
+      { kind: "dose", label: "10 mg", doseOn: "light" },
+      { kind: "dose", label: "20 mg", doseOn: "dark" },
+    ],
+  },
+  {
+    id: "atorvastatin",
+    name: "Atorvastatin",
+    cells: [
+      { kind: "dose", label: "10 mg", doseOn: "light" },
+      { kind: "dose", label: "20 mg", doseOn: "light" },
+      { kind: "dose", label: "40 mg", doseOn: "dark" },
+      { kind: "active" },
+    ],
   },
 ] as const;
 
@@ -570,6 +622,22 @@ export function toTooltipDate(label: string) {
   return `${day} ${mon} 2024`;
 }
 
+/** Portfolio sig tooltip header — e.g. "Sep 10" -> "10 Sep 2025". */
+export function toSigTooltipHeaderDate(axisLabel: string): string {
+  const parts = axisLabel.trim().split(/\s+/);
+  const mon = parts[0] ?? "";
+  const day = (parts[1] ?? "").replace(/\D/g, "");
+  return day && mon ? `${day} ${mon} 2025` : axisLabel;
+}
+
+/** Portfolio sig tooltip “Since” line — e.g. "Sep 10" -> "Sep 10, 2025". */
+export function toSigTooltipSinceDate(axisLabel: string): string {
+  const parts = axisLabel.trim().split(/\s+/);
+  const mon = parts[0] ?? "";
+  const day = (parts[1] ?? "").replace(/\D/g, "");
+  return day && mon ? `${mon} ${day}, 2025` : axisLabel;
+}
+
 function pickMeasureTooltipConfig(args: {
   measure: string;
   dateLabel: string;
@@ -717,6 +785,21 @@ function medDoseLabelClass(cell: SharedMedicationCell): string {
     : "text-[11px] font-semibold text-[#0B111D] md:text-[12px]";
 }
 
+function medSegmentIsDark(cell: SharedMedicationCell): boolean {
+  return (
+    cell.kind === "active" ||
+    (cell.kind === "dose" && cell.doseOn === "dark")
+  );
+}
+
+/** Faint column rule: dark segments use a light hairline; light segments use the shared gray rule. */
+function medColDividerClass(cell: SharedMedicationCell, isLast: boolean): string {
+  if (isLast) return "";
+  return medSegmentIsDark(cell)
+    ? "border-r border-white/[0.14]"
+    : timelineColDividerClass;
+}
+
 /** Medication row — navy active band, blue-grey inactive / dose-on-light (reference EHR). */
 export function MedicationTimelineStrip({
   cells,
@@ -731,10 +814,11 @@ export function MedicationTimelineStrip({
       {cells.map((cell, i) => {
         const isEmpty = cell.kind === "none";
         const isDose = cell.kind === "dose";
+        const isLast = i === cells.length - 1;
         return (
           <div
             key={i}
-            className={`relative flex min-w-0 flex-1 items-center justify-start px-0.5 ${medSegmentBgClass(cell)} ${isEmpty ? "border border-dashed border-black/[0.08]" : ""} ${i < cells.length - 1 ? timelineColDividerClass : ""}`}
+            className={`relative flex min-w-0 flex-1 items-center justify-start px-0.5 ${medSegmentBgClass(cell)} ${medColDividerClass(cell, isLast)} ${isEmpty ? "border border-dashed border-black/[0.08]" : ""}`}
           >
             {isDose ? (
               <span
@@ -750,7 +834,7 @@ export function MedicationTimelineStrip({
   );
 }
 
-type HoldDetailTooltip = {
+export type HoldDetailTooltip = {
   primaryTitle: string;
   secondaryTitle: string;
   date: string;
@@ -758,15 +842,30 @@ type HoldDetailTooltip = {
 };
 
 /** Dark hold panel + caret — shared by diagnosis, encounter, and medication tooltips. */
-function VehrKeyValueHoldTooltipChrome({
+export function VehrKeyValueHoldTooltipChrome({
   primaryTitle,
   secondaryTitle,
   date,
   rows,
-}: HoldDetailTooltip) {
+  panelPlacement = "above",
+}: HoldDetailTooltip & { panelPlacement?: "above" | "below" }) {
+  const caretDown = (
+    <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2">
+      <div className="h-0 w-0 border-x-[10px] border-x-transparent border-t-[11px] border-t-black drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]" />
+    </div>
+  );
+  const caretUp = (
+    <div className="pointer-events-none absolute bottom-full left-1/2 mb-[-1px] -translate-x-1/2">
+      <div className="h-0 w-0 border-x-[10px] border-x-transparent border-b-[11px] border-b-black drop-shadow-[0_-4px_6px_rgba(0,0,0,0.25)]" />
+    </div>
+  );
   return (
-    <div className="relative w-full pb-1" aria-hidden>
+    <div
+      className={`relative w-full ${panelPlacement === "above" ? "pb-1" : "pt-1"}`}
+      aria-hidden
+    >
       <div className="relative w-full rounded-xl bg-black px-[18px] pb-3 pt-[14px] shadow-[0_20px_50px_-14px_rgba(0,0,0,0.55),0_10px_22px_-10px_rgba(0,0,0,0.38)]">
+        {panelPlacement === "below" ? caretUp : null}
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="text-[15px] font-semibold leading-snug tracking-tight text-white">
@@ -795,9 +894,82 @@ function VehrKeyValueHoldTooltipChrome({
           ))}
         </dl>
 
-        <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2">
-          <div className="h-0 w-0 border-x-[10px] border-x-transparent border-t-[11px] border-t-black drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]" />
+        {panelPlacement === "above" ? caretDown : null}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Medication tooltip — sig line, ACTIVE chip, dose state + since (portfolio / prototype style).
+ */
+export function VehrSigMedicationTooltipChrome({
+  medicationName,
+  headerDate,
+  sigLine,
+  doseState,
+  sinceDate,
+  panelPlacement = "above",
+}: {
+  medicationName: string;
+  headerDate: string;
+  sigLine: string;
+  doseState: string;
+  sinceDate: string;
+  panelPlacement?: "above" | "below";
+}) {
+  const caretDown = (
+    <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2">
+      <div className="h-0 w-0 border-x-[10px] border-x-transparent border-t-[11px] border-t-black drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]" />
+    </div>
+  );
+  const caretUp = (
+    <div className="pointer-events-none absolute bottom-full left-1/2 mb-[-1px] -translate-x-1/2">
+      <div className="h-0 w-0 border-x-[10px] border-x-transparent border-b-[11px] border-b-black drop-shadow-[0_-4px_6px_rgba(0,0,0,0.25)]" />
+    </div>
+  );
+  return (
+    <div
+      className={`relative w-full ${panelPlacement === "above" ? "pb-1" : "pt-1"}`}
+      aria-hidden
+    >
+      <div className="relative w-full rounded-xl bg-black px-[18px] pb-3 pt-[14px] shadow-[0_20px_50px_-14px_rgba(0,0,0,0.55),0_10px_22px_-10px_rgba(0,0,0,0.38)]">
+        {panelPlacement === "below" ? caretUp : null}
+
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 text-[15px] font-semibold leading-snug tracking-tight text-white">
+            {medicationName}
+          </div>
+          <span className="shrink-0 text-right text-[11px] font-normal tabular-nums leading-snug text-white/60 md:text-[12px]">
+            {headerDate}
+          </span>
         </div>
+
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="min-w-0 text-[12px] font-normal leading-snug text-white/55">
+            {sigLine}
+          </p>
+          <span className="shrink-0 rounded-full bg-[#22C55E] px-2.5 py-1 text-center font-sans text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-white">
+            ACTIVE
+          </span>
+        </div>
+
+        <dl className="mt-3 space-y-1 border-t border-white/10 pt-3">
+          <div className="flex items-baseline justify-between gap-4 text-[11px] leading-snug md:text-[12px]">
+            <dt className="shrink-0 text-white/65">Dose state</dt>
+            <dd className="min-w-0 text-right font-semibold text-white">
+              {doseState}
+            </dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4 text-[11px] leading-snug md:text-[12px]">
+            <dt className="shrink-0 text-white/65">Since</dt>
+            <dd className="min-w-0 text-right font-semibold text-white">
+              {sinceDate}
+            </dd>
+          </div>
+        </dl>
+
+        {panelPlacement === "above" ? caretDown : null}
       </div>
     </div>
   );
@@ -875,12 +1047,13 @@ function encHoldTooltipDetail(col: number): HoldDetailTooltip {
   };
 }
 
-function medHoldTooltipDetail(
-  mrow: (typeof sharedMedicationRows)[number],
+export function medHoldTooltipDetail(
+  mrow: { name: string },
   cell: SharedMedicationCell,
   col: number,
+  dateAxis: readonly string[] = SHARED_AXIS_DATES,
 ): HoldDetailTooltip {
-  const date = toTooltipDate(SHARED_AXIS_DATES[col] ?? "");
+  const date = toTooltipDate(dateAxis[col] ?? "");
   const secondary = "Medication";
   switch (cell.kind) {
     case "dose":
@@ -930,22 +1103,29 @@ function medHoldTooltipDetail(
   }
 }
 
-function TimelineColumnTooltipAnchor({
+export function TimelineColumnTooltipAnchor({
   globalColIndex,
   colStart,
   visibleColCount,
+  placement = "above",
   children,
 }: {
   globalColIndex: number;
   colStart: number;
   visibleColCount: number;
+  /** `above`: panel over the row (default). `below`: panel under the row — avoids covering rows above. */
+  placement?: "above" | "below";
   children: ReactNode;
 }) {
   const local = globalColIndex - colStart;
   if (local < 0 || local >= visibleColCount) return null;
+  const positionClass =
+    placement === "above"
+      ? "bottom-[calc(100%+6px)]"
+      : "top-[calc(100%+6px)]";
   return (
     <div
-      className="pointer-events-none absolute bottom-[calc(100%+6px)] z-50 w-[min(300px,calc(100vw-4rem))] max-w-[300px] -translate-x-1/2"
+      className={`pointer-events-none absolute ${positionClass} z-50 w-[min(300px,calc(100vw-4rem))] max-w-[300px] -translate-x-1/2`}
       style={{
         left: `${((local + 0.5) / visibleColCount) * 100}%`,
       }}
@@ -985,14 +1165,18 @@ export function VehrSharedAxisDateRow({
   className = "",
   startIndex = 0,
   count = SHARED_AXIS_COLUMN_COUNT,
+  labels: labelsProp,
 }: {
   className?: string;
   /** First column index into `SHARED_AXIS_DATES` (for responsive suffix windows). */
   startIndex?: number;
-  /** Number of consecutive columns to show from `startIndex`. */
+  /** Number of consecutive columns to show from `startIndex` (ignored when `labels` is set). */
   count?: number;
+  /** When set, renders these labels instead of slicing `SHARED_AXIS_DATES`. */
+  labels?: readonly string[];
 }) {
-  const labels = SHARED_AXIS_DATES.slice(startIndex, startIndex + count);
+  const labels =
+    labelsProp ?? SHARED_AXIS_DATES.slice(startIndex, startIndex + count);
   return (
     <div className={`pt-3 md:pt-3.5 ${className}`}>
       <div

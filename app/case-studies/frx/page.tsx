@@ -4,6 +4,7 @@ import FrxBelowHero from "./FrxBelowHero";
 import { FrxSectionsBeforeSolution } from "./FrxExtendedSections";
 import FrxImpactSection from "./FrxImpactSection";
 import FrxSolutionSteps from "./FrxSolutionSteps";
+import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 
 export default function FrxCaseStudyPage() {
   return (
@@ -17,14 +18,10 @@ export default function FrxCaseStudyPage() {
               backAriaLabel="Back to home"
             />
 
-            <section className="mt-24 flex w-full flex-col gap-6 md:mt-32 lg:mt-36">
-              <h1 className="max-w-[1291px] font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+            <section className="mt-24 flex w-full flex-col gap-10 md:mt-32 lg:mt-36">
+              <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
                 Modernizing in-clinic medication refills at scale
               </h1>
-              <div className="font-sans text-[22px] font-normal leading-[1.45] text-black/70 md:text-[24px]">
-                Fresenius Medical Care{" "}
-                <span aria-hidden="true">•</span> 2022–2023
-              </div>
             </section>
 
             <section className="mt-16 w-full md:mt-24 lg:mt-28">
@@ -103,6 +100,8 @@ export default function FrxCaseStudyPage() {
             </section>
 
             <FrxImpactSection />
+
+            <CaseStudyNextProjectButton currentPath="/case-studies/frx" />
           </div>
         </div>
       </main>

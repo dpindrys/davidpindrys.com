@@ -6,6 +6,8 @@ import VehrBelowHero from "./VehrBelowHero";
 import VehrMasterSolutionSummary from "./VehrMasterSolutionSummary";
 import VehrMedicationsSolutionRows from "./VehrMedicationsSolutionRows";
 import VehrRebuildingStorySteps from "./VehrRebuildingStorySteps";
+import VehrClosingSections from "./VehrClosingSections";
+import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
@@ -98,7 +100,7 @@ export default function VisualEhrCaseStudyPage() {
                 <p className={eyebrowClass}>The Core Problem</p>
                 <h2
                   id="vehr-master-problem-heading"
-                  className={`${masterTitleClass} mt-4 md:mt-5`}
+                  className={`scroll-mt-28 ${masterTitleClass} mt-4 md:mt-5`}
                 >
                   Mental Model Mismatch
                 </h2>
@@ -128,7 +130,7 @@ export default function VisualEhrCaseStudyPage() {
                 </p>
                 <h2
                   id="vehr-patient-stories-heading"
-                  className="mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
+                  className="scroll-mt-28 mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
                 >
                   Patient Stories Are Split Across Sources
                 </h2>
@@ -207,7 +209,7 @@ export default function VisualEhrCaseStudyPage() {
                 </p>
                 <h2
                   id="vehr-ehr-problems-heading"
-                  className="mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
+                  className="scroll-mt-28 mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
                 >
                   Trends Become Noise Quickly
                 </h2>
@@ -281,20 +283,13 @@ export default function VisualEhrCaseStudyPage() {
               className="mt-16 w-full md:mt-20 lg:mt-24"
               aria-labelledby="vehr-medications-problem-heading"
             >
-              <p className="max-w-3xl font-sans text-[14px] font-normal leading-[1.55] text-black/48 md:text-[15px]">
-                This section was inspired by TooManyClicks&apos; medication-list
-                usability work, especially the idea that medication review should make
-                active medications, changes, and safety-relevant context easier to
-                compare.
-              </p>
-
-              <div className={`${problemCardClass} mt-8 md:mt-10`}>
+              <div className={problemCardClass}>
                 <p className="font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800">
                   The Problem
                 </p>
                 <h2
                   id="vehr-medications-problem-heading"
-                  className="mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
+                  className="scroll-mt-28 mt-4 w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black md:mt-5"
                 >
                   Medication Lists Hide the Story of Change
                 </h2>
@@ -345,6 +340,9 @@ export default function VisualEhrCaseStudyPage() {
               </div>
             </section>
 
+            <VehrClosingSections />
+
+            <CaseStudyNextProjectButton currentPath="/case-studies/visual-ehr" />
           </div>
         </div>
 

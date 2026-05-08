@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} scroll-smooth`} suppressHydrationWarning>
       <body className="bg-[#F4F2EE] text-black font-sans">
         <div className="h-5 w-full bg-[#00AAFF]" aria-hidden="true" />
         {children}

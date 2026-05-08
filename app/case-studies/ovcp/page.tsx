@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import OvcpBelowHero from "./OvcpBelowHero";
 
 const eyebrowClass =
@@ -82,14 +83,10 @@ export default function OvcpCaseStudyPage() {
               backAriaLabel="Back to home"
             />
 
-            <section className="mt-24 flex w-full flex-col gap-6 md:mt-32 lg:mt-36">
-              <h1 className="max-w-[1291px] font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+            <section className="mt-24 flex w-full flex-col gap-10 md:mt-32 lg:mt-36">
+              <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
                 Reconciling the Problem List
               </h1>
-              <div className="font-sans text-[22px] font-normal leading-[1.45] text-black/70 md:text-[24px]">
-                Optimal Vision Care Prototype{" "}
-                <span aria-hidden="true">•</span> Department of Defense
-              </div>
             </section>
 
             <section className="mt-16 w-full md:mt-24 lg:mt-28">
@@ -389,6 +386,8 @@ export default function OvcpCaseStudyPage() {
                 </figure>
               </div>
             </section>
+
+            <CaseStudyNextProjectButton currentPath="/case-studies/ovcp" />
           </div>
         </div>
       </main>
