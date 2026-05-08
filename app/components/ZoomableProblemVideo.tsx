@@ -8,6 +8,8 @@ import {
   useState,
 } from "react";
 
+import { ZOOM_MODAL_MEDIA_CLASSNAME } from "./zoomModalMediaClassName";
+
 /**
  * Inline video with zoom cursor; click opens the same clip full-viewport like
  * {@link ZoomableProblemImagePair} problem figures.
@@ -134,7 +136,7 @@ export default function ZoomableProblemVideo({
           </button>
           <video
             ref={modalRef}
-            className="max-h-[min(92vh,100%)] w-full max-w-[min(1200px,100vw)] cursor-zoom-out rounded-md border-0 object-contain shadow-none"
+            className={`${ZOOM_MODAL_MEDIA_CLASSNAME} cursor-zoom-out rounded-md`}
             {...sharedVideoProps}
             controls
             aria-label={ariaLabel}

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { ZOOM_MODAL_MEDIA_CLASSNAME } from "./zoomModalMediaClassName";
+
 export interface TriptychItem {
   src: string;
   alt: string;
@@ -122,7 +124,7 @@ export default function TriptychLightbox({ items }: { items: TriptychItem[] }) {
           <img
             src={items[openIndex].src}
             alt={items[openIndex].alt}
-            className="max-h-[min(92vh,100%)] w-full max-w-[100vw] cursor-default border-0 object-contain shadow-none"
+            className={`${ZOOM_MODAL_MEDIA_CLASSNAME} cursor-default`}
             onClick={(e) => e.stopPropagation()}
           />
         </div>

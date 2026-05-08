@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 
+import { ZOOM_MODAL_MEDIA_CLASSNAME } from "./zoomModalMediaClassName";
+
 export type ZoomableProblemImageColumn = {
   src: string;
   alt: string;
@@ -152,7 +154,7 @@ export default function ZoomableProblemImagePair({
           <img
             src={active.src}
             alt={active.alt}
-            className="max-h-[min(92vh,100%)] w-full max-w-[100vw] cursor-zoom-out border-0 object-contain shadow-none"
+            className={`${ZOOM_MODAL_MEDIA_CLASSNAME} cursor-zoom-out`}
           />
         </div>
       )}

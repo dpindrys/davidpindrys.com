@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
+
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
 const sectionTitleClass =
@@ -57,7 +59,7 @@ const masterSolutionRows: MasterSolutionRow[] = [
     question: "What needs attention now?",
     description:
       "The overview surfaces current risks, monitored conditions, stable problems, and relevant care context before clinicians inspect the timeline.",
-    imageSrc: "/images/vehr/patient-overview.png",
+    imageSrc: "/images/vehr/overview.png",
     imageAlt:
       "VEHR patient overview: risks, monitored and stable conditions, and care context",
     payoff: false,
@@ -172,16 +174,13 @@ export default function VehrMasterSolutionSummary() {
                   </div>
                 </a>
               ) : (
-                <div
-                  className={`${visualShellClass} ${row.payoff ? "ring-2 ring-black/[0.12] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.18),0_6px_16px_-6px_rgba(0,0,0,0.1)]" : ""}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={row.imageSrc}
-                    alt={row.imageAlt}
-                    className={thumbClass}
-                  />
-                </div>
+                <ZoomableProblemImage
+                  src={row.imageSrc}
+                  alt={row.imageAlt}
+                  shellClassName={`${visualShellClass} ${row.payoff ? "ring-2 ring-black/[0.12] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.18),0_6px_16px_-6px_rgba(0,0,0,0.1)]" : ""}`}
+                  imgClassName={thumbClass}
+                  dialogLabel={`${row.layer} visual`}
+                />
               )}
             </div>
           </StepRow>
