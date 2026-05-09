@@ -11,10 +11,6 @@ export const vehrBelowHeroSummaryBlock = {
   body:
     "I worked with a practicing physician to design a chart review workflow that makes dense patient data over time easier to interpret, and delivered scalable components now being implemented by his development team.",
   team: "Founding clinical lead, engineering team, and myself",
-  prototypeLink: {
-    href: "https://visual-ehr.vercel.app/",
-    label: "View the prototype",
-  },
 } as const;
 
 export const vehrBelowHeroTestimonial = {

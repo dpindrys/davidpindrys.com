@@ -74,7 +74,9 @@ export default function VisualEhrCaseStudyPage() {
                       className="block h-auto w-full rounded-none border border-black/10 bg-white/40 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.12),0_4px_12px_-4px_rgba(0,0,0,0.08)]"
                     />
                     <p className="font-sans text-[16px] leading-[1.55] text-black/45">
-                      Caption pending
+                      Cole&apos;s paper chart system: A useful reference for how
+                      clinical information gets organized when the record structure
+                      follows the clinician&apos;s reasoning.
                     </p>
                   </div>
                   <div className="flex min-w-0 w-full flex-col gap-3">
@@ -85,7 +87,8 @@ export default function VisualEhrCaseStudyPage() {
                       className="block h-auto w-full rounded-none border border-black/10 bg-white/40 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.12),0_4px_12px_-4px_rgba(0,0,0,0.08)]"
                     />
                     <p className="font-sans text-[16px] leading-[1.55] text-black/45">
-                      Caption pending
+                      Object mapping: Translating that reasoning into encounters,
+                      diagnoses, labs, vitals, medications, and notes.
                     </p>
                   </div>
                 </div>

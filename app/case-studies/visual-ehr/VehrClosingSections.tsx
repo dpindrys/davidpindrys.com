@@ -1,8 +1,5 @@
 import { SECONDARY_OUTLINE_INTERACTIVE } from "../../components/buttonTokens";
-import {
-  vehrBelowHeroSummaryBlock,
-  vehrBelowHeroTestimonial,
-} from "./vehrBelowHeroData";
+import { vehrBelowHeroTestimonial } from "./vehrBelowHeroData";
 
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
@@ -18,7 +15,7 @@ const visualShellClass =
 
 const sectionGapClass = "mt-16 w-full md:mt-20 lg:mt-24";
 
-const prototypeHref = vehrBelowHeroSummaryBlock.prototypeLink.href;
+const prototypeHref = "https://visual-ehr.vercel.app/";
 
 export default function VehrClosingSections() {
   return (
@@ -103,21 +100,9 @@ export default function VehrClosingSections() {
 
       <section
         className={sectionGapClass}
-        aria-labelledby="vehr-clinical-validation-heading"
+        aria-label="Clinical feedback from Dr. Cole Marolf"
       >
-        <h2
-          id="vehr-clinical-validation-heading"
-          className={sectionTitleClass}
-        >
-          Clinical validation
-        </h2>
-        <p className={`${bodyClass} mt-5 md:mt-6`}>
-          Testing and review with Dr. Cole Marolf helped confirm the direction:
-          the timeline reframed chart review around clinical reasoning, while the
-          heat map improved data density without sacrificing clarity.
-        </p>
-
-        <figure className="mt-8 rounded-2xl border border-black/10 bg-white/50 p-8 md:mt-10 md:p-10">
+        <figure className="rounded-2xl border border-black/10 bg-white/50 p-8 md:p-10">
           <blockquote className={bodyClass}>
             &ldquo;David demonstrated strong insight into reframing healthcare
             data interaction… especially the heat map, which improved data density
