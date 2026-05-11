@@ -18,7 +18,19 @@ const introClass =
 const testimonialCardClass =
   "flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8";
 
-const impactRows = [
+type ImpactQuote = {
+  quote: string;
+  name: string;
+  title: string;
+  avatarSrc: string;
+};
+
+type ImpactRow = {
+  heading: string;
+  body: string;
+} & ImpactQuote;
+
+const impactRows: readonly ImpactRow[] = [
   {
     heading: "1. Time Saved for Clinic Staff",
     body: "The workflow reduced repeat calls, paper handling, and pharmacy lookups, giving staff back time each week.",
@@ -46,22 +58,17 @@ const impactRows = [
     title: "RN",
     avatarSrc: "/images/frx/ease.png",
   },
-] as const;
+];
 
 function FrxImpactQuoteCard({
   quote,
   name,
   title,
   avatarSrc,
-}: {
-  quote: string;
-  name: string;
-  title: string;
-  avatarSrc: string;
-}) {
+}: ImpactQuote) {
   return (
     <div className={testimonialCardClass}>
-      <blockquote className={rowBodyTextClass}>
+      <blockquote className={`${rowBodyTextClass} whitespace-pre-line`}>
         {quote}
       </blockquote>
       <div className="flex items-center gap-4">

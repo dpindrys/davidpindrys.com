@@ -1,8 +1,9 @@
-/** Order matches home case study sequence; next from FRx goes to VEHR; otherwise last → first in list. */
+/** Order for next-project navigation; next from FRx still goes to VEHR (see `nextCaseStudyPath`). */
 export const CASE_STUDY_PATHS = [
   "/case-studies/visual-ehr",
   "/case-studies/frx",
   "/case-studies/ovcp",
+  "/case-studies/dell-childrens",
 ] as const;
 
 export type CaseStudyPath = (typeof CASE_STUDY_PATHS)[number];
