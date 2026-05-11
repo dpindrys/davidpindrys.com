@@ -264,24 +264,15 @@ export default function Carousel({ slides, caption }: CarouselProps) {
         {/* Per-slide caption: title + body, or legacy single line */}
         {capTitle != null && capTitle !== "" && capBody != null && capBody !== "" ? (
           <div className="mt-6 w-full flex flex-col items-center gap-1 text-center px-2">
-            <p
-              className="font-sans font-bold text-[15px] leading-[1.3] tracking-tight w-full"
-              style={{ color: "rgb(82, 82, 82)" }}
-            >
+            <p className="w-full font-sans text-[15px] font-bold leading-[1.3] tracking-tight text-black/65">
               {capTitle}
             </p>
-            <p
-              className="font-sans font-normal text-[15px] leading-[1.3] tracking-tight w-full max-w-[640px]"
-              style={{ color: "rgb(82, 82, 82)" }}
-            >
+            <p className="w-full max-w-[640px] font-sans text-[15px] font-normal leading-[1.3] tracking-tight text-black/65">
               {capBody}
             </p>
           </div>
         ) : legacyCaption ? (
-          <p
-            className="mt-6 w-full text-center font-sans font-semibold text-[15px] leading-[1.3] tracking-tight"
-            style={{ color: "rgb(82, 82, 82)" }}
-          >
+          <p className="mt-6 w-full text-center font-sans text-[15px] font-semibold leading-[1.3] tracking-tight text-black/65">
             {legacyCaption}
           </p>
         ) : null}

@@ -449,9 +449,14 @@ export default function Home() {
                     </div>
 
                     <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black">
-                        {ascensionProject.title}
-                      </h3>
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <h3 className="font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black">
+                          {ascensionProject.title}
+                        </h3>
+                        <span className="font-sans text-[13px] font-medium uppercase tracking-[0.08em] text-black/45">
+                          {ascensionProject.caseStudyCtaLabel}
+                        </span>
+                      </div>
                       <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
                         {ascensionProject.descriptor}
                       </p>
@@ -496,9 +501,14 @@ export default function Home() {
                     </div>
 
                     <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                        Reconciling the Problem List
-                      </h3>
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                          Reconciling the Problem List
+                        </h3>
+                        <span className="font-sans text-[13px] font-medium uppercase tracking-[0.08em] text-black/45">
+                          Coming soon
+                        </span>
+                      </div>
                       <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
                         Helping clinicians reduce diagnostic clutter through a faster, more meaningful
                         problem-list reconciliation workflow.

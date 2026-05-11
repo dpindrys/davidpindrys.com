@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
+import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
 import FrxAddressImageCycle from "./FrxAddressImageCycle";
 
 const eyebrowClass =
@@ -103,36 +105,24 @@ export function FrxSectionsBeforeSolution() {
             title="1. Object Mapping for Clarity"
             body="I mapped the key objects in the refill workflow — patients, medications, prescriptions, refills, addresses, and users — to understand what information staff needed and how those objects related to each action."
           >
-            <div className={mediaCardClass}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/frx/objectmap.png"
-                alt="Object map of refill workflow: patients, medications, prescriptions, refills, and related entities"
-                className="block h-auto w-full rounded-md border-0"
-              />
-            </div>
+            <ZoomableProblemImage
+              src="/images/frx/objectmap.png"
+              alt="Object map of refill workflow: patients, medications, prescriptions, refills, and related entities"
+              shellClassName={mediaCardClass}
+              imgClassName="block h-auto w-full rounded-md border-0"
+            />
           </FrxProcessRow>
 
           <FrxProcessRow
             title="2. Turning Objects Into Workflow"
             body="I translated the object map into an early workflow model, testing how refill actions, prescription details, addresses, and submission steps could stay connected without overwhelming the screen."
           >
-            <div className={mediaCardClass}>
-              <video
-                className="block h-auto w-full rounded-md border-0 bg-black/[0.02]"
-                muted
-                autoPlay
-                loop
-                playsInline
-                preload="metadata"
-                aria-label="Early object wireframe prototype connecting refill workflow steps"
-              >
-                <source
-                  src="/videos/frx/fresenius-objectwireframe.mp4"
-                  type="video/mp4"
-                />
-              </video>
-            </div>
+            <ZoomableProblemVideo
+              src="/videos/frx/fresenius-objectwireframe.mp4"
+              ariaLabel="Early object wireframe prototype connecting refill workflow steps"
+              cardClassName={mediaCardClass}
+              dialogLabel="Early workflow wireframe video"
+            />
           </FrxProcessRow>
         </div>
       </section>
@@ -160,28 +150,24 @@ export function FrxSectionsBeforeSolution() {
             title="1. Show Only What’s Essential"
             body="Testing showed that staff preferred minimal information upfront, with secondary details like tracking or shipping dates available only when needed."
           >
-            <div className={mediaCardClass}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/frx/test1.png"
-                alt="Refill interface emphasizing essential information with secondary details deferred"
-                className="block h-auto w-full rounded-md border-0"
-              />
-            </div>
+            <ZoomableProblemImage
+              src="/images/frx/test1.png"
+              alt="Refill interface emphasizing essential information with secondary details deferred"
+              shellClassName={mediaCardClass}
+              imgClassName="block h-auto w-full rounded-md border-0"
+            />
           </FrxProcessRow>
 
           <FrxProcessRow
             title="2. Use Defaults to Reduce Decisions"
             body="Staff wanted date visibility, but pre-selecting today’s date reduced ambiguity and helped them move through the refill task faster."
           >
-            <div className={mediaCardClass}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/frx/test2.png"
-                alt="Refill form with today’s date pre-selected to reduce decision friction"
-                className="block h-auto w-full rounded-md border-0"
-              />
-            </div>
+            <ZoomableProblemImage
+              src="/images/frx/test2.png"
+              alt="Refill form with today’s date pre-selected to reduce decision friction"
+              shellClassName={mediaCardClass}
+              imgClassName="block h-auto w-full rounded-md border-0"
+            />
           </FrxProcessRow>
 
           <FrxProcessRow

@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { ZOOM_MODAL_MEDIA_CLASSNAME } from "./zoomModalMediaClassName";
 
 /**
- * Single thumbnail with zoom cursor; click opens a modal at intrinsic size (capped by
- * viewport width and height), not upscaled to fill the screen.
+ * Single thumbnail with zoom cursor; click opens a modal that scales media up to the
+ * modal width (capped by viewport height), preserving aspect ratio.
  */
 export default function ZoomableProblemImage({
   src,

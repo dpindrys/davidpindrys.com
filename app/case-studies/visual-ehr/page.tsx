@@ -73,10 +73,12 @@ export default function VisualEhrCaseStudyPage() {
                       alt="Chart review mapping: clinical objects and relationships"
                       className="block h-auto w-full rounded-none border border-black/10 bg-white/40 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.12),0_4px_12px_-4px_rgba(0,0,0,0.08)]"
                     />
-                    <p className="font-sans text-[16px] leading-[1.55] text-black/45">
-                      Cole&apos;s paper chart system: A useful reference for how
-                      clinical information gets organized when the record structure
-                      follows the clinician&apos;s reasoning.
+                    <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                      <strong className="font-semibold text-black/65">
+                        Cole&apos;s paper chart system:
+                      </strong>{" "}
+                      A useful reference for how clinical information gets organized
+                      when the record structure follows the clinician&apos;s reasoning.
                     </p>
                   </div>
                   <div className="flex min-w-0 w-full flex-col gap-3">
@@ -86,9 +88,12 @@ export default function VisualEhrCaseStudyPage() {
                       alt="Domain map of problems, events, and relationships for chart review"
                       className="block h-auto w-full rounded-none border border-black/10 bg-white/40 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.12),0_4px_12px_-4px_rgba(0,0,0,0.08)]"
                     />
-                    <p className="font-sans text-[16px] leading-[1.55] text-black/45">
-                      Object mapping: Translating that reasoning into encounters,
-                      diagnoses, labs, vitals, medications, and notes.
+                    <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                      <strong className="font-semibold text-black/65">
+                        Object mapping:
+                      </strong>{" "}
+                      Translating that reasoning into encounters, diagnoses, labs,
+                      vitals, medications, and notes.
                     </p>
                   </div>
                 </div>
@@ -152,8 +157,8 @@ export default function VisualEhrCaseStudyPage() {
                       src: "/images/vehr/epic-encounters.png",
                       alt: "Epic EHR encounters organized as separate entries across the chart",
                       caption: (
-                        <p className="font-sans text-[16px] leading-[1.55] text-black/75">
-                          <span className="font-semibold text-black">
+                        <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                          <span className="font-semibold text-black/65">
                             Encounter list:
                           </span>{" "}
                           Care events are chronological, but the story still has to be
@@ -165,8 +170,8 @@ export default function VisualEhrCaseStudyPage() {
                       src: "/images/vehr/epic-encounter.png",
                       alt: "Epic EHR encounter note view isolated from the broader patient timeline",
                       caption: (
-                        <p className="font-sans text-[16px] leading-[1.55] text-black/75">
-                          <span className="font-semibold text-black">
+                        <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                          <span className="font-semibold text-black/65">
                             Visit report:
                           </span>{" "}
                           Diagnoses and orders are visible, but separated from surrounding
@@ -230,8 +235,8 @@ export default function VisualEhrCaseStudyPage() {
                       src: "/images/vehr/mismatch.png",
                       alt: "Tabular lab and vital review where values are listed without clear emphasis on abnormality or change",
                       caption: (
-                        <p className="font-sans text-[16px] leading-snug tracking-tight text-black/80">
-                          <span className="font-semibold text-black">
+                        <p className="font-sans text-[16px] leading-snug tracking-tight text-black/65">
+                          <span className="font-semibold text-black/65">
                             Tabular review:
                           </span>{" "}
                           Values are available, but abnormality and change have to be found
@@ -243,8 +248,8 @@ export default function VisualEhrCaseStudyPage() {
                       src: "/images/vehr/overload.png",
                       alt: "Overlapping trend lines with competing scales obscuring clinically important changes",
                       caption: (
-                        <p className="font-sans text-[16px] leading-snug tracking-tight text-black/80">
-                          <span className="font-semibold text-black">
+                        <p className="font-sans text-[16px] leading-snug tracking-tight text-black/65">
+                          <span className="font-semibold text-black/65">
                             Spaghetti trends:
                           </span>{" "}
                           Overlapping lines and competing scales make clinically important

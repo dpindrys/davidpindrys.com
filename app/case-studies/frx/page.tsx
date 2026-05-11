@@ -66,8 +66,8 @@ export default function FrxCaseStudyPage() {
                       alt="Paper RAF forms and manual refill coordination"
                       className="h-auto w-full rounded-2xl border border-black/10 bg-white/40"
                     />
-                    <p className="font-sans text-[16px] leading-[1.55] text-black/75">
-                      <span className="font-semibold text-black">
+                    <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                      <span className="font-semibold text-black/65">
                         Administrative burden:
                       </span>{" "}
                       Printing, signing, refaxing, and tracking forms pulled hours
@@ -81,8 +81,8 @@ export default function FrxCaseStudyPage() {
                       alt="Clinic workflow disconnected from pharmacy processing status"
                       className="h-auto w-full rounded-2xl border border-black/10 bg-white/40"
                     />
-                    <p className="font-sans text-[16px] leading-[1.55] text-black/75">
-                      <span className="font-semibold text-black">
+                    <p className="font-sans text-[16px] leading-[1.55] text-black/65">
+                      <span className="font-semibold text-black/65">
                         Visibility gap:
                       </span>{" "}
                       Pharmacy systems tracked every step, but clinics had no

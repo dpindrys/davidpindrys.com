@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import OvcpBelowHero from "./OvcpBelowHero";
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
@@ -26,7 +27,7 @@ const pullQuoteClass =
 const attributionClass =
   "mt-4 text-center font-sans text-[15px] font-normal leading-[1.5] text-black/55 md:text-[16px]";
 const captionClass =
-  "mt-3 font-sans text-[16px] leading-[1.55] text-black/75";
+  "mt-3 font-sans text-[16px] leading-[1.55] text-black/65";
 
 function OvcpRowShell({
   isFirst,
@@ -149,12 +150,12 @@ export default function OvcpCaseStudyPage() {
                 </div>
 
                 <figure className="mt-12 w-full md:mt-14">
-                  <div className={mediaCardClass}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <div className="flex w-full flex-col">
+                    <ZoomableProblemImage
                       src="/images/ovcp/joy-sketch.png"
                       alt="Hand-drawn sketch of low-touch problem list reconciliation"
-                      className="block h-auto w-full rounded-md border-0"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
                     />
                     <figcaption className={`${captionClass} not-italic`}>
                       <span className="font-semibold text-black">SME prototype:</span>{" "}
@@ -202,14 +203,12 @@ export default function OvcpCaseStudyPage() {
                     </>
                   }
                   right={
-                    <div className={mediaCardClass}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/ovcp/direct.png"
-                        alt="Direct manipulation prototype for relating diagnoses on the problem list"
-                        className="block h-auto w-full rounded-md border-0"
-                      />
-                    </div>
+                    <ZoomableProblemImage
+                      src="/images/ovcp/direct.png"
+                      alt="Direct manipulation prototype for relating diagnoses on the problem list"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                    />
                   }
                 />
 
@@ -228,24 +227,23 @@ export default function OvcpCaseStudyPage() {
                     </>
                   }
                   right={
-                    <div className={mediaCardClass}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/ovcp/similar-secondary2.png"
-                        alt="Similar to and secondary to relationship choices when consolidating diagnoses"
-                        className="block h-auto w-full rounded-md border-0"
-                      />
-                    </div>
+                    <ZoomableProblemImage
+                      src="/images/ovcp/similar-secondary2.png"
+                      alt="Similar to and secondary to relationship choices when consolidating diagnoses"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                    />
                   }
                 />
 
                 <div className="border-t border-black/10 pt-12 md:pt-16 lg:pt-20">
-                  <div className={mediaCardClass}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <div className="flex w-full flex-col">
+                    <ZoomableProblemImage
                       src="/images/ovcp/problem-list.gif"
                       alt="Animated click-through: consolidating duplicate diagnoses by dragging and choosing similar or secondary relationships"
-                      className="block h-auto w-full rounded-md border-0"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                      dialogLabel="Click-through prototype"
                     />
                     <p className={`${captionClass} mt-4`}>
                       <span className="font-semibold text-black">
@@ -292,27 +290,23 @@ export default function OvcpCaseStudyPage() {
                     </>
                   }
                   right={
-                    <div className={mediaCardClass}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/ovcp/sorting.png"
-                        alt="Problem list sorted with last-active context and status labels"
-                        className="block h-auto w-full rounded-md border-0"
-                      />
-                    </div>
+                    <ZoomableProblemImage
+                      src="/images/ovcp/sorting.png"
+                      alt="Problem list sorted with last-active context and status labels"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                    />
                   }
                 />
 
                 <OvcpRowShellVisualFirst
                   visual={
-                    <div className={mediaCardClass}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/ovcp/context.png"
-                        alt="Problem detail with history and linked activity"
-                        className="block h-auto w-full rounded-md border-0"
-                      />
-                    </div>
+                    <ZoomableProblemImage
+                      src="/images/ovcp/context.png"
+                      alt="Problem detail with history and linked activity"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                    />
                   }
                   copy={
                     <>
@@ -333,12 +327,13 @@ export default function OvcpCaseStudyPage() {
                 />
 
                 <div className="border-t border-black/10 pt-12 md:pt-16 lg:pt-20">
-                  <div className={mediaCardClass}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                  <div className="flex w-full flex-col">
+                    <ZoomableProblemImage
                       src="/images/ovcp/problemlist-final.gif"
                       alt="Refined prototype: filtering resolved problems and opening diagnosis history"
-                      className="block h-auto w-full rounded-md border-0"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                      dialogLabel="Later iteration"
                     />
                     <p className={`${captionClass} mt-4`}>
                       <span className="font-semibold text-black">Later iteration:</span>{" "}

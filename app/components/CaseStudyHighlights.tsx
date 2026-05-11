@@ -270,10 +270,10 @@ type ModalMediaBlockProps = {
 
 /** Primary image / video / side-by-side / secondary — shared by slide and composite modals. */
 const modalCaptionClass =
-  "mt-1.5 font-sans text-[12px] font-normal leading-snug text-black/55 sm:text-[13px]";
+  "mt-1.5 font-sans text-[12px] font-normal leading-snug text-black/65 sm:text-[13px]";
 
 const modalCaptionTextClass =
-  "font-sans text-[12px] font-normal leading-snug text-black/55 sm:text-[13px]";
+  "font-sans text-[12px] font-normal leading-snug text-black/65 sm:text-[13px]";
 
 function ModalMediaBlock({
   modalImg,
@@ -520,7 +520,7 @@ type VehrCompositeProps = {
 };
 
 const modalImageSourceClass =
-  "mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/50";
+  "mt-2 font-sans text-[16px] font-normal leading-[1.6] text-black/65";
 
 const modalBodyTextClass =
   "font-sans text-[16px] font-normal leading-[1.6] text-black/75";
