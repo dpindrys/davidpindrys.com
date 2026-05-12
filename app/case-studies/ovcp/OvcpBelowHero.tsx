@@ -32,9 +32,6 @@ export default function OvcpBelowHero() {
             {summary.body}
           </p>
         </div>
-        <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/80">
-          {summary.focus}
-        </p>
       </div>
     </section>
   );

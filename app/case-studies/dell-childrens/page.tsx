@@ -3,11 +3,23 @@ import Image from "next/image";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
+import {
+  FrxProcessRowShell,
+  mediaCardClass,
+  rowBodyClass,
+  rowHeadingClass,
+} from "../frx/FrxExtendedSections";
+
+/** Split-row visuals: cap width and hug the right column on md+. */
+const dchpSolutionVisualConstrainClass =
+  "w-full min-w-0 max-w-md md:ml-auto md:max-w-lg lg:max-w-xl";
 
 const dchpBelowHeroMeta = [
   { label: "Role", value: "Product Design Lead" },
-  { label: "Timeline", value: "6 months" },
-  { label: "Status", value: "Deployed enterprise-wide" },
+  { label: "Client", value: "Ascension" },
+  { label: "Timeline", value: "4 months" },
+  { label: "Status", value: "Launched enterprise-wide" },
 ] as const;
 
 const eyebrowClass =
@@ -21,13 +33,93 @@ const cardClass =
 const testimonialCardClass =
   "rounded-2xl border border-black/10 bg-white/50 p-8 text-left";
 
-const FRAMER_URL = "https://dpindrys.framer.website/dchp";
-
 const dchpSummaryBody =
   "Leading design and research for the member experience across web and mobile, I created new workflows for care team selection, physical ID card requests, and prior authorization review, helping transform the portal from a static information hub into a more actionable healthcare experience. The platform launched enterprise-wide within Ascension.";
 
 const dchpTeamBody =
   "Product owner, product manager, system architect, front-end engineers, data engineers, and myself";
+
+type DchpSolutionMedia = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+type DchpSolutionRow = {
+  title: string;
+  body: string;
+  /** One or more screenshots; intrinsic size avoids collapsed layout in the media card */
+  media: DchpSolutionMedia[];
+};
+
+const dchpSolutionRows: DchpSolutionRow[] = [
+  {
+    title: "Welcome",
+    body:
+      "A warmer entry point with personalized greeting and clearer paths into the tools members need most.",
+    media: [
+      {
+        src: "/images/dellchildrens/after.png",
+        alt: "Redesigned member portal welcome and home experience on mobile",
+        width: 898,
+        height: 803,
+      },
+    ],
+  },
+  {
+    title: "Mobile-first retrofit",
+    body:
+      "Core screens were reworked for small viewports first—tighter hierarchy, touch-friendly controls, and responsive layouts—so the same tasks worked consistently from phone to desktop.",
+    media: [
+      {
+        src: "/images/dellchildrens/home-mobile.png",
+        alt: "Member portal home and navigation on mobile after mobile-first retrofit",
+        width: 740,
+        height: 786,
+      },
+    ],
+  },
+  {
+    title: "Care Team Selection",
+    body:
+      "Members could designate a care team and primary care provider through flows that were not available in the legacy portal.",
+    media: [
+      {
+        src: "/images/dellchildrens/change-mobile.png",
+        alt: "Care team selection flow on mobile",
+        width: 717,
+        height: 786,
+      },
+    ],
+  },
+  {
+    title: "ID-card Requests",
+    body:
+      "Physical ID card requests were brought into the digital experience so members could complete them without leaving the workflow.",
+    media: [
+      {
+        src: "/images/dellchildrens/idcards-mobile.png",
+        alt: "ID card request flow on mobile",
+        width: 692,
+        height: 786,
+      },
+    ],
+  },
+  {
+    title: "Claims Visibility",
+    body:
+      "Claims and related status surfaced in context so members could review activity without hunting across disconnected views.",
+    media: [
+      {
+        src: "/images/dellchildrens/claims-mobile.png",
+        alt: "Claims and account visibility on mobile",
+        width: 692,
+        height: 786,
+      },
+    ],
+  },
+];
 
 export default function DellChildrensCaseStudyPage() {
   return (
@@ -41,22 +133,10 @@ export default function DellChildrensCaseStudyPage() {
               backAriaLabel="Back to home"
             />
 
-            <section className="mt-24 flex w-full flex-col gap-6 md:mt-32 lg:mt-36">
-              <p className={eyebrowClass}>Ascension · Dell Children&apos;s Health Plan</p>
+            <section className="mt-24 flex w-full flex-col gap-10 md:mt-32 lg:mt-36">
               <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
-                Responsive Care Access
+                Creating a more usable and meaningful member experience
               </h1>
-              <p className="font-sans text-[16px] leading-[1.5] text-black/60">
-                <a
-                  href={FRAMER_URL}
-                  className="text-black underline decoration-black/30 underline-offset-[0.2em] transition-colors hover:decoration-black/60"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open full preview on Framer
-                </a>
-                <span aria-hidden> ↗</span>
-              </p>
             </section>
 
             <section className="mt-16 w-full md:mt-24 lg:mt-28">
@@ -65,6 +145,8 @@ export default function DellChildrensCaseStudyPage() {
                 <img
                   src="/images/dellchildrens/responsive-home.png"
                   alt="Dell Children's Health Plan responsive member portal home"
+                  width={2048}
+                  height={1362}
                   className="block h-auto w-full"
                 />
               </div>
@@ -149,67 +231,95 @@ export default function DellChildrensCaseStudyPage() {
               <div className={cardClass}>
                 <p className={eyebrowClass}>The problem</p>
                 <h2 id="dchp-problem-heading" className={`${titleClass} mt-4 md:mt-5`}>
-                  Existing patient portal home
+                  Non-Compliant by Design
                 </h2>
                 <p className={`${bodyClass} mt-5 md:mt-6`}>
-                  Before redesign, the Dell Children&apos;s portal greeted members with a
-                  generic, impersonal message—closer to e-commerce than a trusted health
-                  platform. Plan overview and quick links were overloaded with redundant or
-                  unclear content, and the experience offered little personalized guidance for
-                  managing care.
+                  Before redesign, the Dell Children&apos;s portal felt more like an eCommerce
+                  site than a trusted healthcare platform. Generic messaging, cluttered navigation,
+                  and limited functionality left members without clear guidance or meaningful
+                  support in managing their care.
                 </p>
+                <figure className="mt-8 md:mt-10">
+                  <div className="overflow-hidden rounded-2xl border border-black/10 bg-white/40">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/images/dellchildrens/before.png"
+                      alt="Legacy Dell Children's Health Plan member portal home page before redesign"
+                      className="block h-auto w-full"
+                    />
+                  </div>
+                  <figcaption className="mt-3 font-sans text-[16px] leading-[1.55] text-black/65 not-italic">
+                    Home page that did not meet Medicaid standards
+                  </figcaption>
+                </figure>
               </div>
             </section>
 
             <section
               className="mt-16 w-full md:mt-20 lg:mt-24"
-              aria-labelledby="dchp-before-after-heading"
+              aria-labelledby="dchp-solution-heading"
             >
-              <p className={eyebrowClass}>Before and after</p>
-              <h2 id="dchp-before-after-heading" className={`${titleClass} mt-4 md:mt-5`}>
-                A clearer first impression
-              </h2>
-              <div className="mt-8 grid w-full grid-cols-1 gap-8 md:mt-10 md:grid-cols-2 md:gap-10">
-                <div className="rounded-2xl border border-black/10 bg-white/60 p-6 md:p-8">
-                  <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.1em] text-black/45">
-                    Before
-                  </p>
-                  <p className={`${bodyClass} mt-3 text-[18px] md:text-[20px]`}>
-                    The logged-in experience felt cold and generic, with unclear plan info and
-                    disorganized links that confused more than helped.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-black/10 bg-white/60 p-6 md:p-8">
-                  <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.1em] text-black/45">
-                    After
-                  </p>
-                  <p className={`${bodyClass} mt-3 text-[18px] md:text-[20px]`}>
-                    The dashboard feels personal and purposeful—greeting members by name and
-                    surfacing the most relevant tools and actions up front.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            <section
-              className="mt-16 w-full md:mt-20 lg:mt-24"
-              aria-labelledby="dchp-mobile-heading"
-            >
-              <p className={eyebrowClass}>A mobile-first experience</p>
-              <h2 id="dchp-mobile-heading" className={`${titleClass} mt-4 md:mt-5`}>
-                Mobile-first, member-centered
+              <p className={eyebrowClass}>The Solution</p>
+              <h2 id="dchp-solution-heading" className={`${titleClass} mt-4 md:mt-5`}>
+                A Better Member Experience
               </h2>
               <p className={`${bodyClass} mt-5 md:mt-6`}>
-                Built for parents managing children&apos;s care on the go: clear hierarchy,
-                personalization, and immediate utility—care teams, claims, ID cards, and other
-                tasks—within Ascension&apos;s brand system.
+                The redesigned experience introduced a more welcoming, mobile-first interface with
+                clearer navigation, personalized content, and expanded functionality. Members could
+                more easily access information, complete key tasks, and manage their care across
+                devices.
               </p>
-              <p className={`${bodyClass} mt-6 md:mt-8`}>
-                <span className="font-semibold text-black/90">Streamlined access, real-world tasks.</span>{" "}
-                From choosing a primary care provider to downloading ID cards, flows were
-                simplified for small screens with member names and action-driven labels to
-                reduce friction.
-              </p>
+
+              <div className="mt-10 w-full md:mt-14 lg:mt-16">
+                {dchpSolutionRows.map((row, index) => {
+                  const isFirst = index === 0;
+
+                  return (
+                    <FrxProcessRowShell
+                      key={row.title}
+                      isFirst={isFirst}
+                      align="start"
+                      left={
+                        <>
+                          <h3 className={rowHeadingClass}>{row.title}</h3>
+                          <p className={rowBodyClass}>{row.body}</p>
+                        </>
+                      }
+                    >
+                      {row.media.length === 1 ? (
+                        <div className={dchpSolutionVisualConstrainClass}>
+                          <ZoomableProblemImage
+                            src={row.media[0]!.src}
+                            alt={row.media[0]!.alt}
+                            width={row.media[0]!.width}
+                            height={row.media[0]!.height}
+                            dialogLabel={row.title}
+                            shellClassName={`${mediaCardClass} flex flex-col gap-4`}
+                            imgClassName="block h-auto w-full min-w-0 rounded-md border-0"
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className={`${mediaCardClass} ${dchpSolutionVisualConstrainClass} flex flex-col gap-4`}
+                        >
+                          {row.media.map((m, mi) => (
+                            <ZoomableProblemImage
+                              key={`${row.title}-${mi}`}
+                              src={m.src}
+                              alt={m.alt}
+                              width={m.width}
+                              height={m.height}
+                              dialogLabel={row.title}
+                              shellClassName={mi > 0 ? "mt-4 w-full" : "w-full"}
+                              imgClassName="block h-auto w-full min-w-0 rounded-md border-0"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </FrxProcessRowShell>
+                  );
+                })}
+              </div>
             </section>
 
             <CaseStudyNextProjectButton currentPath="/case-studies/dell-childrens" />

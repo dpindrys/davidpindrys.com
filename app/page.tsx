@@ -3,7 +3,6 @@ import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import { sectionHeadingClass } from "./components/sectionHeading";
-import ProjectSection from "./components/ProjectSection";
 import Link from "next/link";
 
 const vehrProject = {
@@ -263,8 +262,6 @@ const ascensionProject = {
       "Dell Children's Patient Portal was outdated, lacked meaningful functionality and a personal touch, and was out of compliance with Medicaid requirements. I designed and shipped a new responsive portal experience with expanded functionality, working with a lean team to modernize key member workflows and improve usability. The portal met Medicaid guidelines and continued serving 40,000+ members.",
     team: "Product manager, product lead, front and data engineers, and myself",
   },
-  caseStudyComingSoon: true,
-  caseStudyCtaLabel: "Coming soon",
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
     modalBrandHeader: {
@@ -438,7 +435,11 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  <article className="rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)]">
+                  <Link
+                    href="/case-studies/dell-childrens"
+                    aria-label="Open Dell Children's Health Plan case study"
+                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  >
                     <div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -449,19 +450,14 @@ export default function Home() {
                     </div>
 
                     <div className="mt-6 flex flex-col gap-2">
-                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <h3 className="font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black">
-                          {ascensionProject.title}
-                        </h3>
-                        <span className="font-sans text-[13px] font-medium uppercase tracking-[0.08em] text-black/45">
-                          {ascensionProject.caseStudyCtaLabel}
-                        </span>
-                      </div>
+                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                        {ascensionProject.title}
+                      </h3>
                       <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
                         {ascensionProject.descriptor}
                       </p>
                     </div>
-                  </article>
+                  </Link>
                 </div>
 
                 {/* Right column: FRx + OVCP */}
@@ -490,7 +486,11 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  <article className="rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)]">
+                  <Link
+                    href="/case-studies/ovcp"
+                    aria-label="Open problem list reconciliation case study"
+                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  >
                     <div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -501,20 +501,15 @@ export default function Home() {
                     </div>
 
                     <div className="mt-6 flex flex-col gap-2">
-                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                          Reconciling the Problem List
-                        </h3>
-                        <span className="font-sans text-[13px] font-medium uppercase tracking-[0.08em] text-black/45">
-                          Coming soon
-                        </span>
-                      </div>
+                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
+                        Reconciling the Problem List
+                      </h3>
                       <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
                         Helping clinicians reduce diagnostic clutter through a faster, more meaningful
                         problem-list reconciliation workflow.
                       </p>
                     </div>
-                  </article>
+                  </Link>
                 </div>
               </div>
             </section>

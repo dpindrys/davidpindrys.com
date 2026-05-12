@@ -16,6 +16,8 @@ export default function ZoomableProblemImage({
   focusRingOffsetClass = "focus-visible:ring-offset-[#F4F2EE]",
   dialogLabel = "Enlarged figure",
   elevateOnHover = true,
+  width,
+  height,
 }: {
   src: string;
   alt: string;
@@ -24,6 +26,9 @@ export default function ZoomableProblemImage({
   focusRingOffsetClass?: string;
   dialogLabel?: string;
   elevateOnHover?: boolean;
+  /** Intrinsic dimensions for layout stability (optional) */
+  width?: number;
+  height?: number;
 }) {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
@@ -65,6 +70,8 @@ export default function ZoomableProblemImage({
           <img
             src={src}
             alt={alt}
+            width={width}
+            height={height}
             className={`${imgClassName} pointer-events-none`}
           />
         </button>
@@ -72,7 +79,7 @@ export default function ZoomableProblemImage({
 
       {open ? (
         <div
-          className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/80 p-3 sm:p-6"
+          className="fixed inset-0 z-[100] flex min-w-0 cursor-zoom-out items-center justify-center overflow-x-hidden bg-black/80 p-3 sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label={`${dialogLabel}. Click anywhere or press Escape to close.`}

@@ -2,6 +2,7 @@ import type { CaseStudyHighlightsData } from "../../components/CaseStudyHighligh
 
 export const vehrBelowHeroMeta = [
   { label: "Role", value: "Founding Product Design Lead" },
+  { label: "Client", value: "VEHR Technologies" },
   { label: "Timeline", value: "4 months" },
   { label: "Status", value: "In development" },
 ] as const;

@@ -5,6 +5,12 @@ import Footer from "../../components/Footer";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import OvcpBelowHero from "./OvcpBelowHero";
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
+import {
+  FrxProcessRowShell,
+  rowBodyClass,
+  rowBodyTextClass,
+  rowHeadingClass,
+} from "../frx/FrxExtendedSections";
 
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
@@ -20,14 +26,24 @@ const problemCardClass =
   "rounded-2xl bg-[#E8E6E1] px-8 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14";
 const mediaCardClass =
   "overflow-hidden rounded-2xl border border-black/10 bg-white p-4 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)] md:p-5";
-const testimonialCardClass =
-  "flex min-h-0 w-full flex-col gap-4 rounded-2xl border border-black/10 bg-white/50 p-8 text-left";
 const pullQuoteClass =
   "mx-auto max-w-3xl text-center font-sans text-[20px] font-medium leading-[1.45] text-black md:text-[22px]";
 const attributionClass =
   "mt-4 text-center font-sans text-[15px] font-normal leading-[1.5] text-black/55 md:text-[16px]";
 const captionClass =
   "mt-3 font-sans text-[16px] leading-[1.55] text-black/65";
+
+/** Right-column research quotes paired with problem pillars (inside problem card). */
+const ovcpProblemQuoteVisualClass =
+  "rounded-xl border border-black/10 bg-white/45 px-5 py-6 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.08)] md:px-6 md:py-7";
+const ovcpProblemQuoteTextClass =
+  "font-sans text-[16px] font-medium leading-[1.55] text-black md:text-[17px]";
+
+/** Matches `FrxImpactQuoteCard` shell (OVCP feedback has no avatar). */
+const ovcpFeedbackQuoteCardClass =
+  "flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8";
+const ovcpFeedbackQuoteAttributionClass =
+  "font-sans text-[15px] font-semibold leading-[1.5] text-black md:text-[16px]";
 
 function OvcpRowShell({
   isFirst,
@@ -50,28 +66,6 @@ function OvcpRowShell({
   );
 }
 
-/** Text second on desktop (visual leads left column). */
-function OvcpRowShellVisualFirst({
-  isFirst,
-  visual,
-  copy,
-}: {
-  isFirst?: boolean;
-  visual: ReactNode;
-  copy: ReactNode;
-}) {
-  return (
-    <div
-      className={`grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-14 ${isFirst ? "pt-0" : "border-t border-black/10 pt-12 md:pt-16 lg:pt-20"} pb-12 md:pb-16 lg:pb-20`}
-    >
-      <div className="order-2 min-w-0 w-full md:order-none">{visual}</div>
-      <div className="order-1 flex min-w-0 flex-col md:order-none md:max-w-lg">
-        {copy}
-      </div>
-    </div>
-  );
-}
-
 export default function OvcpCaseStudyPage() {
   return (
     <>
@@ -86,7 +80,7 @@ export default function OvcpCaseStudyPage() {
 
             <section className="mt-24 flex w-full flex-col gap-10 md:mt-32 lg:mt-36">
               <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
-                Reconciling the Problem List
+                Reimagining problem list management with clinicians
               </h1>
             </section>
 
@@ -105,65 +99,92 @@ export default function OvcpCaseStudyPage() {
 
             <section
               className="mt-16 w-full md:mt-20 lg:mt-24"
-              aria-labelledby="ovcp-discovery-heading"
+              aria-labelledby="ovcp-problem-heading"
             >
               <div className={problemCardClass}>
-                <p className={eyebrowClass}>Discovery</p>
+                <p className={eyebrowClass}>The problem</p>
                 <h2
-                  id="ovcp-discovery-heading"
+                  id="ovcp-problem-heading"
                   className={`${sectionTitleClass} mt-4 md:mt-5`}
                 >
-                  The Problem List Is a Shared Pain Point
+                  The Problem List is a Shared Pain Point
                 </h2>
-                <blockquote className={`${pullQuoteClass} mt-8 md:mt-10`}>
-                  &ldquo;Problem lists are the problem of all EMRs—no one does a good job
-                  of presenting them.&rdquo;
-                </blockquote>
-                <p className={attributionClass}>— Health informatics expert</p>
 
-                <div className="mt-12 grid w-full grid-cols-1 gap-10 md:mt-14 md:grid-cols-2 md:gap-12 lg:gap-14">
-                  <div>
-                    <h3 className={subheadClass}>Physician as designer</h3>
-                    <p className={subbodyClass}>
-                      The first solution sketch came from an emergency physician. On a
-                      call, she argued that diagnoses had to be groupable—and backed it up
-                      with a clear Paint prototype.
-                    </p>
-                    <p className={subbodyClass}>
-                      From there, I iterated a handful of higher-fidelity concepts to
-                      turn a noisy list into something clinicians could actually reconcile.
-                    </p>
+                <blockquote
+                  className={`${bodyClass} mx-auto mt-6 max-w-3xl text-center md:mt-8`}
+                >
+                  &ldquo;Problem lists are the problem of all EMRs:
+                  <br />
+                  no one does a good job of presenting them.&rdquo;
+                </blockquote>
+                <p className={attributionClass}>&mdash; Health informatics expert</p>
+
+                <div className="mt-8 flex w-full flex-col md:mt-10">
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-start md:gap-10 lg:gap-12">
+                    <div className="min-w-0 md:max-w-lg">
+                      <h3 className={subheadClass}>It Becomes Overwhelmingly Large</h3>
+                      <p className={subbodyClass}>
+                        As diagnoses accumulate over time, clinicians struggle to quickly
+                        identify the most relevant information. Critical context becomes buried
+                        in long, difficult-to-scan records.
+                      </p>
+                    </div>
+                    <aside className={`${ovcpProblemQuoteVisualClass} min-w-0`}>
+                      <blockquote>
+                        <p className={ovcpProblemQuoteTextClass}>
+                          &ldquo;The document can quickly grow to 30 or more lines of text,
+                          making a clear and quick understanding of the patient&apos;s health
+                          nearly impossible.&rdquo;
+                        </p>
+                      </blockquote>
+                    </aside>
                   </div>
-                  <div>
-                    <h3 className={subheadClass}>Taking it a step further</h3>
-                    <p className={subbodyClass}>
-                      Working backward from her consolidated-list vision, the next
-                      question was how to start from a flat diagnosis list and arrive
-                      there in a few intentional steps.
-                    </p>
-                    <p className={subbodyClass}>
-                      In a short flow, a physician could open a diagnosis, see it next to
-                      others on the list, and choose how to consolidate—secondary to,
-                      related to, subset of, and similar options.
-                    </p>
+
+                  <div className="mt-10 grid grid-cols-1 gap-8 border-t border-black/10 pt-10 md:mt-12 md:grid-cols-2 md:items-start md:gap-10 md:pt-12 lg:gap-12">
+                    <div className="min-w-0 md:max-w-lg">
+                      <h3 className={subheadClass}>It Becomes Redundant</h3>
+                      <p className={subbodyClass}>
+                        Inconsistent documentation practices often lead to duplicate or
+                        overlapping diagnoses, creating unnecessary noise and reducing trust in
+                        the data.
+                      </p>
+                    </div>
+                    <aside className={`${ovcpProblemQuoteVisualClass} min-w-0`}>
+                      <blockquote>
+                        <p className={ovcpProblemQuoteTextClass}>
+                          &ldquo;Different codes are added to the problem list that reference
+                          the same disease.
+                          <br />
+                          <br />
+                          The problem list becomes redundant&hellip;&rdquo;
+                        </p>
+                      </blockquote>
+                    </aside>
+                  </div>
+
+                  <div className="mt-10 grid grid-cols-1 gap-8 border-t border-black/10 pt-10 md:mt-12 md:grid-cols-2 md:items-start md:gap-10 md:pt-12 lg:gap-12">
+                    <div className="min-w-0 md:max-w-lg">
+                      <h3 className={subheadClass}>It Lacks Clear Governance</h3>
+                      <p className={subbodyClass}>
+                        Clinicians disagreed on what belongs in the problem list, revealing
+                        the absence of shared standards for maintaining meaningful and
+                        clinically useful records.
+                      </p>
+                    </div>
+                    <aside className={`${ovcpProblemQuoteVisualClass} min-w-0`}>
+                      <blockquote>
+                        <p className={ovcpProblemQuoteTextClass}>
+                          &ldquo;One physician would not add &lsquo;persistent cough&rsquo;
+                          &hellip;.
+                        </p>
+                        <p className={`${ovcpProblemQuoteTextClass} mt-4`}>
+                          Yet, if that patient is admitted to the emergency room, such
+                          information could be a key clue for determining treatment.&rdquo;
+                        </p>
+                      </blockquote>
+                    </aside>
                   </div>
                 </div>
-
-                <figure className="mt-12 w-full md:mt-14">
-                  <div className="flex w-full flex-col">
-                    <ZoomableProblemImage
-                      src="/images/ovcp/joy-sketch.png"
-                      alt="Hand-drawn sketch of low-touch problem list reconciliation"
-                      shellClassName={mediaCardClass}
-                      imgClassName="block h-auto w-full rounded-md border-0"
-                    />
-                    <figcaption className={`${captionClass} not-italic`}>
-                      <span className="font-semibold text-black">SME prototype:</span>{" "}
-                      An ER physician&apos;s sketch of how quick problem reconciliation
-                      might feel.
-                    </figcaption>
-                  </div>
-                </figure>
               </div>
             </section>
 
@@ -299,16 +320,8 @@ export default function OvcpCaseStudyPage() {
                   }
                 />
 
-                <OvcpRowShellVisualFirst
-                  visual={
-                    <ZoomableProblemImage
-                      src="/images/ovcp/context.png"
-                      alt="Problem detail with history and linked activity"
-                      shellClassName={mediaCardClass}
-                      imgClassName="block h-auto w-full rounded-md border-0"
-                    />
-                  }
-                  copy={
+                <OvcpRowShell
+                  left={
                     <>
                       <h3 className={subheadClass}>
                         What&apos;s the history of the problem?
@@ -323,6 +336,14 @@ export default function OvcpCaseStudyPage() {
                         follow-up when the chart is dense.
                       </p>
                     </>
+                  }
+                  right={
+                    <ZoomableProblemImage
+                      src="/images/ovcp/context.png"
+                      alt="Problem detail with history and linked activity"
+                      shellClassName={mediaCardClass}
+                      imgClassName="block h-auto w-full rounded-md border-0"
+                    />
                   }
                 />
 
@@ -360,25 +381,65 @@ export default function OvcpCaseStudyPage() {
                 feedback, the program advanced toward summative testing.
               </p>
 
-              <div className="mt-10 grid w-full grid-cols-1 gap-6 md:mt-12 md:grid-cols-2 md:gap-8">
-                <figure className={testimonialCardClass}>
-                  <blockquote className="font-sans text-[16px] font-normal leading-[1.5] text-black md:text-[17px]">
-                    &ldquo;This is a great way to provide a sub-structure to the overall
-                    list—a great feature to reduce clutter.&rdquo;
-                  </blockquote>
-                  <figcaption className="font-sans text-[15px] font-semibold leading-[1.5] text-black md:text-[16px]">
-                    Neuro-ophthalmologist
-                  </figcaption>
-                </figure>
-                <figure className={testimonialCardClass}>
-                  <blockquote className="font-sans text-[16px] font-normal leading-[1.5] text-black md:text-[17px]">
-                    &ldquo;I like the tools used to better represent the clinical
-                    picture.&rdquo;
-                  </blockquote>
-                  <figcaption className="font-sans text-[15px] font-semibold leading-[1.5] text-black md:text-[16px]">
-                    Ophthalmologist
-                  </figcaption>
-                </figure>
+              <div className="mt-10 w-full md:mt-14 lg:mt-16">
+                <FrxProcessRowShell
+                  isFirst
+                  align="start"
+                  left={
+                    <>
+                      <h3 className={rowHeadingClass}>
+                        This is an efficient and effective method for problem list
+                        reconciliation.
+                      </h3>
+                      <ul
+                        className={`${rowBodyClass} list-disc space-y-2 pl-6 marker:text-black/40`}
+                      >
+                        <li className={rowBodyTextClass}>60% strongly agreed</li>
+                        <li className={rowBodyTextClass}>40% agreed</li>
+                        <li className={rowBodyTextClass}>
+                          0% were neutral or disagreed
+                        </li>
+                      </ul>
+                    </>
+                  }
+                >
+                  <figure className={ovcpFeedbackQuoteCardClass}>
+                    <blockquote className={`${rowBodyTextClass}`}>
+                      &ldquo;I like the tools used to better represent the clinical
+                      picture.&rdquo;
+                    </blockquote>
+                    <figcaption className={ovcpFeedbackQuoteAttributionClass}>
+                      Ophthalmologist
+                    </figcaption>
+                  </figure>
+                </FrxProcessRowShell>
+
+                <FrxProcessRowShell align="start" left={
+                    <>
+                      <h3 className={rowHeadingClass}>
+                        This novel method of reconciling the problem list will support more
+                        effective care coordination.
+                      </h3>
+                      <ul
+                        className={`${rowBodyClass} list-disc space-y-2 pl-6 marker:text-black/40`}
+                      >
+                        <li className={rowBodyTextClass}>80% strongly agreed</li>
+                        <li className={rowBodyTextClass}>20% were neutral</li>
+                        <li className={rowBodyTextClass}>0% disagreed</li>
+                      </ul>
+                    </>
+                  }
+                >
+                  <figure className={ovcpFeedbackQuoteCardClass}>
+                    <blockquote className={`${rowBodyTextClass}`}>
+                      &ldquo;This is a great way to provide a sub-structure to the overall
+                      list, a great feature to reduce clutter.&rdquo;
+                    </blockquote>
+                    <figcaption className={ovcpFeedbackQuoteAttributionClass}>
+                      Neuro-ophthalmologist
+                    </figcaption>
+                  </figure>
+                </FrxProcessRowShell>
               </div>
             </section>
 
