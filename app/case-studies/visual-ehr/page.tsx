@@ -50,6 +50,27 @@ export default function VisualEhrCaseStudyPage() {
 
             <section
               className="mt-16 w-full md:mt-20 lg:mt-24"
+              aria-labelledby="vehr-master-problem-heading"
+            >
+              <div className={problemCardClass}>
+                <p className={eyebrowClass}>The Core Problem</p>
+                <h2
+                  id="vehr-master-problem-heading"
+                  className={`scroll-mt-28 ${masterTitleClass} mt-4 md:mt-5`}
+                >
+                  Mental Model Mismatch
+                </h2>
+                <p className={`${masterBodyClass} mt-5 md:mt-6`}>
+                  EHRs store patient information by source: notes, labs, vitals,
+                  medications, diagnoses, and encounters. Clinicians reason differently.
+                  They need to understand what happened over time, what problems were
+                  active, what changed, and why it mattered.
+                </p>
+              </div>
+            </section>
+
+            <section
+              className="mt-16 w-full md:mt-20 lg:mt-24"
               aria-labelledby="vehr-mapping-chart-review-heading"
             >
               <div className={problemCardClass}>
@@ -97,27 +118,6 @@ export default function VisualEhrCaseStudyPage() {
                     </p>
                   </div>
                 </div>
-              </div>
-            </section>
-
-            <section
-              className="mt-16 w-full md:mt-20 lg:mt-24"
-              aria-labelledby="vehr-master-problem-heading"
-            >
-              <div className={problemCardClass}>
-                <p className={eyebrowClass}>The Core Problem</p>
-                <h2
-                  id="vehr-master-problem-heading"
-                  className={`scroll-mt-28 ${masterTitleClass} mt-4 md:mt-5`}
-                >
-                  Mental Model Mismatch
-                </h2>
-                <p className={`${masterBodyClass} mt-5 md:mt-6`}>
-                  EHRs store patient information by source: notes, labs, vitals,
-                  medications, diagnoses, and encounters. Clinicians reason differently.
-                  They need to understand what happened over time, what problems were
-                  active, what changed, and why it mattered.
-                </p>
               </div>
             </section>
 

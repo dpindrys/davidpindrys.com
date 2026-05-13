@@ -19,6 +19,9 @@ const SLIDES = [
   },
 ] as const;
 
+/** Inline-only advance timing (modal uses manual arrows, no auto-cycle). */
+const SLIDE_DURATION_MS = [2000, 1000, 2000] as const;
+
 export default function FrxAddressImageCycle() {
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
@@ -70,13 +73,22 @@ export default function FrxAddressImageCycle() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (open) return;
+    const ms = SLIDE_DURATION_MS[index] ?? 2000;
+    const t = window.setTimeout(() => {
+      setIndex((i) => (i + 1) % count);
+    }, ms);
+    return () => window.clearTimeout(t);
+  }, [open, index, count]);
+
   return (
     <>
-      <div className="relative w-full">
+      <div className="relative w-full" aria-live="polite">
         <button
           type="button"
           className="relative w-full cursor-zoom-in border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-          aria-label={`View larger: ${slide.alt}`}
+          aria-label={`View larger: ${slide.alt} (${index + 1} of ${count}, advancing automatically)`}
           onClick={() => setOpen(true)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -85,23 +97,6 @@ export default function FrxAddressImageCycle() {
             alt={slide.alt}
             className="block h-auto w-full rounded-md border-0 pointer-events-none"
           />
-        </button>
-
-        <button
-          type="button"
-          className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-black/10 px-3 py-3 font-sans text-[18px] font-medium text-black/75 hover:bg-black/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25"
-          aria-label="Previous image"
-          onClick={goPrev}
-        >
-          ←
-        </button>
-        <button
-          type="button"
-          className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-lg bg-black/10 px-3 py-3 font-sans text-[18px] font-medium text-black/75 hover:bg-black/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black/25"
-          aria-label="Next image"
-          onClick={goNext}
-        >
-          →
         </button>
       </div>
 
