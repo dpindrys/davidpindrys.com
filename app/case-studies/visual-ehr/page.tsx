@@ -9,7 +9,6 @@ import VehrSymptomsOnTimelineSection from "./VehrPatientReportedOutcomesSection"
 import VehrDiagnosesThroughTimeSection from "./VehrDiagnosesThroughTimeSection";
 import VehrFromNoiseToSignalSection from "./VehrFromNoiseToSignalSection";
 import VehrMedicationEventsSection from "./VehrMedicationEventsSection";
-import VehrNarrativeSynthesis from "./VehrNarrativeSynthesis";
 import VehrClosingSections from "./VehrClosingSections";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import { vehrSectionGapClass } from "./vehrCaseStudySectionTokens";
@@ -61,8 +60,6 @@ export default function VisualEhrCaseStudyPage() {
               <VehrFromNoiseToSignalSection />
               <VehrMedicationEventsSection />
             </VehrAppliedExamplesShell>
-
-            <VehrNarrativeSynthesis />
 
             <VehrClosingSections />
 

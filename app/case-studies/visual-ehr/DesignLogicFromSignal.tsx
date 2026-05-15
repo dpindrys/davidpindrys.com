@@ -136,7 +136,7 @@ export const medicationFigureRows: readonly SharedMedicationRow[] = [
   },
   {
     id: "insulin-glargine",
-    name: "Insulin glargine",
+    name: "Insulin",
     cells: [
       { kind: "none" },
       { kind: "dose", label: "10 u", doseOn: "light" },
