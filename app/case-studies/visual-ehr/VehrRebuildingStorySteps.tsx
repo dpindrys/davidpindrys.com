@@ -30,17 +30,17 @@ const steps: readonly {
 }[] = [
   {
     title: "1. When did care happen?",
-    body: "Encounters mark the moments where clinical data becomes verifiable and actionable.",
+    body: "Jul 21, Sep 09, Sep 10, and Sep 14 share one axis—urgent care, emergency department, PCP follow-up, and telehealth—so every domain below references the same visits.",
     visualVariant: "encounters-only",
   },
   {
-    title: "2. Which problems were active?",
-    body: "The diagnosis moves through the care sequence: addressed at urgent care, exacerbated at the ER, then resolved at PCP follow-up.",
+    title: "2. How did the diagnosis evolve?",
+    body: "T2 diabetes moves from stable at urgent care to exacerbated at the ED on Sep 09, then managed at PCP and improving by telehealth—not a static problem list entry.",
     visualVariant: "diagnoses-encounters",
   },
   {
-    title: "3. What happened at the ER?",
-    body: "Opening an encounter reveals the clinical details behind that moment in the story.",
+    title: "3. What happened at the ED?",
+    body: "Sep 09 ties hyperglycemia, presenting symptoms, and treatment escalation to the emergency visit—without leaving the shared columns.",
     visualVariant: "er-encounter-tooltip",
   },
 ];

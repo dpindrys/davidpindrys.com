@@ -21,13 +21,18 @@ import {
   VehrSharedAxisDateRow,
   type SharedMedicationRow,
 } from "./DesignLogicFromSignal";
+import {
+  CASE_STUDY_MATRIX_INNER_GRID_CLASS,
+  CASE_STUDY_MATRIX_LABEL_COL_CLASS,
+  CASE_STUDY_MATRIX_ROW_LABEL_CLASS,
+  CASE_STUDY_MATRIX_SHELL_CLASS,
+} from "./caseStudyVisualTokens";
 
-/** Sep 10 — 10 mg after 20 mg therapeutic (reduction below target). */
-const LISINOPRIL_REDUCTION_COL = 2;
+/** Sep 09 — insulin glargine initiated in ED. */
+const INSULIN_INIT_COL = 1;
 
-/** Same as FRX `mediaCardClass` but `overflow-visible` so timeline tooltips aren’t clipped. */
-const medicationChartCardClass =
-  "overflow-visible rounded-2xl border border-black/10 bg-white p-4 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)] md:p-5";
+/** Same shell as vitals/labs matrix; `overflow-visible` so timeline tooltips aren’t clipped. */
+const medicationChartCardClass = `${CASE_STUDY_MATRIX_SHELL_CLASS} overflow-visible`;
 
 function MedicationSolutionFigure({
   rows,
@@ -40,8 +45,8 @@ function MedicationSolutionFigure({
     medId: string;
     col: number;
     placement?: "above" | "below";
-    /** Custom tooltip body for the medication demo (e.g. subtherapeutic reduction). */
-    detail?: "subtherapeutic-reduction";
+    /** Custom tooltip body for the medication demo. */
+    detail?: "subtherapeutic-reduction" | "insulin-initiation";
   };
 }) {
   const colCount = rows[0]?.cells.length ?? 0;
@@ -71,7 +76,7 @@ function MedicationSolutionFigure({
             colCount <= 4 ? "min-w-[280px] md:min-w-0" : "min-w-[560px] md:min-w-0"
           }
         >
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_112px] md:gap-2.5">
+          <div className={CASE_STUDY_MATRIX_INNER_GRID_CLASS}>
             <div className="min-w-0">
               <div className="space-y-1.5">
                 {rows.map((mrow) => {
@@ -83,6 +88,10 @@ function MedicationSolutionFigure({
                   const axisLabel = tooltipDemo
                     ? (axisDates[tooltipDemo.col] ?? "")
                     : "";
+                  const showInsulinTooltip =
+                    tipThisRow &&
+                    tooltipDemo &&
+                    tooltipDemo.detail === "insulin-initiation";
                   const showSigTooltip =
                     tipThisRow &&
                     tooltipDemo &&
@@ -92,16 +101,38 @@ function MedicationSolutionFigure({
                     tipThisRow &&
                     tooltipDemo &&
                     tipCell?.kind === "dose" &&
+                    !showInsulinTooltip &&
                     tooltipDemo.detail !== "subtherapeutic-reduction";
                   return (
                     <div
                       key={mrow.id}
-                      className={`relative isolate flex min-h-[52px] items-center px-0.5 md:min-h-[60px] ${
+                      className={`relative isolate flex min-h-[52px] items-center md:min-h-[60px] ${
                         tipThisRow
                           ? "rounded-[4px] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.88),0_4px_14px_-4px_rgba(0,0,0,0.22)]"
                           : ""
                       }`}
                     >
+                      {showInsulinTooltip ? (
+                        <TimelineColumnTooltipAnchor
+                          globalColIndex={tooltipDemo!.col}
+                          colStart={0}
+                          visibleColCount={axisDates.length}
+                          placement={tipPlacement}
+                        >
+                          <VehrKeyValueHoldTooltipChrome
+                            panelPlacement={panelPlacement}
+                            primaryTitle="Insulin glargine"
+                            secondaryTitle="Medication"
+                            date={toSigTooltipHeaderDate(axisLabel)}
+                            rows={[
+                              { label: "Initiated", value: "During ED visit" },
+                              { label: "Dose", value: "10 units nightly" },
+                              { label: "Reason", value: "Uncontrolled hyperglycemia" },
+                              { label: "Status", value: "Active" },
+                            ]}
+                          />
+                        </TimelineColumnTooltipAnchor>
+                      ) : null}
                       {showSigTooltip ? (
                         <TimelineColumnTooltipAnchor
                           globalColIndex={tooltipDemo!.col}
@@ -149,12 +180,12 @@ function MedicationSolutionFigure({
               </div>
             </div>
 
-            <div className="hidden md:flex flex-col">
+            <div className={CASE_STUDY_MATRIX_LABEL_COL_CLASS}>
               <div className="grid gap-1.5">
                 {rows.map((mrow) => (
                   <div
                     key={mrow.id}
-                    className="flex min-h-[52px] w-full items-center justify-start font-sans text-[11px] font-semibold leading-tight text-black/65 md:min-h-[60px] md:text-[12px]"
+                    className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}
                   >
                     {mrow.name}
                   </div>
@@ -193,10 +224,10 @@ export default function VehrMedicationsSolutionRows() {
         isFirst
         left={
           <>
-            <h3 className={rowHeadingClass}>1. Medication events over time</h3>
+            <h3 className={rowHeadingClass}>1. Treatment progression over time</h3>
             <p className={rowBodyClass}>
-              Medication bars show when a treatment was active, held, or changed across the
-              patient timeline.
+              Metformin continues through the timeline; insulin glargine appears when oral
+              therapy alone was no longer enough—aligned to the same dates as labs and encounters.
             </p>
           </>
         }
@@ -212,10 +243,10 @@ export default function VehrMedicationsSolutionRows() {
       <FrxProcessRowShell
         left={
           <>
-            <h3 className={rowHeadingClass}>2. Dose context in line</h3>
+            <h3 className={rowHeadingClass}>2. Dose changes in context</h3>
             <p className={rowBodyClass}>
-              Dose state appears directly on the timeline, so under-range, therapeutic, or flagged
-              high-dose states can be reviewed against nearby clinical events.
+              Dose labels on the bar show metformin titration from 500 mg BID to 1000 mg BID after
+              the acute event—read beside glucose and visit type on the same columns.
             </p>
           </>
         }
@@ -231,10 +262,10 @@ export default function VehrMedicationsSolutionRows() {
       <FrxProcessRowShell
         left={
           <>
-            <h3 className={rowHeadingClass}>3. Details without leaving context</h3>
+            <h3 className={rowHeadingClass}>3. Why insulin started</h3>
             <p className={rowBodyClass}>
-              Tooltips reveal dose, date, and medication context while preserving the surrounding
-              timeline.
+              Sep 09 documents initiation during the ED visit—dose, reason, and status without
+              leaving the longitudinal view.
             </p>
           </>
         }
@@ -244,10 +275,10 @@ export default function VehrMedicationsSolutionRows() {
             rows={medicationFigureRows}
             axisDates={MEDICATION_FIGURE_AXIS_DATES}
             tooltipDemo={{
-              medId: "lisinopril",
-              col: LISINOPRIL_REDUCTION_COL,
+              medId: "insulin-glargine",
+              col: INSULIN_INIT_COL,
               placement: "above",
-              detail: "subtherapeutic-reduction",
+              detail: "insulin-initiation",
             }}
           />
         </VisualCard>

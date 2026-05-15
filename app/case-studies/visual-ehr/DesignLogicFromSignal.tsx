@@ -3,11 +3,24 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import {
+  CASE_STUDY_MATRIX_INNER_GRID_COMPACT_CLASS,
+  CASE_STUDY_MATRIX_LABEL_COL_COMPACT_CLASS,
+  CASE_STUDY_MATRIX_ROW_LABEL_CLASS,
+  CASE_STUDY_MATRIX_SHELL_CLASS,
+  CASE_STUDY_MATRIX_SHELL_STICKY_BLEED_CLASS,
+} from "./caseStudyVisualTokens";
+import {
   encounterEr,
   encounterPcp,
   encounterTelehealth,
   encounterUc,
 } from "./vehrTimelineVizTokens";
+import {
+  CASE_STUDY_VISIT_DATES,
+  LABS_BP_VALUES,
+  LABS_GLUCOSE_TOOLTIP_ACUTE,
+  LABS_GLUCOSE_VALUES,
+} from "./vehrCaseStudyNarrative";
 
 /** Editorial “from signal to detail” steps — abstract 2×4 grids, portfolio tone */
 
@@ -22,13 +35,13 @@ const stepHeadingClass =
 const stepBodyClass =
   "font-sans text-[22px] md:text-[24px] font-normal leading-[1.45] text-black/80";
 
-const matrixShellClass =
-  "rounded-2xl border border-black/10 bg-white p-4 md:p-5 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)]";
+const matrixShellClass = CASE_STUDY_MATRIX_SHELL_CLASS;
 
 const gridClass = "grid grid-cols-4 grid-rows-2 gap-1.5 min-h-[132px] md:min-h-[156px]";
 
-/** Timeline labels aligned under each 2×1 column stack — matches portfolio mock. */
-const VISIT_DATES = ["July 21", "Sep 09", "Sep 10", "Sep 14"] as const;
+/** Timeline labels aligned under each 2×1 column stack — shared narrative dates. */
+const VISIT_DATES = CASE_STUDY_VISIT_DATES;
+export { CASE_STUDY_VISIT_DATES };
 export const SHARED_AXIS_DATES = [
   "Jun 26",
   "Jul 14",
@@ -78,45 +91,30 @@ export const sharedMedicationRows: readonly SharedMedicationRow[] = [
     id: "metformin",
     name: "Metformin",
     cells: [
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "dose", label: "500 mg", doseOn: "light" },
-      { kind: "inactive" },
-      { kind: "inactive" },
-      { kind: "inactive" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "dose", label: "500 BID", doseOn: "dark" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "dose", label: "500 BID", doseOn: "dark" },
+      { kind: "dose", label: "1000 BID", doseOn: "dark" },
+      { kind: "dose", label: "1000 BID", doseOn: "dark" },
     ],
   },
   {
-    id: "lisinopril",
-    name: "Lisinopril",
+    id: "insulin-glargine",
+    name: "Insulin glargine",
     cells: [
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "dose", label: "10 mg", doseOn: "light" },
-      { kind: "active" },
-      { kind: "dose", label: "20 mg", doseOn: "dark" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-    ],
-  },
-  {
-    id: "atorvastatin",
-    name: "Atorvastatin",
-    cells: [
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "dose", label: "40 mg", doseOn: "light" },
-      { kind: "inactive" },
-      { kind: "inactive" },
-      { kind: "inactive" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "none" },
+      { kind: "dose", label: "10 u", doseOn: "light" },
+      { kind: "dose", label: "12 u", doseOn: "light" },
+      { kind: "dose", label: "12 u", doseOn: "dark" },
     ],
   },
 ] as const;
@@ -130,30 +128,20 @@ export const medicationFigureRows: readonly SharedMedicationRow[] = [
     id: "metformin",
     name: "Metformin",
     cells: [
-      { kind: "dose", label: "1000mg", doseOn: "dark" },
-      { kind: "active" },
-      { kind: "active" },
-      { kind: "active" },
+      { kind: "dose", label: "500 BID", doseOn: "dark" },
+      { kind: "dose", label: "500 BID", doseOn: "dark" },
+      { kind: "dose", label: "1000 BID", doseOn: "dark" },
+      { kind: "dose", label: "1000 BID", doseOn: "dark" },
     ],
   },
   {
-    id: "lisinopril",
-    name: "Lisinopril",
+    id: "insulin-glargine",
+    name: "Insulin glargine",
     cells: [
-      { kind: "dose", label: "10 mg", doseOn: "light" },
-      { kind: "dose", label: "20 mg", doseOn: "dark" },
-      { kind: "dose", label: "10 mg", doseOn: "light" },
-      { kind: "dose", label: "20 mg", doseOn: "dark" },
-    ],
-  },
-  {
-    id: "atorvastatin",
-    name: "Atorvastatin",
-    cells: [
-      { kind: "dose", label: "10 mg", doseOn: "light" },
-      { kind: "dose", label: "20 mg", doseOn: "light" },
-      { kind: "dose", label: "40 mg", doseOn: "dark" },
-      { kind: "active" },
+      { kind: "none" },
+      { kind: "dose", label: "10 u", doseOn: "light" },
+      { kind: "dose", label: "12 u", doseOn: "light" },
+      { kind: "dose", label: "12 u", doseOn: "dark" },
     ],
   },
 ] as const;
@@ -191,17 +179,17 @@ type SharedDiagnosisTimelineRow = {
 const sharedDiagnosisTimelineRows: readonly SharedDiagnosisTimelineRow[] = [
   {
     id: "t2dm",
-    name: "Type 2 diabetes mellitus",
+    name: "T2 Diabetes",
     tones: [
+      "empty",
+      "empty",
       "shell",
-      "shell",
-      "shell",
-      "shell",
-      "shell",
-      "shell",
+      "empty",
+      "empty",
+      "empty",
       "exacerbation",
       "shell",
-      "shell",
+      "light",
     ],
     addressedAtVisit: [
       false,
@@ -212,23 +200,7 @@ const sharedDiagnosisTimelineRows: readonly SharedDiagnosisTimelineRow[] = [
       false,
       true,
       true,
-      false,
-    ],
-  },
-  {
-    id: "htn",
-    name: "Essential hypertension",
-    tones: ["empty", "empty", "exacerbation", "shell", "shell", "shell", "shell", "shell", "shell"],
-    addressedAtVisit: [
-      false,
-      false,
       true,
-      false,
-      false,
-      false,
-      false,
-      true,
-      false,
     ],
   },
 ] as const;
@@ -251,12 +223,12 @@ const ENCOUNTER_FILL: Record<Exclude<EncounterAxisKind, "none">, string> = {
  * Encounters aligned to `SHARED_AXIS_DATES` — one visit type per column; fills from tokens.
  */
 const sharedEncounterAxisRow: readonly EncounterAxisCell[] = [
-  { label: "Tel", kind: "tel" },
-  { label: "PCP", kind: "pcp" },
+  { label: null, kind: "none" },
+  { label: null, kind: "none" },
   { label: "UC", kind: "uc" },
-  { label: "PCP", kind: "pcp" },
-  { label: "Tel", kind: "tel" },
-  { label: "UC", kind: "uc" },
+  { label: null, kind: "none" },
+  { label: null, kind: "none" },
+  { label: null, kind: "none" },
   { label: "ER", kind: "er" },
   { label: "PCP", kind: "pcp" },
   { label: "Tel", kind: "tel" },
@@ -349,73 +321,145 @@ function StepRow({
   );
 }
 
-/** Same 2×4 matrix as step 3 (“What’s the value?”). Optional tooltip anchored above the 82% cell (step 4). */
-function ExactValueMatrix({ tooltipAbove82 = false }: { tooltipAbove82?: boolean }) {
-  const spo2Segments = [
-    "bg-[#115e59]",
-    "bg-[#0f766e]",
-    "bg-[#14b8a6]",
-    "bg-[#99f6e4]",
-    "bg-[#ccfbf1]",
-  ];
+/** 2×4 pattern grid + dates + Glucose / BP labels — same shell and column layout as `ExactValueMatrix`. */
+function PatternOverTimeMatrix() {
+  return (
+    <div className={matrixShellClass}>
+      <div className={CASE_STUDY_MATRIX_INNER_GRID_COMPACT_CLASS}>
+        <div className="min-w-0">
+          <div className={gridClass} aria-hidden>
+            <Cell className="border-[#f472b6]/40 bg-[#f472b6] text-[#111111]" />
+            <Cell className="border-[#9d174d]/30 bg-[#9d174d] text-white shadow-md" />
+            <Cell className="border-[#be185d]/30 bg-[#be185d] text-white" />
+            <Cell className="border-[#fce7f3] bg-[#fce7f3] text-[#111111]" />
+            <Cell className="border-cyan-100/80 bg-[#ecfeff] text-[#111111]" />
+            <Cell className="border-[#115e59]/40 bg-[#115e59] text-white shadow-md" />
+            <Cell className="border-teal-400/40 bg-[#2dd4bf] text-white" />
+            <Cell className="border-black/[0.06] bg-[#fafaf9] text-[#111111]" />
+          </div>
+          <div className="mt-4 border-t border-black/10">
+            <MatrixDateRow />
+          </div>
+        </div>
 
-  /** Left = worse; reads as low on the SpO₂ saturation scale. */
-  const spo2MarkerPercent = 18;
+        <div className={CASE_STUDY_MATRIX_LABEL_COL_COMPACT_CLASS}>
+          <div className="flex min-h-[132px] flex-col gap-1.5 md:min-h-[156px]">
+            <div className="flex min-h-0 flex-1 items-center">
+              <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>Glucose</div>
+            </div>
+            <div className="flex min-h-0 flex-1 items-center">
+              <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>BP</div>
+            </div>
+          </div>
+          <div className="invisible mt-4 border-t border-black/10">
+            <MatrixDateRow />
+          </div>
+        </div>
+      </div>
 
-  const cell82 = (
-    <Cell className="border-[#115E59]/40 bg-[#115E59] text-[#FFFFFF] shadow-md">
-      82%
-    </Cell>
+      <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 border-t border-black/10 pt-4 md:hidden">
+        <span className="font-sans text-[11px] font-semibold leading-tight text-black/60">
+          Glucose
+        </span>
+        <span className="font-sans text-[11px] font-semibold leading-tight text-black/60">
+          BP
+        </span>
+      </div>
+    </div>
   );
+}
+
+/** Same 2×4 matrix as step 2 (“What’s the value?”). Optional tooltip on Sep 09 glucose (step 3). */
+function ExactValueMatrix({ tooltipOnAcuteGlucose = false }: { tooltipOnAcuteGlucose?: boolean }) {
+  const glucoseSegments = [
+    "bg-[#115e59]",
+    "bg-[#2dd4bf]",
+    "bg-[#fafaf9]",
+    "bg-[#f472b6]",
+    "bg-[#be185d]",
+  ];
+  const glucoseClass = [
+    "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]",
+    "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF] shadow-md",
+    "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]",
+    "border-[#FCE7F3] bg-[#FCE7F3] text-[#111111]",
+  ] as const;
+  const bpClass = [
+    "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]",
+    "border-[#115E59]/40 bg-[#115E59] text-[#FFFFFF] shadow-md",
+    "border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]",
+    "border-black/[0.06] bg-[#FAFAF9] text-[#111111]",
+  ] as const;
 
   return (
     <div className={matrixShellClass}>
-      <div className={gridClass} aria-hidden>
-        <Cell className="border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF]">
-          340 mg/dL
-        </Cell>
-        <Cell className="border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]">
-          240 mg/dL
-        </Cell>
-        <Cell className="border-[#F472B6]/40 bg-[#F472B6] text-[#111111]">
-          186 mg/dL
-        </Cell>
-        <Cell className="border-[#FCE7F3] bg-[#FCE7F3] text-[#111111]">
-          112 mg/dL
-        </Cell>
-        <Cell className="border-cyan-100/80 bg-[#ECFEFF] text-[#111111]">
-          96%
-        </Cell>
-        <Cell className="border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]">
-          92%
-        </Cell>
-        <Cell className="border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]">
-          91%
-        </Cell>
-        {tooltipAbove82 ? (
-          <div className="relative isolate z-10 h-full min-h-[52px] md:min-h-[60px]">
-            <div className="pointer-events-none absolute bottom-[calc(100%+6px)] left-1/2 z-10 w-[min(300px,calc(100vw-4rem))] max-w-[300px] -translate-x-1/2">
-              <VehrLabTooltipChrome
-                label="SpO₂"
-                date="14 Sep 2024"
-                valuePrimary="82"
-                segments={spo2Segments}
-                markerPercent={spo2MarkerPercent}
-                markerRingClass="ring-[#115E59]"
-                caption="Markedly reduced oxygen saturation; this value stands out from the prior trend."
-              />
-            </div>
-            <div className="relative h-full min-h-[52px] md:min-h-[60px]">
-              <Cell className="h-full min-h-[52px] md:min-h-[60px] border-[#115E59]/40 bg-[#115E59] text-[#FFFFFF] shadow-md">
-                82%
+      <div className={CASE_STUDY_MATRIX_INNER_GRID_COMPACT_CLASS}>
+        <div className="min-w-0">
+          <div className={gridClass} aria-hidden>
+            {LABS_GLUCOSE_VALUES.map((v, i) => {
+              const content = `${v} mg/dL`;
+              const cls = glucoseClass[i];
+              if (tooltipOnAcuteGlucose && i === 1) {
+                return (
+                  <div key={i} className="relative isolate z-10 h-full min-h-[52px] md:min-h-[60px]">
+                    <div className="pointer-events-none absolute bottom-[calc(100%+6px)] left-1/2 z-10 w-[min(300px,calc(100vw-4rem))] max-w-[300px] -translate-x-1/2">
+                      <VehrLabTooltipChrome
+                        label={LABS_GLUCOSE_TOOLTIP_ACUTE.label}
+                        date={LABS_GLUCOSE_TOOLTIP_ACUTE.date}
+                        valuePrimary={LABS_GLUCOSE_TOOLTIP_ACUTE.valuePrimary}
+                        unitSuffix={LABS_GLUCOSE_TOOLTIP_ACUTE.unitSuffix}
+                        segments={glucoseSegments}
+                        markerPercent={72}
+                        markerRingClass="ring-[#BE185D]"
+                        caption={LABS_GLUCOSE_TOOLTIP_ACUTE.caption}
+                      />
+                    </div>
+                    <div className="relative h-full min-h-[52px] md:min-h-[60px]">
+                      <Cell className={`h-full min-h-[52px] md:min-h-[60px] ${cls}`}>{content}</Cell>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <Cell key={i} className={cls}>
+                  {content}
+                </Cell>
+              );
+            })}
+            {LABS_BP_VALUES.map((v, i) => (
+              <Cell key={v} className={bpClass[i]}>
+                {v}
               </Cell>
+            ))}
+          </div>
+          <div className="mt-4 border-t border-black/10">
+            <MatrixDateRow />
+          </div>
+        </div>
+
+        <div className={CASE_STUDY_MATRIX_LABEL_COL_COMPACT_CLASS}>
+          <div className="flex min-h-[132px] flex-col gap-1.5 md:min-h-[156px]">
+            <div className="flex min-h-0 flex-1 items-center">
+              <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>Glucose</div>
+            </div>
+            <div className="flex min-h-0 flex-1 items-center">
+              <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>BP</div>
             </div>
           </div>
-        ) : (
-          cell82
-        )}
+          <div className="invisible mt-4 border-t border-black/10">
+            <MatrixDateRow />
+          </div>
+        </div>
       </div>
-      <MatrixDateRow />
+
+      <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 border-t border-black/10 pt-4 md:hidden">
+        <span className="font-sans text-[11px] font-semibold leading-tight text-black/60">
+          Glucose
+        </span>
+        <span className="font-sans text-[11px] font-semibold leading-tight text-black/60">
+          BP
+        </span>
+      </div>
     </div>
   );
 }
@@ -493,14 +537,6 @@ function VehrLabTooltipChrome({
   );
 }
 
-function MeasureLabel({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex min-h-[52px] md:min-h-[60px] items-center justify-start pr-2 font-sans text-[11px] font-semibold leading-tight text-black/70 md:text-[12px]">
-      {children}
-    </div>
-  );
-}
-
 type SharedAxisCell = {
   value?: string;
   className: string;
@@ -533,64 +569,76 @@ const T_BP_HIGH =
   "High systolic blood pressure, standing out from the surrounding trend.";
 const T_BP_LOWER = "Lower systolic pressure compared with the prior spike.";
 
+const emptyLabCell: SharedAxisCell = {
+  value: "",
+  className: "border-black/[0.06] bg-white text-black/25",
+  title: "",
+};
+
+const narrativeLabIndices = [2, 6, 7, 8] as const;
+
+function narrativeLabCells(
+  values: readonly string[],
+  classes: readonly string[],
+  titles: readonly string[],
+): SharedAxisCell[] {
+  const cells = Array.from({ length: SHARED_AXIS_COLUMN_COUNT }, () => ({ ...emptyLabCell }));
+  narrativeLabIndices.forEach((col, i) => {
+    cells[col] = {
+      value: values[i] ?? "",
+      className: classes[i] ?? emptyLabCell.className,
+      title: titles[i] ?? "",
+    };
+  });
+  return cells;
+}
+
 const sharedAxisRows: SharedAxisRow[] = [
   {
     measure: "Glucose",
-    cells: [
-      { value: "380 mg/dL", className: "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "362 mg/dL", className: "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "340 mg/dL", className: "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "312 mg/dL", className: "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "286 mg/dL", className: "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "260 mg/dL", className: "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "240 mg/dL", className: "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]", title: T_GLU_DOWN },
-      { value: "186 mg/dL", className: "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]", title: T_GLU_IMPROVING },
-      { value: "112 mg/dL", className: "border-[#FCE7F3] bg-[#FCE7F3] text-[#111111]", title: T_GLU_NEAR },
-    ],
+    cells: narrativeLabCells(
+      ["186 mg/dL", "342 mg/dL", "248 mg/dL", "154 mg/dL"],
+      [
+        "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]",
+        "border-[#9D174D]/30 bg-[#9D174D] text-[#FFFFFF] shadow-md",
+        "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]",
+        "border-[#FCE7F3] bg-[#FCE7F3] text-[#111111]",
+      ],
+      [
+        "Elevated at urgent care; early warning before acute event.",
+        "Marked hyperglycemia during ED presentation.",
+        "Improving after insulin initiation and metformin increase.",
+        "Trending toward goal range at telehealth follow-up.",
+      ],
+    ),
   },
   {
-    measure: "SpO₂",
-    cells: [
-      { value: "98%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_NORMAL },
-      { value: "97%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_NORMAL },
-      { value: "96%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_NORMAL },
-      { value: "95%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_NORMAL },
-      { value: "94%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_DECLINE },
-      { value: "93%", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_SPO2_DECLINE },
-      { value: "92%", className: "border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]", title: T_SPO2_DECLINE },
-      { value: "91%", className: "border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]", title: T_SPO2_DECLINE },
-      { value: "82%", className: "border-[#115E59]/40 bg-[#115E59] text-[#FFFFFF] shadow-md", title: T_SPO2_MARKED },
-    ],
-  },
-  {
-    measure: "Heart rate",
-    cells: [
-      { value: "84 bpm", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_HR_REST },
-      { value: "86 bpm", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_HR_REST },
-      { value: "88 bpm", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_HR_REST },
-      { value: "90 bpm", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_HR_REST },
-      { value: "92 bpm", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_HR_REST },
-      { value: "94 bpm", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_HR_REST },
-      { value: "96 bpm", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_HR_REST },
-      { value: "104 bpm", className: "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]", title: T_HR_ELEV },
-      { value: "118 bpm", className: "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]", title: T_HR_TACHY },
-    ],
-  },
-  {
-    measure: "Systolic BP",
-    cells: [
-      { value: "132 mmHg", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_BP_BORDER },
-      { value: "134 mmHg", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_BP_BORDER },
-      { value: "136 mmHg", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_BP_BORDER },
-      { value: "138 mmHg", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_BP_BORDER },
-      { value: "140 mmHg", className: "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]", title: T_BP_BORDER },
-      { value: "142 mmHg", className: "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]", title: T_BP_ELEV },
-      { value: "144 mmHg", className: "border-[#F472B6]/40 bg-[#F472B6] text-[#111111]", title: T_BP_ELEV },
-      { value: "156 mmHg", className: "border-[#BE185D]/30 bg-[#BE185D] text-[#FFFFFF]", title: T_BP_HIGH },
-      { value: "126 mmHg", className: "border-black/[0.06] bg-[#FAFAF9] text-[#111111]", title: T_BP_LOWER },
-    ],
+    measure: "BP",
+    cells: narrativeLabCells(
+      ["138/88", "168/102", "152/94", "136/84"],
+      [
+        "border-cyan-100/80 bg-[#ECFEFF] text-[#111111]",
+        "border-[#115E59]/40 bg-[#115E59] text-[#FFFFFF] shadow-md",
+        "border-teal-400/40 bg-[#2DD4BF] text-[#FFFFFF]",
+        "border-black/[0.06] bg-[#FAFAF9] text-[#111111]",
+      ],
+      [
+        "Mildly elevated at urgent care.",
+        "Hypertensive during acute presentation.",
+        "Improving with treatment and hydration.",
+        "Near prior baseline at follow-up.",
+      ],
+    ),
   },
 ];
+
+/** Widest shared-axis row label — keeps sticky date footer aligned with the label column. */
+const SHARED_AXIS_LABEL_COL_WIDTH_SENTINEL = [
+  ...sharedDiagnosisTimelineRows.map((r) => r.name),
+  "Encounters",
+  ...sharedAxisRows.map((r) => r.measure),
+  ...sharedMedicationRows.map((r) => r.name),
+].reduce((a, b) => (a.length >= b.length ? a : b));
 
 type HoldTooltipDatum = {
   id: string;
@@ -647,14 +695,14 @@ function pickMeasureTooltipConfig(args: {
 }): Omit<HoldTooltipDatum, "id" | "date"> {
   const { measure, displayValue, tooltipCaption, numericValue } = args;
 
-  if (measure === "SpO₂") {
-    const min = 82;
-    const max = 98;
-    const t = clamp01((numericValue - min) / (max - min));
+  if (measure === "BP") {
+    const criticalLow = 80;
+    const criticalHigh = 200;
+    const t = clamp01((numericValue - criticalLow) / (criticalHigh - criticalLow));
     return {
       measure,
-      valuePrimary: displayValue.replace("%", ""),
-      unitSuffix: "%",
+      valuePrimary: displayValue.split("/")[0]?.trim() || displayValue,
+      unitSuffix: "mmHg",
       caption: tooltipCaption,
       segments: [
         "bg-[#115E59]",
@@ -747,9 +795,8 @@ const MIN_TIMELINE_COL_PX = 60;
 /** Thinnest layout: one visit column beside row labels. */
 const MIN_TIMELINE_VISIBLE_COLS = 1;
 
-/** Row-label column: always visible on the right; data timeline on the left drops oldest columns first. */
-const labelColClass =
-  "w-[5.25rem] shrink-0 sm:w-24 md:w-[7.5rem] lg:w-32";
+/** Row-label column — fixed 70px (matches matrix card label column). */
+const labelColClass = "w-[70px] shrink-0";
 
 const labelRowTextClass =
   "block text-left font-sans text-[10px] font-semibold leading-tight text-black/65 sm:text-[11px] md:text-[12px]";
@@ -1284,8 +1331,8 @@ export function SharedTimeAxisCard() {
   }, []);
 
   return (
-    <div className="relative w-full overflow-visible rounded-2xl border border-black/10 bg-white p-4 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)] md:p-5">
-      <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-3 md:mx-auto md:w-full md:max-w-[1392px]">
+    <div className={`relative w-full overflow-visible ${CASE_STUDY_MATRIX_SHELL_CLASS}`}>
+      <div className="grid w-full grid-cols-[minmax(0,1fr)_70px] items-start gap-2 sm:gap-3 md:mx-auto md:w-full md:max-w-[1392px]">
         <div ref={timelineContentRef} className="min-w-0 overflow-visible">
           <div
             className="space-y-0"
@@ -1496,12 +1543,12 @@ export function SharedTimeAxisCard() {
           {sharedDiagnosisTimelineRows.map((drow, dxRowIdx) => (
             <div
               key={drow.id}
-              className={`flex min-h-[52px] w-full items-center justify-start text-left md:min-h-[60px] ${dxRowIdx > 0 ? "mt-1.5" : ""}`}
+              className={`flex min-h-[52px] min-w-0 w-max max-w-full items-center justify-start text-left md:min-h-[60px] ${dxRowIdx > 0 ? "mt-1.5" : ""}`}
             >
               <span className={labelRowTextClass}>{drow.name}</span>
             </div>
           ))}
-          <div className="mt-1.5 flex min-h-[52px] w-full items-center justify-start text-left md:min-h-[60px]">
+          <div className="mt-1.5 flex min-h-[52px] min-w-0 w-max max-w-full items-center justify-start text-left md:min-h-[60px]">
             <span className={labelRowTextClass}>Encounters</span>
           </div>
 
@@ -1509,7 +1556,7 @@ export function SharedTimeAxisCard() {
             {sharedAxisRows.map((row, labRowIdx) => (
               <div
                 key={row.measure}
-                className={`flex min-h-[52px] w-full items-center justify-start text-left md:min-h-[60px] ${labRowIdx > 0 ? "mt-1.5" : ""}`}
+                className={`flex min-h-[52px] min-w-0 w-max max-w-full items-center justify-start text-left md:min-h-[60px] ${labRowIdx > 0 ? "mt-1.5" : ""}`}
               >
                 <span className={labelRowTextClass}>{row.measure}</span>
               </div>
@@ -1520,7 +1567,7 @@ export function SharedTimeAxisCard() {
             {sharedMedicationRows.map((mrow, medRowIdx) => (
               <div
                 key={mrow.id}
-                className={`flex min-h-[52px] w-full items-center justify-start text-left md:min-h-[60px] ${medRowIdx > 0 ? "mt-1.5" : ""}`}
+                className={`flex min-h-[52px] min-w-0 w-max max-w-full items-center justify-start text-left md:min-h-[60px] ${medRowIdx > 0 ? "mt-1.5" : ""}`}
               >
                 <span className={labelRowTextClass}>{mrow.name}</span>
               </div>
@@ -1529,8 +1576,10 @@ export function SharedTimeAxisCard() {
         </div>
       </div>
 
-      <div className="sticky bottom-0 z-30 -mx-4 mt-4 bg-white px-4 pb-1 pt-3 shadow-[0_-12px_28px_-16px_rgba(0,0,0,0.08)] md:-mx-5 md:px-5 md:pb-2 md:pt-3.5">
-        <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-3 md:mx-auto md:w-full md:max-w-[1392px]">
+      <div
+        className={`sticky bottom-0 z-30 mt-4 bg-white pb-1 pt-3 shadow-[0_-12px_28px_-16px_rgba(0,0,0,0.08)] md:pb-2 md:pt-3.5 ${CASE_STUDY_MATRIX_SHELL_STICKY_BLEED_CLASS}`}
+      >
+        <div className="grid w-full grid-cols-[minmax(0,1fr)_70px] items-start gap-2 sm:gap-3 md:mx-auto md:w-full md:max-w-[1392px]">
           <div className="min-w-0">
             <VehrSharedAxisDateRow
               className="!pt-0"
@@ -1538,7 +1587,11 @@ export function SharedTimeAxisCard() {
               count={visibleColCount}
             />
           </div>
-          <div className={`${labelColClass} shrink-0`} aria-hidden />
+          <div className={labelColClass} aria-hidden>
+            <span className={`${labelRowTextClass} invisible block select-none`}>
+              {SHARED_AXIS_LABEL_COL_WIDTH_SENTINEL}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -1552,13 +1605,13 @@ export function SharedTimeAxisNarrative() {
       <div className="flex flex-col gap-3 md:col-span-2">
         <p className={stepHeadingClass}>Example patient context</p>
         <p className={stepBodyClass}>
-          Glucose improves steadily across visits, suggesting better metabolic control. But the
-          shared timeline reveals a second story: oxygen saturation declines, then drops sharply
-          on Sep 14, while heart rate rises.
+          Glucose rises from urgent care through a marked ED presentation, then trends down after
+          insulin and metformin adjustment. Blood pressure peaks with the acute visit and eases
+          by telehealth follow-up.
         </p>
         <p className={stepBodyClass}>
-          The grid helps clinicians see both stories at once: improvement in one system,
-          deterioration in another.
+          Aligned to the same visit columns, labs, symptoms, encounters, and medications
+          tell one continuous story of exacerbation and recovery.
         </p>
       </div>
     </div>
@@ -1601,81 +1654,43 @@ export default function DesignLogicFromSignal({
           </section>
         ) : null}
 
-        {/* Step 1 */}
+        {/* Step 1 — pattern (formerly step 2) */}
         <StepRow isFirst>
           <div className="flex flex-col gap-4 md:max-w-md">
-            <h4 className={stepHeadingClass}>1. Anything abnormal?</h4>
+            <h4 className={stepHeadingClass}>1. Pattern over time?</h4>
             <p className={stepBodyClass}>
-              Normal findings fade back; abnormal values gain visual weight so
-              urgent signals rise above routine noise.
+              Glucose and blood pressure read as longitudinal patterns—early elevation,
+              acute worsening at the ED visit, then gradual stabilization after
+              treatment changes.
             </p>
           </div>
-          <div className={matrixShellClass}>
-            <div className={gridClass} aria-hidden>
-              {/* Row 1 — July 21 | Sep 09 | medium | very light */}
-              <Cell className="border-transparent bg-[#525252]" />
-              <Cell className="border-transparent bg-[#626262]" />
-              <Cell className="border-transparent bg-[#999999]" />
-              <Cell className="border-black/[0.06] bg-[#EEEEEE]" />
-              {/* Row 2 — empty white | empty white | light-medium | charcoal */}
-              <Cell className="border-black/[0.08] bg-white" />
-              <Cell className="border-black/[0.08] bg-white" />
-              <Cell className="border-black/[0.06] bg-[#BBBBBB]" />
-              <Cell className="border-transparent bg-[#555555]" />
-            </div>
-            <MatrixDateRow />
-          </div>
+          <PatternOverTimeMatrix />
         </StepRow>
 
         {/* Step 2 */}
         <StepRow>
           <div className="flex flex-col gap-4 md:max-w-md">
-            <h4 className={stepHeadingClass}>2. Pattern over time?</h4>
+            <h4 className={stepHeadingClass}>2. What&apos;s the value?</h4>
             <p className={stepBodyClass}>
-              Rows show whether a measure is improving, worsening, or persisting
-              across visits.
-            </p>
-          </div>
-          <div className={matrixShellClass}>
-            <div className={gridClass} aria-hidden>
-              {/* Improvement row — magenta fades lighter */}
-              <Cell className="border-[#9d174d]/30 bg-[#9d174d] text-white" />
-              <Cell className="border-[#be185d]/30 bg-[#be185d] text-white" />
-              <Cell className="border-[#f472b6]/40 bg-[#f472b6] text-white" />
-              <Cell className="border-[#fce7f3] bg-[#fce7f3] text-black/70" />
-              {/* Worsening row — teal strengthens */}
-              <Cell className="border-cyan-100/80 bg-[#ecfeff] text-black/60" />
-              <Cell className="border-black/[0.06] bg-[#fafaf9]" />
-              <Cell className="border-teal-400/40 bg-[#2dd4bf] text-white" />
-              <Cell className="border-[#115e59]/40 bg-[#115e59] text-white shadow-md" />
-            </div>
-            <MatrixDateRow />
-          </div>
-        </StepRow>
-
-        {/* Step 3 */}
-        <StepRow>
-          <div className="flex flex-col gap-4 md:max-w-md">
-            <h4 className={stepHeadingClass}>3. What&apos;s the value?</h4>
-            <p className={stepBodyClass}>
-              Exact figures stay one glance away whenever you decide the signal
-              merits the numbers behind it.
+              Exact glucose and blood pressure values sit on the same dates as
+              symptoms, encounters, and medications—so the acute spike on Sep 09
+              is never read in isolation.
             </p>
           </div>
           <ExactValueMatrix />
         </StepRow>
 
-        {/* Step 4 */}
+        {/* Step 3 */}
         <StepRow>
           <div className="flex flex-col gap-4 md:max-w-md">
-            <h4 className={stepHeadingClass}>4. What explains it?</h4>
+            <h4 className={stepHeadingClass}>3. What explains it?</h4>
             <p className={stepBodyClass}>
-              Related encounters, medications, diagnoses, notes, and
-              patient-reported data sit beside the signal so the chart isn&apos;t
-              floating without context.
+              Opening the Sep 09 glucose cell shows why the value mattered: marked
+              hyperglycemia in the context of the emergency visit and treatment
+              escalation that followed.
             </p>
           </div>
-          <ExactValueMatrix tooltipAbove82 />
+          <ExactValueMatrix tooltipOnAcuteGlucose />
         </StepRow>
       </div>
     </div>

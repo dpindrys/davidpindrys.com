@@ -1,25 +1,25 @@
 import {
+  CASE_STUDY_MATRIX_INNER_GRID_CLASS,
+  CASE_STUDY_MATRIX_LABEL_COL_CLASS,
+  CASE_STUDY_MATRIX_ROW_LABEL_CLASS,
+  CASE_STUDY_MATRIX_SHELL_CLASS,
+} from "./caseStudyVisualTokens";
+import { CASE_STUDY_VISIT_DATES } from "./vehrCaseStudyNarrative";
+import {
   encounterEr,
   encounterPcp,
   encounterTelehealth,
   encounterUc,
 } from "./vehrTimelineVizTokens";
 
-/**
- * Column order (left → right): UC → ER → PCP → Telehealth
- * Date labels below — display order only (columns unchanged).
- */
-export const STEP_VISUAL_DATES = [
-  "July 21",
-  "Sep 09",
-  "Sep 10",
-  "Sep 14",
-] as const;
+export const STEP_VISUAL_DATES = CASE_STUDY_VISIT_DATES;
 
-const shellClass =
-  "rounded-2xl border border-black/10 bg-white p-4 md:p-5 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)]";
+const diagnosisRowLabelClass =
+  "flex h-[22px] w-max max-w-full min-w-0 items-center justify-start pl-0 pr-0 font-sans text-[11px] font-semibold leading-tight text-black/65 md:h-[26px] md:text-[12px]";
 
-/** Match `Cell` height in DesignLogicFromSignal (labs / vitals) */
+const mobileLegendTextClass =
+  "font-sans text-[11px] font-semibold leading-tight text-black/60";
+
 const encounterCellClass =
   "flex min-h-[52px] md:min-h-[60px] w-full items-center justify-center rounded-md px-1 text-center font-sans text-[11px] font-semibold leading-tight text-white md:text-[12px]";
 
@@ -33,21 +33,6 @@ const ENCOUNTER_COLS = [
   { label: "Tele", color: encounterTelehealth },
 ] as const;
 
-function DateRow() {
-  return (
-    <div
-      className="grid grid-cols-4 gap-1.5 pt-3 md:pt-3.5"
-      role="presentation"
-    >
-      {STEP_VISUAL_DATES.map((d) => (
-        <span key={d} className={dateLabelClass}>
-          {d}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 const dxDot = (
   <span
     className="h-2 w-2 rounded-full bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06)]"
@@ -55,32 +40,43 @@ const dxDot = (
   />
 );
 
+const DX_SEGMENTS: readonly {
+  className: string;
+  style?: { backgroundColor: string };
+  dot: boolean;
+}[] = [
+  { className: "bg-[#B8BCC4]", dot: true },
+  { className: "", style: { backgroundColor: encounterEr }, dot: true },
+  { className: "bg-[#B8BCC4]", dot: true },
+  { className: "bg-[#D1D5DB]", dot: false },
+];
+
+function DateRow() {
+  return (
+    <div className="pt-3 md:pt-3.5" role="presentation">
+      <div className="grid grid-cols-4 gap-1.5">
+        {STEP_VISUAL_DATES.map((d) => (
+          <span key={d} className={dateLabelClass}>
+            {d}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function DiagnosisBar() {
   return (
     <div className="mb-1.5 grid grid-cols-4 gap-1.5" aria-hidden>
-      {/* Continuous diagnoses pill across UC → ER → PCP (no internal gaps) */}
-      <div className="col-span-3 min-w-0">
-        <div className="flex h-[22px] w-full min-w-0 overflow-hidden rounded-md bg-[#B8BCC4] md:h-[26px]">
-          {/* UC (gray) */}
-          <div className="flex min-w-0 flex-1 items-center justify-center">
-            {dxDot}
-          </div>
-          {/* ER (red) */}
-          <div
-            className="flex min-w-0 flex-1 items-center justify-center"
-            style={{ backgroundColor: encounterEr }}
-          >
-            {dxDot}
-          </div>
-          {/* PCP (gray) */}
-          <div className="flex min-w-0 flex-1 items-center justify-center">
-            {dxDot}
-          </div>
+      {DX_SEGMENTS.map((seg, i) => (
+        <div
+          key={i}
+          className={`flex h-[22px] items-center justify-center rounded-md md:h-[26px] ${seg.className}`}
+          style={seg.style}
+        >
+          {seg.dot ? dxDot : null}
         </div>
-      </div>
-
-      {/* Tele (no diagnoses band) */}
-      <div className="h-[22px] rounded-md bg-transparent md:h-[26px]" />
+      ))}
     </div>
   );
 }
@@ -105,33 +101,21 @@ function EncounterCell({
   );
 }
 
-/**
- * Mirrors VEHR lab tooltip chrome in DesignLogicFromSignal (dark panel + downward caret).
- * Anchored visually to the ER encounter column in the step visual.
- */
 function VehrEncounterTooltipChrome() {
   const rows: readonly { label: string; value: string }[] = [
-    { label: "Care setting", value: "Hospital ED" },
-    { label: "Diagnosis addressed", value: "Type 2 diabetes" },
-    { label: "Clinical status", value: "Exacerbated" },
-    {
-      label: "Note excerpt",
-      value: "Hyperglycemia; follow-up advised",
-    },
-    { label: "Next step", value: "PCP follow-up" },
+    { label: "Glucose", value: "342 mg/dL" },
+    { label: "Presentation", value: "Fatigue, blurred vision, dizziness" },
+    { label: "Assessment", value: "Acute hyperglycemia" },
+    { label: "Treatment", value: "IV fluids + insulin initiation" },
+    { label: "Follow-up", value: "PCP within 48 hours" },
   ];
 
   return (
     <div className="relative w-full pb-1" aria-hidden>
       <div className="relative w-full rounded-xl bg-black px-[18px] pb-3 pt-[14px] shadow-[0_20px_50px_-14px_rgba(0,0,0,0.55),0_10px_22px_-10px_rgba(0,0,0,0.38)]">
         <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <div className="text-[15px] font-semibold leading-snug tracking-tight text-white">
-              Emergency
-            </div>
-            <div className="text-[15px] font-semibold leading-snug tracking-tight text-white">
-              Department Visit
-            </div>
+          <div className="min-w-0 text-[15px] font-semibold leading-snug tracking-tight text-white">
+            Emergency Department Visit
           </div>
           <span className="shrink-0 text-right text-[11px] font-normal tabular-nums leading-snug text-white/60 md:text-[12px]">
             Sep 09, 2024
@@ -171,43 +155,72 @@ export default function VehrTimelineStepVisual({
   variant: VehrTimelineStepVariant;
 }) {
   const showErTooltip = variant === "er-encounter-tooltip";
-  const highlightCols = [
-    false,
-    showErTooltip,
-    false,
-    false,
-  ] as const;
-
+  const highlightCols = [false, showErTooltip, false, false] as const;
   const showDiagnosis =
     variant === "diagnoses-encounters" || variant === "er-encounter-tooltip";
 
   return (
-    <div className={shellClass} aria-hidden>
+    <div className={CASE_STUDY_MATRIX_SHELL_CLASS} aria-hidden>
       <div
-        className={`relative overflow-visible bg-white ${showErTooltip ? "pt-1 md:pt-2" : ""}`}
+        className={`${CASE_STUDY_MATRIX_INNER_GRID_CLASS} ${showErTooltip ? "pt-1 md:pt-2" : ""}`}
       >
-        {showDiagnosis ? <DiagnosisBar /> : null}
+        <div className="relative min-w-0 overflow-visible bg-white">
+          {showDiagnosis ? <DiagnosisBar /> : null}
 
-        <div className="relative isolate mb-1.5">
-          {showErTooltip ? (
-            <div className="pointer-events-none absolute bottom-full left-[37.5%] z-20 mb-1.5 w-[min(288px,calc(100vw-2.5rem))] max-w-[288px] -translate-x-1/2">
-              <VehrEncounterTooltipChrome />
+          <div className="relative isolate">
+            {showErTooltip ? (
+              <div className="pointer-events-none absolute bottom-full left-[37.5%] z-20 mb-1.5 w-[min(288px,calc(100vw-2.5rem))] max-w-[288px] -translate-x-1/2">
+                <VehrEncounterTooltipChrome />
+              </div>
+            ) : null}
+
+            <div className="grid grid-cols-4 gap-1.5">
+              {ENCOUNTER_COLS.map((col, i) => (
+                <EncounterCell
+                  key={col.label}
+                  label={col.label}
+                  color={col.color}
+                  highlight={highlightCols[i]}
+                />
+              ))}
             </div>
-          ) : null}
+          </div>
 
-          <div className="grid grid-cols-4 gap-1.5">
-            {ENCOUNTER_COLS.map((col, i) => (
-              <EncounterCell
-                key={col.label}
-                label={col.label}
-                color={col.color}
-                highlight={highlightCols[i]}
-              />
-            ))}
+          <div className="mt-4 border-t border-black/10">
+            <DateRow />
           </div>
         </div>
 
-        <DateRow />
+        <div className={CASE_STUDY_MATRIX_LABEL_COL_CLASS}>
+          {showDiagnosis ? (
+            <>
+              <div className="mb-1.5 flex h-[22px] items-center md:h-[26px]">
+                <div className={diagnosisRowLabelClass}>T2 Diabetes</div>
+              </div>
+              <div className="flex min-h-[52px] items-center md:min-h-[60px]">
+                <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>Encounters</div>
+              </div>
+            </>
+          ) : (
+            <div className="flex min-h-[52px] items-center md:min-h-[60px]">
+              <div className={CASE_STUDY_MATRIX_ROW_LABEL_CLASS}>Encounters</div>
+            </div>
+          )}
+          <div className="invisible mt-4 border-t border-black/10">
+            <DateRow />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 border-t border-black/10 pt-4 md:hidden">
+        {showDiagnosis ? (
+          <>
+            <span className={mobileLegendTextClass}>T2 Diabetes</span>
+            <span className={mobileLegendTextClass}>Encounters</span>
+          </>
+        ) : (
+          <span className={mobileLegendTextClass}>Encounters</span>
+        )}
       </div>
     </div>
   );

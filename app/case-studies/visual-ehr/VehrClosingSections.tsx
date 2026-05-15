@@ -1,4 +1,5 @@
 import { SECONDARY_OUTLINE_INTERACTIVE } from "../../components/buttonTokens";
+import { CASE_STUDY_MATRIX_SHELL_CLASS } from "./caseStudyVisualTokens";
 import { vehrBelowHeroTestimonial } from "./vehrBelowHeroData";
 
 const eyebrowClass =
@@ -9,9 +10,6 @@ const bodyClass =
   "w-full font-sans text-[22px] font-normal leading-[1.45] text-black/80 md:text-[24px]";
 const subheadingClass =
   "font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black";
-
-const visualShellClass =
-  "rounded-2xl border border-black/10 bg-white p-4 md:p-5 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)]";
 
 const sectionGapClass = "mt-16 w-full md:mt-20 lg:mt-24";
 
@@ -86,7 +84,7 @@ export default function VehrClosingSections() {
             </div>
           </div>
           <div className="w-full min-w-0">
-            <div className={visualShellClass}>
+            <div className={CASE_STUDY_MATRIX_SHELL_CLASS}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/vehr/vehr.png"
