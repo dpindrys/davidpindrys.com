@@ -21,6 +21,7 @@ import {
   LABS_GLUCOSE_TOOLTIP_ACUTE,
   LABS_GLUCOSE_VALUES,
 } from "./vehrCaseStudyNarrative";
+import { vehrBodyClass, vehrStepBodyClass } from "./vehrCaseStudySectionTokens";
 
 /** Editorial “from signal to detail” steps — abstract 2×4 grids, portfolio tone */
 
@@ -28,12 +29,8 @@ const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
 const sectionTitleClass =
   "w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black";
-const introClass =
-  "w-full font-sans text-[22px] md:text-[24px] font-normal leading-[1.45] text-black/80";
 const stepHeadingClass =
   "font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black";
-const stepBodyClass =
-  "font-sans text-[22px] md:text-[24px] font-normal leading-[1.45] text-black/80";
 
 const matrixShellClass = CASE_STUDY_MATRIX_SHELL_CLASS;
 
@@ -1604,12 +1601,12 @@ export function SharedTimeAxisNarrative() {
     <div className="mt-10 grid w-full grid-cols-1 gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
       <div className="flex flex-col gap-3 md:col-span-2">
         <p className={stepHeadingClass}>Example patient context</p>
-        <p className={stepBodyClass}>
+        <p className={vehrStepBodyClass}>
           Glucose rises from urgent care through a marked ED presentation, then trends down after
           insulin and metformin adjustment. Blood pressure peaks with the acute visit and eases
           by telehealth follow-up.
         </p>
-        <p className={stepBodyClass}>
+        <p className={vehrStepBodyClass}>
           Aligned to the same visit columns, labs, symptoms, encounters, and medications
           tell one continuous story of exacerbation and recovery.
         </p>
@@ -1633,7 +1630,7 @@ export default function DesignLogicFromSignal({
         <>
           <p className={eyebrowClass}>The Solution</p>
           <h3 className={`${sectionTitleClass} mt-4`}>Rebuilding the Story Around Time</h3>
-          <p className={`${introClass} mt-6`}>
+          <p className={`${vehrBodyClass} mt-6`}>
             A shared timeline aligns diagnoses, encounters, medications, labs, and
             vitals to the same dates so clinicians can scan for what changed, when it
             changed, and what else was happening nearby—then open detail only when the
@@ -1658,7 +1655,7 @@ export default function DesignLogicFromSignal({
         <StepRow isFirst>
           <div className="flex flex-col gap-4 md:max-w-md">
             <h4 className={stepHeadingClass}>1. Pattern over time?</h4>
-            <p className={stepBodyClass}>
+            <p className={vehrStepBodyClass}>
               Glucose and blood pressure read as longitudinal patterns—early elevation,
               acute worsening at the ED visit, then gradual stabilization after
               treatment changes.
@@ -1671,7 +1668,7 @@ export default function DesignLogicFromSignal({
         <StepRow>
           <div className="flex flex-col gap-4 md:max-w-md">
             <h4 className={stepHeadingClass}>2. What&apos;s the value?</h4>
-            <p className={stepBodyClass}>
+            <p className={vehrStepBodyClass}>
               Exact glucose and blood pressure values sit on the same dates as
               symptoms, encounters, and medications—so the acute spike on Sep 09
               is never read in isolation.
@@ -1684,7 +1681,7 @@ export default function DesignLogicFromSignal({
         <StepRow>
           <div className="flex flex-col gap-4 md:max-w-md">
             <h4 className={stepHeadingClass}>3. What explains it?</h4>
-            <p className={stepBodyClass}>
+            <p className={vehrStepBodyClass}>
               Opening the Sep 09 glucose cell shows why the value mattered: marked
               hyperglycemia in the context of the emergency visit and treatment
               escalation that followed.

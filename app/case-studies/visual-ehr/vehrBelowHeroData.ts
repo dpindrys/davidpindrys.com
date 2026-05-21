@@ -7,11 +7,21 @@ export const vehrBelowHeroMeta = [
   { label: "Status", value: "In development" },
 ] as const;
 
-export const vehrBelowHeroSummaryBlock = {
-  label: "SUMMARY",
+export const vehrHeroFocusPills = [
+  "EHR Design",
+  "Data Visualization",
+  "Clinical Workflows",
+] as const;
+
+export const vehrHeroLead = {
   body:
-    "I worked with a practicing physician to design a chart review workflow that makes dense patient data over time easier to interpret, and delivered scalable components now being implemented by his development team.",
-  team: "Founding clinical lead, engineering team, and myself",
+    "I collaborated with a practicing physician founder to design a timeline-based chart review platform that reorganizes fragmented EHR data into longitudinal clinical narratives. I led workflow design, information architecture, and scalable UI systems now being implemented by the VEHR engineering team.",
+} as const;
+
+export const vehrProductContext = {
+  title: "Chart review for an EHR startup",
+  body:
+    "VEHR Technologies is developing a timeline-based chart review platform designed around how clinicians naturally interpret patient history over time. The platform reorganizes fragmented EHR data into connected clinical narratives that support contextual review, pattern recognition, and longitudinal sensemaking across complex patient records.",
 } as const;
 
 export const vehrBelowHeroTestimonial = {

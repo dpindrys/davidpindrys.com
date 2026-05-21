@@ -1,136 +1,258 @@
-import Image from "next/image";
-
 import {
-  FrxProcessRowShell,
-  rowBodyClass,
-  rowBodyTextClass,
-  rowHeadingClass,
-} from "./FrxExtendedSections";
+  frxImpactEvidenceRows,
+  frxImpactScale,
+  frxImpactSectionIntro,
+  frxImpactThemeColors,
+  type FrxImpactEvidenceRow,
+  type FrxImpactThemeKey,
+} from "./frxImpactData";
+import { frxMetaEyebrowClass } from "./frxCaseStudyTypography";
 
-const eyebrowClass =
-  "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
-const sectionTitleClass =
-  "w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black";
-const introClass =
-  "w-full font-sans text-[22px] font-normal leading-[1.45] text-black/80 md:text-[24px]";
+const frxImpactProblemBg = "#E8E6E1";
+/** Site primary blue (`--color-blue` in globals.css). */
+const frxImpactPrimaryBlue = "#00AAFF";
+const frxImpactPrimaryBlueMuted = "#D9F4FF";
 
-/** Matches testimonial card in `FrxBelowHero` (Peruri Sai Mahesh). */
-const testimonialCardClass =
-  "flex min-h-0 min-w-0 w-full flex-col gap-6 rounded-2xl border border-black/10 bg-white/50 p-8";
+const frxImpactSectionTitleClass =
+  "font-sans text-[clamp(24px,3.2vw,36px)] font-semibold leading-[1.2] tracking-[-0.02em] text-black";
 
-type ImpactQuote = {
-  quote: string;
-  name: string;
-  title: string;
-  avatarSrc: string;
-};
+const frxImpactRowTitleClass =
+  "font-sans text-[16px] font-semibold leading-[1.4] text-black md:text-[17px]";
 
-type ImpactRow = {
-  heading: string;
-  body: string;
-} & ImpactQuote;
+const frxImpactRowBodyClass =
+  "font-sans text-[15px] font-normal leading-[1.55] text-black/75 md:text-[16px]";
 
-const impactRows: readonly ImpactRow[] = [
-  {
-    heading: "1. Time Saved for Clinic Staff",
-    body: "The workflow reduced repeat calls, paper handling, and pharmacy lookups, giving staff back time each week.",
-    quote:
-      '"Realistically on a big program you\'re saving 2–3 hours per week."',
-    name: "Tara E. Towe",
-    title: "Program Manager",
-    avatarSrc: "/images/frx/time.png",
-  },
-  {
-    heading: "2. Faster Answers for Patients",
-    body: "Shipment and refill status became visible in the workflow, helping staff answer patient questions without calling pharmacy.",
-    quote:
-      '"Quick. Was able to see shipment, call patient back within minutes."',
-    name: "Pat Denton",
-    title: "Program Manager",
-    avatarSrc: "/images/frx/clinical.png",
-  },
-  {
-    heading: "3. Easy Adoption at the Point of Care",
-    body: "Staff could refill medications from the clinic workflow without learning a separate process or leaving the patient context.",
-    quote:
-      '"It\'s super easy, literally the push of a button. We LOVE it."',
-    name: "Natisha Winegarner",
-    title: "RN",
-    avatarSrc: "/images/frx/ease.png",
-  },
-];
+const frxImpactQuoteClass =
+  "font-sans text-[15px] font-normal leading-[1.55] text-black md:text-[16px]";
 
-function FrxImpactQuoteCard({
-  quote,
-  name,
-  title,
-  avatarSrc,
-}: ImpactQuote) {
+const frxImpactAttributionClass =
+  "font-sans text-[11px] font-normal uppercase tracking-[0.12em]";
+
+const frxImpactRowGridClass =
+  "grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-0";
+
+function FrxImpactQuoteMark() {
   return (
-    <div className={testimonialCardClass}>
-      <blockquote className={`${rowBodyTextClass} whitespace-pre-line`}>
-        {quote}
-      </blockquote>
-      <div className="flex items-center gap-4">
-        <div className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-full">
-          <Image
-            src={avatarSrc}
-            alt={name}
-            fill
-            className="rounded-full object-cover"
+    <svg
+      width="32"
+      height="26"
+      viewBox="0 0 40 32"
+      fill="none"
+      aria-hidden
+      className="shrink-0 text-blue"
+    >
+      <path
+        d="M8 32V18.4C8 11.2 11.2 5.6 18.4 2.4L20.8 6.4C16 8.8 13.6 12 13.6 16H20V32H8ZM28 32V18.4C28 11.2 31.2 5.6 38.4 2.4L40.8 6.4C36 8.8 33.6 12 33.6 16H40V32H28Z"
+        fill="currentColor"
+        opacity="0.9"
+      />
+    </svg>
+  );
+}
+
+function FrxImpactThemeIcon({
+  theme,
+  accent,
+  muted,
+}: {
+  theme: FrxImpactThemeKey;
+  accent: string;
+  muted: string;
+}) {
+  return (
+    <div
+      className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full md:h-20 md:w-20"
+      style={{ backgroundColor: muted }}
+      aria-hidden
+    >
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+        className="md:h-[34px] md:w-[34px]"
+      >
+        {theme === "green" && (
+          <>
+            <circle
+              cx="16"
+              cy="16"
+              r="10"
+              stroke={accent}
+              strokeWidth="1.75"
+            />
+            <path
+              d="M16 9v7l5 2.5"
+              stroke={accent}
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </>
+        )}
+        {theme === "blue" && (
+          <path
+            d="M11.5 12h9a2 2 0 012 2v6.5a2 2 0 01-2 2h-1.5l-2.5 2.5V20.5h-1.5a2 2 0 01-2-2V12z"
+            stroke={accent}
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-        </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="font-sans text-[16px] font-semibold leading-[1.5] text-black">
-            {name}
-          </span>
-          <span className="font-sans text-[16px] font-normal leading-[1.5] text-black/50">
-            {title}
-          </span>
+        )}
+        {theme === "purple" && (
+          <>
+            <rect
+              x="8"
+              y="8"
+              width="16"
+              height="16"
+              rx="3.5"
+              stroke={accent}
+              strokeWidth="1.75"
+            />
+            <path
+              d="M12.5 16l2.5 2.5 6-6"
+              stroke={accent}
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
+
+function FrxImpactClinicsIcon({
+  accent,
+  muted,
+}: {
+  accent: string;
+  muted: string;
+}) {
+  return (
+    <div
+      className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full md:h-20 md:w-20"
+      style={{ backgroundColor: muted }}
+      aria-hidden
+    >
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="12" cy="11" r="3.5" fill={accent} />
+        <circle cx="20" cy="11" r="3.5" fill={accent} />
+        <path
+          d="M6 24c0-3.5 2.5-6 6-6s6 2.5 6 6M14 24c0-2.5 1.75-4.5 4.5-4.5S23 21.5 23 24"
+          stroke={accent}
+          strokeWidth="1.75"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function FrxImpactQuoteRow({
+  theme,
+  headline,
+  description,
+  quote,
+  attribution,
+  isLast = false,
+}: FrxImpactEvidenceRow & { isLast?: boolean }) {
+  const { accent, muted } = frxImpactThemeColors[theme];
+
+  return (
+    <article
+      className={`${frxImpactRowGridClass} px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-11 ${
+        isLast ? "" : "border-b border-black/[0.06]"
+      }`}
+    >
+      <div className="flex min-w-0 gap-5 md:gap-6 lg:pr-10">
+        <FrxImpactThemeIcon theme={theme} accent={accent} muted={muted} />
+        <div className="flex min-w-0 flex-col gap-2 pt-1">
+          <h3 className={frxImpactRowTitleClass}>{headline}</h3>
+          <p className={frxImpactRowBodyClass}>{description}</p>
         </div>
       </div>
-    </div>
+
+      <figure className="flex min-w-0 flex-col gap-4 border-black/[0.06] lg:border-l lg:pl-10">
+        <FrxImpactQuoteMark />
+        <blockquote className={frxImpactQuoteClass}>
+          &ldquo;{quote}&rdquo;
+        </blockquote>
+        <figcaption
+          className={frxImpactAttributionClass}
+          style={{ color: accent }}
+        >
+          {attribution}
+        </figcaption>
+      </figure>
+    </article>
+  );
+}
+
+function FrxImpactScaleRow() {
+  return (
+    <article
+      className={`${frxImpactRowGridClass} rounded-2xl px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-11`}
+      style={{ backgroundColor: frxImpactProblemBg }}
+    >
+      <div className="flex min-w-0 gap-5 md:gap-6 lg:pr-10">
+        <FrxImpactClinicsIcon
+          accent={frxImpactPrimaryBlue}
+          muted={frxImpactPrimaryBlueMuted}
+        />
+        <div className="flex min-w-0 flex-col gap-2 pt-1">
+          <h3 className={frxImpactRowTitleClass}>{frxImpactScale.headline}</h3>
+          <p className={frxImpactRowBodyClass}>{frxImpactScale.description}</p>
+        </div>
+      </div>
+
+      <div className="flex min-w-0 flex-col gap-4 border-black/[0.06] sm:flex-row sm:items-start sm:gap-6 lg:border-l lg:pl-10">
+        <p className="shrink-0 font-sans text-[clamp(52px,10vw,80px)] font-semibold leading-none tracking-[-0.03em] text-blue">
+          {frxImpactScale.stat}
+        </p>
+        <p className="max-w-sm pt-1 font-sans text-[15px] font-normal leading-[1.55] text-black/80 md:text-[16px] md:leading-[1.6]">
+          {frxImpactScale.statDetail}
+        </p>
+      </div>
+    </article>
   );
 }
 
 export default function FrxImpactSection() {
   return (
     <section
-      className="mt-16 w-full md:mt-24 lg:mt-28"
+      className="relative mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 md:mt-32 lg:mt-40 lg:w-[calc(100%+8rem)] lg:-mx-16"
       aria-labelledby="frx-impact-heading"
     >
-      <p className={eyebrowClass}>Impact</p>
-      <h2
-        id="frx-impact-heading"
-        className={`${sectionTitleClass} mt-4 md:mt-5`}
+      <div
+        className="rounded-2xl px-6 py-10 md:px-10 md:py-12 lg:px-14 lg:py-14"
+        style={{ backgroundColor: frxImpactProblemBg }}
       >
-        The Refill Button, Deployed at Scale
-      </h2>
-      <p className={`${introClass} mt-5 md:mt-6`}>
-        Reported refill time dropped by ~70%, while staff gained clearer
-        medication visibility across 2,800+ clinics serving 43,000+ patients.
-      </p>
-
-      <div className="mt-10 w-full md:mt-14 lg:mt-16">
-        {impactRows.map((row, i) => (
-          <FrxProcessRowShell
-            key={row.heading}
-            isFirst={i === 0}
-            left={
-              <>
-                <h3 className={rowHeadingClass}>{row.heading}</h3>
-                <p className={rowBodyClass}>{row.body}</p>
-              </>
-            }
+        <header>
+          <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
+          <h2
+            id="frx-impact-heading"
+            className={`${frxImpactSectionTitleClass} mt-4 md:mt-5`}
           >
-            <FrxImpactQuoteCard
-              quote={row.quote}
-              name={row.name}
-              title={row.title}
-              avatarSrc={row.avatarSrc}
+            {frxImpactSectionIntro.title}
+          </h2>
+        </header>
+
+        <div className="mt-8 overflow-hidden rounded-2xl bg-[#F4F2EE] md:mt-10 lg:mt-12">
+          {frxImpactEvidenceRows.map((row, index) => (
+            <FrxImpactQuoteRow
+              key={row.headline}
+              {...row}
+              isLast={index === frxImpactEvidenceRows.length - 1}
             />
-          </FrxProcessRowShell>
-        ))}
+          ))}
+        </div>
+
+        <div className="mt-4 md:mt-5">
+          <FrxImpactScaleRow />
+        </div>
       </div>
     </section>
   );

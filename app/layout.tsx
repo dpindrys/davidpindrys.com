@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import BookCall from "./components/BookCall";
+import Header from "./components/Header";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,11 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="bg-[#F4F2EE] text-black font-sans">
-        <div className="h-5 w-full bg-[#00AAFF]" aria-hidden="true" />
+        <Header />
         {children}
-        <BookCall />
       </body>
     </html>
   );

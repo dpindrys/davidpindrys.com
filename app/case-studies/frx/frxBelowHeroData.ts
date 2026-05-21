@@ -5,18 +5,19 @@ export const frxBelowHeroMeta = [
   { label: "Status", value: "Launched enterprise-wide" },
 ] as const;
 
-export const frxBelowHeroSummaryBlock = {
-  label: "SUMMARY",
+export const frxHeroFocusPills = [
+  "Clinical Workflows",
+  "Care Coordination",
+  "Enterprise Systems",
+] as const;
+
+export const frxProductContext = {
+  title: "FreseniusRx and CareTeamHub",
   body:
-    "I led research and design for a digital in-clinic refill workflow that helped nurses and dietitians complete refills faster and with more patient oversight. Staff reported 70% faster refills across 2,800+ clinics supporting 43,000+ patients.",
-  team:
-    "Product manager, business systems analyst, Salesforce engineers, data team, and myself",
+    "FreseniusRx is Fresenius Medical Care's in-house pharmacy, dispensing medications to dialysis patients across the company's clinic network. This project digitized the in-clinic refill workflow inside CareTeamHub, the Salesforce-based application nurses and dietitians use at the point of care.",
 } as const;
 
-export const frxBelowHeroTestimonial = {
-  quote:
-    '"David stayed engaged through the pilot, helped us address edge cases, and iterated until the solution worked in the real world — not just in Figma."',
-  name: "Peruri Sai Mahesh",
-  title: "Lead Salesforce Engineer, Fresenius Medical Care",
-  avatarSrc: "/images/frx/peruri-sai-mahesh.png",
+export const frxBelowHeroSummaryBlock = {
+  body:
+    "I led research and design for an in-chart refill workflow that replaced the paper, fax, and phone-tag process nurses and dietitians had relied on for years. Staff now complete refills 70% faster and can see shipment and prescription status without calling the pharmacy. Deployed across 2,800+ clinics serving 43,000+ patients.",
 } as const;

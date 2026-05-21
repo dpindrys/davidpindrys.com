@@ -1,12 +1,13 @@
 import { PRIMARY_FILLED_INTERACTIVE } from "../../components/buttonTokens";
 import { vehrBelowHeroTestimonial } from "./vehrBelowHeroData";
+import { vehrBodyClass } from "./vehrCaseStudySectionTokens";
 
 const eyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
 const sectionTitleClass =
   "w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black";
-const bodyClass =
-  "w-full font-sans text-[22px] font-normal leading-[1.45] text-black/80 md:text-[24px]";
+const closingQuoteClass =
+  "font-sans text-[16px] font-normal leading-[1.5] text-gray-800 md:text-[17px]";
 const sectionGapClass = "mt-16 w-full md:mt-20 lg:mt-24";
 
 const prototypeCardClass =
@@ -34,7 +35,7 @@ export default function VehrClosingSections() {
           >
             Putting the Timeline Together
           </h2>
-          <p className={`${bodyClass} mt-5 md:mt-6`}>
+          <p className={`${vehrBodyClass} mt-5 md:mt-6`}>
             The final prototype combines encounters, diagnoses, labs, vitals,
             medications, patient-reported context, and compressed time into one
             interactive timeline. Clinicians can start with the patient story,
@@ -95,7 +96,7 @@ export default function VehrClosingSections() {
         aria-label="Clinical feedback from Dr. Cole Marolf"
       >
         <figure className="rounded-2xl border border-black/10 bg-white/50 p-8 md:p-10">
-          <blockquote className={bodyClass}>
+          <blockquote className={closingQuoteClass}>
             &ldquo;David demonstrated strong insight into reframing healthcare
             data interaction… especially the heat map, which improved data density
             while maintaining clarity.&rdquo;

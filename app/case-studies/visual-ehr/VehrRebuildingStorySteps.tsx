@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
 import VehrTimelineStepVisual from "./VehrTimelineStepVisual";
 import type { VehrTimelineStepVariant } from "./VehrTimelineStepVisual";
+import { vehrStepBodyClass } from "./vehrCaseStudySectionTokens";
 
 const stepHeadingClass =
   "font-sans text-[22px] md:text-[24px] font-semibold leading-[1.25] tracking-tight text-black";
-const stepBodyClass =
-  "font-sans text-[22px] md:text-[24px] font-normal leading-[1.45] text-black/80";
 
 function StepRow({
   children,
@@ -52,7 +51,7 @@ export default function VehrRebuildingStorySteps() {
         <StepRow key={step.title} isFirst={i === 0}>
           <div className="flex max-w-md flex-col gap-4">
             <h4 className={stepHeadingClass}>{step.title}</h4>
-            <p className={stepBodyClass}>{step.body}</p>
+            <p className={vehrStepBodyClass}>{step.body}</p>
           </div>
           <div className="w-full min-w-0">
             <VehrTimelineStepVisual variant={step.visualVariant} />

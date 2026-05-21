@@ -1,17 +1,19 @@
-import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
+import SelectedWorkGrid from "./components/SelectedWorkGrid";
+import { homeFeaturedWorkCards } from "./lib/selectedWorkCards";
 import { sectionHeadingClass } from "./components/sectionHeading";
-import Link from "next/link";
+import { frxStrategyHeadlineClass } from "./case-studies/frx/FrxExtendedSections";
+import { frxSectionBodyClass } from "./case-studies/frx/frxCaseStudyTypography";
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
   projectLogo: "/images/VEHR-project-logo.png",
   projectDate: "2024",
-  title: "Clinical Sensemaking",
+  title: "Rebuilding chart review around the patient story",
   descriptor:
-    "A problem-oriented view of patient history over time for a clinician-led startup",
+    "Built with a practicing physician to replace tab-by-tab navigation with a single timeline that aligns clinical data into a coherent narrative.",
   heroImage: "/images/vehr-hero.png",
   heroImageAlt: "VEHR Technologies, patient timeline interface on iPad",
   heroHref: "/case-studies/visual-ehr",
@@ -25,9 +27,9 @@ const freseniusProject = {
   projectLabel: "Fresenius Medical Care",
   projectLogo: "/images/fresenius-project-logo.png",
   projectDate: "2022-2023",
-  title: "Modernizing In-clinic Refills",
+  title: "A one-click refill workflow for 2,800+ dialysis clinics",
   descriptor:
-    "Digitizing a manual refill workflow across 2,800+ clinics and 43,000+ patients",
+    "Replaced the paper, fax, and phone-tag process nurses and dietitians had used for years, cutting refill time by 70%.",
   heroImage: "/images/fresenius-hero.png",
   heroImageAlt: "Fresenius refill workflow interface",
   heroHref: "/case-studies/frx",
@@ -50,7 +52,7 @@ const freseniusProject = {
   caseStudyHighlights: {
     modalPresentation: "composite-vehr" as const,
     modalBrandHeader: {
-      projectTitle: "Modernizing In-clinic Refills",
+      projectTitle: "A one-click refill workflow for 2,800+ dialysis clinics",
       company: "Fresenius Medical Care",
     },
     compositeRows: {
@@ -393,125 +395,64 @@ export default function Home() {
     <>
       <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
-          <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-12 pb-32 overflow-x-visible">
-
-            <Header />
-            <div className="mt-28 md:mt-36 lg:mt-44">
+          <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-4 pb-32 overflow-x-visible">
+            <section
+              id="home"
+              className="scroll-mt-28 pt-8 md:pt-12 lg:pt-16"
+            >
               <Hero />
-            </div>
+            </section>
             <div className="mt-16 md:mt-20 lg:mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 lg:w-[calc(100%+8rem)] lg:-mx-16 overflow-x-visible">
               <LogoStrip />
             </div>
-            <h2
-              className={`${sectionHeadingClass} mt-16 text-left md:mt-20 lg:mt-24 mb-1.5 md:mb-3 lg:mb-4`}
+            <section
+              id="work"
+              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
             >
-              Selected work
-            </h2>
-            <section className="mt-6 md:mt-8 lg:mt-10">
-              <div className="grid w-full grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-10 lg:gap-12">
-                {/* Left column: VEHR (top) + Dell Children's (bottom) */}
-                <div className="flex w-full flex-col gap-10 lg:gap-12">
-                  <Link
-                    href="/case-studies/visual-ehr"
-                    aria-label="Open VEHR case study"
-                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                  >
-                    <div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={vehrProject.heroImage}
-                        alt={vehrProject.heroImageAlt}
-                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
-                      />
-                    </div>
-
-                    <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                        {vehrProject.title}
-                      </h3>
-                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
-                        {vehrProject.descriptor}
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/case-studies/dell-childrens"
-                    aria-label="Open Dell Children's Health Plan case study"
-                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                  >
-                    <div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={ascensionProject.heroImage}
-                        alt={ascensionProject.heroImageAlt}
-                        className="block w-full h-auto rounded-2xl border border-t-0 border-black/10 bg-white/40"
-                      />
-                    </div>
-
-                    <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                        {ascensionProject.title}
-                      </h3>
-                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
-                        {ascensionProject.descriptor}
-                      </p>
-                    </div>
-                  </Link>
-                </div>
-
-                {/* Right column: FRx + OVCP */}
-                <div className="flex w-full flex-col gap-10 lg:gap-12">
-                  <Link
-                    href="/case-studies/frx"
-                    aria-label="Open Fresenius case study"
-                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                  >
-                    <div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/frx-hero.png"
-                        alt="Fresenius refill workflow keeping key information in one place"
-                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
-                      />
-                    </div>
-
-                    <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                        {freseniusProject.title}
-                      </h3>
-                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
-                        {freseniusProject.descriptor}
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/case-studies/ovcp"
-                    aria-label="Open problem list reconciliation case study"
-                    className="block rounded-2xl border border-black/10 bg-white/50 p-7 md:p-8 transition-[transform,box-shadow] duration-200 ease-out shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                  >
-                    <div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="/images/ovcp-hero.png"
-                        alt="Problem list reconciliation workflow"
-                        className="block h-auto w-full rounded-2xl border border-black/10 bg-white/40"
-                      />
-                    </div>
-
-                    <div className="mt-6 flex flex-col gap-2">
-                      <h3 className="font-sans text-[22px] font-semibold leading-[1.25] tracking-tight text-black md:text-[24px]">
-                        Reconciling the Problem List
-                      </h3>
-                      <p className="font-sans text-[16px] font-normal leading-[1.5] text-black/70">
-                        Helping clinicians reduce diagnostic clutter through a faster, more meaningful
-                        problem-list reconciliation workflow.
-                      </p>
-                    </div>
-                  </Link>
-                </div>
+              <h2
+                className={`${sectionHeadingClass} mb-1.5 text-left md:mb-3 lg:mb-4`}
+              >
+                Selected work
+              </h2>
+              <div className="mt-6 md:mt-8 lg:mt-10">
+                <SelectedWorkGrid fullCards={homeFeaturedWorkCards} />
               </div>
+            </section>
+
+            <section
+              id="about"
+              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
+              aria-labelledby="home-about-heading"
+            >
+              <h2
+                id="home-about-heading"
+                className={frxStrategyHeadlineClass}
+              >
+                About
+              </h2>
+              <p className={`${frxSectionBodyClass} mt-5 max-w-[42rem] md:mt-6`}>
+                I am a product designer focused on clinical workflows, health
+                systems, and human factors. This section will expand on background,
+                approach, and how I partner with clinical and engineering teams.
+              </p>
+            </section>
+
+            <section
+              id="contact"
+              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
+              aria-labelledby="home-contact-heading"
+            >
+              <h2
+                id="home-contact-heading"
+                className={frxStrategyHeadlineClass}
+              >
+                Contact
+              </h2>
+              <p className={`${frxSectionBodyClass} mt-5 max-w-[42rem] md:mt-6`}>
+                Reach out at dpindrys@gmail.com to discuss roles, collaborations,
+                or speaking. This section will add a simple contact form and
+                scheduling links.
+              </p>
             </section>
 
           </div>

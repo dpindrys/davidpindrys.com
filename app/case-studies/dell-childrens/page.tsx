@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
@@ -126,14 +125,8 @@ export default function DellChildrensCaseStudyPage() {
     <>
       <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex w-full justify-center overflow-x-visible px-8 lg:px-16">
-          <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-12">
-            <Header
-              leftVariant="back"
-              backHref="/"
-              backAriaLabel="Back to home"
-            />
-
-            <section className="mt-24 flex w-full flex-col gap-10 md:mt-32 lg:mt-36">
+          <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
+            <section className="flex w-full flex-col gap-10 pt-8 md:pt-12 lg:pt-16">
               <h1 className="max-w-[1291px] font-sans text-[clamp(32px,4.8vw,64px)] font-semibold leading-[1.305] text-black">
                 Creating a more usable and meaningful member experience
               </h1>
