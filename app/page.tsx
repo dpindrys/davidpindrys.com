@@ -11,12 +11,12 @@ import {
 
 const homeIntroColumns = [
   {
-    eyebrow: "Why healthcare",
-    body: "I came to healthcare as a patient first. A car accident in high school showed me how much weight clinicians carry and how often their tools fail them. I design for that.",
+    eyebrow: "What I take on",
+    body: "Clinical workflows and EHR design, patient-facing products, healthcare data visualization, AI-assisted clinical tools, design systems, and websites for healthcare teams. Most engagements run end to end, from research through implementation handoff.",
   },
   {
-    eyebrow: "How I work",
-    body: "I hold an MS in Human Factors Engineering from Tufts, with a certificate in medical devices and systems. I treat use error, cognitive load, and workflow disruption as primary design problems, not edge cases.",
+    eyebrow: "Why healthcare",
+    body: "I came to healthcare as a patient first. A car accident in high school showed me how much weight clinicians carry and how often their tools fail them. I have designed for them since.",
   },
 ] as const;
 
@@ -421,7 +421,7 @@ export default function Home() {
 
             <section
               className="mt-16 w-full md:mt-20 lg:mt-24"
-              aria-label="Why healthcare and how I work"
+              aria-label="What I take on and why healthcare"
             >
               <div className="grid w-full grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
                 {homeIntroColumns.map((column) => (
