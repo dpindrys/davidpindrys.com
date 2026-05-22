@@ -1,12 +1,4 @@
-export const HOME_NAV_SECTION_IDS = [
-  "home",
-  "work",
-  "about",
-  "contact",
-] as const;
-
-export type HomeNavSectionId = (typeof HOME_NAV_SECTION_IDS)[number];
-
+/** Scroll to a home-page section when landing with a hash (e.g. /#about). */
 export function scrollToHomeSection(hash?: string) {
   const id =
     hash?.replace("#", "") ||

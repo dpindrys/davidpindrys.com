@@ -13,6 +13,7 @@ export default function WorkPage() {
           <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-4 pb-32 overflow-x-visible">
             <section className="scroll-mt-28 pt-8 md:pt-12 lg:pt-16">
               <SelectedWorkGrid
+                layout="twoUp"
                 fullCards={allFullWorkCards}
                 stackedCards={stackedWorkCards}
               />

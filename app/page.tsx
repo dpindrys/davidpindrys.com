@@ -4,8 +4,21 @@ import LogoStrip from "./components/LogoStrip";
 import SelectedWorkGrid from "./components/SelectedWorkGrid";
 import { homeFeaturedWorkCards } from "./lib/selectedWorkCards";
 import { sectionHeadingClass } from "./components/sectionHeading";
-import { frxStrategyHeadlineClass } from "./case-studies/frx/FrxExtendedSections";
-import { frxSectionBodyClass } from "./case-studies/frx/frxCaseStudyTypography";
+import {
+  frxMetaEyebrowClass,
+  frxSectionBodyClass,
+} from "./case-studies/frx/frxCaseStudyTypography";
+
+const homeIntroColumns = [
+  {
+    eyebrow: "Why healthcare",
+    body: "I came to healthcare as a patient first. A car accident in high school showed me how much weight clinicians carry and how often their tools fail them. I design for that.",
+  },
+  {
+    eyebrow: "How I work",
+    body: "I hold an MS in Human Factors Engineering from Tufts, with a certificate in medical devices and systems. I treat use error, cognitive load, and workflow disruption as primary design problems, not edge cases.",
+  },
+] as const;
 
 const vehrProject = {
   projectLabel: "VEHR Technologies",
@@ -405,6 +418,24 @@ export default function Home() {
             <div className="mt-16 md:mt-20 lg:mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 lg:w-[calc(100%+8rem)] lg:-mx-16 overflow-x-visible">
               <LogoStrip />
             </div>
+
+            <section
+              className="mt-16 w-full md:mt-20 lg:mt-24"
+              aria-label="Why healthcare and how I work"
+            >
+              <div className="grid w-full grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
+                {homeIntroColumns.map((column) => (
+                  <div
+                    key={column.eyebrow}
+                    className="flex min-w-0 flex-col gap-3 md:gap-4"
+                  >
+                    <p className={frxMetaEyebrowClass}>{column.eyebrow}</p>
+                    <p className={frxSectionBodyClass}>{column.body}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             <section
               id="work"
               className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
@@ -415,46 +446,12 @@ export default function Home() {
                 Selected work
               </h2>
               <div className="mt-6 md:mt-8 lg:mt-10">
-                <SelectedWorkGrid fullCards={homeFeaturedWorkCards} />
+                <SelectedWorkGrid
+                  layout="twoUp"
+                  fullCards={homeFeaturedWorkCards}
+                />
               </div>
             </section>
-
-            <section
-              id="about"
-              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
-              aria-labelledby="home-about-heading"
-            >
-              <h2
-                id="home-about-heading"
-                className={frxStrategyHeadlineClass}
-              >
-                About
-              </h2>
-              <p className={`${frxSectionBodyClass} mt-5 max-w-[42rem] md:mt-6`}>
-                I am a product designer focused on clinical workflows, health
-                systems, and human factors. This section will expand on background,
-                approach, and how I partner with clinical and engineering teams.
-              </p>
-            </section>
-
-            <section
-              id="contact"
-              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
-              aria-labelledby="home-contact-heading"
-            >
-              <h2
-                id="home-contact-heading"
-                className={frxStrategyHeadlineClass}
-              >
-                Contact
-              </h2>
-              <p className={`${frxSectionBodyClass} mt-5 max-w-[42rem] md:mt-6`}>
-                Reach out at dpindrys@gmail.com to discuss roles, collaborations,
-                or speaking. This section will add a simple contact form and
-                scheduling links.
-              </p>
-            </section>
-
           </div>
         </div>
       </main>
