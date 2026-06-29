@@ -132,8 +132,8 @@ export default function Hero() {
           aria-haspopup="dialog"
           aria-expanded={bookCallOpen}
         >
-          <span>Book a call</span>
           <CalendarIcon />
+          <span>Book a call</span>
         </button>
 
         <button
@@ -142,6 +142,7 @@ export default function Hero() {
           className={`group ${ctaBaseClass} text-black ${SECONDARY_OUTLINE_INTERACTIVE}`}
           aria-label={copied ? "Email copied to clipboard" : "Copy email to clipboard"}
         >
+          {copied ? <CheckIcon /> : <CopyIcon />}
           {copied ? (
             <span>dpindrys@gmail.com</span>
           ) : (
@@ -150,7 +151,6 @@ export default function Hero() {
               <span className="hidden group-hover:inline">dpindrys@gmail.com</span>
             </>
           )}
-          {copied ? <CheckIcon /> : <CopyIcon />}
         </button>
       </div>
 

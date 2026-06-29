@@ -1,13 +1,13 @@
-import { ovcpBelowHeroMeta } from "./ovcpBelowHeroData";
+import { dchpBelowHeroMeta } from "./dchpBelowHeroData";
 
-export default function OvcpBelowHero() {
+export default function DchpBelowHero() {
   return (
     <section
       className="mt-8 flex w-full flex-col md:mt-10 lg:mt-12"
       aria-label="Project context"
     >
       <div className="flex flex-col gap-0 md:flex-row md:gap-0">
-        {ovcpBelowHeroMeta.map((item, i) => (
+        {dchpBelowHeroMeta.map((item, i) => (
           <div
             key={`${item.label}-${i}`}
             className="flex flex-col gap-1.5 border-b border-black/10 py-6 last:border-b-0 md:flex-1 md:border-b-0 md:border-r md:py-0 md:pl-8 md:pr-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0"

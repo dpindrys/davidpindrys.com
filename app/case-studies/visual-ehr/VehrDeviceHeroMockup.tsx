@@ -1,17 +1,20 @@
-const VEHR_HERO_SRC = "/images/vehr/vehr-hero.png";
+const VEHR_PROTOTYPE_VIDEO_SRC = "/videos/vehr/prototype.mp4";
 
 export default function VehrDeviceHeroMockup() {
   return (
     <figure
-      className="relative w-full"
+      className="relative w-full overflow-hidden rounded-lg"
       aria-label="VEHR clinical sensemaking interface"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={VEHR_HERO_SRC}
-        alt="VEHR patient timeline and clinical sensemaking interface"
-        className="block h-auto w-full select-none"
-        draggable={false}
+      <video
+        className="block h-auto w-full select-none rounded-lg"
+        src={VEHR_PROTOTYPE_VIDEO_SRC}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden
       />
     </figure>
   );

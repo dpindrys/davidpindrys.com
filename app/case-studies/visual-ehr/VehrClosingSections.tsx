@@ -50,15 +50,11 @@ export default function VehrClosingSections() {
             className="mt-8 block w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:mt-10"
             aria-label="View interactive prototype (opens in new tab)"
           >
-            <video
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               className="block w-full rounded-lg"
-              src="/videos/vehr/prototype.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden
+              src="/images/vehr/vehr-hero.png"
+              alt="VEHR patient timeline and clinical sensemaking interface"
             />
           </a>
 
