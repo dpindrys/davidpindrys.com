@@ -1,22 +1,32 @@
 import Footer from "../components/Footer";
-import { frxMetaEyebrowClass } from "../case-studies/frx/frxCaseStudyTypography";
+import { frxStrategyHeadlineClass } from "../case-studies/frx/FrxExtendedSections";
+import {
+  frxMetaEyebrowClass,
+  frxSectionBodyClass,
+} from "../case-studies/frx/frxCaseStudyTypography";
 
-const aboutHeadlineClass =
-  "font-sans text-[clamp(28px,3.4vw,42px)] font-semibold leading-[1.08] tracking-[-0.02em] text-black";
+const aboutFeatureCardClass =
+  "flex min-h-0 min-w-0 flex-col gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] md:gap-4 md:px-7 md:py-8";
 
-const aboutBodyClass =
-  "font-sans text-[17px] font-normal leading-[1.7] text-black/70 md:text-[18px]";
+const aboutFeatureTitleClass =
+  "font-sans text-[clamp(18px,2vw,22px)] font-semibold leading-[1.2] tracking-[-0.02em] text-black";
 
-const aboutMetaValueClass =
-  "font-sans text-[16px] font-semibold leading-[1.5] text-black";
+const aboutFeatureBodyClass =
+  "font-sans text-[14px] font-normal leading-[1.55] text-black/70 md:text-[15px]";
 
 const aboutHeadline =
-  "The best healthcare technology disappears into the background. My work is driven by a simple idea: when clinicians spend less time fighting software, they have more time caring for people.";
+  "I believe that the best healthcare technology gets out of the way, so care teams can focus on caring for people.";
+
+const aboutBackgroundBody =
+  "My background spans design, health sciences, and human factors engineering, giving me a unique perspective on how people interact with complex healthcare systems.";
+
+const aboutSupportingBody =
+  "I create products that reduce cognitive burden, support better clinical decisions, and help technology feel like a partner instead of an obstacle.";
 
 const aboutFeatures = [
   {
-    title: "Healthcare Design",
-    body: "Designing clinical products that simplify complexity and improve patient care.",
+    title: "Systems Thinking",
+    body: "Connecting people, processes, and technology into cohesive systems.",
   },
   {
     title: "Human Factors",
@@ -27,8 +37,8 @@ const aboutFeatures = [
     body: "Streamlining fragmented systems into clear, connected experiences.",
   },
   {
-    title: "Information Architecture",
-    body: "Presenting the right information at the right time to reduce cognitive load.",
+    title: "Information Design",
+    body: "Organizing information so the right details appear at the right time.",
   },
 ] as const;
 
@@ -40,36 +50,35 @@ export default function AboutPage() {
           <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20">
               <div className="grid w-full grid-cols-1 items-start gap-12 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-16 lg:gap-24">
-                <h2 className={`${aboutHeadlineClass} min-w-0`}>{aboutHeadline}</h2>
+                <div className="flex min-w-0 flex-col gap-5 md:gap-6">
+                  <p className={frxMetaEyebrowClass}>About me</p>
+                  <h1 className={`${frxStrategyHeadlineClass} min-w-0`}>
+                    {aboutHeadline}
+                  </h1>
+                  <p className={frxSectionBodyClass}>{aboutBackgroundBody}</p>
+                  <p className={frxSectionBodyClass}>{aboutSupportingBody}</p>
+                </div>
 
-                <div className="flex min-w-0 flex-col gap-8 md:border-l md:border-black/[0.06] md:pl-12 lg:pl-16">
-                  <p className={aboutBodyClass}>
-                    Drawing on backgrounds in design, health sciences, and human
-                    factors, I bring a systems-thinking approach to healthcare
-                    technology.
-                  </p>
-                  <p className={aboutBodyClass}>
-                    I create products that reduce cognitive burden, support better
-                    clinical decisions, and help healthcare work the way it should.
-                  </p>
+                <div className="min-w-0 md:border-l md:border-black/[0.06] md:pl-12 lg:pl-16">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/photo/11.jpg"
+                    alt="David Pindrys"
+                    className="block h-auto w-full rounded-2xl object-cover"
+                  />
                 </div>
               </div>
 
               <div
-                className="mt-20 flex w-full flex-col gap-0 lg:mt-28"
+                className="mt-20 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-28 lg:grid-cols-4 lg:gap-5"
                 aria-label="Focus areas"
               >
-                <div className="flex flex-col gap-0 md:flex-row md:gap-0">
-                  {aboutFeatures.map((feature) => (
-                    <div
-                      key={feature.title}
-                      className={`flex flex-col gap-1.5 border-b border-black/10 py-6 last:border-b-0 md:flex-1 md:border-b-0 md:border-r md:py-0 md:pl-8 md:pr-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0`}
-                    >
-                      <span className={frxMetaEyebrowClass}>{feature.title}</span>
-                      <span className={aboutMetaValueClass}>{feature.body}</span>
-                    </div>
-                  ))}
-                </div>
+                {aboutFeatures.map((feature) => (
+                  <article key={feature.title} className={aboutFeatureCardClass}>
+                    <h3 className={aboutFeatureTitleClass}>{feature.title}</h3>
+                    <p className={aboutFeatureBodyClass}>{feature.body}</p>
+                  </article>
+                ))}
               </div>
             </section>
           </div>
