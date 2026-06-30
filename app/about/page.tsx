@@ -59,7 +59,7 @@ export default function AboutPage() {
                   <p className={frxSectionBodyClass}>{aboutSupportingBody}</p>
                 </div>
 
-                <div className="min-w-0 md:border-l md:border-black/[0.06] md:pl-12 lg:pl-16">
+                <div className="min-w-0 md:pl-12 lg:pl-16">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/photo/11.jpg"
