@@ -2,9 +2,7 @@ import ContactAvailabilityCard from "../components/ContactAvailabilityCard";
 import ContactHero from "../components/ContactHero";
 import ContactInformation from "../components/ContactInformation";
 import Footer from "../components/Footer";
-import LogoStrip from "../components/LogoStrip";
 import NewClientContactForm from "../components/NewClientContactForm";
-import { frxMetaEyebrowClass } from "../case-studies/frx/frxCaseStudyTypography";
 
 export default function ContactPage() {
   return (
@@ -21,17 +19,6 @@ export default function ContactPage() {
               <div className="mt-16 grid w-full grid-cols-1 items-start gap-10 md:mt-20 lg:grid-cols-2 lg:gap-12">
                 <ContactInformation />
                 <NewClientContactForm />
-              </div>
-
-              <div className="mt-20 md:mt-24 lg:mt-28">
-                <p
-                  className={`${frxMetaEyebrowClass} mb-8 text-center md:mb-10`}
-                >
-                  Trusted by organizations improving lives
-                </p>
-                <div className="w-[calc(100%+4rem)] max-w-none -mx-8 lg:w-[calc(100%+8rem)] lg:-mx-16">
-                  <LogoStrip />
-                </div>
               </div>
             </section>
           </div>
