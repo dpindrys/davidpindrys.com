@@ -13,6 +13,7 @@ import FrxImpactSection from "./FrxImpactSection";
 import FrxChallengeCard from "./FrxChallengeCard";
 import FrxSolutionSteps from "./FrxSolutionSteps";
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
+import FrxDeviceHeroMockup from "./FrxDeviceHeroMockup";
 import {
   frxCenteredIntroBlockClass,
   frxCenteredIntroSectionClass,
@@ -52,14 +53,7 @@ export default function FrxCaseStudyPage() {
             </section>
 
             <section className="mt-16 w-full md:mt-24 lg:mt-28">
-              <div className="relative w-full overflow-hidden rounded-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/frx/frx.png"
-                  alt="In-clinic digital refill workflow in CareTeamHub"
-                  className="block h-auto w-full"
-                />
-              </div>
+              <FrxDeviceHeroMockup />
             </section>
 
             <FrxBelowHero />

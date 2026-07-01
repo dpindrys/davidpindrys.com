@@ -1,4 +1,4 @@
-import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import {
   frxCenteredIntroBlockClass,
   frxPaddedEyebrowClass,
@@ -39,11 +39,12 @@ export default function FrxSolutionSteps() {
         </div>
 
         <div className="w-full min-w-0">
-          <ZoomableProblemVideo
-            src="/images/frx/fresenius.mp4"
-            cardClassName={`${mediaCardClass} w-full`}
-            ariaLabel="Digital refill workflow from list through verification to submission"
-            dialogLabel="Refill workflow video"
+          <ZoomableProblemImage
+            src="/images/frx/frx.png"
+            alt="In-clinic digital refill workflow in CareTeamHub"
+            shellClassName={`${mediaCardClass} w-full`}
+            imgClassName="block h-auto w-full rounded-md border-0"
+            dialogLabel="Refill workflow"
           />
         </div>
       </div>

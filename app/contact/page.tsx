@@ -1,24 +1,37 @@
+import ContactAvailabilityCard from "../components/ContactAvailabilityCard";
+import ContactHero from "../components/ContactHero";
+import ContactInformation from "../components/ContactInformation";
 import Footer from "../components/Footer";
+import LogoStrip from "../components/LogoStrip";
 import NewClientContactForm from "../components/NewClientContactForm";
-import {
-  frxMetaEyebrowClass,
-  frxSectionBodyClass,
-} from "../case-studies/frx/frxCaseStudyTypography";
+import { frxMetaEyebrowClass } from "../case-studies/frx/frxCaseStudyTypography";
 
 export default function ContactPage() {
   return (
     <>
       <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
-          <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-4 pb-32 overflow-x-visible">
+          <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20">
-              <p className={frxMetaEyebrowClass}>Contact me</p>
-              <p className={`${frxSectionBodyClass} mt-5 max-w-[42rem] md:mt-6`}>
-                New client inquiries — share a bit about your product, team, and
-                timeline. I typically respond within a few business days.
-              </p>
-              <div className="mt-10 md:mt-12">
+              <div className="grid w-full grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-12">
+                <ContactHero />
+                <ContactAvailabilityCard />
+              </div>
+
+              <div className="mt-16 grid w-full grid-cols-1 items-start gap-10 md:mt-20 lg:grid-cols-2 lg:gap-12">
+                <ContactInformation />
                 <NewClientContactForm />
+              </div>
+
+              <div className="mt-20 md:mt-24 lg:mt-28">
+                <p
+                  className={`${frxMetaEyebrowClass} mb-8 text-center md:mb-10`}
+                >
+                  Trusted by organizations improving lives
+                </p>
+                <div className="w-[calc(100%+4rem)] max-w-none -mx-8 lg:w-[calc(100%+8rem)] lg:-mx-16">
+                  <LogoStrip />
+                </div>
               </div>
             </section>
           </div>

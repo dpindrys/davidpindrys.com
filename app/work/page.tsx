@@ -14,7 +14,7 @@ export default function WorkPage() {
           <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-4 pb-32 overflow-x-visible">
             <section className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20">
               <div className="flex flex-col gap-5 md:gap-6">
-                <p className={frxMetaEyebrowClass}>Featured work</p>
+                <p className={frxMetaEyebrowClass}>Case studies</p>
                 <SelectedWorkGrid
                   layout="twoUp"
                   fullCards={allFullWorkCards}
