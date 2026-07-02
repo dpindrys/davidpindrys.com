@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 
 import { PRIMARY_FILLED_INTERACTIVE } from "./buttonTokens";
 import { frxSectionBodyClass } from "../case-studies/frx/frxCaseStudyTypography";
@@ -9,7 +9,7 @@ const labelClass =
   "font-sans text-[13px] font-semibold leading-none text-black/80";
 
 const inputClass =
-  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 font-sans text-[16px] leading-normal text-black outline-none transition-[border-color,box-shadow] placeholder:text-black/35 focus-visible:border-black/25 focus-visible:ring-2 focus-visible:ring-black/10";
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 font-sans text-[16px] leading-normal text-black outline-none transition-[border-color,box-shadow] placeholder:text-black/35 focus-visible:border-black/25 focus-visible:ring-2 focus-visible:ring-black/10 disabled:cursor-not-allowed disabled:opacity-60";
 
 const cardClass =
   "rounded-2xl border border-black/10 bg-white p-6 shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] md:p-8";
@@ -23,8 +23,9 @@ const privacyClass =
 const errorClass =
   "font-sans text-[14px] leading-[1.5] text-red-700 md:text-[15px]";
 
-const CONTACT_EMAIL = "dpindrys@gmail.com";
-const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID?.trim();
+/** Public Formspree form id — override via NEXT_PUBLIC_FORMSPREE_FORM_ID if needed. */
+const FORMSPREE_FORM_ID =
+  process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID?.trim() || "mykqbbye";
 
 function SendIcon() {
   return (
@@ -83,103 +84,14 @@ function LockIcon() {
   );
 }
 
-type SubmitMode = "formspree" | "mailto";
-
 export default function NewClientContactForm() {
-  const [submitted, setSubmitted] = useState(false);
-  const [submitMode, setSubmitMode] = useState<SubmitMode | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-
-    const name = String(data.get("name") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const company = String(data.get("company") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
-
-    if (!name || !email || !message) {
-      setError("Please fill in your name, email, and message.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    if (FORMSPREE_FORM_ID) {
-      try {
-        const payload = new FormData();
-        payload.append("name", name);
-        payload.append("email", email);
-        payload.append("_replyto", email);
-        payload.append("_subject", "Message from portfolio — David Pindrys");
-        if (company) payload.append("company", company);
-        payload.append("message", message);
-
-        const response = await fetch(
-          `https://formspree.io/f/${FORMSPREE_FORM_ID}`,
-          {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: payload,
-          },
-        );
-
-        const result = (await response.json().catch(() => null)) as {
-          error?: string;
-        } | null;
-
-        if (!response.ok) {
-          throw new Error(
-            result?.error ?? "Unable to send your message. Please try again.",
-          );
-        }
-
-        setSubmitMode("formspree");
-        setSubmitted(true);
-        form.reset();
-      } catch (submitError) {
-        setError(
-          submitError instanceof Error
-            ? submitError.message
-            : "Unable to send your message. Please try again.",
-        );
-      } finally {
-        setLoading(false);
-      }
-      return;
-    }
-
-    const subject = encodeURIComponent("Message from portfolio — David Pindrys");
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        company ? `Company: ${company}` : null,
-        "",
-        message,
-      ]
-        .filter(Boolean)
-        .join("\n"),
-    );
-
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    setSubmitMode("mailto");
-    setSubmitted(true);
-    form.reset();
-    setLoading(false);
-  }
-
-  if (submitted) {
+  if (state.succeeded) {
     return (
       <div className={cardClass}>
         <p className={frxSectionBodyClass}>
-          {submitMode === "formspree"
-            ? "Thanks — your message was sent. I'll get back to you soon."
-            : "Thanks — your email client should open with a draft message. Send it when you are ready and I will follow up shortly."}
+          Thanks — your message was sent. I&apos;ll get back to you soon.
         </p>
       </div>
     );
@@ -195,7 +107,7 @@ export default function NewClientContactForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-6" noValidate>
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <label className="flex flex-col gap-2">
             <span className={labelClass}>Name</span>
@@ -206,7 +118,13 @@ export default function NewClientContactForm() {
               autoComplete="name"
               className={inputClass}
               placeholder="Your name"
-              disabled={loading}
+              disabled={state.submitting}
+            />
+            <ValidationError
+              prefix="Name"
+              field="name"
+              errors={state.errors}
+              className={errorClass}
             />
           </label>
           <label className="flex flex-col gap-2">
@@ -218,7 +136,13 @@ export default function NewClientContactForm() {
               autoComplete="email"
               className={inputClass}
               placeholder="you@company.com"
-              disabled={loading}
+              disabled={state.submitting}
+            />
+            <ValidationError
+              prefix="Email"
+              field="email"
+              errors={state.errors}
+              className={errorClass}
             />
           </label>
         </div>
@@ -233,7 +157,13 @@ export default function NewClientContactForm() {
             autoComplete="organization"
             className={inputClass}
             placeholder="Your company"
-            disabled={loading}
+            disabled={state.submitting}
+          />
+          <ValidationError
+            prefix="Company"
+            field="company"
+            errors={state.errors}
+            className={errorClass}
           />
         </label>
 
@@ -245,24 +175,26 @@ export default function NewClientContactForm() {
             rows={5}
             className={`${inputClass} min-h-[140px] resize-y`}
             placeholder="Tell me about your project or question..."
-            disabled={loading}
+            disabled={state.submitting}
+          />
+          <ValidationError
+            prefix="Message"
+            field="message"
+            errors={state.errors}
+            className={errorClass}
           />
         </label>
 
-        {error ? (
-          <p className={errorClass} role="alert">
-            {error}
-          </p>
-        ) : null}
+        <ValidationError errors={state.errors} className={errorClass} />
 
         <div className="flex flex-col gap-3">
           <button
             type="submit"
-            disabled={loading}
+            disabled={state.submitting}
             className={`inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-6 font-sans text-[16px] font-semibold leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto ${PRIMARY_FILLED_INTERACTIVE}`}
           >
             <SendIcon />
-            <span>{loading ? "Sending…" : "Send message"}</span>
+            <span>{state.submitting ? "Sending…" : "Send message"}</span>
           </button>
           <p className={privacyClass}>
             <LockIcon />
