@@ -4,12 +4,8 @@ import {
 } from "../lib/homeColleagueQuotes";
 import { sectionHeadingClass } from "./sectionHeading";
 
-/** Matches `HomeShowcaseCard` portfolio card hover treatment. */
-const quoteCardLinkClass =
-  "group flex h-full min-h-0 min-w-0 flex-col gap-6 rounded-2xl border border-black/10 bg-white p-6 shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] md:p-7 lg:p-8";
-
-const quoteCardStaticClass =
-  "flex h-full min-h-0 min-w-0 flex-col gap-6 rounded-2xl border border-black/10 bg-white p-6 shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] md:p-7 lg:p-8";
+const quoteCardClass =
+  "relative flex h-full min-h-0 min-w-0 flex-col gap-6 rounded-2xl border border-black/10 bg-white p-6 md:p-7 lg:p-8";
 
 const quoteClass =
   "font-sans text-[15px] font-normal leading-[1.55] text-black/80 md:text-[16px] md:leading-[1.6]";
@@ -19,6 +15,9 @@ const nameClass =
 
 const titleClass =
   "font-sans text-[13px] font-normal leading-[1.45] text-black/55 md:text-[14px]";
+
+const profileLinkClass =
+  "absolute bottom-5 right-5 inline-flex h-11 w-11 items-center justify-center rounded-full text-black/40 transition-colors hover:bg-black/[0.04] hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] md:bottom-6 md:right-6";
 
 function QuoteMark() {
   return (
@@ -38,6 +37,62 @@ function QuoteMark() {
   );
 }
 
+function LinkedInIcon() {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      className="shrink-0"
+    >
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className="shrink-0"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M7 7h10v10" />
+    </svg>
+  );
+}
+
+function DoctorDirectoryIcon() {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      className="shrink-0"
+    >
+      <circle cx="12" cy="12" r="10" fill="currentColor" />
+      <path
+        d="M12 7.25v9.5M7.25 12h9.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function initialsFromName(name: string) {
   return name
     .split(/\s+/)
@@ -47,12 +102,35 @@ function initialsFromName(name: string) {
     .join("");
 }
 
-function QuoteCardBody({ item }: { item: HomeColleagueQuote }) {
+function ColleagueQuoteCard({ item }: { item: HomeColleagueQuote }) {
+  const isLinkedIn =
+    item.linkIcon === "linkedin" ||
+    (!item.linkIcon && !item.linkIconSrc && Boolean(item.href?.includes("linkedin.com")));
+
+  function ProfileIcon() {
+    if (item.linkIconSrc) {
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.linkIconSrc}
+          alt=""
+          width={26}
+          height={26}
+          className="h-[26px] w-[26px] shrink-0 object-contain"
+        />
+      );
+    }
+    if (item.linkIcon === "doctor") return <DoctorDirectoryIcon />;
+    if (item.linkIcon === "external") return <ExternalLinkIcon />;
+    if (isLinkedIn || item.linkIcon === "linkedin") return <LinkedInIcon />;
+    return <ExternalLinkIcon />;
+  }
+
   return (
-    <>
+    <figure className={quoteCardClass}>
       <QuoteMark />
       <blockquote className={quoteClass}>&ldquo;{item.quote}&rdquo;</blockquote>
-      <figcaption className="mt-auto flex items-center gap-3.5 pt-2">
+      <figcaption className="mt-auto flex items-center gap-3.5 pr-10 pt-2">
         {item.avatarSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -73,32 +151,21 @@ function QuoteCardBody({ item }: { item: HomeColleagueQuote }) {
         <div className="flex min-w-0 flex-col gap-0.5">
           <span className={nameClass}>{item.name}</span>
           <span className={titleClass}>{item.title}</span>
+          <span className={titleClass}>{item.company}</span>
         </div>
       </figcaption>
-    </>
-  );
-}
 
-function ColleagueQuoteCard({ item }: { item: HomeColleagueQuote }) {
-  if (item.href) {
-    return (
-      <a
-        href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Open ${item.name}’s profile`}
-        className={quoteCardLinkClass}
-      >
-        <figure className="flex h-full min-h-0 min-w-0 flex-col gap-6">
-          <QuoteCardBody item={item} />
-        </figure>
-      </a>
-    );
-  }
-
-  return (
-    <figure className={quoteCardStaticClass}>
-      <QuoteCardBody item={item} />
+      {item.href ? (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${item.name}’s ${isLinkedIn ? "LinkedIn" : "U.S. News Health"} profile`}
+          className={profileLinkClass}
+        >
+          <ProfileIcon />
+        </a>
+      ) : null}
     </figure>
   );
 }
