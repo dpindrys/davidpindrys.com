@@ -21,6 +21,15 @@ export type HomeColleagueQuote = {
 export const homeColleagueQuotes: readonly HomeColleagueQuote[] = [
   {
     quote:
+      "David didn’t just hand off designs—he stayed engaged through the pilot, tackled edge cases, and iterated until the solution worked in the real world, not just in Figma.",
+    name: "Mahesh",
+    title: "Lead Salesforce Engineer",
+    company: "Fresenius Medical Care",
+    avatarSrc: "/images/mahesh.png",
+    href: "https://www.linkedin.com/in/sai-mahesh-0525/",
+  },
+  {
+    quote:
       "As a first-time founder, David’s guidance was crucial. His work greatly advanced our team’s quality and timeline.",
     name: "Dr. Cole Marolf",
     title: "Practicing clinician & Founder",
@@ -28,6 +37,15 @@ export const homeColleagueQuotes: readonly HomeColleagueQuote[] = [
     avatarSrc: "/images/cole.png",
     href: "https://health.usnews.com/doctors/cole-marolf-1431490",
     linkIcon: "doctor",
+  },
+  {
+    quote:
+      "David took the time to deeply understand my workflow, challenges, and goals, ensuring the application wasn’t just functional—it was useful and intuitive for our team.",
+    name: "Samantha Ramsey",
+    title: "Nursing Informatics Director",
+    company: "Fresenius Medical Care",
+    avatarSrc: "/images/samantha.png",
+    href: "https://www.linkedin.com/in/samantha-ramsey-msn-rn-cnn-02bb8880/",
   },
   {
     quote:
@@ -46,24 +64,6 @@ export const homeColleagueQuotes: readonly HomeColleagueQuote[] = [
     company: "Ascension Studio",
     avatarSrc: "/images/steven.png",
     href: "https://www.linkedin.com/in/steven-long-5a040419/",
-  },
-  {
-    quote:
-      "David didn’t just hand off designs and move on. He stayed engaged through the pilot, helped us address edge cases, and iterated until the solution worked in the real world—not just in Figma. He brings the rare combination of deep user empathy and practical design thinking that actually ships.",
-    name: "Mahesh",
-    title: "Lead Salesforce Engineer",
-    company: "Fresenius Medical Care",
-    avatarSrc: "/images/mahesh.png",
-    href: "https://www.linkedin.com/in/sai-mahesh-0525/",
-  },
-  {
-    quote:
-      "David took the time to deeply understand my workflow, challenges, and goals, ensuring the application wasn’t just functional—it was useful and intuitive for our team.",
-    name: "Samantha Ramsey",
-    title: "Nursing Informatics Director",
-    company: "Fresenius Medical Care",
-    avatarSrc: "/images/samantha.png",
-    href: "https://www.linkedin.com/in/samantha-ramsey-msn-rn-cnn-02bb8880/",
   },
   {
     quote:
