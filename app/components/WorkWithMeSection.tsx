@@ -17,7 +17,7 @@ const titleClass =
   "font-sans text-[13px] font-normal leading-[1.45] text-black/55 md:text-[14px]";
 
 const profileLinkClass =
-  "absolute bottom-5 right-5 inline-flex h-11 w-11 items-center justify-center rounded-full text-black/40 transition-colors hover:bg-black/[0.04] hover:text-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] md:bottom-6 md:right-6";
+  "absolute bottom-5 right-5 inline-flex h-11 w-11 items-center justify-center rounded-full text-black opacity-50 transition-[opacity,background-color] hover:bg-black/[0.04] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] md:bottom-6 md:right-6";
 
 function QuoteMark() {
   return (
@@ -72,6 +72,21 @@ function ExternalLinkIcon() {
   );
 }
 
+function ShieldIcon() {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      className="shrink-0"
+    >
+      <path d="M12 2.5 4.5 6v5.6c0 4.7 3.2 9.1 7.5 10.4 4.3-1.3 7.5-5.7 7.5-10.4V6L12 2.5z" />
+    </svg>
+  );
+}
+
 function DoctorDirectoryIcon() {
   return (
     <svg
@@ -121,6 +136,7 @@ function ColleagueQuoteCard({ item }: { item: HomeColleagueQuote }) {
       );
     }
     if (item.linkIcon === "doctor") return <DoctorDirectoryIcon />;
+    if (item.linkIcon === "shield") return <ShieldIcon />;
     if (item.linkIcon === "external") return <ExternalLinkIcon />;
     if (isLinkedIn || item.linkIcon === "linkedin") return <LinkedInIcon />;
     return <ExternalLinkIcon />;

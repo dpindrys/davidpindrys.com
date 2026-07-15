@@ -10,7 +10,7 @@ export type HomeColleagueQuote = {
   /** Optional profile link. */
   href?: string;
   /** Built-in profile-link icon. Defaults to LinkedIn for linkedin.com, else external. */
-  linkIcon?: "linkedin" | "doctor" | "external";
+  linkIcon?: "linkedin" | "doctor" | "shield" | "external";
   /** Optional custom image icon for the profile link. */
   linkIconSrc?: string;
   /** Desktop grid column span (default 1). */
@@ -36,7 +36,7 @@ export const homeColleagueQuotes: readonly HomeColleagueQuote[] = [
     company: "VEHR Technologies",
     avatarSrc: "/images/cole.png",
     href: "https://health.usnews.com/doctors/cole-marolf-1431490",
-    linkIcon: "doctor",
+    linkIconSrc: "/images/pluscase.png",
   },
   {
     quote:
