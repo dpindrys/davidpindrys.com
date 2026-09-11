@@ -10,7 +10,6 @@ const LINKEDIN_HREF = "https://www.linkedin.com/in/dpindrys";
 
 const navLinks = [
   { id: "home", href: "/", label: "Home" },
-  { id: "work", href: "/work", label: "Work" },
   { id: "about", href: "/about", label: "About" },
   { id: "contact", href: "/contact", label: "Contact" },
 ] as const;
@@ -22,10 +21,7 @@ const navShellClass = "flex flex-row items-center justify-center gap-1";
 const navItemBaseClass =
   "rounded-[10px] px-3 py-2 font-sans text-[13px] font-normal leading-none transition-colors duration-200 md:px-3.5 md:py-2.5 md:text-[14px]";
 
-function navItemClass(active: boolean, workOnCaseStudy: boolean) {
-  if (workOnCaseStudy) {
-    return `${navItemBaseClass} text-black shadow-[inset_0_0_0_3px_rgba(0,0,0,0.06)] hover:bg-black/[0.06] hover:shadow-none`;
-  }
+function navItemClass(active: boolean) {
   if (active) {
     return `${navItemBaseClass} bg-black/[0.06] text-black`;
   }
@@ -211,8 +207,6 @@ function useMobileHeaderOnScrollUp(menuOpen: boolean) {
 
 export default function Header() {
   const pathname = usePathname();
-  const onWorkPage = pathname === "/work";
-  const onCaseStudy = pathname.startsWith("/case-studies");
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileBarVisible = useMobileHeaderOnScrollUp(menuOpen);
 
@@ -234,9 +228,6 @@ export default function Header() {
   }, [menuOpen]);
 
   const isLinkActive = (link: (typeof navLinks)[number]) => {
-    if (link.id === "work") {
-      return onWorkPage || onCaseStudy;
-    }
     if (link.id === "home") {
       return pathname === "/";
     }
@@ -275,7 +266,6 @@ export default function Header() {
               <ul className="flex flex-col gap-1">
                 {mobileMenuNavLinks.map((link) => {
                   const active = isLinkActive(link);
-                  const workOnCaseStudy = link.id === "work" && onCaseStudy;
 
                   return (
                     <li key={link.id}>
@@ -284,10 +274,6 @@ export default function Header() {
                         className={`${mobileMenuItemClass} ${
                           active
                             ? "bg-black/[0.06] font-semibold text-black"
-                            : ""
-                        } ${
-                          workOnCaseStudy
-                            ? "shadow-[inset_0_0_0_2px_rgba(0,0,0,0.06)]"
                             : ""
                         }`}
                         aria-current={active ? "page" : undefined}
@@ -343,13 +329,12 @@ export default function Header() {
               >
                 {navLinks.map((link) => {
                   const active = isLinkActive(link);
-                  const workOnCaseStudy = link.id === "work" && onCaseStudy;
 
                   return (
                     <Link
                       key={link.id}
                       href={link.href}
-                      className={navItemClass(active, workOnCaseStudy)}
+                      className={navItemClass(active)}
                       aria-current={active ? "page" : undefined}
                     >
                       {link.label}

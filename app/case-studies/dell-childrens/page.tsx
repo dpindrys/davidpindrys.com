@@ -32,6 +32,19 @@ import {
   dchpTestimonial,
 } from "./dchpBelowHeroData";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Responsive Care Access",
+  description:
+    "A responsive Medicaid member portal for 40,000+ members, brought into compliance with expanded workflows.",
+  openGraph: {
+    title: "Responsive Care Access | David Pindrys",
+    description:
+      "A responsive Medicaid member portal for 40,000+ members, brought into compliance with expanded workflows.",
+  },
+};
+
 /** Split-row visuals: cap width and hug the right column on md+. */
 const dchpSolutionVisualConstrainClass =
   "w-full min-w-0 max-w-md md:ml-auto md:max-w-lg lg:max-w-xl";
@@ -127,7 +140,7 @@ const dchpSolutionRows: DchpSolutionRow[] = [
 export default function DellChildrensCaseStudyPage() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
+      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex w-full justify-center overflow-x-visible px-8 lg:px-16">
           <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="flex w-full flex-col gap-8 pt-8 md:gap-10 md:pt-12 lg:pt-16">
@@ -137,7 +150,7 @@ export default function DellChildrensCaseStudyPage() {
               <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-visible md:max-w-[50%]">
                 <p className={frxSectionBodyClass}>{dchpHeroLead.body}</p>
                 <ul
-                  className="flex flex-nowrap gap-2 overflow-visible"
+                  className="flex flex-wrap gap-2 overflow-visible md:flex-nowrap"
                   aria-label="Focus areas"
                 >
                   {dchpHeroFocusPills.map((label) => (

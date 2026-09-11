@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
      */
     localPatterns: [{ pathname: "/images/**" }],
   },
+  async redirects() {
+    return [{ source: "/work", destination: "/#work", permanent: true }];
+  },
 };
 
 export default nextConfig;

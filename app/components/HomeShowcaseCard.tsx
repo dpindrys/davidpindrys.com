@@ -14,7 +14,7 @@ type HomeShowcaseCardProps = {
 };
 
 const showcasePillClass =
-  "inline-flex rounded-full border border-black/15 bg-transparent px-3 py-1 font-sans text-[12px] leading-none text-black/45";
+  "inline-flex rounded-full border border-black/15 bg-transparent px-3 py-1 font-sans text-[12px] leading-none text-black/60";
 
 const cardLinkClass =
   "group block w-full overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]";

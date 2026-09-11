@@ -13,6 +13,9 @@ type HomeShowcaseStackedCardProps = {
 const cardLinkClass =
   "group flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-26px_rgba(0,0,0,0.35)] active:translate-y-0 active:shadow-[0_14px_40px_-26px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]";
 
+const cardPlaceholderClass =
+  "flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)]";
+
 const imagePanelClass =
   "flex min-h-[min(44vw,240px)] w-full items-center justify-center bg-white p-6 md:min-h-[220px] md:p-7 lg:p-8";
 
@@ -21,6 +24,9 @@ const imageClass =
 
 const ctaLinkClass =
   "inline-flex w-fit font-sans text-[15px] font-semibold leading-none text-black transition-opacity group-hover:opacity-70";
+
+const ctaPlaceholderClass =
+  "inline-flex w-fit font-sans text-[15px] font-semibold leading-none text-black/60";
 
 export default function HomeShowcaseStackedCard({
   href,
@@ -31,8 +37,12 @@ export default function HomeShowcaseStackedCard({
   descriptor,
   ctaLabel = "View case study →",
 }: HomeShowcaseStackedCardProps) {
-  return (
-    <Link href={href} aria-label={ariaLabel} className={cardLinkClass}>
+  // A card with no destination yet ("coming soon") must not render as a link:
+  // it would be focusable, announce as a link, and go nowhere when activated.
+  const isPlaceholder = !href || href === "#";
+
+  const inner = (
+    <>
       <div className={imagePanelClass}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={imageSrc} alt={imageAlt} className={imageClass} draggable={false} />
@@ -46,10 +56,23 @@ export default function HomeShowcaseStackedCard({
             {descriptor}
           </p>
         ) : null}
-        <span className={ctaLinkClass} aria-hidden>
+        <span
+          className={isPlaceholder ? ctaPlaceholderClass : ctaLinkClass}
+          aria-hidden={isPlaceholder ? undefined : true}
+        >
           {ctaLabel}
         </span>
       </div>
+    </>
+  );
+
+  if (isPlaceholder) {
+    return <div className={cardPlaceholderClass}>{inner}</div>;
+  }
+
+  return (
+    <Link href={href} aria-label={ariaLabel} className={cardLinkClass}>
+      {inner}
     </Link>
   );
 }

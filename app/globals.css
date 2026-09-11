@@ -58,3 +58,42 @@
 .animate-page-fade-in {
   animation: page-fade-in 220ms ease-out forwards;
 }
+
+/* Skip link (WCAG 2.4.1 Bypass Blocks): visually hidden until keyboard-focused. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: 10px;
+  background-color: #0078B3;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  transition: top 150ms ease-out;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+/* WCAG 2.3.3 / respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-page-fade-in {
+    animation: none;
+    opacity: 1;
+  }
+}

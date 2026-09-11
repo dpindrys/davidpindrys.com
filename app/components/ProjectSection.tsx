@@ -201,7 +201,7 @@ export default function ProjectSection({
                 <button
                   type="button"
                   onClick={() => caseStudyRef.current?.openFirstProblemModal()}
-                  className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 font-sans font-semibold text-[16px] leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
+                  className="inline-flex h-12 shrink-0 items-center gap-2 rounded-2xl border-2 border-[#00567F] bg-[#0078B3] px-4 font-sans font-semibold text-[16px] leading-none text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
                 >
                   {caseStudyCtaLabel}
                   <ViewCaseStudyIcon className="h-[18px] w-[18px] shrink-0 text-white" />
@@ -508,7 +508,7 @@ export default function ProjectSection({
             href={heroPrototypeLink.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center gap-2.5 rounded-2xl border-2 border-[#0078B3] bg-[#00AAFF] px-4 py-2.5 font-sans font-semibold text-[16px] leading-snug text-white hover:opacity-80 transition-opacity"
+            className="inline-flex min-h-11 items-center gap-2.5 rounded-2xl border-2 border-[#00567F] bg-[#0078B3] px-4 py-2.5 font-sans font-semibold text-[16px] leading-snug text-white hover:opacity-80 transition-opacity"
           >
             <span>View prototype</span>
             {heroPrototypeLink.icon && (

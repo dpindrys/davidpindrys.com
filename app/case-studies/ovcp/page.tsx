@@ -31,6 +31,19 @@ import {
   ovcpProductContext,
 } from "./ovcpBelowHeroData";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Problem List Reconciliation",
+  description:
+    "Department of Defense EHR usability research, co-designing problem list reconciliation with practicing physicians.",
+  openGraph: {
+    title: "Problem List Reconciliation | David Pindrys",
+    description:
+      "Department of Defense EHR usability research, co-designing problem list reconciliation with practicing physicians.",
+  },
+};
+
 const ovcpHeroPillClass =
   "inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 font-sans text-[13px] leading-none text-black/70";
 const subheadClass =
@@ -76,7 +89,7 @@ function OvcpRowShell({
 export default function OvcpCaseStudyPage() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
+      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex w-full justify-center overflow-x-visible px-8 lg:px-16">
           <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="flex w-full flex-col gap-8 pt-8 md:gap-10 md:pt-12 lg:pt-16">
@@ -86,7 +99,7 @@ export default function OvcpCaseStudyPage() {
               <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-visible md:max-w-[50%]">
                 <p className={frxSectionBodyClass}>{ovcpHeroLead.body}</p>
                 <ul
-                  className="flex flex-nowrap gap-2 overflow-visible"
+                  className="flex flex-wrap gap-2 overflow-visible md:flex-nowrap"
                   aria-label="Focus areas"
                 >
                   {ovcpHeroFocusPills.map((label) => (

@@ -5,6 +5,19 @@ import {
   frxSectionBodyClass,
 } from "../case-studies/frx/frxCaseStudyTypography";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Product designer with a human factors background, working on clinical tools and healthcare workflows.",
+  openGraph: {
+    title: "About | David Pindrys",
+    description:
+      "Product designer with a human factors background, working on clinical tools and healthcare workflows.",
+  },
+};
+
 const aboutFeatureCardClass =
   "flex min-h-0 min-w-0 flex-col gap-3 rounded-2xl border border-black/10 bg-white px-6 py-7 shadow-[0_10px_30px_-22px_rgba(0,0,0,0.25)] md:gap-4 md:px-7 md:py-8";
 
@@ -45,7 +58,7 @@ const aboutFeatures = [
 export default function AboutPage() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
+      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
           <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20">

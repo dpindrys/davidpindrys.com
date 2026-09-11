@@ -4,10 +4,23 @@ import ContactInformation from "../components/ContactInformation";
 import Footer from "../components/Footer";
 import NewClientContactForm from "../components/NewClientContactForm";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch about healthcare product design and clinical UX work.",
+  openGraph: {
+    title: "Contact | David Pindrys",
+    description:
+      "Get in touch about healthcare product design and clinical UX work.",
+  },
+};
+
 export default function ContactPage() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
+      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
           <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
             <section className="scroll-mt-28 pt-12 md:pt-16 lg:pt-20">

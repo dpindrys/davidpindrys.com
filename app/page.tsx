@@ -3,7 +3,10 @@ import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import SelectedWorkGrid from "./components/SelectedWorkGrid";
 import WorkWithMeSection from "./components/WorkWithMeSection";
-import { homeFeaturedWorkCards } from "./lib/selectedWorkCards";
+import {
+  allFullWorkCards,
+  stackedWorkCards,
+} from "./lib/selectedWorkCards";
 import { sectionHeadingClass } from "./components/sectionHeading";
 import {
   frxMetaEyebrowClass,
@@ -407,7 +410,7 @@ const ascensionProject = {
 export default function Home() {
   return (
     <>
-      <main className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
+      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
         <div className="flex justify-center w-full overflow-x-visible px-8 lg:px-16">
           <div className="flex flex-col items-stretch w-full max-w-[1200px] pt-4 pb-32 overflow-x-visible">
             <section
@@ -449,7 +452,8 @@ export default function Home() {
               <div className="mt-6 md:mt-8 lg:mt-10">
                 <SelectedWorkGrid
                   layout="twoUp"
-                  fullCards={homeFeaturedWorkCards}
+                  fullCards={allFullWorkCards}
+                  stackedCards={stackedWorkCards}
                 />
               </div>
             </section>
