@@ -2,7 +2,6 @@ import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import LogoStrip from "./components/LogoStrip";
 import SelectedWorkGrid from "./components/SelectedWorkGrid";
-import WorkWithMeSection from "./components/WorkWithMeSection";
 import {
   allFullWorkCards,
   stackedWorkCards,
@@ -457,8 +456,6 @@ export default function Home() {
                 />
               </div>
             </section>
-
-            <WorkWithMeSection />
           </div>
         </div>
       </main>

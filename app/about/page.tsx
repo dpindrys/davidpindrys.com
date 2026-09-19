@@ -1,4 +1,9 @@
+import ContactAvailabilityCard from "../components/ContactAvailabilityCard";
+import ContactHero from "../components/ContactHero";
+import ContactInformation from "../components/ContactInformation";
 import Footer from "../components/Footer";
+import NewClientContactForm from "../components/NewClientContactForm";
+import WorkWithMeSection from "../components/WorkWithMeSection";
 import { frxStrategyHeadlineClass } from "../case-studies/frx/FrxExtendedSections";
 import {
   frxMetaEyebrowClass,
@@ -94,6 +99,23 @@ export default function AboutPage() {
                 ))}
               </div>
             </section>
+
+            <section
+              id="contact"
+              className="scroll-mt-28 mt-16 md:mt-20 lg:mt-24"
+            >
+              <div className="grid w-full grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-12">
+                <ContactHero />
+                <ContactAvailabilityCard />
+              </div>
+
+              <div className="mt-16 grid w-full grid-cols-1 items-start gap-10 md:mt-20 lg:grid-cols-2 lg:gap-12">
+                <ContactInformation />
+                <NewClientContactForm />
+              </div>
+            </section>
+
+            <WorkWithMeSection />
           </div>
         </div>
       </main>

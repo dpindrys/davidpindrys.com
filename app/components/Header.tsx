@@ -9,12 +9,11 @@ const RESUME_HREF =
 const LINKEDIN_HREF = "https://www.linkedin.com/in/dpindrys";
 
 const navLinks = [
-  { id: "home", href: "/", label: "Home" },
+  { id: "work", href: "/", label: "Work" },
   { id: "about", href: "/about", label: "About" },
-  { id: "contact", href: "/contact", label: "Contact" },
 ] as const;
 
-const mobileMenuNavLinks = navLinks.filter((link) => link.id !== "home");
+const mobileMenuNavLinks = navLinks;
 
 const navShellClass = "flex flex-row items-center justify-center gap-1";
 
@@ -228,10 +227,10 @@ export default function Header() {
   }, [menuOpen]);
 
   const isLinkActive = (link: (typeof navLinks)[number]) => {
-    if (link.id === "home") {
-      return pathname === "/";
+    if (link.id === "work") {
+      return pathname === "/" || pathname.startsWith("/case-studies");
     }
-    return pathname === link.href;
+    return pathname === link.href || pathname.startsWith(`${link.href}/`);
   };
 
   return (
