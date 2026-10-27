@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const RESUME_HREF =
-  "https://drive.google.com/file/d/1kZjDNW5V1YBmsooHxHyb7NuMqLF4q2Nw/view?usp=sharing";
+  "https://docs.google.com/document/d/1vnbW8RuPWnKoPidyK7VWJFATBk9Kft1A/edit?usp=sharing&ouid=100268452566615929805&rtpof=true&sd=true";
 const LINKEDIN_HREF = "https://www.linkedin.com/in/dpindrys";
 
 const navLinks = [
