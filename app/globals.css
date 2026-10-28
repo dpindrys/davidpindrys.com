@@ -11,6 +11,64 @@
   --color-blue: #00AAFF;
   --color-gray-mid: #9B9B9B;
   --color-gray-light: #D4D4D4;
+  --color-muted: #5F5F5F;
+
+  --container-image: 1280px;
+  --container-body: 38rem;
+  --container-statement: 34rem;
+  --container-subhead: 34rem;
+  --container-caption: 22rem;
+  --container-quote: 40rem;
+
+  /* max-w-* resolves --max-width-* before --spacing-*, so these keep max-w-statement/caption off the spacing tokens. */
+  --max-width-body: 38rem;
+  --max-width-statement: 34rem;
+  --max-width-subhead: 34rem;
+  --max-width-caption: 22rem;
+  --max-width-quote: 40rem;
+
+  --spacing-section: clamp(6rem, 12vw, 11rem);
+  --spacing-label: 1.25rem;
+  --spacing-statement: clamp(2.5rem, 5vw, 4rem);
+  --spacing-caption: 0.875rem;
+
+  --text-hero: clamp(2.75rem, 8vw, 6.5rem);
+  --text-hero--line-height: 0.96;
+  --text-hero--letter-spacing: -0.035em;
+  --text-hero--font-weight: 600;
+
+  --text-subhead: clamp(1.125rem, 1.6vw, 1.375rem);
+  --text-subhead--line-height: 1.5;
+  --text-subhead--letter-spacing: 0;
+  --text-subhead--font-weight: 400;
+
+  --text-statement: clamp(1.75rem, 3.2vw, 2.75rem);
+  --text-statement--line-height: 1.2;
+  --text-statement--letter-spacing: -0.02em;
+  --text-statement--font-weight: 600;
+
+  --text-quote: clamp(2rem, 4vw, 3.5rem);
+  --text-quote--line-height: 1.15;
+  --text-quote--letter-spacing: -0.025em;
+  --text-quote--font-weight: 600;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.1em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-cell: clamp(1rem, 1.4vw, 1.125rem);
+  --text-cell--line-height: 1.5;
+  --text-cell--font-weight: 400;
+
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.45;
+  --text-caption--font-weight: 400;
+
+  --text-closing: clamp(1.25rem, 2vw, 1.625rem);
+  --text-closing--line-height: 1.35;
+  --text-closing--letter-spacing: -0.01em;
+  --text-closing--font-weight: 400;
 }
 
 @layer base {
@@ -57,6 +115,17 @@
 
 .animate-page-fade-in {
   animation: page-fade-in 220ms ease-out forwards;
+}
+
+.vehr-page {
+  --gutter: 24px;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 900px) {
+  .vehr-page {
+    --gutter: 48px;
+  }
 }
 
 /* Skip link (WCAG 2.4.1 Bypass Blocks): visually hidden until keyboard-focused. */
