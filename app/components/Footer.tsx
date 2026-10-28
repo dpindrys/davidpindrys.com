@@ -1,9 +1,13 @@
 export default function Footer() {
   return (
-    <footer className="w-full bg-black px-8 py-16 text-center text-white sm:px-12 sm:py-20">
-      <p className="font-sans text-[15px] leading-relaxed tracking-tight sm:text-base">
-        © 2026 Designed by David Pindrys
-      </p>
+    <footer className="w-full px-6 md:px-10">
+      <div className="mx-auto flex w-full max-w-[1040px] flex-col gap-3 border-t border-black/10 py-8 font-sans text-[13px] text-black/55 sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 David Pindrys</p>
+        <p>Independent design lead · Boston, USA</p>
+        <a href="#top" className="transition-colors hover:text-black">
+          Back to top <span aria-hidden>↑</span>
+        </a>
+      </div>
     </footer>
   );
 }

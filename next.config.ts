@@ -13,7 +13,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/work", destination: "/#work", permanent: true },
-      { source: "/contact", destination: "/about#contact", permanent: true },
+      { source: "/contact", destination: "/#contact", permanent: true },
+      { source: "/about", destination: "/#approach", permanent: true },
+      { source: "/case-studies/frx", destination: "/#frx", permanent: true },
+      { source: "/case-studies/visual-ehr", destination: "/#vehr", permanent: true },
+      { source: "/case-studies/:slug*", destination: "/#more-work", permanent: true },
     ];
   },
 };
