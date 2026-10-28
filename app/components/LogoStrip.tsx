@@ -11,7 +11,7 @@ const logos: readonly { src: string; alt: string; heightClass?: string }[] = [
   {
     src: "/images/ascension-logo.png",
     alt: "Ascension",
-    heightClass: "h-16 sm:h-18 md:h-20",
+    heightClass: "h-11 sm:h-12 md:h-14",
   },
   { src: "/images/fresenius-logo.png", alt: "Fresenius Medical Care" },
   { src: "/images/kaiser-logo.png", alt: "Kaiser Permanente" },
