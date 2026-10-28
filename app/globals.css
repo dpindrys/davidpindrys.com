@@ -13,6 +13,17 @@
   --color-gray-light: #D4D4D4;
   --color-muted: #5F5F5F;
 
+  --animate-logo-marquee: logo-marquee 40s linear infinite;
+
+  @keyframes logo-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
   --container-image: 1280px;
   --container-body: 38rem;
   --container-statement: 34rem;
@@ -116,7 +127,6 @@
 .animate-page-fade-in {
   animation: page-fade-in 220ms ease-out forwards;
 }
-
 .vehr-page {
   --gutter: 24px;
   padding-inline: var(--gutter);
