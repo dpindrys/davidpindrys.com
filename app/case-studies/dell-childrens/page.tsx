@@ -296,7 +296,7 @@ export default function DellChildrensCaseStudyPage() {
             >
               <figure className="rounded-2xl border border-black/10 bg-white/50 p-8 md:p-10">
                 <blockquote className={closingQuoteClass}>
-                  &ldquo;{dchpTestimonial.quote}&rdquo;
+                  {dchpTestimonial.quote}
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-4">
                   <div className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-full">

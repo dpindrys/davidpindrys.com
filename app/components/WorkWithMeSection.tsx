@@ -145,7 +145,7 @@ function ColleagueQuoteCard({ item }: { item: HomeColleagueQuote }) {
   return (
     <figure className={quoteCardClass}>
       <QuoteMark />
-      <blockquote className={quoteClass}>&ldquo;{item.quote}&rdquo;</blockquote>
+      <blockquote className={quoteClass}>{item.quote}</blockquote>
       <figcaption className="mt-auto flex items-center gap-3.5 pr-10 pt-2">
         {item.avatarSrc ? (
           // eslint-disable-next-line @next/next/no-img-element

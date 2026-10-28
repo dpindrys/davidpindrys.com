@@ -247,7 +247,7 @@ const freseniusProject = {
   },
   testimonial: {
     quote:
-      '"David\'s remarkable initiative in building our UI/UX architecture from scratch has been nothing short of impressive."',
+      "David's remarkable initiative in building our UI/UX architecture from scratch has been nothing short of impressive.",
     name: "Larissa Doronina",
     title: "Principal UX Architect, Fresenius Medical Care",
     avatarSrc: "/images/larissa.png",
@@ -399,7 +399,7 @@ const ascensionProject = {
   },
   testimonial: {
     quote:
-      '"David designed previously unavailable Ascension portal workflows (care team/PCP designation, ID card requests, prior auth) and partnered effectively across product, engineering, and data to keep delivery moving."',
+      "David designed previously unavailable Ascension portal workflows (care team/PCP designation, ID card requests, prior auth) and partnered effectively across product, engineering, and data to keep delivery moving.",
     name: "Steven Long",
     title: "Product Manager, Ascension Studio",
     avatarSrc: "/images/steven.png",

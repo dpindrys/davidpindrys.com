@@ -26,7 +26,7 @@ export const vehrProductContext = {
 
 export const vehrBelowHeroTestimonial = {
   quote:
-    '"As a first-time founder, David\'s guidance was crucial. His work greatly advanced our team\'s quality and timeline."',
+    "As a first-time founder, David's guidance was crucial. His work greatly advanced our team's quality and timeline.",
   name: "Cole Marolf MD",
   title: "Practicing clinician & Founder, VEHR Technologies",
   avatarSrc: "/images/cole.png",
@@ -152,7 +152,7 @@ export const vehrBelowHeroCaseStudyHighlights: CaseStudyHighlightsData = {
           modalTestimonials: [
             {
               quote:
-                "\"David brought design expertise to our early concepts, identifying core workflow needs and adding novel solutions - especially the heatmap visualization, which balances data density with clarity better than anything I've seen in practice.\"",
+                "David brought design expertise to our early concepts, identifying core workflow needs and adding novel solutions - especially the heatmap visualization, which balances data density with clarity better than anything I've seen in practice.",
               attribution:
                 "— Dr. Cole Marolf, Practicing Clinician & Founder, VEHR Technologies",
               avatarSrc: "/images/cole.png",
