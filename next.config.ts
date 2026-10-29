@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       { source: "/contact", destination: "/#contact", permanent: true },
       { source: "/about", destination: "/#approach", permanent: true },
       { source: "/case-studies/frx", destination: "/#frx", permanent: true },
+      { source: "/case-studies/dell-childrens", destination: "/#dell", permanent: true },
       { source: "/case-studies/visual-ehr", destination: "/#vehr", permanent: true },
       { source: "/case-studies/:slug*", destination: "/#more-work", permanent: true },
     ];

@@ -80,6 +80,16 @@
   outline-offset: 2px;
 }
 
+/* Visible keyboard focus for links and buttons (WCAG 2.4.7). */
+a[href]:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: #000000;
+  outline-offset: 3px;
+}
+
 /* WCAG 2.3.3 / respect the OS "reduce motion" setting. */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "David Pindrys, Healthcare Product Design";
+export const alt = "David Pindrys, Senior Product Designer | Healthcare";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,21 +30,20 @@ export default async function OpengraphImage() {
               fontWeight: 600,
             }}
           >
-            Healthcare Product Design
+            Senior Product Designer
           </div>
           <div
             style={{
               display: "flex",
-              fontSize: 62,
+              fontSize: 58,
               lineHeight: 1.1,
               letterSpacing: "-0.03em",
               color: "#000000",
               fontWeight: 700,
-              maxWidth: 940,
+              maxWidth: 980,
             }}
           >
-            I design digital healthcare products that make complex clinical
-            workflows clearer, safer, and easier to use.
+            Driving healthcare product design from clinical insight to launch.
           </div>
         </div>
 

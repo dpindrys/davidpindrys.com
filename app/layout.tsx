@@ -10,13 +10,14 @@ const inter = Inter({
 });
 
 const SITE_URL = "https://www.davidpindrys.com";
+const SITE_TITLE = "David Pindrys, Senior Product Designer | Healthcare";
 const SITE_DESCRIPTION =
-  "Portfolio of David Pindrys, a product designer focused on clinical tools, healthcare workflows, and human factors.";
+  "Senior product designer driving healthcare product decisions from clinical insight to launch. Medicaid portal, clinical refill workflow, and EHR design.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "David Pindrys, Healthcare Product Design",
+    default: SITE_TITLE,
     template: "%s | David Pindrys",
   },
   description: SITE_DESCRIPTION,
@@ -24,12 +25,12 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "David Pindrys",
     url: SITE_URL,
-    title: "David Pindrys, Healthcare Product Design",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "David Pindrys, Healthcare Product Design",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
 };

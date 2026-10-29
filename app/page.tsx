@@ -10,81 +10,96 @@ const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17
 const sectionHeadingClass =
   "font-sans text-[clamp(2rem,4vw,3.25rem)] font-normal leading-[1.08] tracking-[-0.035em] text-black";
 
-const experience = [
-  "Fresenius Medical Care",
-  "UnitedHealth Group",
-  "Department of Defense",
-  "Kaiser Permanente",
-] as const;
-
-const approachSteps = [
+const decisionPoints = [
   {
-    title: "Find the right problem.",
-    body: "Work with clinicians to understand the decisions, constraints, and risks behind a workflow.",
+    title: "Set direction early.",
+    body: "Work with clinicians to define the decisions, constraints, and risks behind a workflow before designing screens.",
   },
   {
-    title: "Define the system.",
-    body: "Connect research, information architecture, and interaction design into a coherent product.",
+    title: "Build the system.",
+    body: "Create pattern libraries and decide when to extend an existing system versus create a new pattern.",
   },
   {
-    title: "Make it work in practice.",
-    body: "Test the critical moments and partner with engineering to bring the design into use.",
+    title: "Own quality.",
+    body: "Lead accessibility work from WCAG AA audits and remediation through the conformance checklists developers build against.",
   },
 ] as const;
 
-const moreWork = [
+const earlierWork = [
   {
-    org: "Ascension · Dell Children’s Health Plan",
-    title: "Responsive care access",
-    body: "A responsive member portal serving 40,000+ members.",
+    title: "Department of Defense · Problem list reconciliation",
+    body: "Co-designed EHR problem list reconciliation with practicing physicians. 100% of clinicians rated the method efficient and effective.",
   },
   {
-    org: "Department of Defense",
-    title: "Problem list reconciliation",
-    body: "EHR usability research, co-designing problem list reconciliation with physicians.",
-  },
-  {
-    org: "Picwell",
-    title: "Medicare Part D plan selection",
-    body: "Helping members compare and choose Medicare Part D plans.",
+    title: "Picwell · Medicare Part D plan selection",
+    body: "Helped members compare and choose Medicare Part D plans.",
   },
 ] as const;
 
-function FeaturedProject({
-  id,
-  index,
-  org,
-  role,
-  title,
-  video,
-  children,
-}: {
+type ImpactProject = {
   id: string;
   index: string;
-  org: string;
+  client: string;
   role: string;
   title: string;
-  video: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <article id={id} aria-labelledby={`${id}-title`} className="scroll-mt-8 border-t border-black/10 pt-6 md:pt-8">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        <p className={eyebrowClass}>
-          {index} / {org}
-        </p>
-        <p className="font-sans text-[13px] text-black/55">{role}</p>
-      </div>
-      <h3 id={`${id}-title`} className={`${sectionHeadingClass} mt-8 md:mt-10`}>
-        {title}
-      </h3>
-      <div className="mt-8 bg-white p-4 sm:p-8 md:mt-10 md:p-12">{video}</div>
-      <div className="mt-8 grid grid-cols-1 gap-10 md:mt-10 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16">
-        {children}
-      </div>
-    </article>
-  );
-}
+  body: string;
+  metrics?: readonly string[];
+  link?: { href: string; label: string };
+  media: ReactNode;
+};
+
+const impactProjects: readonly ImpactProject[] = [
+  {
+    id: "vehr",
+    index: "01",
+    client: "VEHR Technologies",
+    role: "Founding Product Design Lead · Prototype handed to engineering",
+    title: "Organized the patient record around history, so clinicians can read related information together.",
+    body: "Partnered with a physician founder to turn clinical mental models into a shared timeline and aligned data views. Built the component and interaction pattern library in Figma from scratch to support scalable prototyping and clearer engineering handoff.",
+    link: { href: "https://vehr.vercel.app/", label: "View Live Prototype" },
+    media: (
+      <HoverControlsVideo
+        src="/videos/vehr/prototype.mp4"
+        label="VEHR clinical timeline prototype aligning history, encounters, and related clinical data"
+        className="block h-auto w-full"
+      />
+    ),
+  },
+  {
+    id: "frx",
+    index: "02",
+    client: "Fresenius Medical Care",
+    role: "UX Design Lead · Enterprise-wide launch",
+    title: "Cut time-to-refill 70% across 2,800+ clinics.",
+    body: "Owned research and design for an in-clinic refill workflow that replaced paper, fax, and phone follow-ups. Mapped the system with clinic staff, set the UI architecture and component patterns, and partnered with engineering and clinical operations through launch.",
+    metrics: ["70% faster refill completion", "2,800+ clinics", "43,000+ patients"],
+    media: (
+      <HoverControlsVideo
+        src="/images/frx/fresenius.mp4"
+        label="In-clinic digital refill workflow in CareTeamHub"
+        className="block h-auto w-full"
+        style={{ clipPath: "inset(0 0 0 1px)" }}
+      />
+    ),
+  },
+  {
+    id: "dell",
+    index: "03",
+    client: "Ascension, Dell Children’s Health Plan",
+    role: "Product Design Lead · Enterprise-wide launch",
+    title: "Launched a responsive Medicaid member portal to 40,000+ members.",
+    body: "Led end-to-end design and research for a portal that added workflows the legacy system lacked: care team designation, ID card requests, prior authorization review, and in-context claims status. Audited against WCAG AA and produced the conformance checklist developers built against.",
+    metrics: ["40,000+ members", "WCAG AA remediation", "Enterprise-wide launch"],
+    media: (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src="/images/dchp-card.png"
+        alt="Dell Children’s Health Plan member portal on desktop and mobile, showing care team, ID card, and plan overview."
+        className="block h-auto w-full"
+      />
+    ),
+  },
+];
 
 export default function Home() {
   return (
@@ -92,133 +107,104 @@ export default function Home() {
       <main id="main-content" className="min-h-screen bg-[#F4F2EE] pb-24 md:pb-32">
         <section aria-labelledby="hero-title" className={`${shellClass} pt-16 md:pt-24`}>
           <div className={innerClass}>
-            <p className={eyebrowClass}>Independent design lead · Boston</p>
+            <p className={eyebrowClass}>Senior Product Designer · Boston</p>
             <h1
               id="hero-title"
-              className="mt-6 font-sans text-[clamp(3rem,7.5vw,6.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black md:mt-8"
+              className="mt-6 max-w-[18ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black md:mt-8"
             >
-              Complex healthcare.
-              <br />
-              <em className="italic">Clear direction.</em>
+              Driving healthcare product design from clinical insight to launch.
             </h1>
-            <div className="mt-10 flex flex-col gap-8 md:mt-12 md:flex-row md:items-end md:justify-between">
-              <p className="max-w-[34rem] font-sans text-[17px] leading-[1.55] text-black/60 md:text-[18px]">
-                <span className="text-black">
-                  I lead healthcare product design from clinical insight to implementation.
-                </span>{" "}
-                I make complex workflows clear, usable, and ready for the people who depend on them.
-              </p>
+            <p className="mt-10 max-w-[40rem] font-sans text-[17px] leading-[1.55] text-black/70 md:mt-12 md:text-[18px]">
+              I’ve led the design of a Medicaid member portal serving 40,000+ members and an in-clinic
+              refill workflow that cut time-to-refill 70% across 2,800+ clinics.
+            </p>
+            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center md:mt-10">
+              <a
+                href={CONTACT_HREF}
+                className="inline-flex items-center gap-3 bg-[#D8EF7A] px-5 py-3.5 font-sans text-[15px] font-medium text-black transition-colors hover:bg-[#CBE35F]"
+              >
+                Let’s talk <span aria-hidden>↗</span>
+              </a>
               <a
                 href="#work"
-                className="font-sans text-[14px] text-black/70 transition-colors hover:text-black"
+                className="font-sans text-[15px] font-medium text-black/70 transition-colors hover:text-black"
               >
-                See the work in motion <span aria-hidden>↓</span>
+                See selected impact
               </a>
             </div>
 
-            <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-black/10 py-6 md:mt-20 md:grid-cols-5 md:items-center">
-              <p className="col-span-2 font-sans text-[13px] leading-[1.35] text-black/55 md:col-span-1 md:max-w-[9rem]">
-                Experience across healthcare
+            <div className="mt-14 max-w-[40rem] border-t border-black/10 pt-6 md:mt-16">
+              <p className={eyebrowClass}>Currently</p>
+              <p className="mt-3 font-sans text-[16px] leading-[1.55] text-black/80 md:text-[17px]">
+                Senior Product Designer, Clinical Ink. Usability audits, user flows, and high-fidelity
+                mobile screens for participant-facing eCOA apps in clinical trials.
               </p>
-              <ul className="contents">
-                {experience.map((org) => (
-                  <li key={org} className="font-sans text-[15px] font-medium text-black">
-                    {org}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </section>
 
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
           <div className={innerClass}>
-            <div className="flex flex-col gap-2 pb-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-              <h2 id="work-title" className="font-sans text-[15px] font-semibold text-black">
-                Selected impact
-              </h2>
-              <p className="font-sans text-[14px] text-black/55">
-                Two products. From defining the problem to delivering the details.
-              </p>
-            </div>
+            <h2 id="work-title" className="font-sans text-[15px] font-semibold text-black">
+              Selected impact
+            </h2>
 
-            <div className="flex flex-col gap-20 md:gap-28">
-              <FeaturedProject
-                id="frx"
-                index="01"
-                org="Fresenius Medical Care"
-                role="UX Design Lead · Launched enterprise-wide"
-                title="Giving clinicians their time back."
-                video={
-                  <HoverControlsVideo
-                    src="/images/frx/fresenius.mp4"
-                    label="In-clinic digital refill workflow in CareTeamHub"
-                    className="block h-auto w-full"
-                    style={{ clipPath: "inset(0 0 0 1px)" }}
-                  />
-                }
-              >
-                <p className={`${bodyClass} max-w-[38rem]`}>
-                  I led research and design for an in-chart refill workflow, replacing paper, fax, and
-                  phone follow-ups. I mapped the system with clinic staff, refined the critical decisions
-                  through testing, and partnered with engineering through launch.
-                </p>
-                <dl className="flex gap-10 md:gap-12">
-                  <div className="flex flex-col-reverse gap-2">
-                    <dt className="font-sans text-[13px] text-black/55">Faster refill completion</dt>
-                    <dd className="font-sans text-[clamp(2rem,3.5vw,2.75rem)] leading-none tracking-[-0.03em] text-black">
-                      70%
-                    </dd>
+            <div className="mt-6 flex flex-col gap-16 md:gap-24">
+              {impactProjects.map((project) => (
+                <article
+                  key={project.id}
+                  id={project.id}
+                  aria-labelledby={`${project.id}-title`}
+                  className="scroll-mt-8 border-t border-black/10 pt-6 md:pt-8"
+                >
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                    <p className={eyebrowClass}>
+                      {project.index} / {project.client}
+                    </p>
+                    <p className="max-w-[36rem] font-sans text-[13px] leading-snug text-black/70 sm:text-right">
+                      {project.role}
+                    </p>
                   </div>
-                  <div className="flex flex-col-reverse gap-2">
-                    <dt className="font-sans text-[13px] text-black/55">Clinics reached</dt>
-                    <dd className="font-sans text-[clamp(2rem,3.5vw,2.75rem)] leading-none tracking-[-0.03em] text-black">
-                      2,800+
-                    </dd>
-                  </div>
-                </dl>
-              </FeaturedProject>
-
-              <FeaturedProject
-                id="vehr"
-                index="02"
-                org="VEHR Technologies"
-                role="Founding Product Design Lead · In development"
-                title="Making the patient story visible."
-                video={
-                  <HoverControlsVideo
-                    src="/videos/vehr/prototype.mp4"
-                    label="VEHR clinical sensemaking interface prototype"
-                    className="block h-auto w-full"
-                  />
-                }
-              >
-                <p className={`${bodyClass} max-w-[38rem]`}>
-                  As the first designer, I partnered with a physician founder to define a new approach to
-                  chart review. I translated clinical mental models into a shared timeline, aligned data
-                  views, and a scalable UI system now being implemented by engineering.
-                </p>
-                <div className="max-w-[20rem]">
-                  <p className={eyebrowClass}>The design decision</p>
-                  <p className="mt-4 font-sans text-[16px] leading-[1.5] text-black">
-                    Organize the record around the patient’s history, so clinicians can read related
-                    information together.
-                  </p>
-                </div>
-              </FeaturedProject>
+                  <h3 id={`${project.id}-title`} className={`${sectionHeadingClass} mt-6 md:mt-8`}>
+                    {project.title}
+                  </h3>
+                  <div className="mt-8 bg-white p-4 sm:p-8 md:mt-10 md:p-12">{project.media}</div>
+                  <p className={`${bodyClass} mt-8 max-w-[40rem]`}>{project.body}</p>
+                  {project.metrics ? (
+                    <ul className="mt-8 grid grid-cols-1 gap-3 border-t border-black/10 pt-5 sm:grid-cols-3 sm:gap-6">
+                      {project.metrics.map((metric) => (
+                        <li
+                          key={metric}
+                          className="font-sans text-[15px] font-medium leading-snug text-black"
+                        >
+                          {metric}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {project.link ? (
+                    <a
+                      href={project.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-8 inline-flex items-center gap-2 font-sans text-[15px] font-medium text-black underline decoration-black underline-offset-4"
+                    >
+                      {project.link.label} <span aria-hidden>↗</span>
+                    </a>
+                  ) : null}
+                </article>
+              ))}
             </div>
 
             <div id="more-work" className="scroll-mt-8 mt-20 md:mt-28">
-              <h3 className={eyebrowClass}>More work</h3>
+              <h3 className="font-sans text-[15px] font-semibold text-black">Earlier work</h3>
               <ul className="mt-6">
-                {moreWork.map((item) => (
-                  <li
-                    key={item.title}
-                    className="grid grid-cols-1 gap-2 border-t border-black/10 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.4fr)] md:gap-8"
-                  >
-                    <p className="font-sans text-[13px] text-black/55">{item.org}</p>
+                {earlierWork.map((item) => (
+                  <li key={item.title} className="border-t border-black/10 py-6">
                     <p className="font-sans text-[16px] font-medium text-black">{item.title}</p>
-                    <p className="font-sans text-[15px] leading-[1.5] text-black/70">{item.body}</p>
+                    <p className="mt-2 max-w-[40rem] font-sans text-[15px] leading-[1.5] text-black/70">
+                      {item.body}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -232,25 +218,28 @@ export default function Home() {
           className="scroll-mt-8 mt-24 w-full px-2 md:mt-32 md:px-4"
         >
           <div className="mx-auto w-full max-w-[1160px] bg-[#1F2621] px-4 py-16 text-[#F4F2EE] md:px-6 md:py-24">
-            <div className={innerClass}>
-              <p className="font-sans text-[12px] uppercase leading-none tracking-[0.14em] text-white/55">
-                What I bring
-              </p>
+            <div id="leadership" className={`${innerClass} scroll-mt-8`}>
               <h2
                 id="approach-title"
-                className="mt-8 max-w-[44rem] font-sans text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.15] tracking-[-0.03em]"
+                className="max-w-[20ch] font-sans text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.15] tracking-[-0.03em]"
               >
-                I turn complex clinical problems into a clear product direction—and carry it through the
-                details.
+                How I drive product decisions
               </h2>
               <ul className="mt-14 grid grid-cols-1 gap-10 md:mt-20 md:grid-cols-3 md:gap-8">
-                {approachSteps.map((step) => (
-                  <li key={step.title} className="border-t border-white/20 pt-6">
-                    <h3 className="font-sans text-[16px] font-medium">{step.title}</h3>
-                    <p className="mt-3 font-sans text-[15px] leading-[1.55] text-white/65">{step.body}</p>
+                {decisionPoints.map((point) => (
+                  <li key={point.title} className="border-t border-white/20 pt-6">
+                    <h3 className="font-sans text-[16px] font-medium">{point.title}</h3>
+                    <p className="mt-3 font-sans text-[15px] leading-[1.55] text-white/80">{point.body}</p>
                   </li>
                 ))}
               </ul>
+              <aside className="mt-12 max-w-[28rem] bg-[#F4F2EE] px-5 py-5 text-black md:mt-16">
+                <p className={eyebrowClass}>Accessibility</p>
+                <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/80">
+                  WCAG 2.1 AA audits, remediation, and developer checklists. Deque certified in usability
+                  testing for accessibility.
+                </p>
+              </aside>
             </div>
           </div>
         </section>
@@ -276,7 +265,7 @@ export default function Home() {
             </div>
             <p className={`${bodyClass} max-w-[30rem]`}>
               A car accident in high school introduced me to healthcare as a patient. Seeing the demands on
-              clinicians—and the friction in their tools—shaped the work I chose to do.
+              clinicians, and the friction in their tools, shaped the work I chose to do.
             </p>
           </div>
         </section>
