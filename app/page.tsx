@@ -247,10 +247,9 @@ export default function Home() {
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
         <section aria-labelledby="hero-title" className={`${shellClass} ${heroBandClass} pb-16 pt-16 md:pb-24 md:pt-24`}>
           <div className={innerClass}>
-            <p className={eyebrowClass}>Senior Product Designer · Boston</p>
             <h1
               id="hero-title"
-              className="mt-6 max-w-[16ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black md:mt-8"
+              className="max-w-[16ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black"
             >
               Healthcare workflows that people can actually use.
             </h1>

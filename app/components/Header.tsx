@@ -59,7 +59,7 @@ export default function Header() {
       <div className="mx-auto flex w-full max-w-[1040px] flex-wrap items-center justify-between gap-x-6 gap-y-3 py-6 md:py-8">
         <a href="#top" className="flex flex-col gap-1 font-sans leading-none">
           <span className="text-[15px] font-semibold text-black">David Pindrys</span>
-          <span className="text-[13px] text-black/55">Healthcare product design</span>
+          <span className="text-[13px] text-black/55">Product Design · Human Factors · Boston</span>
         </a>
         <nav aria-label="Primary" className="flex flex-wrap items-center gap-x-5 gap-y-2 md:gap-x-8">
           <a href="#approach" className={linkClass}>
