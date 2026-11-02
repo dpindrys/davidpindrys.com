@@ -34,6 +34,12 @@ export default function Footer() {
               </svg>
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
+            <a
+              href={CONTACT_HREF}
+              className="font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
+            >
+              Email me
+            </a>
           </div>
         </section>
         <div className="mt-14 flex flex-col gap-4 border-t border-black/10 py-8 md:mt-16 md:flex-row md:items-center md:justify-between">
@@ -49,12 +55,6 @@ export default function Footer() {
             </a>
             <a href="#work" className={linkClass}>
               Work
-            </a>
-            <a href="https://linkedin.com/in/dpindrys" className={linkClass} target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-            <a href={CONTACT_HREF} className={linkClass}>
-              Email
             </a>
           </nav>
         </div>
