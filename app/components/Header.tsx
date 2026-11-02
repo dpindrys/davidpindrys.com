@@ -198,7 +198,7 @@ export default function Header() {
           ))}
           <button
             type="button"
-            className={`${menuLinkClass} inline-flex items-center gap-[0.35em]`}
+            className="inline-flex w-fit items-center gap-[0.35em] bg-[#1F2621] px-[0.45em] py-[0.28em] text-left font-sans text-[clamp(2.5rem,12vw,4rem)] font-normal leading-[1.05] tracking-[-0.035em] text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
             onClick={() => {
               setMenuOpen(false);
               openContact(menuButtonRef.current);
