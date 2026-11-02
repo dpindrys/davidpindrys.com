@@ -216,17 +216,18 @@ export default function Header() {
 }
 
 function MenuIcon({ open }: { open: boolean }) {
+  if (open) {
+    return (
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none">
+        <path d="M3 3 L15 15 M15 3 L3 15" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    );
+  }
   return (
     <svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true" fill="none">
-      {open ? (
-        <path d="M2 2 L20 14 M20 2 L2 14" stroke="currentColor" strokeWidth="1.5" />
-      ) : (
-        <>
-          <path d="M1 1.5 H21" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M1 8 H21" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M1 14.5 H21" stroke="currentColor" strokeWidth="1.5" />
-        </>
-      )}
+      <path d="M1 1.5 H21" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M1 8 H21" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M1 14.5 H21" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
 }
