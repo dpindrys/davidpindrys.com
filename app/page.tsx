@@ -8,10 +8,8 @@ import HoverControlsVideo from "./components/HoverControlsVideo";
 const shellClass = "w-full px-6 md:px-10";
 const innerClass = "mx-auto w-full max-w-[1040px]";
 const eyebrowClass = "font-sans text-[12px] uppercase leading-none tracking-[0.14em] text-black/55";
-const sideLabelClass =
-  "font-sans text-[12px] uppercase leading-[1.45] tracking-[0.14em] text-black/55 md:pt-2";
-const workLabelClass =
-  "font-sans text-[12px] uppercase leading-[1.45] tracking-[0.14em] text-black/55";
+const sideLabelClass = `w-fit self-start ${heroBandClass} -mx-4 -mb-3 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:text-[17px]`;
+const workLabelClass = `w-fit self-start ${heroBandClass} -mx-4 -mb-3 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:text-[17px]`;
 const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
 const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
@@ -117,12 +115,46 @@ const offerings = [
 
 const earlierWork = [
   {
-    title: "Department of Defense · Problem list reconciliation",
-    body: "Co-designed EHR problem list reconciliation with practicing physicians. 100% of clinicians rated the method efficient and effective.",
+    id: "clinical-ink",
+    client: "Clinical Ink",
+    role: "Senior Product Designer · Clinical trial platform",
+    title: "Mapping usability issues across an eCOA platform for participant-facing apps.",
+    body: "Ran usability audits across several parts of the system and produced user flows, prototypes, and high-fidelity mobile screens. Designed a reusable error-state pattern for device integrations that carries across study builds.",
   },
   {
-    title: "Picwell · Medicare Part D plan selection",
-    body: "Helped members compare and choose Medicare Part D plans.",
+    id: "nhs",
+    client: "NHS Sexual Health Clinics",
+    role: "Design Researcher · STIQI",
+    title: "Turned clinician usability testing into recommendations for a funding bid.",
+    body: "Developed the research protocol, recruited clinicians, and ran moderated usability testing. Synthesized the findings into interface recommendations.",
+  },
+  {
+    id: "uhg",
+    client: "UnitedHealth Group",
+    role: "Senior UX Designer · Drug-spend analytics",
+    title: "Made dense pharmaceutical spend data readable enough to act on.",
+    body: "Designed analytics dashboards that turned complex datasets into clear visual frameworks for decision-making.",
+  },
+  {
+    id: "kaiser",
+    client: "Kaiser Permanente",
+    role: "Senior Designer · Innovation team",
+    title: "Visualized stroke care outcomes at population and patient levels.",
+    body: "Designed data visualizations that show stroke outcomes both across a population and for individual patients.",
+  },
+  {
+    id: "conteneo",
+    client: "Conteneo",
+    role: "UI/UX Design Lead · SaaS",
+    title: "Redesigned the Weave platform end to end.",
+    body: "Led information architecture, navigation, and framework creation tools. Ran customer discovery sessions that shaped the roadmap.",
+  },
+  {
+    id: "dod",
+    client: "Department of Defense",
+    role: "UI Engineer · Optimal Vision Care Prototype",
+    title: "Tested problem list reconciliation with practicing physicians.",
+    body: "Planned and ran formative evaluation in a complex military EHR. 100% of clinicians rated the method efficient and effective, and the findings moved the program to summative evaluation.",
   },
 ] as const;
 
@@ -228,11 +260,11 @@ export default function Home() {
               40,000+ members and an in-clinic refill workflow that cut time-to-refill 70% across 2,800+
               clinics.
             </p>
-            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center md:mt-10">
-              <TalkButton variant="nav">Let&apos;s talk</TalkButton>
+            <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center md:mt-10">
+              <TalkButton variant="hero">Let&apos;s talk</TalkButton>
               <a
                 href="#work"
-                className="font-sans text-[15px] font-medium text-black/70 transition-colors hover:text-black"
+                className="font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black md:text-[1.75rem]"
               >
                 See my work
               </a>
@@ -369,7 +401,7 @@ export default function Home() {
                   <p className={workLabelClass}>{project.client}</p>
                 )}
                 <div className="md:col-span-3">
-                  <p className="font-sans text-[13px] leading-snug text-black/70">{project.role}</p>
+                  <p className={bodyClass}>{project.role}</p>
                   <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
                     {project.title}
                   </h3>
@@ -415,21 +447,24 @@ export default function Home() {
                 </div>
               </article>
             ))}
+            {earlierWork.map((project) => (
+              <article
+                key={project.id}
+                id={project.id === "clinical-ink" ? "more-work" : project.id}
+                aria-labelledby={`${project.id}-title`}
+                className={`${splitClass} scroll-mt-32 mt-16 md:mt-24`}
+              >
+                <p className={workLabelClass}>{project.client}</p>
+                <div className="md:col-span-3">
+                  <p className={bodyClass}>{project.role}</p>
+                  <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
+                    {project.title}
+                  </h3>
+                  <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
+                </div>
+              </article>
+            ))}
           </div>
-
-          <div id="more-work" className={`${innerClass} ${splitClass} scroll-mt-32 mt-20 md:mt-28`}>
-              <h3 className={sideLabelClass}>Earlier work</h3>
-              <ul className="md:col-span-3">
-                {earlierWork.map((item) => (
-                  <li key={item.title} className="border-t border-black/10 py-6">
-                    <p className="font-sans text-[16px] font-medium text-black">{item.title}</p>
-                    <p className="mt-2 max-w-[40rem] font-sans text-[15px] leading-[1.5] text-black/70">
-                      {item.body}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
         </section>
       </main>
       <Footer />

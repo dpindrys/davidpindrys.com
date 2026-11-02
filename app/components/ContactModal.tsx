@@ -26,6 +26,9 @@ const primaryButtonClass =
 const navButtonClass =
   "inline-flex items-center bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]";
 
+const heroButtonClass =
+  "inline-flex items-center bg-[#1F2621] px-6 py-3.5 font-sans text-[1.375rem] font-medium leading-[1.1] text-[#F4F2EE] transition-colors hover:bg-[#2A332C] md:px-7 md:py-4 md:text-[1.75rem]";
+
 type OpenContact = (opener: HTMLElement | null) => void;
 
 const ContactContext = createContext<OpenContact>(() => {});
@@ -248,14 +251,15 @@ export function TalkButton({
   className = "",
 }: {
   children: ReactNode;
-  variant?: "primary" | "nav";
+  variant?: "primary" | "nav" | "hero";
   className?: string;
 }) {
   const openContact = useContext(ContactContext);
+  const buttonClass = variant === "hero" ? heroButtonClass : variant === "nav" ? navButtonClass : primaryButtonClass;
   return (
     <button
       type="button"
-      className={`${variant === "nav" ? navButtonClass : primaryButtonClass} ${className}`}
+      className={`${buttonClass} ${className}`}
       onClick={(event) => openContact(event.currentTarget)}
     >
       {children}

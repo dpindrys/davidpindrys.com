@@ -5,9 +5,10 @@ export function scrollToHomeSection(hash?: string) {
     window.location.hash.replace("#", "") ||
     "home";
   const el = document.getElementById(id);
+  const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
   if (el) {
-    el.scrollIntoView({ block: "start" });
+    el.scrollIntoView({ block: "start", behavior });
     return;
   }
-  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, behavior });
 }

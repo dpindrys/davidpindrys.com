@@ -1,11 +1,12 @@
 import { TalkButton } from "./ContactModal";
 import { CONTACT_HREF } from "./Header";
+import { heroBandClass } from "../lib/heroBand";
 
 const linkClass = "font-sans text-[13px] text-black/55 transition-colors hover:text-black";
 
 export default function Footer() {
   return (
-    <footer className="w-full px-6 md:px-10">
+    <footer className={`w-full px-6 md:px-10 ${heroBandClass}`}>
       <div className="mx-auto w-full max-w-[1040px] border-t border-black/10 pt-10 md:pt-14">
         <section id="contact" aria-labelledby="contact-title" className="scroll-mt-8">
           <h2
