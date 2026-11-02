@@ -17,7 +17,7 @@
   html {
     background-color: #F4F2EE;
     color: #000000;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -34,6 +34,12 @@
   input[type="reset"]:not(:disabled),
   label[for] {
     cursor: pointer;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   button:disabled,

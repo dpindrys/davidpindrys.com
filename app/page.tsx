@@ -8,8 +8,8 @@ import HoverControlsVideo from "./components/HoverControlsVideo";
 const shellClass = "w-full px-6 md:px-10";
 const innerClass = "mx-auto w-full max-w-[1040px]";
 const eyebrowClass = "font-sans text-[12px] uppercase leading-none tracking-[0.14em] text-black/55";
-const sideLabelClass = `w-fit self-start ${heroBandClass} -mx-4 -mb-3 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:text-[17px]`;
-const workLabelClass = `w-fit self-start ${heroBandClass} -mx-4 -mb-3 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:text-[17px]`;
+const sideLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
+const workLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
 const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
 const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";

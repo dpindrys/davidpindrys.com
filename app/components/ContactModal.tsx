@@ -196,14 +196,14 @@ function ContactDialog({
   if (!open || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[130] flex items-end justify-center p-3 sm:items-center sm:p-6">
-      <div className="absolute inset-0 bg-black/45" onClick={onClose} />
+    <div className="fixed inset-0 z-[130] md:flex md:items-center md:justify-center md:p-6">
+      <div className="absolute inset-0 hidden bg-black/45 md:block" onClick={onClose} />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative max-h-[min(92vh,760px)] w-full max-w-[36rem] overflow-y-auto bg-[#F4F2EE] p-5 shadow-[0_24px_80px_-32px_rgba(0,0,0,0.45)] sm:p-8"
+        className="relative h-full w-full overflow-y-auto bg-[#F4F2EE] p-6 md:h-auto md:max-h-[min(92vh,760px)] md:max-w-[36rem] md:p-8 md:shadow-[0_24px_80px_-32px_rgba(0,0,0,0.45)]"
       >
         <div className="flex items-start justify-between gap-4">
           <h2
@@ -243,6 +243,10 @@ export function ContactProvider({ children }: { children: ReactNode }) {
       <ContactDialog open={open} onClose={() => setOpen(false)} openerRef={openerRef} />
     </ContactContext.Provider>
   );
+}
+
+export function useOpenContact() {
+  return useContext(ContactContext);
 }
 
 export function TalkButton({
