@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
+import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
 
@@ -350,11 +351,12 @@ export default function Home() {
               40,000+ members and an in-clinic refill workflow that cut time-to-refill 70% across 2,800+
               clinics.
             </p>
-            <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center md:mt-10">
+            <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-10">
               <TalkButton variant="hero">Let&apos;s talk</TalkButton>
+              <LinkedInButton />
               <a
                 href="#work"
-                className="font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black md:text-[1.75rem]"
+                className="font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
               >
                 See my work
               </a>
