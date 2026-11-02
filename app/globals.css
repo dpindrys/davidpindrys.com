@@ -36,12 +36,6 @@
     cursor: pointer;
   }
 
-  @media (min-width: 768px) {
-    html {
-      scroll-behavior: smooth;
-    }
-  }
-
   button:disabled,
   [aria-disabled="true"] {
     cursor: not-allowed;
@@ -95,6 +89,12 @@ summary:focus-visible {
   outline-width: 2px;
   outline-color: #000000;
   outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* WCAG 2.3.3 / respect the OS "reduce motion" setting. */

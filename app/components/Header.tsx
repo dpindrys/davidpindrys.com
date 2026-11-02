@@ -159,7 +159,19 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex w-full max-w-[1040px] items-center justify-between gap-x-4 py-6 md:py-8">
-        <a href="#top" onClick={() => setMenuOpen(false)} className="flex min-w-0 flex-col gap-1 font-sans leading-none">
+        <a
+          href="#top"
+          onClick={(event) => {
+            event.preventDefault();
+            setMenuOpen(false);
+            const instant =
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+              window.matchMedia("(max-width: 767px)").matches;
+            window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+          }}
+          className="flex min-w-0 flex-col gap-1 font-sans leading-none"
+        >
           <span className="text-[15px] font-semibold text-black">David Pindrys</span>
           <span className="text-[13px] text-black/55">Product Design · Human Factors · Boston</span>
         </a>
