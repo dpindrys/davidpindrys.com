@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
+import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
 
 const shellClass = "w-full px-6 md:px-10";
@@ -9,12 +10,12 @@ const innerClass = "mx-auto w-full max-w-[1040px]";
 const eyebrowClass = "font-sans text-[12px] uppercase leading-none tracking-[0.14em] text-black/55";
 const sideLabelClass =
   "font-sans text-[12px] uppercase leading-[1.45] tracking-[0.14em] text-black/55 md:pt-2";
+const workLabelClass =
+  "font-sans text-[12px] uppercase leading-[1.45] tracking-[0.14em] text-black/55";
 const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
 const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
 const splitClass = "grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-4";
-const sectionTitleClass =
-  "font-sans text-[clamp(1.75rem,3.2vw,2.6rem)] font-normal leading-[1.12] tracking-[-0.03em] text-black";
 const cardTitleClass =
   "font-sans text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.12] tracking-[-0.03em] text-black";
 
@@ -157,7 +158,6 @@ const workCards: readonly WorkCard[] = [
     ],
     links: [
       { href: "https://visual-ehr.vercel.app", label: "View interactive prototype", external: true },
-      { href: "/case-studies/visual-ehr", label: "Read the case study" },
     ],
     media: (
       <HoverControlsVideo
@@ -178,7 +178,7 @@ const workCards: readonly WorkCard[] = [
     metrics: ["70% faster refill completion", "2,800+ clinics", "43,000+ patients"],
     decision:
       "Validated the system's objects with nurses before wireframing, so the interface matched how they think about a refill.",
-    links: [{ href: "/case-studies/frx", label: "Read the case study" }],
+    links: [],
     media: (
       <HoverControlsVideo
         src="/images/frx/fresenius.mp4"
@@ -191,13 +191,13 @@ const workCards: readonly WorkCard[] = [
   {
     id: "dell",
     index: "03",
-    client: "Ascension, Dell Children’s Health Plan",
+    client: "Ascension",
     role: "Product Design Lead · Enterprise-wide launch",
     title: "Launched a responsive Medicaid member portal to 40,000+ members.",
     body: "Led end-to-end design and research for a portal that added workflows the legacy system lacked: care team designation, ID card requests, prior authorization review, and in-context claims status. Audited against WCAG AA and produced the conformance checklist developers built against.",
     tags: ["Medicaid", "Member portal", "Accessibility", "Prior authorization"],
     metrics: ["40,000+ members", "WCAG AA remediation", "Enterprise-wide launch"],
-    links: [{ href: "/case-studies/dell-childrens", label: "Read the case study" }],
+    links: [],
     media: (
       // eslint-disable-next-line @next/next/no-img-element
       <img
@@ -213,7 +213,7 @@ export default function Home() {
   return (
     <>
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
-        <section aria-labelledby="hero-title" className={`${shellClass} pt-16 md:pt-24`}>
+        <section aria-labelledby="hero-title" className={`${shellClass} ${heroBandClass} pb-16 pt-16 md:pb-24 md:pt-24`}>
           <div className={innerClass}>
             <p className={eyebrowClass}>Senior Product Designer · Boston</p>
             <h1
@@ -229,7 +229,7 @@ export default function Home() {
               clinics.
             </p>
             <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center md:mt-10">
-              <TalkButton>Let&apos;s talk</TalkButton>
+              <TalkButton variant="nav">Let&apos;s talk</TalkButton>
               <a
                 href="#work"
                 className="font-sans text-[15px] font-medium text-black/70 transition-colors hover:text-black"
@@ -240,7 +240,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="problem-title" className={`${shellClass} mt-20 md:mt-28`}>
+        <section id="approach" aria-labelledby="problem-title" className={`${shellClass} scroll-mt-32 pt-10 md:pt-14`}>
           <div className={`${innerClass} ${splitClass} md:gap-y-12`}>
             <h2 id="problem-title" className={sideLabelClass}>
               Tools fail at the edges
@@ -290,28 +290,19 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="approach"
-          aria-labelledby="approach-title"
-          className="scroll-mt-8 mt-20 w-full px-2 md:mt-28 md:px-4"
-        >
-          <div className="mx-auto w-full max-w-[1160px] bg-[#1F2621] px-4 py-16 text-[#F4F2EE] md:px-6 md:py-24">
-            <div className={innerClass}>
-              <h2
-                id="approach-title"
-                className="font-sans text-[clamp(1.75rem,3.2vw,2.6rem)] font-normal leading-[1.12] tracking-[-0.03em]"
-              >
-                How I work
-              </h2>
-              <p className="mt-6 max-w-[36rem] font-sans text-[16px] leading-[1.6] text-white/80 md:text-[17px]">
-                Start with the workflow, not the screens.
-              </p>
-              <ol className="mt-12 max-w-[46rem]">
+        <section aria-labelledby="approach-title" className={`${shellClass} scroll-mt-32 mt-20 md:mt-28`}>
+          <div className={`${innerClass} ${splitClass}`}>
+            <h2 id="approach-title" className={sideLabelClass}>
+              How I work
+            </h2>
+            <div className="md:col-span-3">
+              <p className={sideLeadClass}>Start with the workflow, not the screens.</p>
+              <ol className="mt-8">
                 {workSteps.map((step, index) => (
-                  <li key={step.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-t border-white/20 py-5">
-                    <span className="font-sans text-[13px] text-white/55">0{index + 1}</span>
-                    <p className="font-sans text-[16px] leading-[1.55] text-white/85">
-                      <span className="font-medium text-white">{step.title}</span> {step.body}
+                  <li key={step.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-t border-black/10 py-5">
+                    <span className="font-sans text-[13px] text-black/55">0{index + 1}</span>
+                    <p className="font-sans text-[16px] leading-[1.55] text-black/80">
+                      <span className="font-medium text-black">{step.title}</span> {step.body}
                     </p>
                   </li>
                 ))}
@@ -323,7 +314,7 @@ export default function Home() {
         <section
           id="services"
           aria-labelledby="services-title"
-          className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}
+          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28`}
         >
           <div className={`${innerClass} ${splitClass}`}>
             <h2 id="services-title" className={sideLabelClass}>
@@ -350,31 +341,35 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
-          <div className={innerClass}>
-            <h2 id="work-title" className={sectionTitleClass}>
-              Selected work
+        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
+          <div className={`${innerClass} ${splitClass}`}>
+            <h2 id="quotes-title" className={sideLabelClass}>
+              In their words
             </h2>
-            <p className={`${bodyClass} mt-4 max-w-[40rem]`}>
-              Three projects, from problem definition to what shipped or what&apos;s in the prototype.
-            </p>
+            <div className="md:col-span-3">
+              <ColleagueQuotes />
+            </div>
+          </div>
+        </section>
 
-            <div className="mt-8 flex flex-col gap-16 md:mt-10 md:gap-24">
-              {workCards.map((project) => (
-                <article
-                  key={project.id}
-                  id={project.id}
-                  aria-labelledby={`${project.id}-title`}
-                  className="scroll-mt-8 border-t border-black/10 pt-6 md:pt-8"
-                >
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
-                    <p className={eyebrowClass}>
-                      {project.index} / {project.client}
-                    </p>
-                    <p className="max-w-[36rem] font-sans text-[13px] leading-snug text-black/70 sm:text-right">
-                      {project.role}
-                    </p>
-                  </div>
+        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:pb-28`}>
+          <div className={innerClass}>
+            {workCards.map((project, index) => (
+              <article
+                key={project.id}
+                id={project.id}
+                aria-labelledby={`${project.id}-title`}
+                className={`${splitClass} scroll-mt-32 ${index === 0 ? "" : "mt-16 md:mt-24"}`}
+              >
+                {index === 0 ? (
+                  <h2 id="work-title" className={workLabelClass}>
+                    {project.client}
+                  </h2>
+                ) : (
+                  <p className={workLabelClass}>{project.client}</p>
+                )}
+                <div className="md:col-span-3">
+                  <p className="font-sans text-[13px] leading-snug text-black/70">{project.role}</p>
                   <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
                     {project.title}
                   </h3>
@@ -403,23 +398,26 @@ export default function Home() {
                       <p className="mt-3 font-sans text-[16px] leading-[1.5] text-black">{project.decision}</p>
                     </aside>
                   ) : null}
-                  <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-3">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        className="font-sans text-[15px] font-medium text-black underline decoration-black underline-offset-4"
-                        {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
+                  {project.links.length > 0 ? (
+                    <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-3">
+                      {project.links.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          className="font-sans text-[15px] font-medium text-black underline decoration-black underline-offset-4"
+                          {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
 
-            <div id="more-work" className={`${splitClass} scroll-mt-8 mt-20 md:mt-28`}>
+          <div id="more-work" className={`${innerClass} ${splitClass} scroll-mt-32 mt-20 md:mt-28`}>
               <h3 className={sideLabelClass}>Earlier work</h3>
               <ul className="md:col-span-3">
                 {earlierWork.map((item) => (
@@ -432,18 +430,6 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="quotes-title" className={`${shellClass} mt-20 pb-20 md:mt-28 md:pb-28`}>
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="quotes-title" className={sideLabelClass}>
-              In their words
-            </h2>
-            <div className="md:col-span-3">
-              <ColleagueQuotes />
-            </div>
-          </div>
         </section>
       </main>
       <Footer />

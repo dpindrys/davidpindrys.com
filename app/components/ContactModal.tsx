@@ -24,7 +24,7 @@ const primaryButtonClass =
   "inline-flex items-center bg-[#D8EF7A] px-5 py-3.5 font-sans text-[15px] font-medium text-black transition-colors hover:bg-[#CBE35F] disabled:cursor-not-allowed disabled:opacity-60";
 
 const navButtonClass =
-  "bg-transparent p-0 font-sans text-[14px] leading-none text-black/70 transition-colors hover:text-black";
+  "inline-flex items-center bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]";
 
 type OpenContact = (opener: HTMLElement | null) => void;
 

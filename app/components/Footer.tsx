@@ -25,14 +25,14 @@ export default function Footer() {
             © 2026 David Pindrys · Senior Product Designer · Boston, USA
           </p>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            <a href="#work" className={linkClass}>
-              Work
-            </a>
             <a href="#approach" className={linkClass}>
               Approach
             </a>
             <a href="#services" className={linkClass}>
               Services
+            </a>
+            <a href="#work" className={linkClass}>
+              Work
             </a>
             <a href="https://linkedin.com/in/dpindrys" className={linkClass} target="_blank" rel="noopener noreferrer">
               LinkedIn
