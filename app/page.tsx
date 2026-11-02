@@ -130,23 +130,23 @@ function SkillIcon({ name }: { name: (typeof skillGroups)[number]["icon"] }) {
 
 const workSteps = [
   {
-    title: "Learn the work.",
+    title: "Learn the work",
     body: "Talk with the people who do it, and map the decisions and exceptions.",
   },
   {
-    title: "Define the system.",
+    title: "Define the system",
     body: "Connect research, information architecture, and interaction design.",
   },
   {
-    title: "Test the critical moments.",
+    title: "Test the critical moments",
     body: "Check risky steps with clinicians or users before committing to a build.",
   },
   {
-    title: "Hand off with clarity.",
+    title: "Hand off with clarity",
     body: "Specs, pattern documentation, and a conformance checklist developers can build against.",
   },
   {
-    title: "Check it again after launch.",
+    title: "Check it again after launch",
     body: "Watch for drift, accessibility regressions, and new edge cases.",
   },
 ] as const;
@@ -404,9 +404,10 @@ export default function Home() {
                 {workSteps.map((step, index) => (
                   <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-5 border-t border-black/10 py-5">
                     <span className={sideLeadClass}>0{index + 1}</span>
-                    <p className="font-sans text-[16px] leading-[1.55] text-black/80">
-                      <span className="font-medium text-black">{step.title}</span> {step.body}
-                    </p>
+                    <div>
+                      <p className="font-sans text-[16px] font-medium text-black">{step.title}</p>
+                      <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
+                    </div>
                   </li>
                 ))}
               </ol>
@@ -432,10 +433,8 @@ export default function Home() {
                       {offer.name}
                     </h3>
                     <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{offer.body}</p>
-                    <p className="mt-5 font-sans text-[14px] leading-[1.5] text-black/80">
-                      <span className="font-medium text-black">Ideal for: </span>
-                      {offer.ideal}
-                    </p>
+                    <p className="mt-5 font-sans text-[16px] font-medium text-black">Ideal for</p>
+                    <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{offer.ideal}</p>
                   </li>
                 ))}
               </ul>
