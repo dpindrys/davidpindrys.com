@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ContactProvider } from "./components/ContactModal";
 import Header from "./components/Header";
 import "./globals.css";
 
@@ -12,7 +13,7 @@ const inter = Inter({
 const SITE_URL = "https://www.davidpindrys.com";
 const SITE_TITLE = "David Pindrys, Senior Product Designer | Healthcare";
 const SITE_DESCRIPTION =
-  "Senior product designer driving healthcare product decisions from clinical insight to launch. Medicaid portal, clinical refill workflow, and EHR design.";
+  "Senior product designer for clinical and public-sector workflows. Medicaid portal, clinical refill workflow, EHR design, and accessibility audits.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -43,11 +44,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="bg-[#F4F2EE] text-black font-sans">
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <Header />
-        {children}
+        <ContactProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <Header />
+          {children}
+        </ContactProvider>
       </body>
     </html>
   );
