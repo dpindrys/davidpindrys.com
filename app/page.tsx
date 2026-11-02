@@ -35,30 +35,98 @@ const lookFirst = [
 
 const skillGroups = [
   {
+    icon: "clinical",
     label: "Clinical and public sector",
     body: "Medicaid compliance, prior authorization, eligibility workflows, HIPAA, clinical trial protocols, U.S. Department of Defense health IT",
   },
   {
+    icon: "access",
     label: "Accessibility",
     body: "WCAG 2.1 and 2.2 AA audits and remediation, conformance checklists, keyboard and focus order, accessible form and error patterns",
   },
   {
+    icon: "research",
     label: "Research",
     body: "Clinician interviews and co-design, moderated usability testing, usability audits, synthesis into design direction",
   },
   {
+    icon: "systems",
     label: "Systems",
     body: "Component libraries and patterns in Figma, pattern documentation, developer handoff",
   },
   {
+    icon: "build",
     label: "Build",
     body: "Functional React prototypes with Cursor and Claude, HTML, CSS, JavaScript",
   },
   {
+    icon: "collaboration",
     label: "Collaboration",
     body: "Agile and Scrum, cross-functional work with product, engineering, data, clinical, and compliance partners",
   },
 ] as const;
+
+function SkillIcon({ name }: { name: (typeof skillGroups)[number]["icon"] }) {
+  const props = {
+    viewBox: "0 0 24 24",
+    className: "h-[1.7875rem] w-[1.7875rem] shrink-0 text-black md:h-[2.275rem] md:w-[2.275rem]",
+    "aria-hidden": true as const,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  if (name === "clinical") {
+    return (
+      <svg {...props}>
+        <rect x="4" y="4" width="16" height="16" rx="3" />
+        <path d="M12 8v8M8 12h8" />
+      </svg>
+    );
+  }
+  if (name === "access") {
+    return (
+      <svg {...props}>
+        <circle cx="12" cy="12" r="8" />
+        <circle cx="12" cy="9" r="1.15" fill="currentColor" stroke="none" />
+        <path d="M8.5 12.2h7M12 10.4V14M9.7 17.4 12 14l2.3 3.4" />
+      </svg>
+    );
+  }
+  if (name === "research") {
+    return (
+      <svg {...props}>
+        <circle cx="11" cy="11" r="5.5" />
+        <path d="m15.2 15.2 3.8 3.8" />
+      </svg>
+    );
+  }
+  if (name === "systems") {
+    return (
+      <svg {...props}>
+        <rect x="4" y="4" width="6.5" height="6.5" rx="1" />
+        <rect x="13.5" y="4" width="6.5" height="6.5" rx="1" />
+        <rect x="4" y="13.5" width="6.5" height="6.5" rx="1" />
+        <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1" />
+      </svg>
+    );
+  }
+  if (name === "build") {
+    return (
+      <svg {...props}>
+        <path d="m9 8-4 4 4 4M15 8l4 4-4 4" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...props}>
+      <circle cx="9" cy="9" r="2.1" />
+      <circle cx="16" cy="10" r="1.7" />
+      <path d="M4.8 18.2c.5-2.5 2.4-3.9 4.2-3.9s3.7 1.4 4.2 3.9M13.8 18.2c.35-1.7 1.5-2.8 2.8-2.8 1.15 0 2.1.8 2.6 2.1" />
+    </svg>
+  );
+}
 
 const workSteps = [
   {
@@ -312,9 +380,12 @@ export default function Home() {
               </p>
               <dl className="mt-8">
                 {skillGroups.map((group) => (
-                  <div key={group.label} className="border-t border-black/10 py-5">
-                    <dt className="font-sans text-[16px] font-medium text-black">{group.label}</dt>
-                    <dd className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{group.body}</dd>
+                  <div key={group.label} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-5 border-t border-black/10 py-5">
+                    <SkillIcon name={group.icon} />
+                    <div>
+                      <dt className="font-sans text-[16px] font-medium text-black">{group.label}</dt>
+                      <dd className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{group.body}</dd>
+                    </div>
                   </div>
                 ))}
               </dl>
@@ -331,8 +402,8 @@ export default function Home() {
               <p className={sideLeadClass}>Start with the workflow, not the screens.</p>
               <ol className="mt-8">
                 {workSteps.map((step, index) => (
-                  <li key={step.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-t border-black/10 py-5">
-                    <span className="font-sans text-[13px] text-black/55">0{index + 1}</span>
+                  <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-5 border-t border-black/10 py-5">
+                    <span className={sideLeadClass}>0{index + 1}</span>
                     <p className="font-sans text-[16px] leading-[1.55] text-black/80">
                       <span className="font-medium text-black">{step.title}</span> {step.body}
                     </p>
@@ -357,8 +428,7 @@ export default function Home() {
               <ul className="mt-8 grid grid-cols-1 gap-4">
                 {offerings.map((offer) => (
                   <li key={offer.index} className="flex flex-col border border-black/10 p-5 sm:p-6">
-                    <p className={eyebrowClass}>{offer.index}</p>
-                    <h3 className="mt-4 font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
+                    <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
                       {offer.name}
                     </h3>
                     <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{offer.body}</p>
