@@ -247,7 +247,8 @@ type WorkCard = {
   tags: readonly string[];
   decision?: string;
   links: readonly WorkLink[];
-  media: ReactNode;
+  featured?: boolean;
+  media?: ReactNode;
 };
 
 const workCards: readonly WorkCard[] = [
@@ -255,10 +256,11 @@ const workCards: readonly WorkCard[] = [
     id: "vehr",
     index: "01",
     client: "VEHR Technologies",
-    role: "Founding Product Design Lead · Interactive prototype",
+    role: "Founding Product Designer",
     title: "Organized the patient record around history, so clinicians can read related information together.",
     body: "Partnered with a physician founder to turn clinical mental models into a shared timeline and aligned data views. Built the component and interaction pattern library in Figma from scratch to support scalable prototyping and clearer engineering handoff.",
-    tags: ["EHR", "Information architecture", "Pattern library"],
+    tags: ["PHI visualization", "EHR", "Design system"],
+    featured: true,
     links: [
       { href: "https://visual-ehr.vercel.app", label: "View interactive prototype", external: true },
     ],
@@ -267,6 +269,26 @@ const workCards: readonly WorkCard[] = [
         src="/videos/vehr/prototype.mp4"
         label="VEHR clinical timeline prototype aligning history, encounters, and related clinical data"
         className="block h-auto w-full"
+      />
+    ),
+  },
+  {
+    id: "vinyl",
+    index: "02",
+    client: "Vinyl Health",
+    role: "Founding Product Designer",
+    title: "Prototyped a clinician dashboard where AI summaries trace back to source data.",
+    body: "Built a working React prototype to test where automation should act and where clinicians need explicit control with a practicing clinician.",
+    tags: ["AI-assisted EHR", "Prototype"],
+    links: [
+      { href: "https://vinylhealth.vercel.app/", label: "View interactive prototype", external: true },
+    ],
+    featured: true,
+    media: (
+      <HoverControlsVideo
+        src="/videos/vinyl.mp4"
+        label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
+        className="block h-auto w-full border border-black/15"
       />
     ),
   },
@@ -456,7 +478,7 @@ export default function Home() {
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:pb-28`}>
           <div className={innerClass}>
             {workCards.map((project, index) => {
-              const showMedia = project.id === "vehr";
+              const showMedia = Boolean(project.featured);
               return (
               <article
                 key={project.id}
@@ -486,8 +508,10 @@ export default function Home() {
                 </div>
                 {showMedia ? (
                   <>
-                    <div className="mt-8 md:col-span-4">{project.media}</div>
-                    <ul className="mt-4 flex flex-wrap gap-2 md:col-span-4">
+                    {project.media ? <div className="mt-8 md:col-span-4">{project.media}</div> : null}
+                    <ul
+                      className={`flex flex-wrap gap-2 ${project.media ? "mt-4 md:col-span-4" : "mt-6 md:col-span-3 md:col-start-2"}`}
+                    >
                       {project.tags.map((tag) => (
                         <li
                           key={tag}
