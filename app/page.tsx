@@ -21,7 +21,7 @@ const lookFirst = [
   "Where clinicians or staff lose time",
   "Where patients or members drop off",
   "Where compliance and access rules get in the way",
-  "Where a workflow breaks on the edge cases",
+  "Where workflows break under real conditions",
 ] as const;
 
 const skillGroups = [
@@ -275,11 +275,11 @@ export default function Home() {
         <section id="approach" aria-labelledby="problem-title" className={`${shellClass} scroll-mt-32 pt-10 md:pt-14`}>
           <div className={`${innerClass} ${splitClass} md:gap-y-12`}>
             <h2 id="problem-title" className={sideLabelClass}>
-              Tools fail at the edges
+              How I start
             </h2>
             <div className="md:col-span-3">
               <p className={sideLeadClass}>
-                Clinical tools rarely fail because the people using them are careless.
+                Tools fail at the edges.
               </p>
               <p className={`${bodyClass} mt-5 max-w-[40rem]`}>
                 They fail because the design ignores how the work actually happens. The interruptions, the
