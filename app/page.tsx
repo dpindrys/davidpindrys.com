@@ -17,6 +17,15 @@ const splitClass = "grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-4";
 const cardTitleClass =
   "font-sans text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.12] tracking-[-0.03em] text-black";
 
+function ExternalLinkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[1em] w-[1em] shrink-0" aria-hidden="true" fill="none">
+      <path d="M14 5h5v5M19 5l-9 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 13.5V19H5V7h5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const lookFirst = [
   "Where clinicians or staff lose time",
   "Where patients or members drop off",
@@ -168,7 +177,6 @@ type WorkCard = {
   title: string;
   body: string;
   tags: readonly string[];
-  metrics: readonly string[];
   decision?: string;
   links: readonly WorkLink[];
   media: ReactNode;
@@ -183,11 +191,6 @@ const workCards: readonly WorkCard[] = [
     title: "Organized the patient record around history, so clinicians can read related information together.",
     body: "Partnered with a physician founder to turn clinical mental models into a shared timeline and aligned data views. Built the component and interaction pattern library in Figma from scratch to support scalable prototyping and clearer engineering handoff.",
     tags: ["EHR", "Information architecture", "Pattern library"],
-    metrics: [
-      "Timeline and heatmap views",
-      "Gap detection across dense time-series data",
-      "Pattern library built from scratch",
-    ],
     links: [
       { href: "https://visual-ehr.vercel.app", label: "View interactive prototype", external: true },
     ],
@@ -207,7 +210,6 @@ const workCards: readonly WorkCard[] = [
     title: "Cut time-to-refill 70% across 2,800+ clinics.",
     body: "Owned research and design for an in-clinic refill workflow that replaced paper, fax, and phone follow-ups. Mapped the system with clinic staff, set the UI architecture and component patterns, and partnered with engineering and clinical operations through launch.",
     tags: ["Clinical workflow", "Point of care", "Design system", "Salesforce"],
-    metrics: ["70% faster refill completion", "2,800+ clinics", "43,000+ patients"],
     decision:
       "Validated the system's objects with nurses before wireframing, so the interface matched how they think about a refill.",
     links: [],
@@ -228,7 +230,6 @@ const workCards: readonly WorkCard[] = [
     title: "Launched a responsive Medicaid member portal to 40,000+ members.",
     body: "Led end-to-end design and research for a portal that added workflows the legacy system lacked: care team designation, ID card requests, prior authorization review, and in-context claims status. Audited against WCAG AA and produced the conformance checklist developers built against.",
     tags: ["Medicaid", "Member portal", "Accessibility", "Prior authorization"],
-    metrics: ["40,000+ members", "WCAG AA remediation", "Enterprise-wide launch"],
     links: [],
     media: (
       // eslint-disable-next-line @next/next/no-img-element
@@ -385,7 +386,9 @@ export default function Home() {
 
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:pb-28`}>
           <div className={innerClass}>
-            {workCards.map((project, index) => (
+            {workCards.map((project, index) => {
+              const showMedia = project.id === "vehr";
+              return (
               <article
                 key={project.id}
                 id={project.id}
@@ -405,47 +408,51 @@ export default function Home() {
                     {project.title}
                   </h3>
                   <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
-                  <div className="mt-8 bg-white p-4 sm:p-8 md:p-12">{project.media}</div>
-                  <ul className="mt-8 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                  <ul className="mt-6 grid grid-cols-1 gap-3 border-t border-black/10 pt-5 md:grid-cols-3 md:gap-6">
-                    {project.metrics.map((metric) => (
-                      <li key={metric} className="font-sans text-[15px] font-medium leading-snug text-black">
-                        {metric}
-                      </li>
-                    ))}
-                  </ul>
-                  {project.decision ? (
+                  {showMedia && project.decision ? (
                     <aside className="mt-8 max-w-[36rem] border-l-2 border-black pl-4">
                       <p className={eyebrowClass}>Decision</p>
                       <p className="mt-3 font-sans text-[16px] leading-[1.5] text-black">{project.decision}</p>
                     </aside>
                   ) : null}
-                  {project.links.length > 0 ? (
-                    <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-3">
-                      {project.links.map((link) => (
-                        <a
-                          key={link.href}
-                          href={link.href}
-                          className="font-sans text-[15px] font-medium text-black underline decoration-black underline-offset-4"
-                          {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        >
-                          {link.label}
-                        </a>
-                      ))}
-                    </div>
-                  ) : null}
                 </div>
+                {showMedia ? (
+                  <>
+                    <div className="mt-8 md:col-span-4">{project.media}</div>
+                    <ul className="mt-4 flex flex-wrap gap-2 md:col-span-4">
+                      {project.tags.map((tag) => (
+                        <li
+                          key={tag}
+                          className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                    {project.links.length > 0 ? (
+                      <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3 md:col-span-4">
+                        {project.links.map((link) => (
+                          <a
+                            key={link.href}
+                            href={link.href}
+                            className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
+                            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                          >
+                            {link.label}
+                            {link.external ? (
+                              <>
+                                <ExternalLinkIcon />
+                                <span className="sr-only"> (opens in a new tab)</span>
+                              </>
+                            ) : null}
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </>
+                ) : null}
               </article>
-            ))}
+              );
+            })}
             {earlierWork.map((project) => (
               <article
                 key={project.id}

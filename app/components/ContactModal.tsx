@@ -21,13 +21,13 @@ const inputClass =
 const errorClass = "font-sans text-[14px] leading-[1.5] text-red-700";
 
 const primaryButtonClass =
-  "inline-flex items-center bg-[#D8EF7A] px-5 py-3.5 font-sans text-[15px] font-medium text-black transition-colors hover:bg-[#CBE35F] disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center gap-2 bg-[#D8EF7A] px-5 py-3.5 font-sans text-[15px] font-medium text-black transition-colors hover:bg-[#CBE35F] disabled:cursor-not-allowed disabled:opacity-60";
 
 const navButtonClass =
-  "inline-flex items-center bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]";
+  "inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]";
 
 const heroButtonClass =
-  "inline-flex items-center bg-[#1F2621] px-6 py-3.5 font-sans text-[1.375rem] font-medium leading-[1.1] text-[#F4F2EE] transition-colors hover:bg-[#2A332C] md:px-7 md:py-4 md:text-[1.75rem]";
+  "inline-flex items-center gap-2 bg-[#1F2621] px-6 py-3.5 font-sans text-[1.375rem] font-medium leading-[1.1] text-[#F4F2EE] transition-colors hover:bg-[#2A332C] md:px-7 md:py-4 md:text-[1.75rem]";
 
 type OpenContact = (opener: HTMLElement | null) => void;
 
@@ -249,6 +249,19 @@ export function useOpenContact() {
   return useContext(ContactContext);
 }
 
+export function MessageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[1.15em] w-[1.15em] shrink-0" aria-hidden="true" fill="none">
+      <path
+        d="M5 6.5h14v9.25H8.2L5 18.5v-12z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function TalkButton({
   children,
   variant = "primary",
@@ -266,6 +279,7 @@ export function TalkButton({
       className={`${buttonClass} ${className}`}
       onClick={(event) => openContact(event.currentTarget)}
     >
+      <MessageIcon />
       {children}
     </button>
   );

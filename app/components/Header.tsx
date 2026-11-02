@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { heroBandClass } from "../lib/heroBand";
-import { TalkButton, useOpenContact } from "./ContactModal";
+import { MessageIcon, TalkButton, useOpenContact } from "./ContactModal";
 
 const linkClass =
   "font-sans text-[14px] leading-none text-black/70 transition-colors hover:text-black";
@@ -198,12 +198,13 @@ export default function Header() {
           ))}
           <button
             type="button"
-            className={menuLinkClass}
+            className={`${menuLinkClass} inline-flex items-center gap-[0.35em]`}
             onClick={() => {
               setMenuOpen(false);
               openContact(menuButtonRef.current);
             }}
           >
+            <MessageIcon />
             Let&apos;s talk
           </button>
         </nav>
