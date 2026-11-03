@@ -95,11 +95,23 @@ export default function ColleagueQuotes() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={linkedIn ? `${item.name} on LinkedIn` : `${item.name} profile`}
-                className="absolute bottom-4 right-4 inline-flex h-11 w-11 items-center justify-center text-black/55 hover:text-black"
+                className="group absolute bottom-4 right-4 inline-flex h-11 w-11 items-center justify-center text-[#0A66C2] hover:text-[#004182]"
               >
                 {"linkIconSrc" in item ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item.linkIconSrc} alt="" width={22} height={22} className="h-[22px] w-[22px] object-contain" />
+                  <span
+                    aria-hidden
+                    className="h-[22px] w-[22px] shrink-0 bg-current opacity-85 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                    style={{
+                      maskImage: `url(${item.linkIconSrc})`,
+                      WebkitMaskImage: `url(${item.linkIconSrc})`,
+                      maskSize: "contain",
+                      WebkitMaskSize: "contain",
+                      maskRepeat: "no-repeat",
+                      WebkitMaskRepeat: "no-repeat",
+                      maskPosition: "center",
+                      WebkitMaskPosition: "center",
+                    }}
+                  />
                 ) : (
                   <LinkedInIcon />
                 )}
