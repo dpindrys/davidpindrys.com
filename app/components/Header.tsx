@@ -51,6 +51,23 @@ export default function Header() {
       setHidden(false);
     };
 
+    let linkScrolling = false;
+    let linkScrollTimer: number | undefined;
+    const endLinkScrollSoon = () => {
+      clearTimeout(linkScrollTimer);
+      linkScrollTimer = window.setTimeout(() => {
+        linkScrolling = false;
+      }, 200);
+    };
+
+    const onClick = (event: MouseEvent) => {
+      if (mobileNav() || !(event.target instanceof Element)) return;
+      const link = event.target.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!link || link.getAttribute("href") === "#top") return;
+      linkScrolling = true;
+      endLinkScrollSoon();
+    };
+
     const onScroll = () => {
       const y = window.scrollY;
       const delta = y - lastY.current;
@@ -61,7 +78,10 @@ export default function Header() {
       }
       let next = hiddenRef.current;
       if (y < 24) next = false;
-      else if (delta > 8) next = true;
+      else if (linkScrolling) {
+        next = true;
+        endLinkScrollSoon();
+      } else if (delta > 8) next = true;
       else if (delta < -8) next = false;
       lastY.current = y;
       if (next === hiddenRef.current) return;
@@ -76,9 +96,12 @@ export default function Header() {
     const narrowQuery = window.matchMedia("(max-width: 767px)");
     narrowQuery.addEventListener("change", onNarrow);
     window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("click", onClick);
     return () => {
+      clearTimeout(linkScrollTimer);
       narrowQuery.removeEventListener("change", onNarrow);
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("click", onClick);
     };
   }, []);
 

@@ -364,7 +364,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="approach" aria-labelledby="problem-title" className={`${shellClass} scroll-mt-32 pt-10 md:pt-14`}>
+        <section id="approach" aria-labelledby="problem-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
           <div className={`${innerClass} ${splitClass} md:gap-y-12`}>
             <h2 id="problem-title" className={sideLabelClass}>
               How I start
@@ -417,7 +417,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="approach-title" className={`${shellClass} scroll-mt-32 mt-20 md:mt-28`}>
+        <section aria-labelledby="approach-title" className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}>
           <div className={`${innerClass} ${splitClass}`}>
             <h2 id="approach-title" className={sideLabelClass}>
               How I work
@@ -442,7 +442,7 @@ export default function Home() {
         <section
           id="services"
           aria-labelledby="services-title"
-          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28`}
+          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
         >
           <div className={`${innerClass} ${splitClass}`}>
             <h2 id="services-title" className={sideLabelClass}>
@@ -477,7 +477,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:pb-28`}>
+        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}>
           <div className={innerClass}>
             {workCards.map((project, index) => {
               const showMedia = Boolean(project.featured);
@@ -486,7 +486,7 @@ export default function Home() {
                 key={project.id}
                 id={project.id}
                 aria-labelledby={`${project.id}-title`}
-                className={`${splitClass} scroll-mt-32 ${index === 0 ? "" : "mt-16 md:mt-24"}`}
+                className={`${splitClass} scroll-mt-32 md:scroll-mt-8 ${index === 0 ? "" : "mt-16 md:mt-24"}`}
               >
                 {index === 0 ? (
                   <h2 id="work-title" className={workLabelClass}>
@@ -553,7 +553,7 @@ export default function Home() {
                 key={project.id}
                 id={project.id === "clinical-ink" ? "more-work" : project.id}
                 aria-labelledby={`${project.id}-title`}
-                className={`${splitClass} scroll-mt-32 mt-16 md:mt-24`}
+                className={`${splitClass} scroll-mt-32 md:scroll-mt-8 mt-16 md:mt-24`}
               >
                 <p className={workLabelClass}>{project.client}</p>
                 <div className="md:col-span-3">
