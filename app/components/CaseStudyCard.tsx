@@ -5,7 +5,7 @@ import { useRef, useState, type PointerEvent } from "react";
 
 export type CaseStudyCardData = {
   id: string;
-  href: string;
+  href?: string;
   name: string;
   tag: string;
   description: string;
@@ -17,6 +17,8 @@ export type CaseStudyCardData = {
 };
 
 const labelClass = "font-sans text-[11px] uppercase leading-[1.3] tracking-[0.14em] text-black/55";
+const cardClass =
+  "group relative block overflow-hidden border border-black/10 bg-[#E8E5DE] p-4 transition-colors duration-300 hover:border-black/20 md:p-5";
 
 export default function CaseStudyCard({ card }: { card: CaseStudyCardData }) {
   const pillRef = useRef<HTMLSpanElement>(null);
@@ -33,20 +35,8 @@ export default function CaseStudyCard({ card }: { card: CaseStudyCardData }) {
     pill.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
   };
 
-  return (
-    <Link
-      href={card.href}
-      className="group relative block overflow-hidden border border-black/10 bg-[#E8E5DE] p-4 outline-none transition-colors duration-300 hover:border-black/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black pointer-fine:cursor-none md:p-5"
-      onPointerEnter={(event) => {
-        if (event.pointerType !== "mouse") return;
-        movePill(event);
-        setPillVisible(true);
-      }}
-      onPointerMove={(event) => {
-        if (event.pointerType === "mouse") movePill(event);
-      }}
-      onPointerLeave={() => setPillVisible(false)}
-    >
+  const content = (
+    <>
       <div
         className={`aspect-[3/2] overflow-hidden border border-black/10 ${
           card.imageFramed === false ? "" : "bg-white p-3 md:p-4"
@@ -93,7 +83,28 @@ export default function CaseStudyCard({ card }: { card: CaseStudyCardData }) {
           </dl>
         </div>
       </div>
+    </>
+  );
 
+  if (!card.href) {
+    return <article className={cardClass}>{content}</article>;
+  }
+
+  return (
+    <Link
+      href={card.href}
+      className={`${cardClass} outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black pointer-fine:cursor-none`}
+      onPointerEnter={(event) => {
+        if (event.pointerType !== "mouse") return;
+        movePill(event);
+        setPillVisible(true);
+      }}
+      onPointerMove={(event) => {
+        if (event.pointerType === "mouse") movePill(event);
+      }}
+      onPointerLeave={() => setPillVisible(false)}
+    >
+      {content}
       <span
         ref={pillRef}
         aria-hidden="true"

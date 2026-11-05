@@ -131,7 +131,6 @@ const featuredWork = workCards.filter((project) => project.featured);
 const caseStudyCards: readonly CaseStudyCardData[] = [
   {
     id: "dell",
-    href: "/case-studies/dell-childrens",
     name: "Dell Children’s Health Plan",
     tag: "Medicaid portal",
     description:
