@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { heroBandClass } from "../lib/heroBand";
 import { MessageIcon, TalkButton, useOpenContact } from "./ContactModal";
@@ -13,9 +14,8 @@ const menuLinkClass =
 export const CONTACT_HREF = "mailto:dpindrys@gmail.com";
 
 const menuLinks = [
-  { href: "#approach", label: "Approach" },
-  { href: "#services", label: "Services" },
   { href: "#work", label: "Work" },
+  { href: "#services", label: "Services" },
 ] as const;
 
 export default function Header() {
@@ -170,6 +170,8 @@ export default function Header() {
   };
 
   const concealed = hidden && !menuOpen;
+  const onHome = usePathname() === "/";
+  const sectionHref = (href: string) => (onHome ? href : `/${href}`);
 
   return (
     <>
@@ -183,8 +185,12 @@ export default function Header() {
     >
       <div className="mx-auto flex w-full max-w-[1040px] items-center justify-between gap-x-4 py-6 md:py-8">
         <a
-          href="#top"
+          href={onHome ? "#top" : "/"}
           onClick={(event) => {
+            if (!onHome) {
+              setMenuOpen(false);
+              return;
+            }
             event.preventDefault();
             setMenuOpen(false);
             const instant =
@@ -211,7 +217,7 @@ export default function Header() {
         </button>
         <nav aria-label="Primary" className="hidden flex-wrap items-center gap-x-5 gap-y-2 md:flex md:gap-x-8">
           {menuLinks.map((link) => (
-            <a key={link.href} href={link.href} className={linkClass}>
+            <a key={link.href} href={sectionHref(link.href)} className={linkClass}>
               {link.label}
             </a>
           ))}
@@ -227,7 +233,7 @@ export default function Header() {
       >
         <nav aria-label="Sections" className="flex h-full flex-col justify-center gap-8 px-6">
           {menuLinks.map((link) => (
-            <a key={link.href} href={link.href} onClick={closeMenu} className={menuLinkClass}>
+            <a key={link.href} href={sectionHref(link.href)} onClick={closeMenu} className={menuLinkClass}>
               {link.label}
             </a>
           ))}

@@ -5,7 +5,7 @@ import { heroBandClass } from "../lib/heroBand";
 
 const linkClass = "font-sans text-[13px] text-black/55 transition-colors hover:text-black";
 
-export default function Footer() {
+export default function Footer({ linkBase = "" }: { linkBase?: string }) {
   return (
     <footer className={`w-full px-6 md:px-10 ${heroBandClass}`}>
       <div className="mx-auto w-full max-w-[1040px] border-t border-black/10 pt-10 md:pt-14">
@@ -36,14 +36,11 @@ export default function Footer() {
             © 2026 David Pindrys · Senior Product Designer · Boston, USA
           </p>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            <a href="#approach" className={linkClass}>
-              Approach
-            </a>
-            <a href="#services" className={linkClass}>
-              Services
-            </a>
-            <a href="#work" className={linkClass}>
+            <a href={`${linkBase}#work`} className={linkClass}>
               Work
+            </a>
+            <a href={`${linkBase}#services`} className={linkClass}>
+              Services
             </a>
           </nav>
         </div>

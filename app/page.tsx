@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
+import CaseStudyCard, { type CaseStudyCardData } from "./components/CaseStudyCard";
 
 const shellClass = "w-full px-6 md:px-10";
 const innerClass = "mx-auto w-full max-w-[1040px]";
@@ -26,131 +27,6 @@ function ExternalLinkIcon() {
     </svg>
   );
 }
-
-const lookFirst = [
-  "Where clinicians or staff lose time",
-  "Where patients or members drop off",
-  "Where compliance and access rules get in the way",
-  "Where workflows break under real conditions",
-] as const;
-
-const skillGroups = [
-  {
-    icon: "clinical",
-    label: "Clinical and public sector",
-    body: "Medicaid compliance, prior authorization, eligibility workflows, HIPAA, clinical trial protocols, U.S. Department of Defense health IT",
-  },
-  {
-    icon: "access",
-    label: "Accessibility",
-    body: "WCAG 2.1 and 2.2 AA audits and remediation, conformance checklists, keyboard and focus order, accessible form and error patterns",
-  },
-  {
-    icon: "research",
-    label: "Research",
-    body: "Clinician interviews and co-design, moderated usability testing, usability audits, synthesis into design direction",
-  },
-  {
-    icon: "systems",
-    label: "Systems",
-    body: "Component libraries and patterns in Figma, pattern documentation, developer handoff",
-  },
-  {
-    icon: "build",
-    label: "Build",
-    body: "Functional React prototypes with Cursor and Claude, HTML, CSS, JavaScript",
-  },
-  {
-    icon: "collaboration",
-    label: "Collaboration",
-    body: "Agile and Scrum, cross-functional work with product, engineering, data, clinical, and compliance partners",
-  },
-] as const;
-
-function SkillIcon({ name }: { name: (typeof skillGroups)[number]["icon"] }) {
-  const props = {
-    viewBox: "0 0 24 24",
-    className: "h-[1.7875rem] w-[1.7875rem] shrink-0 text-black md:h-[2.275rem] md:w-[2.275rem]",
-    "aria-hidden": true as const,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  if (name === "clinical") {
-    return (
-      <svg {...props}>
-        <rect x="4" y="4" width="16" height="16" rx="3" />
-        <path d="M12 8v8M8 12h8" />
-      </svg>
-    );
-  }
-  if (name === "access") {
-    return (
-      <svg {...props}>
-        <circle cx="12" cy="12" r="8" />
-        <circle cx="12" cy="9" r="1.15" fill="currentColor" stroke="none" />
-        <path d="M8.5 12.2h7M12 10.4V14M9.7 17.4 12 14l2.3 3.4" />
-      </svg>
-    );
-  }
-  if (name === "research") {
-    return (
-      <svg {...props}>
-        <circle cx="11" cy="11" r="5.5" />
-        <path d="m15.2 15.2 3.8 3.8" />
-      </svg>
-    );
-  }
-  if (name === "systems") {
-    return (
-      <svg {...props}>
-        <rect x="4" y="4" width="6.5" height="6.5" rx="1" />
-        <rect x="13.5" y="4" width="6.5" height="6.5" rx="1" />
-        <rect x="4" y="13.5" width="6.5" height="6.5" rx="1" />
-        <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1" />
-      </svg>
-    );
-  }
-  if (name === "build") {
-    return (
-      <svg {...props}>
-        <path d="m9 8-4 4 4 4M15 8l4 4-4 4" />
-      </svg>
-    );
-  }
-  return (
-    <svg {...props}>
-      <circle cx="9" cy="9" r="2.1" />
-      <circle cx="16" cy="10" r="1.7" />
-      <path d="M4.8 18.2c.5-2.5 2.4-3.9 4.2-3.9s3.7 1.4 4.2 3.9M13.8 18.2c.35-1.7 1.5-2.8 2.8-2.8 1.15 0 2.1.8 2.6 2.1" />
-    </svg>
-  );
-}
-
-const workSteps = [
-  {
-    title: "Learn the work",
-    body: "Talk with the people who do it, and map the decisions and exceptions.",
-  },
-  {
-    title: "Define the system",
-    body: "Connect research, information architecture, and interaction design.",
-  },
-  {
-    title: "Test the critical moments",
-    body: "Check risky steps with clinicians or users before committing to a build.",
-  },
-  {
-    title: "Hand off with clarity",
-    body: "Specs, pattern documentation, and a conformance checklist developers can build against.",
-  },
-  {
-    title: "Check it again after launch",
-    body: "Watch for drift, accessibility regressions, and new edge cases.",
-  },
-] as const;
 
 const offerings = [
   {
@@ -188,51 +64,6 @@ const offerings = [
     name: "Embedded Product Design",
     body: "Three to six months as a senior product designer on your team, working inside your sprints with your product, engineering, and clinical partners.",
     ideal: "Teams that need senior design capacity for a defined period without a full-time hire.",
-  },
-] as const;
-
-const earlierWork = [
-  {
-    id: "clinical-ink",
-    client: "Clinical Ink",
-    role: "Senior Product Designer · Clinical trial platform",
-    title: "Mapping usability issues across an eCOA platform for participant-facing apps.",
-    body: "Ran usability audits across several parts of the system and produced user flows, prototypes, and high-fidelity mobile screens. Designed a reusable error-state pattern for device integrations that carries across study builds.",
-  },
-  {
-    id: "nhs",
-    client: "NHS Sexual Health Clinics",
-    role: "Design Researcher · STIQI",
-    title: "Turned clinician usability testing into recommendations for a funding bid.",
-    body: "Developed the research protocol, recruited clinicians, and ran moderated usability testing. Synthesized the findings into interface recommendations.",
-  },
-  {
-    id: "uhg",
-    client: "UnitedHealth Group",
-    role: "Senior UX Designer · Drug-spend analytics",
-    title: "Made dense pharmaceutical spend data readable enough to act on.",
-    body: "Designed analytics dashboards that turned complex datasets into clear visual frameworks for decision-making.",
-  },
-  {
-    id: "kaiser",
-    client: "Kaiser Permanente",
-    role: "Senior Designer · Innovation team",
-    title: "Visualized stroke care outcomes at population and patient levels.",
-    body: "Designed data visualizations that show stroke outcomes both across a population and for individual patients.",
-  },
-  {
-    id: "conteneo",
-    client: "Conteneo",
-    role: "UI/UX Design Lead · SaaS",
-    title: "Redesigned the Weave platform end to end.",
-    body: "Led information architecture, navigation, and framework creation tools. Ran customer discovery sessions that shaped the roadmap.",
-  },
-  {
-    id: "dod",
-    client: "Department of Defense",
-    role: "UI Engineer · Optimal Vision Care Prototype",
-    title: "Tested problem list reconciliation with practicing physicians.",
-    body: "Planned and ran formative evaluation in a complex military EHR. 100% of clinicians rated the method efficient and effective, and the findings moved the program to summative evaluation.",
   },
 ] as const;
 
@@ -293,45 +124,110 @@ const workCards: readonly WorkCard[] = [
       />
     ),
   },
-  {
-    id: "frx",
-    index: "02",
-    client: "Fresenius Medical Care",
-    role: "UX Design Lead · Enterprise-wide launch",
-    title: "Cut time-to-refill 70% across 2,800+ clinics.",
-    body: "Owned research and design for an in-clinic refill workflow that replaced paper, fax, and phone follow-ups. Mapped the system with clinic staff, set the UI architecture and component patterns, and partnered with engineering and clinical operations through launch.",
-    tags: ["Clinical workflow", "Point of care", "Design system", "Salesforce"],
-    decision:
-      "Validated the system's objects with nurses before wireframing, so the interface matched how they think about a refill.",
-    links: [],
-    media: (
-      <HoverControlsVideo
-        src="/images/frx/fresenius.mp4"
-        label="In-clinic digital refill workflow in CareTeamHub"
-        className="block h-auto w-full"
-        style={{ clipPath: "inset(0 0 0 1px)" }}
-      />
-    ),
-  },
+];
+
+const featuredWork = workCards.filter((project) => project.featured);
+
+const caseStudyCards: readonly CaseStudyCardData[] = [
   {
     id: "dell",
-    index: "03",
-    client: "Ascension",
-    role: "Product Design Lead · Enterprise-wide launch",
-    title: "Launched a responsive Medicaid member portal to 40,000+ members.",
-    body: "Led end-to-end design and research for a portal that added workflows the legacy system lacked: care team designation, ID card requests, prior authorization review, and in-context claims status. Audited against WCAG AA and produced the conformance checklist developers built against.",
-    tags: ["Medicaid", "Member portal", "Accessibility", "Prior authorization"],
-    links: [],
-    media: (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src="/images/dchp-card.png"
-        alt="Dell Children’s Health Plan member portal on desktop and mobile, showing care team, ID card, and plan overview."
-        className="block h-auto w-full"
-      />
-    ),
+    href: "/case-studies/dell-childrens",
+    name: "Dell Children’s Health Plan",
+    tag: "Medicaid portal",
+    description:
+      "A responsive member portal that added care team, ID card, and prior authorization workflows the old portal lacked.",
+    imageSrc: "/images/dellchildrens-hero.png",
+    imageFramed: false,
+    imageAlt: "Dell Children’s Health Plan member portal on two phones, showing quick links to the care team and ID cards, and the plan overview.",
+    highlights: [
+      { value: "40,000+", label: "Members" },
+      { value: "AA", label: "WCAG audited" },
+      { value: "4 mo", label: "To launch" },
+    ],
+    details: [
+      { label: "Role", value: "Product Design Lead" },
+      { label: "Team", value: "Product manager, product lead, front-end and data engineers" },
+      { label: "Timeframe", value: "4 months, 2023" },
+    ],
   },
 ];
+
+function WorkArticle({
+  project,
+  headingId,
+  first,
+}: {
+  project: WorkCard;
+  headingId?: string;
+  first: boolean;
+}) {
+  const showMedia = Boolean(project.featured);
+  return (
+    <article
+      id={project.id}
+      aria-labelledby={`${project.id}-title`}
+      className={`${splitClass} scroll-mt-32 md:scroll-mt-8 ${first ? "" : "mt-16 md:mt-24"}`}
+    >
+      {headingId ? (
+        <h2 id={headingId} className={workLabelClass}>
+          {project.client}
+        </h2>
+      ) : (
+        <p className={workLabelClass}>{project.client}</p>
+      )}
+      <div className="md:col-span-3">
+        <p className={bodyClass}>{project.role}</p>
+        <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
+          {project.title}
+        </h3>
+        <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
+        {showMedia && project.decision ? (
+          <aside className="mt-8 max-w-[36rem] border-l-2 border-black pl-4">
+            <p className={eyebrowClass}>Decision</p>
+            <p className="mt-3 font-sans text-[16px] leading-[1.5] text-black">{project.decision}</p>
+          </aside>
+        ) : null}
+      </div>
+      {showMedia ? (
+        <>
+          {project.media ? <div className="mt-8 md:col-span-4">{project.media}</div> : null}
+          <ul
+            className={`flex flex-wrap gap-2 ${project.media ? "mt-4 md:col-span-4" : "mt-6 md:col-span-3 md:col-start-2"}`}
+          >
+            {project.tags.map((tag) => (
+              <li
+                key={tag}
+                className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+          {project.links.length > 0 ? (
+            <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3 md:col-span-4">
+              {project.links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {link.label}
+                  {link.external ? (
+                    <>
+                      <ExternalLinkIcon />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </>
+                  ) : null}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </>
+      ) : null}
+    </article>
+  );
+}
 
 export default function Home() {
   return (
@@ -364,77 +260,41 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="approach" aria-labelledby="problem-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
-          <div className={`${innerClass} ${splitClass} md:gap-y-12`}>
-            <h2 id="problem-title" className={sideLabelClass}>
-              How I start
-            </h2>
-            <div className="md:col-span-3">
-              <p className={sideLeadClass}>
-                Tools fail at the edges.
-              </p>
-              <p className={`${bodyClass} mt-5 max-w-[40rem]`}>
-                They fail because the design ignores how the work actually happens. The interruptions, the
-                exceptions, the paperwork nobody mentioned in the kickoff. I start there.
-              </p>
-              <p className={`${sideLeadClass} mt-12 md:mt-16`}>Where I look first</p>
-              <ul className="mt-6 list-disc space-y-4 pl-5 font-sans text-[16px] leading-[1.8] text-black marker:text-black md:text-[17px]">
-                {lookFirst.map((item) => (
-                  <li key={item} className="pl-1">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
+          <div className={innerClass}>
+            {featuredWork.map((project, index) => (
+              <WorkArticle
+                key={project.id}
+                project={project}
+                headingId={index === 0 ? "work-title" : undefined}
+                first={index === 0}
+              />
+            ))}
           </div>
         </section>
 
-        <section
-          id="services-intro"
-          aria-labelledby="skills-title"
-          className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}
-        >
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="skills-title" className={sideLabelClass}>
-              What I bring
+        <section aria-labelledby="case-studies-title" className={`${shellClass} mt-16 md:mt-24`}>
+          <div className={innerClass}>
+            <h2 id="case-studies-title" className="sr-only">
+              Case studies
             </h2>
-            <div className="md:col-span-3">
-              <p className={sideLeadClass}>
-                Ten years of UX, six of them in healthcare and regulated programs.
-              </p>
-              <dl className="mt-8">
-                {skillGroups.map((group) => (
-                  <div key={group.label} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-5 border-t border-black/10 py-5">
-                    <SkillIcon name={group.icon} />
-                    <div>
-                      <dt className="font-sans text-[16px] font-medium text-black">{group.label}</dt>
-                      <dd className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{group.body}</dd>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <ul className="grid grid-cols-1 gap-6 md:gap-8">
+              {caseStudyCards.map((card) => (
+                <li key={card.id} id={card.id} className="scroll-mt-32 md:scroll-mt-8">
+                  <CaseStudyCard card={card} />
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
-        <section aria-labelledby="approach-title" className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}>
+        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
           <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="approach-title" className={sideLabelClass}>
-              How I work
+            <h2 id="quotes-title" className={sideLabelClass}>
+              In their words
             </h2>
             <div className="md:col-span-3">
-              <p className={sideLeadClass}>Start with the workflow, not the screens.</p>
-              <ol className="mt-8">
-                {workSteps.map((step, index) => (
-                  <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-5 border-t border-black/10 py-5">
-                    <span className={sideLeadClass}>0{index + 1}</span>
-                    <div>
-                      <p className="font-sans text-[16px] font-medium text-black">{step.title}</p>
-                      <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <ColleagueQuotes />
             </div>
           </div>
         </section>
@@ -442,7 +302,7 @@ export default function Home() {
         <section
           id="services"
           aria-labelledby="services-title"
-          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
+          className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
         >
           <div className={`${innerClass} ${splitClass}`}>
             <h2 id="services-title" className={sideLabelClass}>
@@ -463,108 +323,6 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="quotes-title" className={sideLabelClass}>
-              In their words
-            </h2>
-            <div className="md:col-span-3">
-              <ColleagueQuotes />
-            </div>
-          </div>
-        </section>
-
-        <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}>
-          <div className={innerClass}>
-            {workCards.map((project, index) => {
-              const showMedia = Boolean(project.featured);
-              return (
-              <article
-                key={project.id}
-                id={project.id}
-                aria-labelledby={`${project.id}-title`}
-                className={`${splitClass} scroll-mt-32 md:scroll-mt-8 ${index === 0 ? "" : "mt-16 md:mt-24"}`}
-              >
-                {index === 0 ? (
-                  <h2 id="work-title" className={workLabelClass}>
-                    {project.client}
-                  </h2>
-                ) : (
-                  <p className={workLabelClass}>{project.client}</p>
-                )}
-                <div className="md:col-span-3">
-                  <p className={bodyClass}>{project.role}</p>
-                  <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
-                    {project.title}
-                  </h3>
-                  <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
-                  {showMedia && project.decision ? (
-                    <aside className="mt-8 max-w-[36rem] border-l-2 border-black pl-4">
-                      <p className={eyebrowClass}>Decision</p>
-                      <p className="mt-3 font-sans text-[16px] leading-[1.5] text-black">{project.decision}</p>
-                    </aside>
-                  ) : null}
-                </div>
-                {showMedia ? (
-                  <>
-                    {project.media ? <div className="mt-8 md:col-span-4">{project.media}</div> : null}
-                    <ul
-                      className={`flex flex-wrap gap-2 ${project.media ? "mt-4 md:col-span-4" : "mt-6 md:col-span-3 md:col-start-2"}`}
-                    >
-                      {project.tags.map((tag) => (
-                        <li
-                          key={tag}
-                          className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
-                        >
-                          {tag}
-                        </li>
-                      ))}
-                    </ul>
-                    {project.links.length > 0 ? (
-                      <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3 md:col-span-4">
-                        {project.links.map((link) => (
-                          <a
-                            key={link.href}
-                            href={link.href}
-                            className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
-                            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                          >
-                            {link.label}
-                            {link.external ? (
-                              <>
-                                <ExternalLinkIcon />
-                                <span className="sr-only"> (opens in a new tab)</span>
-                              </>
-                            ) : null}
-                          </a>
-                        ))}
-                      </div>
-                    ) : null}
-                  </>
-                ) : null}
-              </article>
-              );
-            })}
-            {earlierWork.map((project) => (
-              <article
-                key={project.id}
-                id={project.id === "clinical-ink" ? "more-work" : project.id}
-                aria-labelledby={`${project.id}-title`}
-                className={`${splitClass} scroll-mt-32 md:scroll-mt-8 mt-16 md:mt-24`}
-              >
-                <p className={workLabelClass}>{project.client}</p>
-                <div className="md:col-span-3">
-                  <p className={bodyClass}>{project.role}</p>
-                  <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
-                    {project.title}
-                  </h3>
-                  <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
-                </div>
-              </article>
-            ))}
           </div>
         </section>
       </main>
