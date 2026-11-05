@@ -5,6 +5,8 @@ import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
+import PhotoCarousel from "./components/PhotoCarousel";
+import { getPhotoGroups } from "./lib/photos";
 
 const shellClass = "w-full px-6 md:px-10";
 const innerClass = "mx-auto w-full max-w-[1920px]";
@@ -40,39 +42,21 @@ const workButtonClass =
 const offerings = [
   {
     index: "01",
-    name: "Workflow and Usability Audit",
-    body: "A human factors review of a live product. I find where clinicians, patients, or staff get stuck, rank the problems by risk and impact, and give you a fix list your team can act on.",
-    ideal: "Product teams whose users struggle with a clinical or regulated workflow.",
+    name: "Find what needs fixing",
+    body: "Workflow, usability, and accessibility reviews to uncover where people get stuck. You’ll get clear priorities and practical fixes, informed by research with the people using your product.",
+    ideal: "Teams improving an existing product or preparing for launch.",
   },
   {
     index: "02",
-    name: "Accessibility Audit and Remediation",
-    body: "A WCAG 2.1 and 2.2 AA audit, specified fixes, and a conformance checklist developers can build against.",
-    ideal: "Teams that need AA conformance before a launch, a procurement review, or a public-sector contract.",
+    name: "Design what comes next",
+    body: "Turn a complex problem into a clear, usable experience, from early research to prototypes and developer handoff, with reusable components to support future growth.",
+    ideal: "Teams building something new or rethinking a core workflow.",
   },
   {
     index: "03",
-    name: "New Workflow Design",
-    body: "End-to-end design for a new or complex workflow, from problem definition through shipped product: research, information architecture, prototypes, and handoff.",
-    ideal: "Teams building a new clinical, public-sector, or multi-user product, or a major redesign of one that isn't scaling.",
-  },
-  {
-    index: "04",
-    name: "Design System and Pattern Library",
-    body: "Reusable components and interaction patterns in Figma, with documentation and developer handoff. I'll also tell you when to extend an existing system and when a new pattern is the better call.",
-    ideal: "Teams whose screens are drifting apart across products or builds.",
-  },
-  {
-    index: "05",
-    name: "Clinical Research and Usability Testing",
-    body: "Scoping research, clinician interviews, moderated usability testing, and synthesis into design direction.",
-    ideal: "Teams that need clinician input before committing to a build.",
-  },
-  {
-    index: "06",
-    name: "Embedded Product Design",
-    body: "Three to six months as a senior product designer on your team, working inside your sprints with your product, engineering, and clinical partners.",
-    ideal: "Teams that need senior design capacity for a defined period without a full-time hire.",
+    name: "Bring me onto your team",
+    body: "Embedded senior product design for three to six months. I work alongside your product, engineering, and clinical partners to shape decisions and move the work through delivery.",
+    ideal: "Teams that need an experienced design partner without a full-time hire.",
   },
 ] as const;
 
@@ -302,7 +286,7 @@ export default function Home() {
         <section
           id="services"
           aria-labelledby="services-title"
-          className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
+          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
         >
           <div className={`${innerClass} ${splitClass}`}>
             <h2 id="services-title" className={sideLabelClass}>
@@ -323,6 +307,28 @@ export default function Home() {
                 ))}
               </ul>
             </div>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          aria-labelledby="about-title"
+          className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
+        >
+          <div className={`${innerClass} ${splitClass}`}>
+            <h2 id="about-title" className={sideLabelClass}>
+              Behind the screen
+            </h2>
+            <div className="md:col-span-3">
+              <p className={sideLeadClass}>
+                Outside of work, I love traveling and spending enough time somewhere to get a feel for everyday
+                life. Closer to home, I’m learning piano and making time for figure drawing, two things that keep
+                me curious and happily a beginner.
+              </p>
+            </div>
+          </div>
+          <div className="-mx-6 mt-10 md:-mx-10 md:mt-14">
+            <PhotoCarousel groups={getPhotoGroups()} />
           </div>
         </section>
       </main>

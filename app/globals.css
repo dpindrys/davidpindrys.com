@@ -11,6 +11,17 @@
   --color-blue: #00AAFF;
   --color-gray-mid: #9B9B9B;
   --color-gray-light: #D4D4D4;
+
+  --animate-photo-drift: photo-drift 140s linear infinite;
+
+  @keyframes photo-drift {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
 }
 
 @layer base {
