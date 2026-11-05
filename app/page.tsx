@@ -71,7 +71,7 @@ type WorkCard = {
   id: string;
   client: string;
   dates: string;
-  role: string;
+  summary: string;
   title: string;
   body: string;
   tags: readonly string[];
@@ -84,10 +84,10 @@ const workCards: readonly WorkCard[] = [
     id: "vinyl",
     client: "Vinyl Health",
     dates: "2026",
-    role: "Founding Product Designer",
-    title: "Prototyped a clinician dashboard where AI summaries trace back to source data.",
-    body: "Built a working React prototype to test where automation should act and where clinicians need explicit control with a practicing clinician.",
-    tags: ["AI-assisted EHR", "Prototype"],
+    summary: "A health technology startup exploring AI-assisted clinical care. Joined as founding product designer to shape and prototype the experience.",
+    title: "Made AI insights traceable to the patient data behind them.",
+    body: "Built a working React prototype and explored with a practicing clinician where automation helps and where clinicians need control.",
+    tags: ["AI-assisted care", "Prototyping", "Source transparency", "Clinician control"],
     links: [
       { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     ],
@@ -103,10 +103,10 @@ const workCards: readonly WorkCard[] = [
     id: "vehr",
     client: "VEHR Technologies",
     dates: "2024",
-    role: "Founding Product Designer",
-    title: "Organized the patient record around history, so clinicians can read related information together.",
-    body: "Partnered with a physician founder to turn clinical mental models into a shared timeline and aligned data views. Built the component and interaction pattern library in Figma from scratch to support scalable prototyping and clearer engineering handoff.",
-    tags: ["PHI visualization", "EHR", "Design system"],
+    summary: "A health technology startup rethinking the patient record. Partnered with the physician founder as founding product designer.",
+    title: "Brought the patient’s history into one connected view.",
+    body: "Designed a shared clinical timeline and aligned data views, supported by a Figma component library built from scratch.",
+    tags: ["Clinical workflows", "Data visualization", "Design systems", "0→1"],
     links: [
       { href: "https://visual-ehr.vercel.app", label: "View prototype", external: true },
     ],
@@ -122,10 +122,10 @@ const workCards: readonly WorkCard[] = [
     id: "dell",
     client: "Dell Children’s Health Plan",
     dates: "2023",
-    role: "Product Design Lead",
-    title: "Added the care team, ID card, and prior authorization workflows the old Medicaid portal lacked.",
-    body: "Designed a responsive member portal for 40,000+ members, audited to WCAG AA and launched in four months.",
-    tags: ["Medicaid portal", "Responsive", "Accessibility"],
+    summary: "A children’s health plan serving Medicaid members. Led product design for its member portal redesign.",
+    title: "Designed the tools members need to manage their care.",
+    body: "Added care team, ID card, and prior authorization workflows to a responsive portal for 40,000+ members, launched in four months.",
+    tags: ["Member portal", "Responsive design", "Accessibility", "Product leadership"],
     links: [],
     media: (
       <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px]">
@@ -172,7 +172,7 @@ function WorkArticle({
           <p className={workLabelClass}>{project.client}</p>
         )}
         <p className={`${bodyClass} md:mt-5`}>{project.dates}</p>
-        <p className={bodyClass}>{project.role}</p>
+        <p className={`${bodyClass} mt-3`}>{project.summary}</p>
       </div>
       <div className="mt-6 md:col-span-9 md:mt-0">
         {project.media}
