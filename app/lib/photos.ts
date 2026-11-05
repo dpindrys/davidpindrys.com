@@ -10,7 +10,21 @@ const IMAGE_EXT = /\.(jpe?g|png|webp|avif|gif)$/i;
 const EXCLUDED = new Set(["profile.jpg"]);
 const DEFAULT_ALT = "Photo by David Pindrys";
 
+const folderOrder: Record<string, string[]> = {
+  drawings: ["1.jpeg", "2.jpeg", "3.jpeg", "face.jpg", "boxer.jpg", "swing.jpg", "sad.jpg", "beauty.jpg"],
+};
+
 const photoAlts: Record<string, string> = {
+  "1.jpeg": "Quick pencil gesture drawing of a seated nude figure, one arm raised over the head.",
+  "2.jpeg": "Quick pencil gesture drawing of a standing nude figure with arms crossed over the chest.",
+  "3.jpeg": "Quick pencil gesture drawing of a standing nude figure in profile, one hand resting on the hip.",
+  "face.jpg": "Charcoal drawing of a close-cropped face emerging from heavy shading, one eye and the nose in sharp detail.",
+  "boxer.jpg": "Charcoal drawing of a man with a shaved head in profile, his shoulder and hand outlined in bold strokes.",
+  "swing.jpg": "Charcoal drawing of a seated woman with long hair, her figure framed by dark, smudged shadows.",
+  "sad.jpg": "Charcoal drawing of a shirtless older man in profile with his eyes closed, set against dark shading.",
+  "beauty.jpg": "Framed charcoal drawing of a sleeping face resting on a pillow, rendered in abstract shapes of light and dark.",
+  "maui.jpeg": "Three people in matching green Startup Weekend Maui shirts smiling on a lawn, one giving a shaka sign.",
+  "seattle.jpeg": "A man adjusting a tracker on the arm of a person wearing a VR headset, with the virtual scene on a monitor behind them.",
   "fes1.jpg": "A young man walking past others on a cobblestone street beside an ochre wall painted with a shop sign.",
   "fes2.jpg": "A man reading a newspaper at a café table, seen through a doorway beside a Coca-Cola fridge.",
   "fes3.jpg": "A vintage pinball machine in the foreground while a young man plays pool in the room behind it.",
@@ -59,11 +73,16 @@ const byName = (a: string, b: string) => a.localeCompare(b, "en", { sensitivity:
 const isHidden = (name: string) => name.split("/").some((part) => part.startsWith("."));
 
 function listImages(dir: string): string[] {
+  const order = folderOrder[dir] ?? [];
+  const rank = (name: string) => {
+    const index = order.indexOf(path.posix.basename(name));
+    return index === -1 ? order.length : index;
+  };
   return fs
     .readdirSync(path.join(PHOTO_DIR, dir), { recursive: true, encoding: "utf8" })
     .map((entry) => `${dir}/${entry.split(path.sep).join("/")}`)
     .filter((name) => IMAGE_EXT.test(name) && !isHidden(name))
-    .sort(byName);
+    .sort((a, b) => rank(a) - rank(b) || byName(a, b));
 }
 
 export function getPhotoGroups(): PhotoGroup[] {
