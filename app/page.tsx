@@ -26,6 +26,17 @@ function ExternalLinkIcon() {
   );
 }
 
+function ArrowRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[1em] w-[1em] shrink-0" aria-hidden="true" fill="none">
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+const workButtonClass =
+  "inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE]";
+
 const offerings = [
   {
     index: "01",
@@ -65,7 +76,7 @@ const offerings = [
   },
 ] as const;
 
-type WorkLink = { href: string; label: string; external?: boolean };
+type WorkLink = { href?: string; label: string; external?: boolean };
 
 type WorkCard = {
   id: string;
@@ -84,10 +95,10 @@ const workCards: readonly WorkCard[] = [
     id: "vinyl",
     client: "Vinyl Health",
     dates: "2026",
-    summary: "A health technology startup exploring AI-assisted clinical care. Joined as founding product designer to shape and prototype the experience.",
-    title: "Made AI insights traceable to the patient data behind them.",
-    body: "Built a working React prototype and explored with a practicing clinician where automation helps and where clinicians need control.",
-    tags: ["AI-assisted care", "Prototyping", "Source transparency", "Clinician control"],
+    summary: "A personal health assistant that helps patients and caregivers make sense of complex care, turning medical visits into clear next steps and keeping health information in one place.",
+    title: "Designed a clinician experience that builds trust in AI insights.",
+    body: "Made supporting patient data easy to verify without overwhelming the clinical view. Built a working React prototype to explore the balance with a practicing clinician.",
+    tags: ["Clinician experience", "Trust in AI", "Progressive disclosure", "Source transparency"],
     links: [
       { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     ],
@@ -126,7 +137,7 @@ const workCards: readonly WorkCard[] = [
     title: "Designed the tools members need to manage their care.",
     body: "Added care team, ID card, and prior authorization workflows to a responsive portal for 40,000+ members, launched in four months.",
     tags: ["Member portal", "Responsive design", "Accessibility", "Product leadership"],
-    links: [],
+    links: [{ label: "View case study" }],
     media: (
       <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -171,8 +182,8 @@ function WorkArticle({
         ) : (
           <p className={workLabelClass}>{project.client}</p>
         )}
-        <p className={`${bodyClass} md:mt-5`}>{project.dates}</p>
-        <p className={`${bodyClass} mt-3`}>{project.summary}</p>
+        <p className={`${bodyClass} md:mt-5`}>{project.summary}</p>
+        <p className={`${bodyClass} mt-3`}>{project.dates}</p>
       </div>
       <div className="mt-6 md:col-span-9 md:mt-0">
         {project.media}
@@ -192,22 +203,32 @@ function WorkArticle({
         </ul>
         {project.links.length > 0 ? (
           <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3">
-            {project.links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
-                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {link.label}
-                {link.external ? (
-                  <>
-                    <ExternalLinkIcon />
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </>
-                ) : null}
-              </a>
-            ))}
+            {project.links.map((link) =>
+              link.href ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`${workButtonClass} transition-colors hover:bg-[#2A332C]`}
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {link.label}
+                  {link.external ? (
+                    <>
+                      <ExternalLinkIcon />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </>
+                  ) : (
+                    <ArrowRightIcon />
+                  )}
+                </a>
+              ) : (
+                <span key={link.label} className={`${workButtonClass} cursor-default`}>
+                  {link.label}
+                  <ArrowRightIcon />
+                  <span className="sr-only"> (coming soon)</span>
+                </span>
+              ),
+            )}
           </div>
         ) : null}
       </div>
