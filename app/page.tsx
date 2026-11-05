@@ -81,6 +81,25 @@ type WorkCard = {
 
 const workCards: readonly WorkCard[] = [
   {
+    id: "vinyl",
+    client: "Vinyl Health",
+    dates: "2026",
+    role: "Founding Product Designer",
+    title: "Prototyped a clinician dashboard where AI summaries trace back to source data.",
+    body: "Built a working React prototype to test where automation should act and where clinicians need explicit control with a practicing clinician.",
+    tags: ["AI-assisted EHR", "Prototype"],
+    links: [
+      { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
+    ],
+    media: (
+      <HoverControlsVideo
+        src="/videos/vinyl.mp4"
+        label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
+        className="block h-auto w-full rounded-[20px] border border-black/15"
+      />
+    ),
+  },
+  {
     id: "vehr",
     client: "VEHR Technologies",
     dates: "2024",
@@ -95,26 +114,7 @@ const workCards: readonly WorkCard[] = [
       <HoverControlsVideo
         src="/videos/vehr/prototype.mp4"
         label="VEHR clinical timeline prototype aligning history, encounters, and related clinical data"
-        className="block h-auto w-full"
-      />
-    ),
-  },
-  {
-    id: "vinyl",
-    client: "Vinyl Health",
-    dates: "2025",
-    role: "Founding Product Designer",
-    title: "Prototyped a clinician dashboard where AI summaries trace back to source data.",
-    body: "Built a working React prototype to test where automation should act and where clinicians need explicit control with a practicing clinician.",
-    tags: ["AI-assisted EHR", "Prototype"],
-    links: [
-      { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
-    ],
-    media: (
-      <HoverControlsVideo
-        src="/videos/vinyl.mp4"
-        label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
-        className="block h-auto w-full border border-black/15"
+        className="block h-auto w-full rounded-[20px]"
       />
     ),
   },
@@ -128,12 +128,22 @@ const workCards: readonly WorkCard[] = [
     tags: ["Medicaid portal", "Responsive", "Accessibility"],
     links: [],
     media: (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src="/images/dellchildrens-hero.png"
-        alt="Dell Children’s Health Plan member portal on two phones, showing quick links to the care team and ID cards, and the plan overview."
-        className="block h-auto w-full"
-      />
+      <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/dellchildrens/claims-mobile2.png"
+          alt=""
+          className="absolute left-[12.9%] top-[26.5%] h-auto w-[31.9%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.02] motion-reduce:transition-none"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/dellchildrens/home-mobile2.png"
+          alt="Dell Children’s Health Plan member portal on two phones, showing the home screen quick links and a claim detail."
+          className="absolute left-[40.8%] top-[4.4%] h-auto w-[44%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
+        />
+      </div>
     ),
   },
 ];
