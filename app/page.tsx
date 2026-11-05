@@ -5,11 +5,9 @@ import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
-import CaseStudyCard, { type CaseStudyCardData } from "./components/CaseStudyCard";
 
 const shellClass = "w-full px-6 md:px-10";
-const innerClass = "mx-auto w-full max-w-[1040px]";
-const eyebrowClass = "font-sans text-[12px] uppercase leading-none tracking-[0.14em] text-black/55";
+const innerClass = "mx-auto w-full max-w-[1920px]";
 const sideLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
 const workLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
 const sideLeadClass =
@@ -71,30 +69,27 @@ type WorkLink = { href: string; label: string; external?: boolean };
 
 type WorkCard = {
   id: string;
-  index: string;
   client: string;
+  dates: string;
   role: string;
   title: string;
   body: string;
   tags: readonly string[];
-  decision?: string;
   links: readonly WorkLink[];
-  featured?: boolean;
-  media?: ReactNode;
+  media: ReactNode;
 };
 
 const workCards: readonly WorkCard[] = [
   {
     id: "vehr",
-    index: "01",
     client: "VEHR Technologies",
+    dates: "2024",
     role: "Founding Product Designer",
     title: "Organized the patient record around history, so clinicians can read related information together.",
     body: "Partnered with a physician founder to turn clinical mental models into a shared timeline and aligned data views. Built the component and interaction pattern library in Figma from scratch to support scalable prototyping and clearer engineering handoff.",
     tags: ["PHI visualization", "EHR", "Design system"],
-    featured: true,
     links: [
-      { href: "https://visual-ehr.vercel.app", label: "View interactive prototype", external: true },
+      { href: "https://visual-ehr.vercel.app", label: "View prototype", external: true },
     ],
     media: (
       <HoverControlsVideo
@@ -106,16 +101,15 @@ const workCards: readonly WorkCard[] = [
   },
   {
     id: "vinyl",
-    index: "02",
     client: "Vinyl Health",
+    dates: "2025",
     role: "Founding Product Designer",
     title: "Prototyped a clinician dashboard where AI summaries trace back to source data.",
     body: "Built a working React prototype to test where automation should act and where clinicians need explicit control with a practicing clinician.",
     tags: ["AI-assisted EHR", "Prototype"],
     links: [
-      { href: "https://vinylhealth.vercel.app/", label: "View interactive prototype", external: true },
+      { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     ],
-    featured: true,
     media: (
       <HoverControlsVideo
         src="/videos/vinyl.mp4"
@@ -124,30 +118,23 @@ const workCards: readonly WorkCard[] = [
       />
     ),
   },
-];
-
-const featuredWork = workCards.filter((project) => project.featured);
-
-const caseStudyCards: readonly CaseStudyCardData[] = [
   {
     id: "dell",
-    name: "Dell Children’s Health Plan",
-    tag: "Medicaid portal",
-    description:
-      "A responsive member portal that added care team, ID card, and prior authorization workflows the old portal lacked.",
-    imageSrc: "/images/dellchildrens-hero.png",
-    imageFramed: false,
-    imageAlt: "Dell Children’s Health Plan member portal on two phones, showing quick links to the care team and ID cards, and the plan overview.",
-    highlights: [
-      { value: "40,000+", label: "Members" },
-      { value: "AA", label: "WCAG audited" },
-      { value: "4 mo", label: "To launch" },
-    ],
-    details: [
-      { label: "Role", value: "Product Design Lead" },
-      { label: "Team", value: "Product manager, product lead, front-end and data engineers" },
-      { label: "Timeframe", value: "4 months, 2023" },
-    ],
+    client: "Dell Children’s Health Plan",
+    dates: "2023",
+    role: "Product Design Lead",
+    title: "Added the care team, ID card, and prior authorization workflows the old Medicaid portal lacked.",
+    body: "Designed a responsive member portal for 40,000+ members, audited to WCAG AA and launched in four months.",
+    tags: ["Medicaid portal", "Responsive", "Accessibility"],
+    links: [],
+    media: (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src="/images/dellchildrens-hero.png"
+        alt="Dell Children’s Health Plan member portal on two phones, showing quick links to the care team and ID cards, and the plan overview."
+        className="block h-auto w-full"
+      />
+    ),
   },
 ];
 
@@ -160,70 +147,60 @@ function WorkArticle({
   headingId?: string;
   first: boolean;
 }) {
-  const showMedia = Boolean(project.featured);
   return (
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className={`${splitClass} scroll-mt-32 md:scroll-mt-8 ${first ? "" : "mt-16 md:mt-24"}`}
+      className={`grid grid-cols-1 gap-x-10 md:grid-cols-12 scroll-mt-32 md:scroll-mt-8 ${first ? "" : "mt-16 md:mt-24"}`}
     >
-      {headingId ? (
-        <h2 id={headingId} className={workLabelClass}>
-          {project.client}
-        </h2>
-      ) : (
-        <p className={workLabelClass}>{project.client}</p>
-      )}
       <div className="md:col-span-3">
+        {headingId ? (
+          <h2 id={headingId} className={workLabelClass}>
+            {project.client}
+          </h2>
+        ) : (
+          <p className={workLabelClass}>{project.client}</p>
+        )}
+        <p className={`${bodyClass} md:mt-5`}>{project.dates}</p>
         <p className={bodyClass}>{project.role}</p>
+      </div>
+      <div className="mt-6 md:col-span-9 md:mt-0">
+        {project.media}
         <h3 id={`${project.id}-title`} className={`${cardTitleClass} mt-6 md:mt-8`}>
           {project.title}
         </h3>
-        <p className={`${bodyClass} mt-6 max-w-[40rem]`}>{project.body}</p>
-        {showMedia && project.decision ? (
-          <aside className="mt-8 max-w-[36rem] border-l-2 border-black pl-4">
-            <p className={eyebrowClass}>Decision</p>
-            <p className="mt-3 font-sans text-[16px] leading-[1.5] text-black">{project.decision}</p>
-          </aside>
+        <p className={`${bodyClass} mt-5 max-w-[44rem]`}>{project.body}</p>
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <li
+              key={tag}
+              className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+        {project.links.length > 0 ? (
+          <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3">
+            {project.links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {link.label}
+                {link.external ? (
+                  <>
+                    <ExternalLinkIcon />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </>
+                ) : null}
+              </a>
+            ))}
+          </div>
         ) : null}
       </div>
-      {showMedia ? (
-        <>
-          {project.media ? <div className="mt-8 md:col-span-4">{project.media}</div> : null}
-          <ul
-            className={`flex flex-wrap gap-2 ${project.media ? "mt-4 md:col-span-4" : "mt-6 md:col-span-3 md:col-start-2"}`}
-          >
-            {project.tags.map((tag) => (
-              <li
-                key={tag}
-                className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-          {project.links.length > 0 ? (
-            <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3 md:col-span-4">
-              {project.links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]"
-                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {link.label}
-                  {link.external ? (
-                    <>
-                      <ExternalLinkIcon />
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </>
-                  ) : null}
-                </a>
-              ))}
-            </div>
-          ) : null}
-        </>
-      ) : null}
     </article>
   );
 }
@@ -251,9 +228,17 @@ export default function Home() {
               <LinkedInButton />
               <a
                 href="#work"
-                className="font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
+                className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
               >
                 See my work
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-[1em] w-[1em] shrink-0 transition-transform duration-200 ease-out group-hover:translate-y-1 group-focus-visible:translate-y-1 motion-reduce:transition-none"
+                  aria-hidden="true"
+                  fill="none"
+                >
+                  <path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </a>
             </div>
           </div>
@@ -261,7 +246,7 @@ export default function Home() {
 
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
           <div className={innerClass}>
-            {featuredWork.map((project, index) => (
+            {workCards.map((project, index) => (
               <WorkArticle
                 key={project.id}
                 project={project}
@@ -269,21 +254,6 @@ export default function Home() {
                 first={index === 0}
               />
             ))}
-          </div>
-        </section>
-
-        <section aria-labelledby="case-studies-title" className={`${shellClass} mt-16 md:mt-24`}>
-          <div className={innerClass}>
-            <h2 id="case-studies-title" className="sr-only">
-              Case studies
-            </h2>
-            <ul className="grid grid-cols-1 gap-6 md:gap-8">
-              {caseStudyCards.map((card) => (
-                <li key={card.id} id={card.id} className="scroll-mt-32 md:scroll-mt-8">
-                  <CaseStudyCard card={card} />
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 

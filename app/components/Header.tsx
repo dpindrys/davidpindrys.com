@@ -183,7 +183,7 @@ export default function Header() {
         concealed ? "pointer-events-none -translate-y-full" : "translate-y-0"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-[1040px] items-center justify-between gap-x-4 py-6 md:py-8">
+      <div className="mx-auto flex w-full max-w-[1920px] items-center justify-between gap-x-4 py-6 md:py-8">
         <a
           href={onHome ? "#top" : "/"}
           onClick={(event) => {
@@ -245,8 +245,8 @@ export default function Header() {
               openContact(menuButtonRef.current);
             }}
           >
-            <MessageIcon />
             Let&apos;s talk
+            <MessageIcon />
           </button>
         </nav>
       </div>

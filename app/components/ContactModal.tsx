@@ -279,8 +279,8 @@ export function TalkButton({
       className={`${buttonClass} ${className}`}
       onClick={(event) => openContact(event.currentTarget)}
     >
-      <MessageIcon />
       {children}
+      <MessageIcon />
     </button>
   );
 }
