@@ -141,6 +141,32 @@ const workCards: readonly WorkCard[] = [
       </div>
     ),
   },
+  {
+    id: "frx",
+    client: "Fresenius Medical Care",
+    dates: "2022",
+    summary: "A kidney care provider with 2,800+ dialysis clinics across the US. Led design for an in-clinic medication refill workflow.",
+    title: "Turned a paper and fax process into a one-click refill.",
+    body: "Replaced paper, fax, and phone follow-ups with a refill workflow inside the Salesforce application clinic staff use at the point of care. Refills are now 70% faster, with shipment and prescription status in one place.",
+    tags: ["Clinical workflows", "Point of care", "Enterprise systems", "Salesforce"],
+    links: [{ label: "View case study" }],
+    media: (
+      <div className="group/frx relative aspect-[1494/1052] w-full overflow-hidden rounded-[20px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/frx:scale-[1.02] motion-reduce:transition-none">
+            <HoverControlsVideo
+              src="/images/frx/fresenius.mp4"
+              label="In-clinic medication refill workflow in CareTeamHub"
+              className="block h-auto w-full rounded-[12px]"
+              style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
+            />
+          </div>
+        </div>
+      </div>
+    ),
+  },
 ];
 
 function WorkArticle({
