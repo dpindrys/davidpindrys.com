@@ -151,7 +151,11 @@ function Lightbox({
         height={photo.height}
         sizes="(min-width: 640px) calc(100vw - 10rem), 100vw"
         onClick={(event) => event.stopPropagation()}
-        className="h-auto max-h-[calc(100dvh-8rem)] w-auto max-w-full object-contain motion-safe:animate-page-fade-in"
+        style={{
+          aspectRatio: `${photo.width} / ${photo.height}`,
+          width: `min(100%, calc((100dvh - 8rem) * ${photo.width / photo.height}))`,
+        }}
+        className="h-auto max-w-none object-contain motion-safe:animate-page-fade-in"
       />
     </div>,
     document.body,
