@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import HoverControlsVideo from "./components/HoverControlsVideo";
-import PhotoCarousel from "./components/PhotoCarousel";
+import PhotoGroups from "./components/PhotoGroups";
 import { getPhotoGroups } from "./lib/photos";
 
 const shellClass = "w-full px-6 md:px-10";
@@ -123,7 +123,7 @@ const workCards: readonly WorkCard[] = [
     tags: ["Member portal", "Responsive design", "Accessibility", "Product leadership"],
     links: [{ label: "View case study" }],
     media: (
-      <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px]">
+      <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -151,7 +151,7 @@ const workCards: readonly WorkCard[] = [
     tags: ["Clinical workflows", "Point of care", "Enterprise systems", "Salesforce"],
     links: [{ label: "View case study" }],
     media: (
-      <div className="group/frx relative aspect-[1494/1052] w-full overflow-hidden rounded-[20px]">
+      <div className="group/frx relative aspect-[1494/1052] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -353,8 +353,10 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="-mx-6 mt-10 md:-mx-10 md:mt-14">
-            <PhotoCarousel groups={getPhotoGroups()} />
+          <div className={`${innerClass} ${splitClass} mt-10 md:mt-14`}>
+            <div className="md:col-span-3 md:col-start-2">
+              <PhotoGroups groups={getPhotoGroups()} />
+            </div>
           </div>
         </section>
       </main>

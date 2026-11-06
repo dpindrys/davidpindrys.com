@@ -1,17 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { Photo, PhotoGroup } from "../lib/photos";
 
-const MIN_SEQUENCE_ITEMS = 8;
-const SECONDS_PER_ITEM = 14;
-const SECONDS_PER_GROUP = 3;
+const PREVIEW_COUNT = 3;
 
 const lightboxNavClass =
   "absolute top-1/2 z-[1] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+
+const tileClass =
+  "group/tile relative block w-full cursor-zoom-in overflow-hidden rounded-[12px] bg-black/5 outline-none focus-visible:ring-2 focus-visible:ring-black/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#E8E5DE]";
+
+const tileImageClass =
+  "object-cover transition-transform duration-500 ease-out motion-safe:group-hover/tile:scale-[1.03] motion-reduce:transition-none";
 
 function ChevronIcon({ direction }: { direction: "left" | "right" }) {
   return (
@@ -35,16 +39,14 @@ function CloseIcon() {
   );
 }
 
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
 function Lightbox({
+  title,
   photos,
   index,
   onNavigate,
   onClose,
 }: {
+  title: string;
   photos: readonly Photo[];
   index: number;
   onNavigate: (step: 1 | -1) => void;
@@ -99,7 +101,7 @@ function Lightbox({
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Photo viewer"
+      aria-label={title}
       onClick={onClose}
       className="fixed inset-0 z-[130] flex items-center justify-center bg-black/85 px-4 py-16 motion-safe:animate-page-fade-in sm:px-20"
     >
@@ -156,111 +158,113 @@ function Lightbox({
   );
 }
 
-export default function PhotoCarousel({ groups }: { groups: readonly PhotoGroup[] }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
+function GroupCard({ group, onOpen }: { group: PhotoGroup; onOpen: (index: number, opener: HTMLButtonElement, byPointer: boolean) => void }) {
+  const [cover, ...rest] = group.photos;
+  const thumbs = rest.slice(0, PREVIEW_COUNT - 1);
+  const hiddenCount = group.photos.length - 1 - thumbs.length;
+  const count = group.photos.length;
+  const noun = group.noun ?? "photos";
+
+  const tile = (photo: Photo, index: number, aspectClass: string, sizes: string, extra?: number) => (
+    <button
+      type="button"
+      aria-label={`Open photo: ${photo.alt}${extra ? ` (${extra} more in this set)` : ""}`}
+      onClick={(event) => onOpen(index, event.currentTarget, event.detail > 0)}
+      className={`${tileClass} ${aspectClass}`}
+    >
+      <Image src={photo.src} alt="" fill sizes={sizes} className={tileImageClass} />
+      {extra ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 flex items-center justify-center bg-black/45 font-sans text-[22px] font-medium text-white md:text-[26px]"
+        >
+          +{extra}
+        </span>
+      ) : null}
+    </button>
+  );
+
+  return (
+    <li className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-3 md:p-4">
+      <div className="grid grid-cols-2 gap-2 md:gap-3">
+        <div className="col-span-2">{tile(cover, 0, "aspect-[2/1]", "(min-width: 768px) 38vw, 100vw")}</div>
+        {thumbs.map((photo, i) => (
+          <div key={photo.src} className={thumbs.length === 1 ? "col-span-2" : undefined}>
+            {tile(
+              photo,
+              i + 1,
+              thumbs.length === 1 ? "aspect-[2/1]" : "aspect-[16/10]",
+              thumbs.length === 1 ? "(min-width: 768px) 38vw, 100vw" : "(min-width: 768px) 19vw, 50vw",
+              i === thumbs.length - 1 && hiddenCount > 0 ? hiddenCount : undefined,
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="px-1 pb-1 pt-5 md:px-2 md:pb-2 md:pt-6">
+        <p className="font-sans text-[12px] font-medium uppercase leading-none tracking-[0.14em] text-black/70">
+          {group.label} · {count} {count === 1 ? noun.replace(/s$/, "") : noun}
+        </p>
+        <h3 className="mt-3 font-sans text-[1.375rem] font-medium leading-[1.2] tracking-[-0.02em] text-black md:text-[1.625rem]">
+          {group.title}
+        </h3>
+        {group.description ? (
+          <p className="mt-2 font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]">{group.description}</p>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+export default function PhotoGroups({ groups }: { groups: readonly PhotoGroup[] }) {
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const openedByPointerRef = useRef(false);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const photos = useMemo(() => groups.flatMap((group) => group.photos), [groups]);
-  const groupStarts = useMemo(() => {
-    let start = 0;
-    return groups.map((group) => {
-      const current = start;
-      start += group.photos.length;
-      return current;
-    });
-  }, [groups]);
+  const [open, setOpen] = useState<{ group: number; index: number } | null>(null);
 
   const navigate = useCallback(
     (step: 1 | -1) => {
-      setOpenIndex((current) => (current === null ? current : (current + step + photos.length) % photos.length));
+      setOpen((current) => {
+        if (!current) return current;
+        const total = groups[current.group].photos.length;
+        return { ...current, index: (current.index + step + total) % total };
+      });
     },
-    [photos.length],
+    [groups],
   );
 
   const close = useCallback(() => {
-    setOpenIndex(null);
+    setOpen(null);
     const opener = openerRef.current;
     if (!opener) return;
     opener.focus({ preventScroll: true });
     if (openedByPointerRef.current) opener.blur();
   }, []);
 
-  if (photos.length === 0) return null;
-
-  const repeats = Math.max(1, Math.ceil(MIN_SEQUENCE_ITEMS / photos.length));
-  const sequence = Array.from({ length: repeats * groups.length }, (_, i) => i % groups.length);
-  const sequenceItems = repeats * photos.length;
-  const track = [...sequence, ...sequence];
-  const paused = openIndex !== null;
+  if (groups.length === 0) return null;
 
   return (
-    <div>
-      <div
-        ref={viewportRef}
-        onBlur={(event) => {
-          const viewport = viewportRef.current;
-          if (!viewport || viewport.contains(event.relatedTarget as Node | null) || prefersReducedMotion()) return;
-          viewport.scrollLeft = 0;
-        }}
-        className="group/strip overflow-hidden motion-reduce:overflow-x-auto"
-      >
-        <ul
-          aria-label="Photos"
-          style={{
-            animationDuration: `${sequenceItems * SECONDS_PER_ITEM + sequence.length * SECONDS_PER_GROUP}s`,
-            ...(paused ? { animationPlayState: "paused" } : {}),
-          }}
-          className="flex w-max items-start pb-2 motion-safe:animate-photo-drift group-has-[:focus-visible]/strip:[animation-play-state:paused]"
-        >
-          {track.map((groupIndex, position) => {
-            const group = groups[groupIndex];
-            const isCopy = position >= groups.length;
-            return (
-              <li
-                key={position}
-                aria-hidden={isCopy || undefined}
-                className={`flex shrink-0 items-start pl-16 md:pl-[120px] ${isCopy ? "motion-reduce:hidden" : ""}`}
-              >
-                <ul className="flex items-start gap-5 md:gap-10">
-                  {group.photos.map((photo, offset) => {
-                    const photoIndex = groupStarts[groupIndex] + offset;
-                    const aspect = photo.width / photo.height;
-                    return (
-                      <li key={photo.src} className="shrink-0">
-                        <button
-                          type="button"
-                          tabIndex={isCopy ? -1 : undefined}
-                          aria-label={`Open photo: ${photo.alt}`}
-                          onClick={(event) => {
-                            openerRef.current = event.currentTarget;
-                            openedByPointerRef.current = event.detail > 0;
-                            setOpenIndex(photoIndex);
-                          }}
-                          className="block cursor-zoom-in overflow-hidden rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-black/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-                        >
-                          <Image
-                            src={photo.src}
-                            alt=""
-                            width={photo.width}
-                            height={photo.height}
-                            sizes={`(min-width: 768px) ${Math.ceil(240 * aspect)}px, ${Math.ceil(160 * aspect)}px`}
-                            className="block h-[160px] w-auto md:h-[240px]"
-                          />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      {openIndex !== null ? (
-        <Lightbox photos={photos} index={openIndex} onNavigate={navigate} onClose={close} />
+    <>
+      <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+        {groups.map((group, groupIndex) => (
+          <GroupCard
+            key={group.id}
+            group={group}
+            onOpen={(index, opener, byPointer) => {
+              openerRef.current = opener;
+              openedByPointerRef.current = byPointer;
+              setOpen({ group: groupIndex, index });
+            }}
+          />
+        ))}
+      </ul>
+      {open ? (
+        <Lightbox
+          title={groups[open.group].title}
+          photos={groups[open.group].photos}
+          index={open.index}
+          onNavigate={navigate}
+          onClose={close}
+        />
       ) : null}
-    </div>
+    </>
   );
 }

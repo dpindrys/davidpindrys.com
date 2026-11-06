@@ -3,15 +3,66 @@ import fs from "node:fs";
 import path from "node:path";
 
 export type Photo = { src: string; alt: string; width: number; height: number };
-export type PhotoGroup = { id: string; photos: Photo[] };
+export type PhotoGroup = {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  noun?: string;
+  photos: Photo[];
+};
+
+type GroupCopy = Omit<PhotoGroup, "id" | "photos">;
 
 const PHOTO_DIR = path.join(process.cwd(), "public/images/photo");
 const IMAGE_EXT = /\.(jpe?g|png|webp|avif|gif)$/i;
 const EXCLUDED = new Set(["profile.jpg"]);
 const DEFAULT_ALT = "Photo by David Pindrys";
 
+const groupCopy: Record<string, GroupCopy> = {
+  drawings: {
+    label: "Figure drawing",
+    title: "Learning to see, one pose at a time",
+    description: "Quick gesture studies and longer charcoal pieces from figure drawing sessions.",
+    noun: "drawings",
+  },
+  fes: {
+    label: "Fes, Morocco",
+    title: "Getting lost in the medina",
+    description: "Everyday moments from the streets and cafés of the old city.",
+  },
+  me: {
+    label: "Along the way",
+    title: "Good people, good conversations",
+    description: "Hackathons, conferences, and family, a few of the people who shape how I work.",
+  },
+  misha: {
+    label: "Portrait",
+    title: "An afternoon with Misha",
+    description: "Watching games at an outdoor chess table with a regular who had seen it all.",
+  },
+  oaxaca: {
+    label: "Oaxaca, Mexico",
+    title: "The small routines of home",
+    description: "A family, a wedding, and the everyday moments in between.",
+  },
+  trotitlan: {
+    label: "Teotitlán del Valle, Mexico",
+    title: "Where the red comes from",
+    description: "Weavers grinding and dyeing wool by hand in a Zapotec weaving village.",
+  },
+  uganda: {
+    label: "Uganda",
+    title: "Out on the savanna",
+    description: "A few days watching wildlife cross the grasslands.",
+  },
+};
+
 const folderOrder: Record<string, string[]> = {
   drawings: ["1.jpeg", "2.jpeg", "3.jpeg", "face.jpg", "boxer.jpg", "swing.jpg", "sad.jpg", "beauty.jpg"],
+  me: ["sonsiel.jpg"],
+  oaxaca: ["corn.jpg"],
+  uganda: ["giraffes.jpeg"],
 };
 
 const photoAlts: Record<string, string> = {
@@ -112,6 +163,8 @@ export function getPhotoGroups(): PhotoGroup[] {
     .flatMap((entry) => {
       const names = entry.isDirectory() ? listImages(entry.name) : [entry.name];
       const photos = names.map(toPhoto).filter((photo): photo is Photo => photo !== null);
-      return photos.length > 0 ? [{ id: entry.name, photos }] : [];
+      if (photos.length === 0) return [];
+      const copy = groupCopy[entry.name] ?? { label: entry.name, title: entry.name, description: "" };
+      return [{ id: entry.name, ...copy, photos }];
     });
 }
