@@ -65,7 +65,7 @@ type WorkLink = { href?: string; label: string; external?: boolean };
 type WorkCard = {
   id: string;
   client: string;
-  logo?: { src: string; width: number; height: number; alt?: string };
+  logo?: { src: string; width: number; height: number; alt?: string; widthClass?: string };
   dates: string;
   summary: string;
   title: string;
@@ -79,7 +79,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vinyl",
     client: "Vinyl Health",
-    logo: { src: "/images/vinyl-logo.png", width: 256, height: 98 },
+    logo: { src: "/images/vinyl-logo.png", width: 256, height: 98, widthClass: "md:w-3/5" },
     dates: "2026",
     summary: "A personal health assistant that helps patients and caregivers make sense of complex care, turning medical visits into clear next steps and keeping health information in one place.",
     title: "Designed a clinician experience that builds trust in AI insights.",
@@ -193,7 +193,7 @@ function WorkArticle({
         {(() => {
           const Label = headingId ? "h2" : "p";
           return (
-            <Label id={headingId} className={project.logo ? "mb-6 w-full max-w-[200px] md:mb-0 md:w-4/5 md:max-w-none" : workLabelClass}>
+            <Label id={headingId} className={project.logo ? `mb-6 w-full max-w-[200px] md:mb-0 md:max-w-none ${project.logo.widthClass ?? "md:w-4/5"}` : workLabelClass}>
               {project.logo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
