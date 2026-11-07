@@ -65,6 +65,7 @@ type WorkLink = { href?: string; label: string; external?: boolean };
 type WorkCard = {
   id: string;
   client: string;
+  logo?: { src: string; width: number; height: number; alt?: string };
   dates: string;
   summary: string;
   title: string;
@@ -78,6 +79,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vinyl",
     client: "Vinyl Health",
+    logo: { src: "/images/vinyl-logo.png", width: 256, height: 98 },
     dates: "2026",
     summary: "A personal health assistant that helps patients and caregivers make sense of complex care, turning medical visits into clear next steps and keeping health information in one place.",
     title: "Designed a clinician experience that builds trust in AI insights.",
@@ -97,6 +99,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vehr",
     client: "VEHR Technologies",
+    logo: { src: "/images/vehr-logo.png", width: 299, height: 73 },
     dates: "2024",
     summary: "A health technology startup rethinking the patient record. Partnered with the physician founder as founding product designer.",
     title: "Brought the patient’s history into one connected view.",
@@ -116,6 +119,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "dell",
     client: "Dell Children’s Health Plan",
+    logo: { src: "/images/ascension-logo.png", width: 800, height: 201, alt: "Ascension" },
     dates: "2023",
     summary: "A children’s health plan serving Medicaid members. Led product design for its member portal redesign.",
     title: "Designed the tools members need to manage their care.",
@@ -144,6 +148,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "frx",
     client: "Fresenius Medical Care",
+    logo: { src: "/images/fresenius-logo.png", width: 466, height: 116 },
     dates: "2022",
     summary: "A kidney care provider with 2,800+ dialysis clinics across the US. Led design for an in-clinic medication refill workflow.",
     title: "Turned a paper and fax process into a one-click refill.",
@@ -185,13 +190,25 @@ function WorkArticle({
       className={`grid grid-cols-1 gap-x-10 md:grid-cols-12 scroll-mt-32 md:scroll-mt-8 ${first ? "" : "mt-16 md:mt-24"}`}
     >
       <div className="md:col-span-3">
-        {headingId ? (
-          <h2 id={headingId} className={workLabelClass}>
-            {project.client}
-          </h2>
-        ) : (
-          <p className={workLabelClass}>{project.client}</p>
-        )}
+        {(() => {
+          const Label = headingId ? "h2" : "p";
+          return (
+            <Label id={headingId} className={project.logo ? "mb-6 w-full max-w-[200px] md:mb-0 md:w-4/5 md:max-w-none" : workLabelClass}>
+              {project.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={project.logo.src}
+                  alt={project.logo.alt ?? project.client}
+                  width={project.logo.width}
+                  height={project.logo.height}
+                  className="block h-auto w-full"
+                />
+              ) : (
+                project.client
+              )}
+            </Label>
+          );
+        })()}
         <p className={`${bodyClass} md:mt-5`}>{project.summary}</p>
         <p className={`${bodyClass} mt-3`}>{project.dates}</p>
       </div>
@@ -232,10 +249,14 @@ function WorkArticle({
                   )}
                 </a>
               ) : (
-                <span key={link.label} className={`${workButtonClass} cursor-default`}>
-                  {link.label}
-                  <ArrowRightIcon />
-                  <span className="sr-only"> (coming soon)</span>
+                <span key={link.label} className="flex flex-col items-start gap-2">
+                  <span className={`${workButtonClass} cursor-default`}>
+                    {link.label}
+                    <ArrowRightIcon />
+                  </span>
+                  <span className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70">
+                    Coming soon
+                  </span>
                 </span>
               ),
             )}
