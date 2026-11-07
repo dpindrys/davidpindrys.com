@@ -348,8 +348,8 @@ export default function Home() {
             <div className="md:col-span-3">
               <p className={sideLeadClass}>
                 Outside of work, I love traveling and spending enough time somewhere to get a feel for everyday
-                life. Closer to home, I’m learning piano and making time for figure drawing, two things that keep
-                me curious and happily a beginner.
+                life. Closer to home, I’m learning piano and continuing a lifelong love of drawing, especially
+                figure drawing.
               </p>
             </div>
           </div>
