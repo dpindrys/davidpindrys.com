@@ -249,7 +249,10 @@ export default function Home() {
   return (
     <>
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
-        <section aria-labelledby="hero-title" className={`${shellClass} ${heroBandClass} pb-16 pt-16 md:pb-24 md:pt-24`}>
+        <section
+          aria-labelledby="hero-title"
+          className={`${shellClass} ${heroBandClass} flex min-h-[80svh] flex-col justify-center pb-16 pt-16 md:pb-24 md:pt-24`}
+        >
           <div className={columnClass}>
             <h1
               id="hero-title"
