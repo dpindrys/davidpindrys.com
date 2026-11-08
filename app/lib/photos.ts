@@ -9,10 +9,25 @@ export type PhotoGroup = {
   title: string;
   description: string;
   noun?: string;
+  wide?: boolean;
   photos: Photo[];
 };
 
 type GroupCopy = Omit<PhotoGroup, "id" | "photos">;
+
+const combinedGroups: { id: string; folders: string[]; copy: GroupCopy }[] = [
+  {
+    id: "photography",
+    folders: ["oaxaca", "fes", "misha", "trotitlan", "uganda"],
+    copy: {
+      label: "Photography",
+      title: "Slowing down, looking closer",
+      description:
+        "Photography helps me slow down and notice the quiet moments I might otherwise pass by. It’s a meditative practice for me, a way to be present and understand a place a little better.",
+      wide: true,
+    },
+  },
+];
 
 const PHOTO_DIR = path.join(process.cwd(), "public/images/photo");
 const IMAGE_EXT = /\.(jpe?g|png|webp|avif|gif)$/i;
@@ -26,39 +41,14 @@ const groupCopy: Record<string, GroupCopy> = {
     description: "Quick gesture studies and longer charcoal pieces from figure drawing sessions.",
     noun: "drawings",
   },
-  fes: {
-    label: "Fes, Morocco",
-    title: "Getting lost in the medina",
-    description: "Everyday moments from the streets and cafés of the old city.",
-  },
   me: {
     label: "Along the way",
     title: "Good people, good conversations",
     description: "Hackathons, conferences, and family, a few of the people who shape how I work.",
   },
-  misha: {
-    label: "Portrait",
-    title: "An afternoon with Misha",
-    description: "Watching games at an outdoor chess table with a regular who had seen it all.",
-  },
-  oaxaca: {
-    label: "Oaxaca, Mexico",
-    title: "The small routines of home",
-    description: "A family, a wedding, and the everyday moments in between.",
-  },
-  trotitlan: {
-    label: "Teotitlán del Valle, Mexico",
-    title: "Where the red comes from",
-    description: "Weavers grinding and dyeing wool by hand in a Zapotec weaving village.",
-  },
-  uganda: {
-    label: "Uganda",
-    title: "Out on the savanna",
-    description: "A few days watching wildlife cross the grasslands.",
-  },
 };
 
-const groupOrder = ["me", "drawings", "fes"];
+const groupOrder = ["me", "drawings"];
 
 const folderOrder: Record<string, string[]> = {
   drawings: ["1.jpeg", "2.jpeg", "3.jpeg", "face.jpg", "boxer.jpg", "swing.jpg", "sad.jpg", "beauty.jpg"],
@@ -158,7 +148,7 @@ export function getPhotoGroups(): PhotoGroup[] {
     };
   };
 
-  return fs
+  const groups: PhotoGroup[] = fs
     .readdirSync(PHOTO_DIR, { withFileTypes: true })
     .filter((entry) => !isHidden(entry.name) && (entry.isDirectory() || IMAGE_EXT.test(entry.name)))
     .sort((a, b) => {
@@ -175,4 +165,19 @@ export function getPhotoGroups(): PhotoGroup[] {
       const copy = groupCopy[entry.name] ?? { label: entry.name, title: entry.name, description: "" };
       return [{ id: entry.name, ...copy, photos }];
     });
+
+  // Each folder's first photo leads, so the card preview shows one from every place.
+  return combinedGroups.reduce((list, combined) => {
+    const members = combined.folders
+      .map((folder) => list.find((group) => group.id === folder))
+      .filter((group): group is PhotoGroup => group !== undefined);
+    if (members.length === 0) return list;
+    const merged: PhotoGroup = {
+      id: combined.id,
+      ...combined.copy,
+      photos: [...members.map((group) => group.photos[0]), ...members.flatMap((group) => group.photos.slice(1))],
+    };
+    const at = list.findIndex((group) => members.includes(group));
+    return [...list.slice(0, at), merged, ...list.slice(at).filter((group) => !members.includes(group))];
+  }, groups);
 }

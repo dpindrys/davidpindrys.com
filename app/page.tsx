@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
@@ -36,6 +37,52 @@ const offerings = [
     name: "Bring me onto your team",
     body: "Embedded senior product design for three to six months. I work alongside your product, engineering, and clinical partners to shape decisions and move the work through delivery.",
     ideal: "Teams that need an experienced design partner without a full-time hire.",
+  },
+] as const;
+
+const processSteps = [
+  {
+    name: "Understand people and context",
+    body: "Learn how patients, caregivers, and clinicians work. Explore their goals, environments, and constraints to understand where a design can help.",
+  },
+  {
+    name: "Model the workflow",
+    body: "Map tasks, information, and relationships before shaping the interface. Account for handoffs, exceptions, and recovery when things go wrong.",
+  },
+  {
+    name: "Prototype and evaluate",
+    body: "Build prototypes and evaluate them with representative users. Observe comprehension, task completion, and confusion, then refine the design.",
+  },
+  {
+    name: "Implement and improve",
+    body: "Partner with engineering and clinical teams through implementation. Review accessibility and interaction details, and use feedback from real-world use to guide improvements.",
+  },
+] as const;
+
+const processLayers = [
+  {
+    name: "The experience",
+    body: "Clear information, accessible interfaces, understandable instructions, and useful feedback for patients and care teams.",
+  },
+  {
+    name: "Interactions and workflows",
+    body: "Task sequences, clinical handoffs, system status, and recovery when something goes wrong.",
+  },
+  {
+    name: "Information and mental models",
+    body: "Records, relationships, and terminology organized around how people understand their work.",
+  },
+  {
+    name: "Human capabilities and limitations",
+    body: "Attention, memory, perception, physical abilities, and the demands of making decisions.",
+  },
+  {
+    name: "People and care environments",
+    body: "Patients, caregivers, and clinicians working across interruptions, time pressures, devices, and settings.",
+  },
+  {
+    name: "Research and evaluation",
+    body: "Observation, interviews, task analysis, and usability testing that inform and refine design decisions.",
   },
 ] as const;
 
@@ -255,7 +302,7 @@ export default function Home() {
               <p className={sideLeadClass}>A few ways I can help, depending on where your product is.</p>
               <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
                 {offerings.map((offer) => (
-                  <li key={offer.index} className="flex flex-col border border-black/10 p-5 sm:p-6">
+                  <li key={offer.index} className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-6 md:p-8">
                     <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
                       {offer.name}
                     </h3>
@@ -270,19 +317,61 @@ export default function Home() {
         </section>
 
         <section
+          id="process"
+          aria-labelledby="process-title"
+          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
+        >
+          <div className={columnClass}>
+            <h2 id="process-title" className={sideLeadClass}>
+              My design process
+            </h2>
+            <p className="mt-4 font-sans text-[16px] leading-[1.6] text-black/70 md:mt-5 md:text-[18px]">
+              I bring a human factors engineering perspective to healthcare design. I study how people understand
+              information, make decisions, and complete tasks within the realities of care, then work with clinical
+              and product teams to turn that understanding into accessible, usable experiences.
+            </p>
+            <ul className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-6">
+              {processSteps.map((step) => (
+                <li key={step.name} className="border border-black/10 p-5 sm:p-6">
+                  <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
+                    {step.name}
+                  </h3>
+                  <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-14 grid grid-cols-1 gap-10 md:mt-20 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-14">
+              <Image
+                src="/images/healthberg.png"
+                alt="Hospital cutaway showing calm patient-facing care above the complex coordination, information, and operational work beneath it."
+                width={1024}
+                height={1536}
+                sizes="(min-width: 1280px) 480px, (min-width: 768px) 38vw, 360px"
+                className="mx-auto h-auto w-full max-w-[360px] mix-blend-multiply md:max-w-none"
+              />
+              <ul className="flex flex-col gap-7 md:justify-between md:gap-6 md:py-[6%]">
+                {processLayers.map((layer) => (
+                  <li key={layer.name}>
+                    <h3 className="font-sans text-[18px] font-medium leading-[1.3] tracking-[-0.01em] text-black md:text-[20px]">
+                      {layer.name}
+                    </h3>
+                    <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70 md:text-[16px]">{layer.body}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="about"
           aria-labelledby="about-title"
           className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
         >
           <div className={columnClass}>
-            <h2 id="about-title" className="sr-only">
+            <h2 id="about-title" className={sideLeadClass}>
               Behind the screen
             </h2>
-            <p className={sideLeadClass}>
-              Outside of work, I love traveling and spending enough time somewhere to get a feel for everyday
-              life. Closer to home, I’m learning piano and continuing a lifelong love of drawing, especially
-              figure drawing.
-            </p>
             <div className="mt-10 md:mt-14">
               <PhotoGroups groups={getPhotoGroups()} />
             </div>

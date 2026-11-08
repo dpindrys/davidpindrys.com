@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import type { Photo, PhotoGroup } from "../lib/photos";
 
 const PREVIEW_COUNT = 3;
+const WIDE_PREVIEW_COUNT = 5;
 
 const lightboxNavClass =
   "absolute top-1/2 z-[1] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
@@ -164,7 +165,7 @@ function Lightbox({
 
 function GroupCard({ group, onOpen }: { group: PhotoGroup; onOpen: (index: number, opener: HTMLButtonElement, byPointer: boolean) => void }) {
   const [cover, ...rest] = group.photos;
-  const thumbs = rest.slice(0, PREVIEW_COUNT - 1);
+  const thumbs = rest.slice(0, (group.wide ? WIDE_PREVIEW_COUNT : PREVIEW_COUNT) - 1);
   const hiddenCount = group.photos.length - 1 - thumbs.length;
   const count = group.photos.length;
   const noun = group.noun ?? "photos";
@@ -188,6 +189,46 @@ function GroupCard({ group, onOpen }: { group: PhotoGroup; onOpen: (index: numbe
     </button>
   );
 
+  const caption = (
+    <div className="px-1 pb-1 pt-5 md:px-2 md:pb-2 md:pt-6">
+      <p className="font-sans text-[12px] font-medium uppercase leading-none tracking-[0.14em] text-black/70">
+        {group.label} · {count} {count === 1 ? noun.replace(/s$/, "") : noun}
+      </p>
+      <h3 className="mt-3 font-sans text-[1.375rem] font-medium leading-[1.2] tracking-[-0.02em] text-black md:text-[1.625rem]">
+        {group.title}
+      </h3>
+      {group.description ? (
+        <p className="mt-2 font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]">
+          {group.description}
+        </p>
+      ) : null}
+    </div>
+  );
+
+  if (group.wide) {
+    return (
+      <li className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-3 md:col-span-2 md:p-4">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
+          <div className="col-span-2 md:row-span-2">
+            {tile(cover, 0, "aspect-[16/10] md:aspect-auto md:h-full", "(min-width: 768px) 600px, 100vw")}
+          </div>
+          {thumbs.map((photo, i) => (
+            <div key={photo.src}>
+              {tile(
+                photo,
+                i + 1,
+                "aspect-[16/10]",
+                "(min-width: 768px) 300px, 50vw",
+                i === thumbs.length - 1 && hiddenCount > 0 ? hiddenCount : undefined,
+              )}
+            </div>
+          ))}
+        </div>
+        {caption}
+      </li>
+    );
+  }
+
   return (
     <li className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-3 md:p-4">
       <div className="grid grid-cols-2 gap-2 md:gap-3">
@@ -204,17 +245,7 @@ function GroupCard({ group, onOpen }: { group: PhotoGroup; onOpen: (index: numbe
           </div>
         ))}
       </div>
-      <div className="px-1 pb-1 pt-5 md:px-2 md:pb-2 md:pt-6">
-        <p className="font-sans text-[12px] font-medium uppercase leading-none tracking-[0.14em] text-black/70">
-          {group.label} · {count} {count === 1 ? noun.replace(/s$/, "") : noun}
-        </p>
-        <h3 className="mt-3 font-sans text-[1.375rem] font-medium leading-[1.2] tracking-[-0.02em] text-black md:text-[1.625rem]">
-          {group.title}
-        </h3>
-        {group.description ? (
-          <p className="mt-2 font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]">{group.description}</p>
-        ) : null}
-      </div>
+      {caption}
     </li>
   );
 }
