@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import { ContactProvider } from "./components/ContactModal";
 import Header from "./components/Header";
 import "./globals.css";
 
-const inter = Inter({
+const quicksand = Quicksand({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-quicksand",
   display: "swap",
 });
 
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={quicksand.variable} suppressHydrationWarning>
       <body className="bg-[#F4F2EE] text-black font-sans">
         <ContactProvider>
           <a href="#main-content" className="skip-link">

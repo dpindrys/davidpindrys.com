@@ -66,7 +66,7 @@ function LinkedInIcon() {
 
 export default function ColleagueQuotes() {
   return (
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {quotes.map((item) => {
         const linkedIn = item.href.includes("linkedin.com");
         return (

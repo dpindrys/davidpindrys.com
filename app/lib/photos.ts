@@ -58,6 +58,8 @@ const groupCopy: Record<string, GroupCopy> = {
   },
 };
 
+const groupOrder = ["me", "drawings", "fes"];
+
 const folderOrder: Record<string, string[]> = {
   drawings: ["1.jpeg", "2.jpeg", "3.jpeg", "face.jpg", "boxer.jpg", "swing.jpg", "sad.jpg", "beauty.jpg"],
   me: ["sonsiel.jpg"],
@@ -159,7 +161,13 @@ export function getPhotoGroups(): PhotoGroup[] {
   return fs
     .readdirSync(PHOTO_DIR, { withFileTypes: true })
     .filter((entry) => !isHidden(entry.name) && (entry.isDirectory() || IMAGE_EXT.test(entry.name)))
-    .sort((a, b) => byName(a.name, b.name))
+    .sort((a, b) => {
+      const rank = (name: string) => {
+        const index = groupOrder.indexOf(name);
+        return index === -1 ? groupOrder.length : index;
+      };
+      return rank(a.name) - rank(b.name) || byName(a.name, b.name);
+    })
     .flatMap((entry) => {
       const names = entry.isDirectory() ? listImages(entry.name) : [entry.name];
       const photos = names.map(toPhoto).filter((photo): photo is Photo => photo !== null);

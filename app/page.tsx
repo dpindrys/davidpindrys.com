@@ -4,44 +4,19 @@ import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
-import HoverControlsVideo from "./components/HoverControlsVideo";
+import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
 import { getPhotoGroups } from "./lib/photos";
 
 const shellClass = "w-full px-6 md:px-10";
-const innerClass = "mx-auto w-full max-w-[1920px]";
-const sideLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
-const workLabelClass = `w-fit self-start ${heroBandClass} mb-6 px-4 py-3 font-sans text-[16px] leading-[1.45] text-black md:mb-0 md:text-[17px]`;
 const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
 const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
-const splitClass = "grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-4";
-const cardTitleClass =
-  "font-sans text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.12] tracking-[-0.03em] text-black";
-const datePillClass =
-  "w-fit whitespace-nowrap border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70";
-const caseTitleClass =
-  "font-sans text-[clamp(1.5rem,2.4vw,2.25rem)] font-normal leading-[1.15] tracking-[-0.03em] text-black";
-
-function ExternalLinkIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-[1em] w-[1em] shrink-0" aria-hidden="true" fill="none">
-      <path d="M14 5h5v5M19 5l-9 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17 13.5V19H5V7h5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ArrowRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-[1em] w-[1em] shrink-0" aria-hidden="true" fill="none">
-      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-const workButtonClass =
-  "inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE]";
+const columnClass = "mx-auto w-full max-w-[1200px]";
+const pillBaseClass = "w-fit whitespace-nowrap border px-2.5 py-1 font-sans text-[13px] leading-none";
+const datePillClass = `${pillBaseClass} border-black/15 text-black/70`;
+const companyNameClass = "font-sans text-[1.375rem] font-medium leading-[1.1] text-black md:text-[1.75rem]";
+const tagClass = "border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70";
 
 const offerings = [
   {
@@ -64,18 +39,26 @@ const offerings = [
   },
 ] as const;
 
-type WorkLink = { href?: string; label: string; external?: boolean };
+function VideoPanel({ src, label, widthClass }: { src: string; label: string; widthClass: string }) {
+  return (
+    <div className="group/panel relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-[20px] bg-[#E8E5DE]">
+      <div
+        className={`${widthClass} overflow-hidden rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,12,19,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/panel:scale-[1.02] motion-reduce:transition-none`}
+      >
+        <HeroVideo src={src} label={label} className="block h-auto w-full" />
+      </div>
+    </div>
+  );
+}
+
+type WorkLink = { href: string; label: string; external?: boolean };
 
 type WorkCard = {
   id: string;
   client: string;
-  logo?: { src: string; width: number; height: number; alt?: string; widthClass?: string };
   dates: string;
-  summary: string;
-  title: string;
-  body: string;
-  tags: readonly string[];
-  links: readonly WorkLink[];
+  description: string;
+  link?: WorkLink;
   media: ReactNode;
 };
 
@@ -83,55 +66,38 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vinyl",
     client: "Vinyl Health",
-    logo: { src: "/images/vinyl-logo.png", width: 256, height: 98, widthClass: "md:w-3/5" },
     dates: "2026",
-    summary: "A personal health assistant that helps patients and caregivers make sense of complex care, turning medical visits into clear next steps and keeping health information in one place.",
-    title: "Designed a clinician experience that builds trust in AI insights.",
-    body: "Made supporting patient data easy to verify without overwhelming the clinical view. Built a working React prototype to explore the balance with a practicing clinician.",
-    tags: ["Clinician experience", "Trust in AI", "Progressive disclosure", "Source transparency"],
-    links: [
-      { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
-    ],
+    description: "Partnered with a practicing clinician to design and prototype an AI-assisted clinical experience, making supporting patient data easy to verify without overwhelming the view.",
+    link: { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     media: (
-      <HoverControlsVideo
+      <VideoPanel
         src="/videos/vinyl.mp4"
         label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
-        className="block h-auto w-full rounded-[20px] border border-black/15"
+        widthClass="w-[86%]"
       />
     ),
   },
   {
     id: "vehr",
     client: "VEHR Technologies",
-    logo: { src: "/images/vehr-logo.png", width: 299, height: 73 },
     dates: "2024",
-    summary: "A health technology startup rethinking the patient record. Partnered with the physician founder as founding product designer.",
-    title: "Brought the patient’s history into one connected view.",
-    body: "Designed a shared clinical timeline and aligned data views, supported by a Figma component library built from scratch.",
-    tags: ["Clinical workflows", "Data visualization", "Design systems", "0→1"],
-    links: [
-      { href: "https://visual-ehr.vercel.app", label: "View prototype", external: true },
-    ],
+    description: "Partnered with the physician founder to bring patient history into a connected clinical timeline, supported by aligned data views and a component library built from scratch.",
+    link: { href: "https://visual-ehr.vercel.app", label: "View prototype", external: true },
     media: (
-      <HoverControlsVideo
+      <VideoPanel
         src="/videos/vehr/prototype.mp4"
         label="VEHR clinical timeline prototype aligning history, encounters, and related clinical data"
-        className="block h-auto w-full rounded-[20px]"
+        widthClass="w-[70%]"
       />
     ),
   },
   {
     id: "dell",
     client: "Dell Children’s Health Plan",
-    logo: { src: "/images/ascension-logo.png", width: 764, height: 201, alt: "Ascension" },
     dates: "2023",
-    summary: "A children’s health plan serving Medicaid members. Led product design for its member portal redesign.",
-    title: "Designed the tools members need to manage their care.",
-    body: "Added care team, ID card, and prior authorization workflows to a responsive portal for 40,000+ members, launched in four months.",
-    tags: ["Member portal", "Responsive design", "Accessibility", "Product leadership"],
-    links: [{ label: "View case study" }],
+    description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
     media: (
-      <div className="group/dchp relative aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-black/15">
+      <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-x-0 top-1/2 aspect-[1626/1011] -translate-y-1/2">
@@ -148,20 +114,15 @@ const workCards: readonly WorkCard[] = [
   {
     id: "frx",
     client: "Fresenius Medical Care",
-    logo: { src: "/images/fresenius-logo.png", width: 466, height: 116 },
     dates: "2022",
-    summary: "A kidney care provider with 2,800+ dialysis clinics across the US. Led design for an in-clinic medication refill workflow.",
-    title: "Turned a paper and fax process into a one-click refill.",
-    body: "Replaced paper, fax, and phone follow-ups with a refill workflow inside the Salesforce application clinic staff use at the point of care. Refills are now 70% faster, with shipment and prescription status in one place.",
-    tags: ["Clinical workflows", "Point of care", "Enterprise systems", "Salesforce"],
-    links: [{ label: "View case study" }],
+    description: "Led design of a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups to make refills 70% faster across 2,800+ dialysis clinics.",
     media: (
-      <div className="group/frx relative aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-black/15">
+      <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/frx:scale-[1.02] motion-reduce:transition-none">
-            <HoverControlsVideo
+            <HeroVideo
               src="/images/frx/fresenius.mp4"
               label="In-clinic medication refill workflow in CareTeamHub"
               className="block h-auto w-full rounded-[12px]"
@@ -176,84 +137,26 @@ const workCards: readonly WorkCard[] = [
 
 const caseStudyIds = new Set(["dell", "frx"]);
 
-function CompanyLabel({ project, className }: { project: WorkCard; className: string }) {
-  if (!project.logo) return <p className={workLabelClass}>{project.client}</p>;
+function ProjectHero({ project }: { project: WorkCard }) {
+  const { link } = project;
   return (
-    <p className={className}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={project.logo.src}
-        alt={project.logo.alt ?? project.client}
-        width={project.logo.width}
-        height={project.logo.height}
-        className="block h-auto w-full"
-      />
-    </p>
-  );
-}
-
-function WorkDetails({
-  project,
-  titleClass,
-  pinFooter = false,
-}: {
-  project: WorkCard;
-  titleClass: string;
-  pinFooter?: boolean;
-}) {
-  return (
-    <>
-      <h3 id={`${project.id}-title`} className={titleClass}>
-        {project.title}
-      </h3>
-      <p className={`${bodyClass} mt-5 max-w-[44rem]`}>{project.body}</p>
-      <div className={pinFooter ? "mt-auto" : undefined}>
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <li
-              key={tag}
-              className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
-        {project.links.length > 0 ? (
-          <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3">
-            {project.links.map((link) =>
-              link.href ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className={`${workButtonClass} transition-colors hover:bg-[#2A332C]`}
-                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {link.label}
-                  {link.external ? (
-                    <>
-                      <ExternalLinkIcon />
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </>
-                  ) : (
-                    <ArrowRightIcon />
-                  )}
-                </a>
-              ) : (
-                <span key={link.label} className="flex flex-col items-start gap-2">
-                  <span className={`${workButtonClass} cursor-default`}>
-                    {link.label}
-                    <ArrowRightIcon />
-                  </span>
-                  <span className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70">
-                    Coming soon
-                  </span>
-                </span>
-              ),
-            )}
-          </div>
-        ) : null}
+    <HeroVideoProvider>
+      <div className="group/hero relative mt-8">
+        {link ? (
+          <a
+            href={link.href}
+            aria-label={`${link.label}: ${project.client}${link.external ? " (opens in a new tab)" : ""}`}
+            className="block rounded-[20px]"
+            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {project.media}
+          </a>
+        ) : (
+          project.media
+        )}
+        <HeroVideoToggle className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:right-5 md:top-5" />
       </div>
-    </>
+    </HeroVideoProvider>
   );
 }
 
@@ -262,38 +165,21 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className="flex h-full scroll-mt-32 flex-col md:scroll-mt-8"
+      className="scroll-mt-32 md:scroll-mt-8"
     >
-      {project.media}
-      <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
-        <p className={`${datePillClass} shrink-0 md:mt-1`}>{project.dates}</p>
-        <CompanyLabel project={project} className="w-full max-w-[140px] shrink-0 md:w-[19%] md:max-w-none" />
-        <p className={`${bodyClass} min-w-0 max-w-[44rem] flex-1`}>{project.summary}</p>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10">
+        <div className="flex flex-col items-start justify-between gap-3">
+          <h3 id={`${project.id}-title`} className={companyNameClass}>
+            {project.client}
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            <p className={datePillClass}>{project.dates}</p>
+            {project.link ? null : <p className={tagClass}>Case study coming soon</p>}
+          </div>
+        </div>
+        <p className={`${bodyClass} max-w-[36rem]`}>{project.description}</p>
       </div>
-      <WorkDetails project={project} titleClass={`${caseTitleClass} mt-8`} pinFooter />
-    </article>
-  );
-}
-
-function WorkArticle({ project }: { project: WorkCard }) {
-  return (
-    <article
-      id={project.id}
-      aria-labelledby={`${project.id}-title`}
-      className="mt-16 grid grid-cols-1 gap-x-10 scroll-mt-32 md:mt-24 md:grid-cols-12 md:scroll-mt-8"
-    >
-      <div className="md:col-span-3">
-        <p className={`${datePillClass} mb-4`}>{project.dates}</p>
-        <CompanyLabel
-          project={project}
-          className={`mb-6 w-full max-w-[200px] md:mb-0 md:max-w-none ${project.logo?.widthClass ?? "md:w-4/5"}`}
-        />
-        <p className={`${bodyClass} md:mt-5`}>{project.summary}</p>
-      </div>
-      <div className="mt-6 md:col-span-9 md:mt-0">
-        {project.media}
-        <WorkDetails project={project} titleClass={`${cardTitleClass} mt-6 md:mt-8`} />
-      </div>
+      <ProjectHero project={project} />
     </article>
   );
 }
@@ -303,20 +189,14 @@ export default function Home() {
     <>
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
         <section aria-labelledby="hero-title" className={`${shellClass} ${heroBandClass} pb-16 pt-16 md:pb-24 md:pt-24`}>
-          <div className={innerClass}>
+          <div className={columnClass}>
             <h1
               id="hero-title"
               className="max-w-[16ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black"
             >
               Healthcare workflows that people can actually use.
             </h1>
-            <p className="mt-10 max-w-[40rem] font-sans text-[17px] leading-[1.55] text-black/70 md:mt-12 md:text-[18px]">
-              I design complex clinical and public-sector products, from the first conversation with
-              clinicians to a launch that holds up. Recent work includes a Medicaid member portal for
-              40,000+ members and an in-clinic refill workflow that cut time-to-refill 70% across 2,800+
-              clinics.
-            </p>
-            <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-10">
+            <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-12">
               <TalkButton variant="hero">Let&apos;s talk</TalkButton>
               <LinkedInButton />
               <a
@@ -338,33 +218,27 @@ export default function Home() {
         </section>
 
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
-          <div className={innerClass}>
+          <div className={columnClass}>
             <h2 id="work-title" className="sr-only">
               Work
             </h2>
-            <div className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-2">
-              {workCards
-                .filter((project) => caseStudyIds.has(project.id))
-                .map((project) => (
-                  <CaseStudyArticle key={project.id} project={project} />
-                ))}
-            </div>
-            {workCards
-              .filter((project) => !caseStudyIds.has(project.id))
-              .map((project) => (
-                <WorkArticle key={project.id} project={project} />
+            <div className="flex flex-col gap-24 md:gap-32">
+              {[
+                ...workCards.filter((project) => caseStudyIds.has(project.id)),
+                ...workCards.filter((project) => !caseStudyIds.has(project.id)),
+              ].map((project) => (
+                <CaseStudyArticle key={project.id} project={project} />
               ))}
+            </div>
           </div>
         </section>
 
         <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="quotes-title" className={sideLabelClass}>
+          <div className={columnClass}>
+            <h2 id="quotes-title" className="sr-only">
               In their words
             </h2>
-            <div className="md:col-span-3">
-              <ColleagueQuotes />
-            </div>
+            <ColleagueQuotes />
           </div>
         </section>
 
@@ -373,20 +247,20 @@ export default function Home() {
           aria-labelledby="services-title"
           className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
         >
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="services-title" className={sideLabelClass}>
+          <div className={columnClass}>
+            <h2 id="services-title" className="sr-only">
               Ways to work together
             </h2>
-            <div className="md:col-span-3">
+            <div>
               <p className={sideLeadClass}>A few ways I can help, depending on where your product is.</p>
-              <ul className="mt-8 grid grid-cols-1 gap-4">
+              <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
                 {offerings.map((offer) => (
                   <li key={offer.index} className="flex flex-col border border-black/10 p-5 sm:p-6">
                     <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
                       {offer.name}
                     </h3>
                     <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{offer.body}</p>
-                    <p className="mt-5 font-sans text-[16px] font-medium text-black">Ideal for</p>
+                    <p className="mt-auto pt-5 font-sans text-[16px] font-medium text-black">Ideal for</p>
                     <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{offer.ideal}</p>
                   </li>
                 ))}
@@ -400,20 +274,16 @@ export default function Home() {
           aria-labelledby="about-title"
           className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
         >
-          <div className={`${innerClass} ${splitClass}`}>
-            <h2 id="about-title" className={sideLabelClass}>
+          <div className={columnClass}>
+            <h2 id="about-title" className="sr-only">
               Behind the screen
             </h2>
-            <div className="md:col-span-3">
-              <p className={sideLeadClass}>
-                Outside of work, I love traveling and spending enough time somewhere to get a feel for everyday
-                life. Closer to home, I’m learning piano and continuing a lifelong love of drawing, especially
-                figure drawing.
-              </p>
-            </div>
-          </div>
-          <div className={`${innerClass} ${splitClass} mt-10 md:mt-14`}>
-            <div className="md:col-span-3 md:col-start-2">
+            <p className={sideLeadClass}>
+              Outside of work, I love traveling and spending enough time somewhere to get a feel for everyday
+              life. Closer to home, I’m learning piano and continuing a lifelong love of drawing, especially
+              figure drawing.
+            </p>
+            <div className="mt-10 md:mt-14">
               <PhotoGroups groups={getPhotoGroups()} />
             </div>
           </div>

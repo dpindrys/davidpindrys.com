@@ -8,7 +8,7 @@ const linkClass = "font-sans text-[13px] text-black/55 transition-colors hover:t
 export default function Footer({ linkBase = "" }: { linkBase?: string }) {
   return (
     <footer className={`w-full px-6 md:px-10 ${heroBandClass}`}>
-      <div className="mx-auto w-full max-w-[1920px] border-t border-black/10 pt-10 md:pt-14">
+      <div className="mx-auto w-full max-w-[1200px] border-t border-black/10 pt-10 md:pt-14">
         <section id="contact" aria-labelledby="contact-title" className="scroll-mt-8">
           <h2
             id="contact-title"
