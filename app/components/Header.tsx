@@ -16,7 +16,7 @@ export const CONTACT_HREF = "mailto:dpindrys@gmail.com";
 const menuLinks = [
   { href: "#work", label: "Work" },
   { href: "#services", label: "Services" },
-  { href: "#about", label: "About" },
+  { href: "#process", label: "About" },
 ] as const;
 
 export default function Header() {

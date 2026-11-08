@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
@@ -56,33 +55,6 @@ const processSteps = [
   {
     name: "Implement and improve",
     body: "Partner with engineering and clinical teams through implementation. Review accessibility and interaction details, and use feedback from real-world use to guide improvements.",
-  },
-] as const;
-
-const processLayers = [
-  {
-    name: "The experience",
-    body: "Clear information, accessible interfaces, understandable instructions, and useful feedback for patients and care teams.",
-  },
-  {
-    name: "Interactions and workflows",
-    body: "Task sequences, clinical handoffs, system status, and recovery when something goes wrong.",
-  },
-  {
-    name: "Information and mental models",
-    body: "Records, relationships, and terminology organized around how people understand their work.",
-  },
-  {
-    name: "Human capabilities and limitations",
-    body: "Attention, memory, perception, physical abilities, and the demands of making decisions.",
-  },
-  {
-    name: "People and care environments",
-    body: "Patients, caregivers, and clinicians working across interruptions, time pressures, devices, and settings.",
-  },
-  {
-    name: "Research and evaluation",
-    body: "Observation, interviews, task analysis, and usability testing that inform and refine design decisions.",
   },
 ] as const;
 
@@ -280,26 +252,16 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
-          <div className={columnClass}>
-            <h2 id="quotes-title" className="sr-only">
-              In their words
-            </h2>
-            <ColleagueQuotes />
-          </div>
-        </section>
-
         <section
           id="services"
           aria-labelledby="services-title"
           className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
         >
           <div className={columnClass}>
-            <h2 id="services-title" className="sr-only">
-              Ways to work together
-            </h2>
             <div>
-              <p className={sideLeadClass}>A few ways I can help, depending on where your product is.</p>
+              <h2 id="services-title" className={sideLeadClass}>
+                A few ways I can help
+              </h2>
               <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
                 {offerings.map((offer) => (
                   <li key={offer.index} className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-6 md:p-8">
@@ -313,6 +275,15 @@ export default function Home() {
                 ))}
               </ul>
             </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
+          <div className={columnClass}>
+            <h2 id="quotes-title" className={`${sideLeadClass} mb-8`}>
+              In their words
+            </h2>
+            <ColleagueQuotes />
           </div>
         </section>
 
@@ -330,36 +301,24 @@ export default function Home() {
               information, make decisions, and complete tasks within the realities of care, then work with clinical
               and product teams to turn that understanding into accessible, usable experiences.
             </p>
-            <ul className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-6">
-              {processSteps.map((step) => (
-                <li key={step.name} className="border border-black/10 p-5 sm:p-6">
-                  <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
-                    {step.name}
-                  </h3>
-                  <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
+            <ol className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-6">
+              {processSteps.map((step, i) => (
+                <li key={step.name} className="flex items-start gap-5 border border-black/10 p-5 sm:gap-6 sm:p-6">
+                  <span
+                    aria-hidden="true"
+                    className="w-[0.56em] shrink-0 text-center font-sans text-[6rem] font-bold leading-[0.74] md:text-[8.5rem] tracking-[-0.04em] text-black"
+                  >
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
+                      {step.name}
+                    </h3>
+                    <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
+                  </div>
                 </li>
               ))}
-            </ul>
-            <div className="mt-14 grid grid-cols-1 gap-10 md:mt-20 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-14">
-              <Image
-                src="/images/healthberg.png"
-                alt="Hospital cutaway showing calm patient-facing care above the complex coordination, information, and operational work beneath it."
-                width={1024}
-                height={1536}
-                sizes="(min-width: 1280px) 480px, (min-width: 768px) 38vw, 360px"
-                className="mx-auto h-auto w-full max-w-[360px] mix-blend-multiply md:max-w-none"
-              />
-              <ul className="flex flex-col gap-7 md:justify-between md:gap-6 md:py-[6%]">
-                {processLayers.map((layer) => (
-                  <li key={layer.name}>
-                    <h3 className="font-sans text-[18px] font-medium leading-[1.3] tracking-[-0.01em] text-black md:text-[20px]">
-                      {layer.name}
-                    </h3>
-                    <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70 md:text-[16px]">{layer.body}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </ol>
           </div>
         </section>
 
@@ -372,7 +331,7 @@ export default function Home() {
             <h2 id="about-title" className={sideLeadClass}>
               Behind the screen
             </h2>
-            <div className="mt-10 md:mt-14">
+            <div className="mt-8">
               <PhotoGroups groups={getPhotoGroups()} />
             </div>
           </div>
