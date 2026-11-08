@@ -112,16 +112,20 @@ export function HeroVideoToggle({ className }: { className?: string }) {
       aria-label={`${playing ? "Pause" : "Play"} video: ${label}`}
       className={className}
     >
-      {playing ? (
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="h-5 w-5">
-          <rect x="6" y="5" width="4" height="14" rx="1" />
-          <rect x="14" y="5" width="4" height="14" rx="1" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="ml-0.5 h-5 w-5">
-          <path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.6-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z" />
-        </svg>
-      )}
+      <PlayPauseIcon playing={playing} />
     </button>
+  );
+}
+
+export function PlayPauseIcon({ playing }: { playing: boolean }) {
+  return playing ? (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="h-5 w-5">
+      <rect x="6" y="5" width="4" height="14" rx="1" />
+      <rect x="14" y="5" width="4" height="14" rx="1" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="ml-0.5 h-5 w-5">
+      <path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.6-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z" />
+    </svg>
   );
 }

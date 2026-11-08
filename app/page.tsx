@@ -4,6 +4,7 @@ import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
+import FloatingColumns from "./components/FloatingColumns";
 import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
 import { getPhotoGroups } from "./lib/photos";
@@ -17,6 +18,26 @@ const pillBaseClass = "w-fit whitespace-nowrap border px-2.5 py-1 font-sans text
 const datePillClass = `${pillBaseClass} border-black/15 text-black/70`;
 const companyNameClass = "font-sans text-[1.375rem] font-medium leading-[1.1] text-black md:text-[1.75rem]";
 const tagClass = "border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70";
+const heroToggleClass =
+  "absolute right-4 top-4 z-[1] flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:right-5 md:top-5";
+const heroCueClass =
+  "-translate-x-2 opacity-0 transition duration-200 ease-out group-has-[.hero-area:hover]/card:translate-x-0 group-has-[.hero-area:hover]/card:opacity-100 group-has-[.hero-area_a:focus-visible]/card:translate-x-0 group-has-[.hero-area_a:focus-visible]/card:opacity-100 motion-reduce:transition-none";
+
+function ArrowRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[0.9em] w-[0.9em] shrink-0" aria-hidden="true" fill="none">
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[0.9em] w-[0.9em] shrink-0" aria-hidden="true" fill="none">
+      <path d="M7 17L17 7M9 7h8v8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 const offerings = [
   {
@@ -119,14 +140,34 @@ const workCards: readonly WorkCard[] = [
       <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-x-0 top-1/2 aspect-[1626/1011] -translate-y-1/2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/dellchildrens/home-mobile2.png"
-            alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links."
-            className="absolute left-[28%] top-[4.4%] h-auto w-[44%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
-          />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/dellchildrens/home-mobile2.png"
+          alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links, alongside claims, care team, ID card request, and primary care physician screens."
+          className="absolute left-[10%] top-[6%] h-auto w-[30%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
+        />
+        <FloatingColumns
+          className="absolute inset-y-0 left-[55%] right-[5%] grid grid-cols-2 gap-[5%]"
+          toggleClassName={heroToggleClass}
+          columns={[
+            {
+              duration: 70,
+              images: [
+                { src: "/images/dellchildrens/all-claims.png", width: 343, height: 853 },
+                { src: "/images/dellchildrens/care-team.png", width: 343, height: 678 },
+              ],
+            },
+            {
+              duration: 80,
+              delay: 20,
+              images: [
+                { src: "/images/dellchildrens/claim.png", width: 375, height: 721 },
+                { src: "/images/dellchildrens/request-cards.png", width: 343, height: 801 },
+                { src: "/images/dellchildrens/choose-pcp.png", width: 343, height: 984 },
+              ],
+            },
+          ]}
+        />
       </div>
     ),
   },
@@ -160,7 +201,7 @@ function ProjectHero({ project }: { project: WorkCard }) {
   const { link } = project;
   return (
     <HeroVideoProvider>
-      <div className="group/hero relative mt-8">
+      <div className="hero-area group/hero relative mt-8">
         {link ? (
           <a
             href={link.href}
@@ -173,7 +214,7 @@ function ProjectHero({ project }: { project: WorkCard }) {
         ) : (
           project.media
         )}
-        <HeroVideoToggle className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:right-5 md:top-5" />
+        <HeroVideoToggle className={heroToggleClass} />
       </div>
     </HeroVideoProvider>
   );
@@ -184,12 +225,13 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className="scroll-mt-32 md:scroll-mt-8"
+      className="group/card scroll-mt-32 md:scroll-mt-8"
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10">
         <div className="flex flex-col items-start justify-between gap-3">
-          <h3 id={`${project.id}-title`} className={companyNameClass}>
+          <h3 id={`${project.id}-title`} className={`${companyNameClass} flex items-center gap-2`}>
             {project.client}
+            <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
           </h3>
           <div className="flex flex-wrap gap-2">
             <p className={datePillClass}>{project.dates}</p>

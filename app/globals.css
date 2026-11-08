@@ -62,6 +62,19 @@
 .animate-page-fade-in {
   animation: page-fade-in 220ms ease-out forwards;
 }
+
+@keyframes float-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-float-up {
+  animation: float-up var(--float-duration, 60s) linear infinite;
+}
 /* Skip link (WCAG 2.4.1 Bypass Blocks): visually hidden until keyboard-focused. */
 .skip-link {
   position: absolute;
@@ -114,5 +127,9 @@ summary:focus-visible {
   .animate-page-fade-in {
     animation: none;
     opacity: 1;
+  }
+
+  .animate-float-up {
+    animation: none;
   }
 }
