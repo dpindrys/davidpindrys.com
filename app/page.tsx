@@ -131,21 +131,17 @@ const workCards: readonly WorkCard[] = [
     tags: ["Member portal", "Responsive design", "Accessibility", "Product leadership"],
     links: [{ label: "View case study" }],
     media: (
-      <div className="group/dchp relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px] border border-black/15">
+      <div className="group/dchp relative aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/dellchildrens/claims-mobile2.png"
-          alt=""
-          className="absolute left-[12.9%] top-[26.5%] h-auto w-[31.9%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.02] motion-reduce:transition-none"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/dellchildrens/home-mobile2.png"
-          alt="Dell Children’s Health Plan member portal on two phones, showing the home screen quick links and a claim detail."
-          className="absolute left-[40.8%] top-[4.4%] h-auto w-[44%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
-        />
+        <div className="absolute inset-x-0 top-1/2 aspect-[1626/1011] -translate-y-1/2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/dellchildrens/home-mobile2.png"
+            alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links."
+            className="absolute left-[28%] top-[4.4%] h-auto w-[44%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
+          />
+        </div>
       </div>
     ),
   },
@@ -160,7 +156,7 @@ const workCards: readonly WorkCard[] = [
     tags: ["Clinical workflows", "Point of care", "Enterprise systems", "Salesforce"],
     links: [{ label: "View case study" }],
     media: (
-      <div className="group/frx relative aspect-[1626/1011] w-full overflow-hidden rounded-[20px] border border-black/15">
+      <div className="group/frx relative aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -196,71 +192,85 @@ function CompanyLabel({ project, className }: { project: WorkCard; className: st
   );
 }
 
-function WorkDetails({ project, titleClass }: { project: WorkCard; titleClass: string }) {
+function WorkDetails({
+  project,
+  titleClass,
+  pinFooter = false,
+}: {
+  project: WorkCard;
+  titleClass: string;
+  pinFooter?: boolean;
+}) {
   return (
     <>
       <h3 id={`${project.id}-title`} className={titleClass}>
         {project.title}
       </h3>
       <p className={`${bodyClass} mt-5 max-w-[44rem]`}>{project.body}</p>
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <li
-            key={tag}
-            className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
-      {project.links.length > 0 ? (
-        <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3">
-          {project.links.map((link) =>
-            link.href ? (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`${workButtonClass} transition-colors hover:bg-[#2A332C]`}
-                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {link.label}
-                {link.external ? (
-                  <>
-                    <ExternalLinkIcon />
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </>
-                ) : (
-                  <ArrowRightIcon />
-                )}
-              </a>
-            ) : (
-              <span key={link.label} className="flex flex-col items-start gap-2">
-                <span className={`${workButtonClass} cursor-default`}>
+      <div className={pinFooter ? "mt-auto" : undefined}>
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <li
+              key={tag}
+              className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+        {project.links.length > 0 ? (
+          <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-3">
+            {project.links.map((link) =>
+              link.href ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`${workButtonClass} transition-colors hover:bg-[#2A332C]`}
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
                   {link.label}
-                  <ArrowRightIcon />
+                  {link.external ? (
+                    <>
+                      <ExternalLinkIcon />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </>
+                  ) : (
+                    <ArrowRightIcon />
+                  )}
+                </a>
+              ) : (
+                <span key={link.label} className="flex flex-col items-start gap-2">
+                  <span className={`${workButtonClass} cursor-default`}>
+                    {link.label}
+                    <ArrowRightIcon />
+                  </span>
+                  <span className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70">
+                    Coming soon
+                  </span>
                 </span>
-                <span className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70">
-                  Coming soon
-                </span>
-              </span>
-            ),
-          )}
-        </div>
-      ) : null}
+              ),
+            )}
+          </div>
+        ) : null}
+      </div>
     </>
   );
 }
 
 function CaseStudyArticle({ project }: { project: WorkCard }) {
   return (
-    <article id={project.id} aria-labelledby={`${project.id}-title`} className="scroll-mt-32 md:scroll-mt-8">
-      <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
+    <article
+      id={project.id}
+      aria-labelledby={`${project.id}-title`}
+      className="flex h-full scroll-mt-32 flex-col md:scroll-mt-8"
+    >
+      {project.media}
+      <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
         <p className={`${datePillClass} shrink-0 md:mt-1`}>{project.dates}</p>
         <CompanyLabel project={project} className="w-full max-w-[140px] shrink-0 md:w-[19%] md:max-w-none" />
         <p className={`${bodyClass} min-w-0 max-w-[44rem] flex-1`}>{project.summary}</p>
       </div>
-      {project.media}
-      <WorkDetails project={project} titleClass={`${caseTitleClass} mt-8`} />
+      <WorkDetails project={project} titleClass={`${caseTitleClass} mt-8`} pinFooter />
     </article>
   );
 }
@@ -313,7 +323,7 @@ export default function Home() {
                 href="#work"
                 className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
               >
-                See my work
+                Selected work
                 <svg
                   viewBox="0 0 24 24"
                   className="h-[1em] w-[1em] shrink-0 transition-transform duration-200 ease-out group-hover:translate-y-1 group-focus-visible:translate-y-1 motion-reduce:transition-none"
