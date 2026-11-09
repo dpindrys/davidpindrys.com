@@ -61,7 +61,7 @@ const offerings = [
 const processSteps = [
   {
     name: "Understand people and context",
-    body: "Learn how patients, caregivers, and clinicians work. Explore their goals, environments, and constraints to understand where a design can help.",
+    body: "Learn how clinicians, caregivers, and patients navigate care together. Explore their goals and the constraints they face to understand how design can help.",
   },
   {
     name: "Model the workflow",
@@ -150,7 +150,7 @@ const workCards: readonly WorkCard[] = [
               duration: 70,
               images: [
                 { src: "/images/dellchildrens/all-claims.png", width: 343, height: 853 },
-                { src: "/images/dellchildrens/care-team.png", width: 343, height: 678 },
+                { src: "/images/dellchildrens/care-team.png", width: 343, height: 645 },
               ],
             },
             {
@@ -348,7 +348,8 @@ export default function Home() {
             <p className="mt-4 font-sans text-[16px] leading-[1.6] text-black/70 md:mt-5 md:text-[18px]">
               I bring a human factors engineering perspective to healthcare design. I study how people understand
               information, make decisions, and complete tasks within the realities of care, then work with clinical
-              and product teams to turn that understanding into accessible, usable experiences.
+              and product teams to turn that understanding into accessible, usable experiences that remove barriers to
+              delivering and receiving care.
             </p>
             <ol className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-6">
               {processSteps.map((step, i) => (
