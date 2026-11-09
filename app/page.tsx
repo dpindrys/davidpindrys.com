@@ -14,8 +14,6 @@ const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
 const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
 const columnClass = "mx-auto w-full max-w-[1200px]";
-const pillBaseClass = "w-fit whitespace-nowrap border px-2.5 py-1 font-sans text-[13px] leading-none";
-const datePillClass = `${pillBaseClass} border-black/15 text-black/70`;
 const companyNameClass = "font-sans text-[1.375rem] font-medium leading-[1.1] text-black md:text-[1.75rem]";
 const tagClass = "border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70";
 const heroToggleClass =
@@ -96,7 +94,7 @@ type WorkLink = { href: string; label: string; external?: boolean };
 type WorkCard = {
   id: string;
   client: string;
-  dates: string;
+  focus: readonly string[];
   description: string;
   link?: WorkLink;
   media: ReactNode;
@@ -106,7 +104,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vinyl",
     client: "Vinyl Health",
-    dates: "2026",
+    focus: ["AI Transparency", "Clinician Co-Design", "Functional Prototyping"],
     description: "Partnered with a practicing clinician to design and prototype an AI-assisted clinical experience, making supporting patient data easy to verify without overwhelming the view.",
     link: { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     media: (
@@ -119,7 +117,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "vehr",
     client: "VEHR Technologies",
-    dates: "2024",
+    focus: ["Information Architecture", "Longitudinal Records", "Design Systems"],
     description: "Partnered with the physician founder to bring patient history into a connected clinical timeline, supported by aligned data views and a component library built from scratch.",
     link: { href: "https://visual-ehr.vercel.app", label: "View prototype", external: true },
     media: (
@@ -132,7 +130,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "dell",
     client: "Dell Children’s Health Plan",
-    dates: "2023",
+    focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
     description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
     media: (
       <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
@@ -172,7 +170,7 @@ const workCards: readonly WorkCard[] = [
   {
     id: "frx",
     client: "Fresenius Medical Care",
-    dates: "2022",
+    focus: ["Workflow Simplification", "Clinical Workflows", "Exception Handling"],
     description: "Led design of a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups to make refills 70% faster across 2,800+ dialysis clinics.",
     media: (
       <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
@@ -231,9 +229,17 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
             {project.client}
             <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
           </h3>
-          <div className="flex flex-wrap gap-2">
-            <p className={datePillClass}>{project.dates}</p>
-            {project.link ? null : <p className={tagClass}>Case study coming soon</p>}
+          <div className="flex flex-col gap-3">
+            <p className="font-sans text-[13px] leading-none text-black/70">
+              {project.link?.external ? "Prototype" : "Case study coming soon"}
+            </p>
+            <ul aria-label="Focus areas" className="flex flex-wrap gap-2">
+              {project.focus.map((area) => (
+                <li key={area} className={tagClass}>
+                  {area}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <p className={`${bodyClass} max-w-[36rem]`}>{project.description}</p>
