@@ -79,11 +79,11 @@ const processSteps = [
   },
 ] as const;
 
-function VideoPanel({ src, label, widthClass }: { src: string; label: string; widthClass: string }) {
+function VideoPanel({ src, label }: { src: string; label: string }) {
   return (
     <div className="group/panel relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-[20px] bg-[#E8E5DE]">
       <div
-        className={`${widthClass} overflow-hidden rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,12,19,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/panel:scale-[1.02] motion-reduce:transition-none`}
+        className="w-[78%] overflow-hidden rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,12,19,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/panel:scale-[1.02] motion-reduce:transition-none"
       >
         <HeroVideo src={src} label={label} className="block h-auto w-full" />
       </div>
@@ -113,7 +113,6 @@ const workCards: readonly WorkCard[] = [
       <VideoPanel
         src="/videos/vinyl.mp4"
         label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
-        widthClass="w-[86%]"
       />
     ),
   },
@@ -127,7 +126,6 @@ const workCards: readonly WorkCard[] = [
       <VideoPanel
         src="/videos/vehr/prototype.mp4"
         label="VEHR clinical timeline prototype aligning history, encounters, and related clinical data"
-        widthClass="w-[70%]"
       />
     ),
   },
