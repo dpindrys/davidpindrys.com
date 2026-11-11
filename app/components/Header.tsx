@@ -6,10 +6,10 @@ import { heroBandClass } from "../lib/heroBand";
 import { MessageIcon, TalkButton, useOpenContact } from "./ContactModal";
 
 const linkClass =
-  "font-sans text-[14px] leading-none text-black/70 transition-colors hover:text-black";
+  "font-sans text-[14px] leading-none text-black underline-offset-4 hover:underline focus-visible:underline";
 
 const menuLinkClass =
-  "text-left font-sans text-[clamp(2.5rem,12vw,4rem)] font-normal leading-[1.05] tracking-[-0.035em] text-black";
+  "text-left font-sans text-[clamp(2.5rem,12vw,4rem)] font-normal leading-[1.05] tracking-[-0.035em] text-black underline-offset-[0.12em] hover:underline focus-visible:underline";
 
 export const CONTACT_HREF = "mailto:dpindrys@gmail.com";
 
@@ -204,7 +204,7 @@ export default function Header() {
           className="flex min-w-0 flex-col gap-1 font-sans leading-none"
         >
           <span className="text-[15px] font-semibold text-black">David Pindrys</span>
-          <span className="text-[13px] text-black/55">Product Design · Human Factors · Boston</span>
+          <span className="text-[13px] text-black">Product Design · Human Factors · Boston</span>
         </a>
         <button
           ref={menuButtonRef}

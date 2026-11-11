@@ -58,6 +58,8 @@ const steps = [
 
 const frameSrc = "/images/dellchildrens/mobile-frame2x.png";
 const headerSrc = "/images/dellchildrens/mobile-header2x.png";
+/** Off until carestart.png and careteam2x.png share a width; they scale differently today. */
+const stepsEnabled = false;
 
 export default function DchpCareTeam() {
   const [step, setStep] = useState(0);
@@ -81,10 +83,11 @@ export default function DchpCareTeam() {
                   key={item.title}
                   type="button"
                   aria-pressed={pressed}
-                  onClick={() => setStep(index)}
+                  disabled={!stepsEnabled}
+                  onClick={stepsEnabled ? () => setStep(index) : undefined}
                   className={`grid w-full grid-cols-[30px_minmax(0,1fr)] gap-3 border-0 border-t border-[#d9ddd7] bg-transparent py-5 text-left ${
                     pressed ? "text-[#222d27]" : "text-[#626864]"
-                  } cursor-pointer focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#cd8c2e]`}
+                  } cursor-pointer disabled:cursor-default focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#cd8c2e]`}
                 >
                   <span
                     className={`flex h-[27px] w-[27px] items-center justify-center rounded-full border text-[12px] font-bold ${
