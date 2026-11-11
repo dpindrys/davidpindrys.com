@@ -166,7 +166,13 @@ export default function DellChildrensCaseStudyPage() {
               {researchTitle}
             </h2>
             <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>{researchIntro}</p>
-            <ResearchFindings findings={researchFindings} />
+            <ResearchFindings
+              findings={researchFindings}
+              image={{
+                src: "/images/dellchildrens/cardsort.png",
+                alt: "Card sort board grouping member tasks into family members, care and providers, and plan categories.",
+              }}
+            />
           </div>
         </section>
 
@@ -211,7 +217,13 @@ export default function DellChildrensCaseStudyPage() {
               {engineeringTitle}
             </h2>
             <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>{engineeringIntro}</p>
-            <ResearchFindings findings={engineeringFindings} />
+            <ResearchFindings
+              findings={engineeringFindings}
+              image={{
+                src: "/images/dellchildrens/engineering-artifacts-mint.png",
+                alt: "Diagram showing known member ZIP code and language carried into provider search parameters to return relevant primary care results.",
+              }}
+            />
           </div>
         </section>
 

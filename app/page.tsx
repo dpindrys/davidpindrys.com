@@ -10,7 +10,6 @@ import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/Hero
 import PhotoGroups from "./components/PhotoGroups";
 import { getPhotoGroups } from "./lib/photos";
 import {
-  bodyClass,
   cardBodyClass,
   cardTitleClass,
   columnClass,
@@ -220,7 +219,7 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
             </ul>
           </div>
         </div>
-        <p className={`${bodyClass} max-w-[36rem]`}>{project.description}</p>
+        <p className="max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[17px]">{project.description}</p>
       </div>
       <ProjectHero project={project} />
     </article>

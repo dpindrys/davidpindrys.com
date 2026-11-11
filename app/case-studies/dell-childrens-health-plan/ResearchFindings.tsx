@@ -2,9 +2,17 @@
 
 import { useId, useState } from "react";
 
+import ZoomableProblemImage from "../../components/ZoomableProblemImage";
+
 type Finding = { title: string; body: string };
 
-export default function ResearchFindings({ findings }: { findings: readonly Finding[] }) {
+export default function ResearchFindings({
+  findings,
+  image,
+}: {
+  findings: readonly Finding[];
+  image?: { src: string; alt: string };
+}) {
   const [open, setOpen] = useState(0);
   const baseId = useId();
 
@@ -64,13 +72,25 @@ export default function ResearchFindings({ findings }: { findings: readonly Find
           );
         })}
       </ul>
-      <div className="w-full shrink-0 lg:w-[432px]">
-        <div
-          className="aspect-[700/800] w-full rounded-[12px] border border-black/10 bg-[#E8E5DE]"
-          role="img"
-          aria-label="Image placeholder"
+      {image ? (
+        <ZoomableProblemImage
+          src={image.src}
+          alt={image.alt}
+          width={700}
+          height={800}
+          shellClassName="w-full shrink-0 lg:w-[432px]"
+          imgClassName="block h-auto w-full rounded-[12px] border border-black/10"
+          dialogLabel={image.alt}
         />
-      </div>
+      ) : (
+        <div className="w-full shrink-0 lg:w-[432px]">
+          <div
+            className="aspect-[700/800] w-full rounded-[12px] border border-black/10 bg-[#E8E5DE]"
+            role="img"
+            aria-label="Image placeholder"
+          />
+        </div>
+      )}
     </div>
   );
 }
