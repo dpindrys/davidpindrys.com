@@ -169,7 +169,7 @@ export default function DellChildrensCaseStudyPage() {
             <ResearchFindings
               findings={researchFindings}
               image={{
-                src: "/images/dellchildrens/cardsort.png",
+                src: "/images/dellchildrens/card-sort-white-cards.png",
                 alt: "Card sort board grouping member tasks into family members, care and providers, and plan categories.",
               }}
             />

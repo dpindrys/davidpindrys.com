@@ -4,50 +4,60 @@ import { useState } from "react";
 
 import { challengeTagClass } from "../../lib/pageStyles";
 
+/** carestart.png is 720×1240. Positions are source pixels in that file. */
+const startHeight = 1240;
+/** BROWSE NEARBY PROVIDERS button, y 1070–1153. */
+const browseCenter = (1070 + 1153) / 2;
 /** careteam2x.png is 720×2428. Positions are source pixels in that file. */
-const imageHeight = 2428;
+const searchHeight = 2428;
 /** “for Amy Khandavalli”, y 162–183. */
 const memberNameCenter = (162 + 183) / 2;
 /** Dr. Dan Nelson, y 424–465. */
 const providerNameCenter = (424 + 465) / 2;
-/** “Providers in the 78701 area code”, y 786–807. */
-const searchCenter = (786 + 807) / 2;
 /** EDIT control for the area code, y 848–919. */
 const editCenter = (848 + 919) / 2;
 const phoneWidth = 432;
 const phoneScale = phoneWidth / 280;
 const markerSize = 28 * phoneScale;
 const markerHalf = markerSize / 2;
-const markerCenter = (y: number) => `calc(${(y / imageHeight) * 100}% - ${markerHalf}px)`;
+const markerCenter = (y: number, height: number) => `calc(${(y / height) * 100}% - ${markerHalf}px)`;
 /** Center of the GK profile circle, on an image that fills the screen hole. */
 const markerRight = `calc(9.237% - ${markerHalf}px)`;
+
+const screens = {
+  start: { src: "/images/dellchildrens/carestart.png", width: 720, height: startHeight },
+  search: { src: "/images/dellchildrens/careteam2x.png", width: 720, height: searchHeight },
+} as const;
 
 const steps = [
   {
     title: "Search without starting over",
     body: "Uses the member’s saved location, language, and required provider type to launch a PCP search in one tap.",
-    marker: { top: markerCenter(searchCenter) },
+    screen: "start",
+    marker: { top: markerCenter(browseCenter, startHeight) },
   },
   {
     title: "Adjust without losing progress",
     body: "Members can change their ZIP code or language preference while viewing results.",
-    marker: { top: markerCenter(editCenter) },
+    screen: "search",
+    marker: { top: markerCenter(editCenter, searchHeight) },
   },
   {
     title: "Stay in context",
     body: "Search expands beneath the current PCP, keeping the member and their existing provider visible.",
-    marker: { top: markerCenter(providerNameCenter) },
+    screen: "search",
+    marker: { top: markerCenter(providerNameCenter, searchHeight) },
   },
   {
     title: "Keep the member clear",
     body: "A prominent name makes it clear whose care team the user is managing.",
-    marker: { top: markerCenter(memberNameCenter) },
+    screen: "search",
+    marker: { top: markerCenter(memberNameCenter, searchHeight) },
   },
 ] as const;
 
 const frameSrc = "/images/dellchildrens/mobile-frame2x.png";
 const headerSrc = "/images/dellchildrens/mobile-header2x.png";
-const screenSrc = "/images/dellchildrens/careteam2x.png";
 
 export default function DchpCareTeam() {
   const [step, setStep] = useState(0);
@@ -120,8 +130,17 @@ export default function DchpCareTeam() {
                   className="relative w-full will-change-transform"
                   style={{ marginTop: 15 * phoneScale }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={screenSrc} alt="" width={720} height={2428} className="block h-auto w-full max-w-none" />
+                  {(Object.keys(screens) as (keyof typeof screens)[]).map((key) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={key}
+                      src={screens[key].src}
+                      alt=""
+                      width={screens[key].width}
+                      height={screens[key].height}
+                      className={`${key === active.screen ? "block" : "hidden"} h-auto w-full max-w-none`}
+                    />
+                  ))}
                   {steps.map((item, index) => (
                     <span
                       key={item.title}
