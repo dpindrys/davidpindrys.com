@@ -41,10 +41,10 @@ export const metadata: Metadata = {
 const focusAreas = ["Member Self-Service", "Accessibility", "End-to-End Design"] as const;
 
 const facts = [
-  { label: "Client", value: "Dell Children’s Health Plan / Ascension" },
+  { label: "Client", value: "Ascension" },
   { label: "Role", value: "Product Design Lead" },
   { label: "Platform", value: "Responsive web portal" },
-  { label: "Timeline", value: "Four months to launch" },
+  { label: "Timeline", value: "4 months" },
 ] as const;
 
 const contributions = [
@@ -103,12 +103,12 @@ export default function DellChildrensCaseStudyPage() {
   return (
     <>
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
-        <section aria-labelledby="case-title" className={`${shellClass} ${heroBandClass} pb-16 pt-12 md:pb-24 md:pt-20`}>
+        <section aria-labelledby="case-title" className={`${shellClass} ${heroBandClass} pb-2 pt-2 md:pb-[59px] md:pt-4`}>
           <div className={columnClass}>
             <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_min(38%,400px)] lg:gap-x-12">
               <h1
                 id="case-title"
-                className="max-w-[18ch] text-balance font-sans text-[clamp(2.5rem,5.6vw,4.75rem)] font-normal leading-[1] tracking-[-0.045em] text-black lg:col-start-1"
+                className="max-w-[18ch] text-balance font-sans text-[clamp(2.5rem,5.6vw,4.75rem)] font-normal leading-[1] tracking-[-0.045em] text-black lg:col-start-1 lg:row-start-1"
               >
                 {title}
               </h1>
@@ -119,25 +119,25 @@ export default function DellChildrensCaseStudyPage() {
                 height={800}
                 className="block h-auto w-full rounded-[12px] lg:col-start-2 lg:row-span-2 lg:row-start-1"
               />
-              <div className="min-w-0 lg:col-start-1">
+              <div className="min-w-0 lg:col-start-1 lg:row-start-2">
                 <p className={`${caseBodyClass} max-w-[40rem]`}>{summary}</p>
-                <ul aria-label="Focus areas" className="mt-8 flex flex-wrap gap-2">
+                <ul aria-label="Focus areas" className="mt-5 flex flex-wrap gap-2">
                   {focusAreas.map((area) => (
                     <li key={area} className={tagClass}>
                       {area}
                     </li>
                   ))}
                 </ul>
+                <dl className="mt-4 flex flex-wrap gap-6">
+                  {facts.map((fact) => (
+                    <div key={fact.label}>
+                      <dt className={metaTextClass}>{fact.label}</dt>
+                      <dd className="mt-3 font-sans text-[16px] leading-[1.4] text-black md:text-[17px]">{fact.value}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
             </div>
-            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-y border-black/10 py-8 md:mt-12 md:grid-cols-4">
-              {facts.map((fact) => (
-                <div key={fact.label}>
-                  <dt className={metaTextClass}>{fact.label}</dt>
-                  <dd className="mt-3 font-sans text-[16px] leading-[1.4] text-black md:text-[17px]">{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </section>
 
