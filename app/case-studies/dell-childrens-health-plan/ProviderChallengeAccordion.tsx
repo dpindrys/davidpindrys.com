@@ -4,12 +4,18 @@ import { useId, useState } from "react";
 
 type Point = { title: string; body: string };
 
-export default function ProviderChallengeAccordion({ points }: { points: readonly Point[] }) {
+export default function ProviderChallengeAccordion({
+  points,
+  className = "mt-8",
+}: {
+  points: readonly Point[];
+  className?: string;
+}) {
   const [open, setOpen] = useState(0);
   const baseId = useId();
 
   return (
-    <ul className="mt-8">
+    <ul className={className}>
       {points.map((point, index) => {
         const expanded = open === index;
         const buttonId = `${baseId}-button-${index}`;

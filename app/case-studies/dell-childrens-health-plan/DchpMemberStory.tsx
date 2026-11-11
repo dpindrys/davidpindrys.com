@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { tagClass } from "../../lib/pageStyles";
+import { challengeTagClass } from "../../lib/pageStyles";
 
 /** home-long2x.png is 734×2350. Positions below are source pixels in that file. */
 const homeHeight = 2350;
@@ -76,16 +76,15 @@ export default function DchpMemberStory() {
 
   return (
     <section aria-label="Interactive member portal case study" className="font-sans text-[#25292a]">
-      <p className={`${tagClass} mb-4 inline-block`}>Solution</p>
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_432px] lg:gap-12">
+      <p className={`${challengeTagClass} mb-4 inline-block`}>Solution</p>
+      <h3 className="w-full text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em]">
+        A clearer start for every member.
+      </h3>
+      <p className="mt-4 max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[20px]">
+        Frequently used actions up front, with individual tasks organized under each person.
+      </p>
+      <div className="mt-10 grid grid-cols-1 items-start gap-8 md:mt-12 lg:grid-cols-[minmax(0,1fr)_432px] lg:gap-12">
         <div>
-          <h3 className="w-full text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em]">
-            A clearer start for every member.
-          </h3>
-          <p className="mt-4 max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[20px]">
-            Frequently used actions up front, with individual tasks organized under each person.
-          </p>
-          <div className="mt-8">
             {steps.map((item, index) => {
               const pressed = index === step;
               return (
@@ -114,7 +113,6 @@ export default function DchpMemberStory() {
                 </button>
               );
             })}
-          </div>
         </div>
 
         <div className="flex flex-col items-center gap-4 lg:items-end">
