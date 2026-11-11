@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 const frxHeroPillClass =
-  "inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 font-sans text-[13px] leading-none text-black/70";
+  "inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 font-sans text-[13px] font-bold leading-none text-black/70";
 
 export default function FrxCaseStudyPage() {
   return (

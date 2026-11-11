@@ -4,20 +4,27 @@ import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
-import FloatingColumns from "./components/FloatingColumns";
+import DchpHeroMedia from "./components/DchpHeroMedia";
+import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
 import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
 import { getPhotoGroups } from "./lib/photos";
+import {
+  bodyClass,
+  cardBodyClass,
+  cardTitleClass,
+  columnClass,
+  companyNameClass,
+  filledCardClass,
+  heroToggleClass,
+  metaTextClass,
+  outlineCardClass,
+  sectionGapClass,
+  shellClass,
+  sideLeadClass,
+  tagClass,
+} from "./lib/pageStyles";
 
-const shellClass = "w-full px-6 md:px-10";
-const sideLeadClass =
-  "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
-const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
-const columnClass = "mx-auto w-full max-w-[1200px]";
-const companyNameClass = "font-sans text-[1.375rem] font-medium leading-[1.1] text-black md:text-[1.75rem]";
-const tagClass = "border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70";
-const heroToggleClass =
-  "absolute right-4 top-4 z-[1] flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:right-5 md:top-5";
 const heroCueClass =
   "-translate-x-2 opacity-0 transition duration-200 ease-out group-has-[.hero-area:hover]/card:translate-x-0 group-has-[.hero-area:hover]/card:opacity-100 group-has-[.hero-area_a:focus-visible]/card:translate-x-0 group-has-[.hero-area_a:focus-visible]/card:opacity-100 motion-reduce:transition-none";
 
@@ -102,19 +109,6 @@ type WorkCard = {
 
 const workCards: readonly WorkCard[] = [
   {
-    id: "vinyl",
-    client: "Vinyl Health",
-    focus: ["AI Transparency", "Clinician Co-Design", "Functional Prototyping"],
-    description: "Partnered with a practicing clinician to design and prototype an AI-assisted clinical experience, making supporting patient data easy to verify without overwhelming the view.",
-    link: { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
-    media: (
-      <VideoPanel
-        src="/videos/vinyl.mp4"
-        label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
-      />
-    ),
-  },
-  {
     id: "vehr",
     client: "VEHR Technologies",
     focus: ["Information Architecture", "Longitudinal Records", "Design Systems"],
@@ -128,43 +122,16 @@ const workCards: readonly WorkCard[] = [
     ),
   },
   {
-    id: "dell",
-    client: "Dell Children’s Health Plan",
-    focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
-    description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
+    id: "vinyl",
+    client: "Vinyl Health",
+    focus: ["AI Transparency", "Clinician Co-Design", "Functional Prototyping"],
+    description: "Partnered with a practicing clinician to design and prototype an AI-assisted clinical experience, making supporting patient data easy to verify without overwhelming the view.",
+    link: { href: "https://vinylhealth.vercel.app/", label: "View prototype", external: true },
     media: (
-      <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/dellchildrens/home-mobile2.png"
-          alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links, alongside claims, care team, ID card request, and primary care physician screens."
-          className="absolute left-[10%] top-[6%] h-auto w-[30%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
-        />
-        <FloatingColumns
-          className="absolute inset-y-0 left-[55%] right-[5%] grid grid-cols-2 gap-[5%]"
-          toggleClassName={heroToggleClass}
-          columns={[
-            {
-              duration: 70,
-              images: [
-                { src: "/images/dellchildrens/all-claims.png", width: 343, height: 853 },
-                { src: "/images/dellchildrens/care-team.png", width: 343, height: 645 },
-              ],
-            },
-            {
-              duration: 80,
-              delay: 20,
-              images: [
-                { src: "/images/dellchildrens/claim.png", width: 375, height: 721 },
-                { src: "/images/dellchildrens/request-cards.png", width: 343, height: 801 },
-                { src: "/images/dellchildrens/choose-pcp.png", width: 343, height: 984 },
-              ],
-            },
-          ]}
-        />
-      </div>
+      <VideoPanel
+        src="/videos/vinyl.mp4"
+        label="Vinyl Health clinician dashboard prototype with AI summaries linked to source data"
+      />
     ),
   },
   {
@@ -189,6 +156,14 @@ const workCards: readonly WorkCard[] = [
       </div>
     ),
   },
+  {
+    id: "dell",
+    client: "Dell Children’s Health Plan",
+    focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
+    description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
+    link: { href: "/case-studies/dell-childrens-health-plan", label: "View case study" },
+    media: <DchpHeroMedia />,
+  },
 ];
 
 const caseStudyIds = new Set(["dell", "frx"]);
@@ -197,21 +172,24 @@ function ProjectHero({ project }: { project: WorkCard }) {
   const { link } = project;
   return (
     <HeroVideoProvider>
-      <div className="hero-area group/hero relative mt-8">
-        {link ? (
-          <a
-            href={link.href}
-            aria-label={`${link.label}: ${project.client}${link.external ? " (opens in a new tab)" : ""}`}
-            className="block rounded-[20px]"
-            {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          >
-            {project.media}
-          </a>
-        ) : (
-          project.media
-        )}
-        <HeroVideoToggle className={heroToggleClass} />
-      </div>
+      <FloatingPlaybackProvider>
+        <div className="hero-area group/hero relative mt-8">
+          {link ? (
+            <a
+              href={link.href}
+              aria-label={`${link.label}: ${project.client}${link.external ? " (opens in a new tab)" : ""}`}
+              className="block rounded-[20px]"
+              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              {project.media}
+            </a>
+          ) : (
+            project.media
+          )}
+          <HeroVideoToggle className={heroToggleClass} />
+          <FloatingColumnsToggle className={heroToggleClass} />
+        </div>
+      </FloatingPlaybackProvider>
     </HeroVideoProvider>
   );
 }
@@ -230,8 +208,8 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
             <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
           </h3>
           <div className="flex flex-col gap-3">
-            <p className="font-sans text-[13px] leading-none text-black/70">
-              {project.link?.external ? "Prototype" : "Case study coming soon"}
+            <p className={metaTextClass}>
+              {project.link ? (project.link.external ? "Prototype" : "Case study") : "Case study coming soon"}
             </p>
             <ul aria-label="Focus areas" className="flex flex-wrap gap-2">
               {project.focus.map((area) => (
@@ -304,7 +282,7 @@ export default function Home() {
         <section
           id="services"
           aria-labelledby="services-title"
-          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
+          className={`${shellClass} scroll-mt-32 md:scroll-mt-8 ${sectionGapClass}`}
         >
           <div className={columnClass}>
             <div>
@@ -313,13 +291,13 @@ export default function Home() {
               </h2>
               <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
                 {offerings.map((offer) => (
-                  <li key={offer.index} className="flex flex-col rounded-[20px] bg-[#E8E5DE] p-6 md:p-8">
-                    <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
+                  <li key={offer.index} className={`${filledCardClass} flex flex-col`}>
+                    <h3 className={cardTitleClass}>
                       {offer.name}
                     </h3>
-                    <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{offer.body}</p>
+                    <p className={`${cardBodyClass} mt-3`}>{offer.body}</p>
                     <p className="mt-auto pt-5 font-sans text-[16px] font-medium text-black">Ideal for</p>
-                    <p className="mt-2 font-sans text-[15px] leading-[1.55] text-black/70">{offer.ideal}</p>
+                    <p className={`${cardBodyClass} mt-2`}>{offer.ideal}</p>
                   </li>
                 ))}
               </ul>
@@ -327,7 +305,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 mt-20 md:mt-28`}>
+        <section aria-labelledby="quotes-title" className={`${shellClass} scroll-mt-8 ${sectionGapClass}`}>
           <div className={columnClass}>
             <h2 id="quotes-title" className={`${sideLeadClass} mb-8`}>
               In their words
@@ -339,7 +317,7 @@ export default function Home() {
         <section
           id="process"
           aria-labelledby="process-title"
-          className={`${shellClass} scroll-mt-32 mt-20 md:mt-28 md:scroll-mt-8`}
+          className={`${shellClass} scroll-mt-32 md:scroll-mt-8 ${sectionGapClass}`}
         >
           <div className={columnClass}>
             <h2 id="process-title" className={sideLeadClass}>
@@ -353,7 +331,7 @@ export default function Home() {
             </p>
             <ol className="mt-8 grid grid-cols-1 gap-4 md:mt-10 md:grid-cols-2 md:gap-6">
               {processSteps.map((step, i) => (
-                <li key={step.name} className="flex items-start gap-5 border border-black/10 p-5 sm:gap-6 sm:p-6">
+                <li key={step.name} className={`${outlineCardClass} flex items-start gap-5 sm:gap-6`}>
                   <span
                     aria-hidden="true"
                     className="w-[0.56em] shrink-0 text-center font-sans text-[6rem] font-bold leading-[0.74] md:text-[8.5rem] tracking-[-0.04em] text-black"
@@ -361,10 +339,10 @@ export default function Home() {
                     {i + 1}
                   </span>
                   <div className="min-w-0">
-                    <h3 className="font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black">
+                    <h3 className={cardTitleClass}>
                       {step.name}
                     </h3>
-                    <p className="mt-3 font-sans text-[15px] leading-[1.55] text-black/70">{step.body}</p>
+                    <p className={`${cardBodyClass} mt-3`}>{step.body}</p>
                   </div>
                 </li>
               ))}
@@ -375,7 +353,7 @@ export default function Home() {
         <section
           id="about"
           aria-labelledby="about-title"
-          className={`${shellClass} scroll-mt-32 mt-20 pb-20 md:mt-28 md:scroll-mt-8 md:pb-28`}
+          className={`${shellClass} scroll-mt-32 pb-20 md:scroll-mt-8 md:pb-28 ${sectionGapClass}`}
         >
           <div className={columnClass}>
             <h2 id="about-title" className={sideLeadClass}>

@@ -1,7 +1,7 @@
 /** Order for next-project: FRx → DCHP → FRx. */
 export const CASE_STUDY_PATHS = [
   "/case-studies/frx",
-  "/case-studies/dell-childrens",
+  "/case-studies/dell-childrens-health-plan",
 ] as const;
 
 export type CaseStudyPath = (typeof CASE_STUDY_PATHS)[number];

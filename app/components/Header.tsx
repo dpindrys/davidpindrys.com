@@ -77,13 +77,14 @@ export default function Header() {
         showHeader();
         return;
       }
-      let next = hiddenRef.current;
+      let next: boolean;
       if (y < 24) next = false;
       else if (linkScrolling) {
         next = true;
         endLinkScrollSoon();
       } else if (delta > 8) next = true;
       else if (delta < -8) next = false;
+      else return;
       lastY.current = y;
       if (next === hiddenRef.current) return;
       hiddenRef.current = next;
