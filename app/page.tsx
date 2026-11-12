@@ -160,7 +160,6 @@ const workCards: readonly WorkCard[] = [
     client: "Dell Children’s Health Plan",
     focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
     description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
-    link: { href: "/case-studies/dell-childrens-health-plan", label: "View case study" },
     media: <DchpHeroMedia />,
   },
 ];
