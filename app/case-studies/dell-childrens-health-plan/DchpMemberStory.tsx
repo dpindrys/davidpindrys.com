@@ -10,8 +10,11 @@ const quickLinksY = 236;
 const coveredMembersY = 1028;
 /** Moves Covered Members up to where Quick Links sits. Stays short of the frame bottom. */
 const coveredMembersScroll = (coveredMembersY - quickLinksY) / homeHeight;
-/** “Welcome, Gopi” line, y 21–90. The marker is centered on it. */
-const welcomeCenter = (21 + 90) / 2;
+/**
+ * Past this, the screenshot's bottom edge rises above the bottom of the screen. Measured at the
+ * 432px phone; narrower phones allow slightly more because the top margin is a fixed pixel size.
+ */
+const maxScroll = 0.455;
 /** Blue Quick Links header, y 236–367. */
 const quickLinksCenter = (236 + 367) / 2;
 /** Blue Covered Members title, y 1028–1159. */
@@ -34,33 +37,21 @@ const markerRight = `calc(10.014% - ${markerHalf}px)`;
 
 const steps = [
   {
-    title: "Personalized greeting",
-    body: "A brief welcome that addresses the member by name.",
+    title: "Start with the task",
+    body: "Quick Links provides direct access to care teams, provider search, plan coverage, and support.",
     /** Portion of the long page moved up. 0 keeps the top on screen. */
-    scroll: 0,
-    marker: { top: markerCenter(welcomeCenter) },
-  },
-  {
-    title: "Member tasks first",
-    body: "Four focused links bring care, provider search, coverage, and support to the top of the page.",
     scroll: 0,
     marker: { top: markerCenter(quickLinksCenter) },
   },
   {
-    title: "A manageable family view",
-    body: "Expandable sections keep individual actions accessible without showing everyone’s details at once.",
+    title: "Find the right person",
+    body: "Expandable member sections let parents and caregivers access one person’s information without displaying everyone’s details at once.",
     scroll: coveredMembersScroll,
     marker: { top: markerCenter(coveredMembersCenter) },
   },
   {
-    title: "The right member, already selected",
-    body: "Opens care team, ID cards, and handbook information for that individual without asking users to select them again.",
-    scroll: coveredMembersScroll,
-    marker: { top: "59%" },
-  },
-  {
-    title: "Common tasks, one tap away",
-    body: "Prioritized frequently used tasks within each member’s details.",
+    title: "Continue with that member selected",
+    body: "Opening a care team, ID card, or handbook from a member’s section carries that person into the next task.",
     scroll: coveredMembersScroll,
     marker: { top: markerCenter(careTeamCenter) },
   },
@@ -77,14 +68,15 @@ export default function DchpMemberStory() {
   return (
     <section aria-label="Interactive member portal case study" className="font-sans text-[#25292a]">
       <p className={`${challengeTagClass} mb-4 inline-block`}>Solution</p>
-      <h3 className="w-full text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em]">
-        A clearer start for every member.
-      </h3>
-      <p className="mt-4 max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[20px]">
-        Frequently used actions up front, with individual tasks organized under each person.
-      </p>
-      <div className="mt-10 grid grid-cols-1 items-start gap-8 md:mt-12 lg:grid-cols-[minmax(0,1fr)_432px] lg:gap-12">
+      <div className="grid grid-cols-1 items-start gap-8 lg:items-center lg:grid-cols-[minmax(0,1fr)_432px] lg:gap-12">
         <div>
+          <h3 className="w-full text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em]">
+            A clearer starting point for families.
+          </h3>
+          <p className="mt-4 max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[20px]">
+            Shared shortcuts at the top, with individual information and actions organized under each covered member.
+          </p>
+          <div className="mt-8 md:mt-10">
             {steps.map((item, index) => {
               const pressed = index === step;
               return (
@@ -113,6 +105,7 @@ export default function DchpMemberStory() {
                 </button>
               );
             })}
+          </div>
         </div>
 
         <div className="flex flex-col items-center gap-4 lg:items-end">
@@ -141,7 +134,7 @@ export default function DchpMemberStory() {
                   style={{
                     marginLeft: "-0.972%",
                     marginTop: 15 * phoneScale,
-                    transform: active.scroll ? `translateY(-${active.scroll * 100}%)` : undefined,
+                    transform: active.scroll ? `translateY(-${Math.min(active.scroll, maxScroll) * 100}%)` : undefined,
                   }}
                 >
                     {/* eslint-disable-next-line @next/next/no-img-element */}

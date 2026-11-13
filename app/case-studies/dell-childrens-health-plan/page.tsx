@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-
 import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import Footer from "../../components/Footer";
-import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import { heroBandClass } from "../../lib/heroBand";
 import {
   columnClass,
@@ -11,22 +9,18 @@ import {
   sectionGapClass,
   shellClass,
   sideLeadClass,
-  challengeTagClass,
-  tagClass,
+  eyebrowClass,
 } from "../../lib/pageStyles";
 
 const caseBodyClass = "font-sans text-[16px] leading-[1.6] text-black md:text-[20px]";
-const storyEyebrowClass = `${challengeTagClass} mb-4 inline-block`;
+const storyEyebrowClass = `${eyebrowClass} mb-4`;
 const storyTitleClass = "w-full text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em]";
-const storyBandClass = `${heroBandClass} py-14 md:py-20`;
-import DchpCareTeam from "./DchpCareTeam";
-import DchpMemberStory from "./DchpMemberStory";
-import ProviderChallengeAccordion from "./ProviderChallengeAccordion";
-import ResearchFindings from "./ResearchFindings";
+const storyBandClass = "py-14 md:py-20";
+import DchpStory, { type StoryExample, type StoryPanel } from "./DchpStory";
 
-const title = "Making it easier for families to manage their care";
+const title = "Helping families manage their care.";
 const summary =
-  "Redesigning Dell Children’s Health Plan’s member portal with accessible, responsive tools for 40,000+ Medicaid members.";
+  "Redesigned the member portal to bring everyday tasks and each family member’s information into one place.";
 
 export const metadata: Metadata = {
   title: "Dell Children’s Health Plan",
@@ -34,126 +28,182 @@ export const metadata: Metadata = {
   openGraph: { title: `Dell Children’s Health Plan | David Pindrys`, description: summary },
 };
 
-const focusAreas = ["Member Self-Service", "Accessibility", "End-to-End Design"] as const;
-
 const facts = [
-  { label: "Client", value: "Ascension" },
   { label: "Role", value: "Product Design Lead" },
-  { label: "Platform", value: "Responsive web portal" },
+  { label: "Client", value: "Ascension" },
+  { label: "Platform", value: "Responsive web" },
   { label: "Timeline", value: "4 months" },
 ] as const;
 
-const researchTitle = "Understanding how members find and manage care.";
-const researchIntro =
-  "Reviewed the existing portal and provider search, evaluated usability, and organized a card sort with representative users to inform the navigation and task structure.";
-const researchFindings = [
+const researchColumns = [
   {
-    title: "How users organized information",
-    body: "Organized a card sort with representative users to understand how they grouped information and everyday care tasks.",
+    title: "Organizing around the family",
+    body: "Reviewed the existing experience and organized a card sort with representative users to inform how shared tasks and member-specific information could be grouped.",
   },
   {
-    title: "Where the experience created friction",
-    body: "Conducted a heuristic evaluation of the existing portal, examining navigation, information hierarchy, and support for common tasks.",
-  },
-  {
-    title: "How the experiences connected",
-    body: "Reviewed the member portal and separate provider search to understand where members moved between systems, repeated information, or lost context.",
+    title: "Building on existing capabilities",
+    body: "Worked with engineering to inspect available member data and supported search parameters, identifying what could carry into the next task.",
   },
 ] as const;
 
-const homeChallengePoints = [
+const homePanels: readonly StoryPanel[] = [
   {
-    title: "Important tasks were hard to find",
-    body: "The existing homepage made key links difficult to scan.",
+    label: "The need",
+    body: (
+      <>
+        Help parents and caregivers <strong>find everyday tasks</strong> and manage information for{" "}
+        <strong>multiple covered members</strong>.
+      </>
+    ),
   },
   {
-    title: "Multiple members, one account",
-    body: "Parents and caregivers needed to move between family members without losing context.",
+    label: "The friction",
+    body: (
+      <>
+        The existing homepage <strong>separated key links from member information</strong>, making families navigate
+        between them to complete individual tasks.
+      </>
+    ),
   },
-] as const;
+  {
+    label: "The approach",
+    body: (
+      <>
+        Bring <strong>shared shortcuts up front</strong> and group individual actions{" "}
+        <strong>beneath each covered member</strong>.
+      </>
+    ),
+  },
+];
 
-const providerChallengeSummary =
-  "A separate search asked members to enter information the portal already knew, with a phone call still needed to schedule care.";
-const providerChallengePoints = [
+const homeExamples: readonly StoryExample[] = [
   {
-    title: "A separate experience",
-    body: "Provider search took members outside the portal to find care.",
+    title: "Start with a task",
+    caption: "Shared shortcuts provide direct access to care, coverage, and support.",
+    src: "/images/dellchildrens/welcome2.png",
+    width: 734,
+    height: 1066,
+    cardLeft: 32,
+    cardWidth: 670,
+    alt: "Member portal home screen: “Welcome, Gopi Khandavalli” above a Quick Links card with Your care team, Search for a new provider, Review plan coverage, and Get live support.",
   },
   {
-    title: "Information entered again",
-    body: "The search didn’t carry over the member’s location, language, or need for a primary care provider.",
+    title: "Continue with a person",
+    caption: "Member-specific actions open with that person already selected.",
+    src: "/images/dellchildrens/covered-members.png",
+    width: 710,
+    height: 1302,
+    cardLeft: 20,
+    cardWidth: 670,
+    cropHeight: 1066,
+    alt: "Covered Members section listing four family members, with Madhavi Khandavalli expanded to show Care Team, ID Cards, and Members Handbook actions.",
   },
-  {
-    title: "More setup before results",
-    body: "Members had to specify their search criteria before seeing relevant providers.",
-  },
-  {
-    title: "Another step to get care",
-    body: "Finding a provider didn’t complete the task. Scheduling still required a phone call.",
-  },
-] as const;
+];
 
-const engineeringTitle = "Turning existing capabilities into a simpler member experience.";
-const engineeringIntro =
-  "Worked with engineering to understand the available API data and how the provider search URL was constructed. Identified query parameters that could carry member context into the search, reducing the information members had to enter again.";
-const engineeringFindings = [
+const careTeamPanels: readonly StoryPanel[] = [
   {
-    title: "Understand the available data",
-    body: "Reviewed what the APIs returned and which member details were available to support provider search.",
+    label: "The need",
+    body: (
+      <>
+        Help families find a <strong>new primary care provider</strong> for the <strong>right covered member</strong>.
+      </>
+    ),
   },
   {
-    title: "Trace how search worked",
-    body: "Inspected the search URL and its query parameters to understand how location, language, and provider type shaped the results.",
+    label: "The friction",
+    body: (
+      <>
+        Provider search <strong>lived outside the portal</strong> and required users to{" "}
+        <strong>enter information the portal already knew</strong>.
+      </>
+    ),
   },
   {
-    title: "Connect the findings to the experience",
-    body: "Designed a search that used known member information to show relevant providers, with controls to adjust preferences.",
+    label: "The approach",
+    body: (
+      <>
+        <strong>Use available member information</strong> to open relevant results, with preferences that remain{" "}
+        <strong>easy to adjust</strong>.
+      </>
+    ),
   },
-] as const;
+];
+
+const careTeamExamples: readonly StoryExample[] = [
+  {
+    title: "Start from the member’s care team",
+    caption: "Browse nearby providers directly beneath the member’s name and current PCP.",
+    src: "/images/dellchildrens/carestart.png",
+    width: 734,
+    height: 1140,
+    cardLeft: 36,
+    cardWidth: 662,
+    alt: "Care Team screen for Madhavi Khandavalli showing her current primary care provider, Dr. Dan Nelson, above a “Need a new Primary Care Physician?” card with a Browse Nearby Providers button.",
+  },
+  {
+    title: "Review results without starting over",
+    caption:
+      "Results use the member’s location, language preference, and required provider type. Users can adjust their ZIP code or language while reviewing providers.",
+    src: "/images/dellchildrens/careteam2x.png",
+    width: 734,
+    height: 2422,
+    cardLeft: 36,
+    cardWidth: 662,
+    cropHeight: 1140,
+    alt: "Provider results beneath Madhavi Khandavalli’s current PCP: “Providers in the 78701” with a Choose New Area Code button, a Speaks Spanish filter, and the first matching provider.",
+  },
+];
 
 const outcomes = [
-  "Launched the redesigned portal in four months for 40,000+ members.",
-  "Expanded self-service access to care teams, ID cards, claims, prior authorizations, and support.",
-  "Made core tasks available through a responsive experience for members and caregivers.",
+  { label: "Delivery", body: "Launched the redesigned portal in four months." },
+  { label: "Reach", body: "A responsive portal serving 40,000+ Medicaid members and the families managing their care." },
+  {
+    label: "Self-service",
+    body: "Expanded access to care teams, ID cards, claims, prior authorizations, and support.",
+  },
+  {
+    label: "Accessibility",
+    body: "Reviewed the portal against WCAG AA and documented remediations with a developer conformance checklist.",
+  },
 ] as const;
 
 export default function DellChildrensCaseStudyPage() {
   return (
     <>
       <main id="main-content" className="min-h-screen bg-[#F4F2EE]">
-        <section aria-labelledby="case-title" className={`${shellClass} ${heroBandClass} pb-2 pt-2 md:pb-[59px] md:pt-4`}>
+        <section aria-labelledby="case-title" className={`${shellClass} ${heroBandClass} pb-8 pt-2 md:pb-[50px] md:pt-4`}>
           <div className={columnClass}>
-            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_min(38%,400px)] lg:gap-x-12">
-              <h1
-                id="case-title"
-                className="max-w-[18ch] text-balance font-sans text-[clamp(2.5rem,5.6vw,4.75rem)] font-normal leading-[1] tracking-[-0.045em] text-black lg:col-start-1 lg:row-start-1"
-              >
-                {title}
-              </h1>
-              <img
-                src="/images/dellchildrens/fatherchild.png"
-                alt="A father holding his baby while looking at a phone."
-                width={701}
-                height={800}
-                className="block h-auto w-full rounded-[12px] lg:col-start-2 lg:row-span-2 lg:row-start-1"
-              />
-              <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-                <p className={`${caseBodyClass} max-w-[40rem]`}>{summary}</p>
-                <ul aria-label="Focus areas" className="mt-5 flex flex-wrap gap-2">
-                  {focusAreas.map((area) => (
-                    <li key={area} className={tagClass}>
-                      {area}
-                    </li>
-                  ))}
-                </ul>
-                <dl className="mt-4 flex flex-wrap gap-6">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-x-14">
+              <div className="min-w-0">
+                <p className={eyebrowClass}>
+                  Dell Children’s Health Plan
+                </p>
+                <h1
+                  id="case-title"
+                  className="mt-5 max-w-[10.5em] text-balance font-sans text-[clamp(2.5rem,5.6vw,4.75rem)] font-normal leading-[1.02] tracking-[-0.045em] text-black md:mt-7"
+                >
+                  {title}
+                </h1>
+                <p className={`${caseBodyClass} mt-5 max-w-[36rem] md:mt-7`}>{summary}</p>
+                <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-black/15 pt-6 sm:grid-cols-[repeat(4,auto)] sm:justify-between md:mt-10">
                   {facts.map((fact) => (
-                    <div key={fact.label}>
-                      <dt className={metaTextClass}>{fact.label}</dt>
-                      <dd className="mt-3 font-sans text-[16px] leading-[1.4] text-black md:text-[17px]">{fact.value}</dd>
+                    <div key={fact.label} className="min-w-0">
+                      <dt className="font-sans text-[13px] leading-none text-black/80 md:text-[14px]">{fact.label}</dt>
+                      <dd className="mt-2.5 font-sans text-[16px] font-semibold leading-[1.3] text-black md:text-[17px]">
+                        {fact.value}
+                      </dd>
                     </div>
                   ))}
                 </dl>
+              </div>
+              <div className="relative min-w-0">
+                <img
+                  src="/images/dellchildrens/fatherchild.png"
+                  alt="A father holding his baby while looking at a phone."
+                  width={701}
+                  height={800}
+                  className="block aspect-square w-full rounded-[14px] object-cover object-[50%_30%] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
+                />
               </div>
             </div>
           </div>
@@ -163,97 +213,48 @@ export default function DellChildrensCaseStudyPage() {
           <div className={columnClass}>
             <p className={storyEyebrowClass}>Research</p>
             <h2 id="research-title" className={storyTitleClass}>
-              {researchTitle}
+              Understanding the people and the platform.
             </h2>
-            <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>{researchIntro}</p>
-            <ResearchFindings
-              findings={researchFindings}
-              image={{
-                src: "/images/dellchildrens/card-sort-white-cards.png",
-                alt: "Card sort board grouping member tasks into family members, care and providers, and plan categories.",
-              }}
-            />
+            <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>
+              Reviewed how families managed care, how the existing portal organized tasks, and what its data and search
+              capabilities could support.
+            </p>
+            <div className="mt-10 grid grid-cols-1 gap-y-10 md:mt-12 md:grid-cols-2 md:gap-x-8 lg:gap-x-12">
+              {researchColumns.map((column) => (
+                <div key={column.title} className="min-w-0">
+                  <h3 className="font-sans text-[18px] font-bold leading-[1.35] text-black md:text-[20px]">
+                    {column.title}
+                  </h3>
+                  <p className={`${caseBodyClass} mt-2`}>{column.body}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         <section aria-labelledby="home-story-title" className={`${storyBandClass} ${sectionGapClass}`}>
           <div className={shellClass}>
             <div className={columnClass}>
-              <p className={storyEyebrowClass}>Challenge</p>
-              <h2 id="home-story-title" className={storyTitleClass}>
-                Home · Finding the right task
-              </h2>
-              <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>
-                Families needed a clearer starting point for common tasks and a way to access the right information for
-                each member.
-              </p>
-              <div className="mt-10 flex flex-col gap-8 md:mt-12 lg:flex-row lg:items-start lg:gap-12">
-                <ProviderChallengeAccordion
-                  points={homeChallengePoints}
-                  className="min-w-0 w-full flex-1"
-                />
-                <ZoomableProblemImage
-                  src="/images/dellchildrens/mothercomp.png"
-                  alt="A mother at a laptop, holding a sleeping baby while a young child stands beside her."
-                  width={700}
-                  height={800}
-                  shellClassName="w-full shrink-0 lg:w-[432px]"
-                  imgClassName="block h-auto w-full rounded-[12px] border border-black/10"
-                  dialogLabel="A parent managing care at home"
-                />
-              </div>
-
-              <div className="mt-12 md:mt-16">
-                <DchpMemberStory />
-              </div>
+              <DchpStory
+                eyebrow="Design decisions"
+                title="A clearer starting point for families."
+                titleId="home-story-title"
+                panels={homePanels}
+                examples={homeExamples}
+              />
             </div>
           </div>
         </section>
 
-        <section aria-labelledby="engineering-title" className={`${shellClass} ${sectionGapClass}`}>
-          <div className={columnClass}>
-            <p className={storyEyebrowClass}>Engineering</p>
-            <h2 id="engineering-title" className={storyTitleClass}>
-              {engineeringTitle}
-            </h2>
-            <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>{engineeringIntro}</p>
-            <ResearchFindings
-              findings={engineeringFindings}
-              image={{
-                src: "/images/dellchildrens/engineering-artifacts-mint.png",
-                alt: "Diagram showing known member ZIP code and language carried into provider search parameters to return relevant primary care results.",
-              }}
-            />
-          </div>
-        </section>
-
-        <section aria-labelledby="care-story-title" className={`${storyBandClass} ${sectionGapClass}`}>
+        <section aria-labelledby="care-story-title" className="pb-14 md:pb-20">
           <div className={shellClass}>
             <div className={columnClass}>
-              <p className={storyEyebrowClass}>Challenge</p>
-              <h2 id="care-story-title" className={storyTitleClass}>
-                Care team · Finding a new PCP
-              </h2>
-              <p className={`${caseBodyClass} mt-4 max-w-[42rem]`}>{providerChallengeSummary}</p>
-              <div className="mt-10 flex flex-col gap-8 md:mt-12 lg:flex-row lg:items-start lg:gap-12">
-                <ProviderChallengeAccordion
-                  points={providerChallengePoints}
-                  className="min-w-0 w-full flex-1"
-                />
-                <ZoomableProblemImage
-                  src="/images/dellchildrens/motherphone.png"
-                  alt="A mother on the phone at a laptop, with her children beside her."
-                  width={700}
-                  height={800}
-                  shellClassName="w-full shrink-0 lg:w-[432px]"
-                  imgClassName="block h-auto w-full rounded-[12px] border border-black/10"
-                  dialogLabel="Scheduling care by phone"
-                />
-              </div>
-
-              <div className="mt-12 md:mt-16">
-                <DchpCareTeam />
-              </div>
+              <DchpStory
+                title="A simpler path to a new PCP."
+                titleId="care-story-title"
+                panels={careTeamPanels}
+                examples={careTeamExamples}
+              />
             </div>
           </div>
         </section>
@@ -263,16 +264,20 @@ export default function DellChildrensCaseStudyPage() {
             <h2 id="outcome-title" className={sideLeadClass}>
               The outcome
             </h2>
-            <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
+            <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
               {outcomes.map((outcome) => (
-                <li
-                  key={outcome}
-                  className={`${outlineCardClass} ${caseBodyClass}`}
-                >
-                  {outcome}
+                <li key={outcome.label} className={`${outlineCardClass} ${caseBodyClass}`}>
+                  <span className={`${metaTextClass} mb-3 block font-bold uppercase tracking-[0.08em]`}>
+                    {outcome.label}
+                  </span>
+                  {outcome.body}
                 </li>
               ))}
             </ul>
+            <p className={`${caseBodyClass} mt-6 max-w-[42rem]`}>
+              <strong className="font-bold">Remaining constraint:</strong> scheduling an appointment still required a phone
+              call after choosing a PCP.
+            </p>
             <CaseStudyNextProjectButton currentPath="/case-studies/dell-childrens-health-plan" />
           </div>
         </section>

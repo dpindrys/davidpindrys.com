@@ -192,14 +192,14 @@ function ProjectHero({ project }: { project: WorkCard }) {
   );
 }
 
-function CaseStudyArticle({ project }: { project: WorkCard }) {
+function CaseStudyArticle({ project, compact = false }: { project: WorkCard; compact?: boolean }) {
   return (
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
       className="group/card scroll-mt-32 md:scroll-mt-8"
     >
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10">
+      <div className={compact ? "flex flex-col gap-5" : "grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10"}>
         <div className="flex flex-col items-start justify-between gap-3">
           <h3 id={`${project.id}-title`} className={`${companyNameClass} flex items-center gap-2`}>
             {project.client}
@@ -267,12 +267,18 @@ export default function Home() {
               Work
             </h2>
             <div className="flex flex-col gap-24 md:gap-32">
-              {[
-                ...workCards.filter((project) => caseStudyIds.has(project.id)),
-                ...workCards.filter((project) => !caseStudyIds.has(project.id)),
-              ].map((project) => (
-                <CaseStudyArticle key={project.id} project={project} />
-              ))}
+              <div className="grid grid-cols-1 gap-24 md:grid-cols-2 md:gap-x-10 md:gap-y-32">
+                {workCards
+                  .filter((project) => !caseStudyIds.has(project.id))
+                  .map((project) => (
+                    <CaseStudyArticle key={project.id} project={project} compact />
+                  ))}
+              </div>
+              {workCards
+                .filter((project) => caseStudyIds.has(project.id))
+                .map((project) => (
+                  <CaseStudyArticle key={project.id} project={project} />
+                ))}
             </div>
           </div>
         </section>

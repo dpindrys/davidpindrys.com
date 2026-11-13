@@ -4,14 +4,16 @@ import { useId, useState } from "react";
 
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 
-type Finding = { title: string; body: string };
+type Finding = { title: string; body: string; kind?: string };
 
 export default function ResearchFindings({
   findings,
   image,
+  headingLevel: Heading = "h3",
 }: {
   findings: readonly Finding[];
-  image?: { src: string; alt: string };
+  image?: { src: string; alt: string; caption?: string };
+  headingLevel?: "h3" | "h4";
 }) {
   const [open, setOpen] = useState(0);
   const baseId = useId();
@@ -25,7 +27,7 @@ export default function ResearchFindings({
           const panelId = `${baseId}-panel-${index}`;
           return (
             <li key={finding.title} className="border-t border-[#d9ddd7]">
-              <h3>
+              <Heading>
                 <button
                   id={buttonId}
                   type="button"
@@ -36,7 +38,14 @@ export default function ResearchFindings({
                     expanded ? "pt-5" : "py-5"
                   }`}
                 >
-                  <span className="font-bold">{finding.title}</span>
+                  <span className="flex flex-col gap-1">
+                    {finding.kind ? (
+                      <span className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#626864]">
+                        {finding.kind}
+                      </span>
+                    ) : null}
+                    <span className="font-bold">{finding.title}</span>
+                  </span>
                   <svg
                     viewBox="0 0 16 16"
                     aria-hidden="true"
@@ -54,7 +63,7 @@ export default function ResearchFindings({
                     />
                   </svg>
                 </button>
-              </h3>
+              </Heading>
               <div
                 id={panelId}
                 role="region"
@@ -73,15 +82,20 @@ export default function ResearchFindings({
         })}
       </ul>
       {image ? (
-        <ZoomableProblemImage
-          src={image.src}
-          alt={image.alt}
-          width={700}
-          height={800}
-          shellClassName="w-full shrink-0 lg:w-[432px]"
-          imgClassName="block h-auto w-full rounded-[12px] border border-black/10"
-          dialogLabel={image.alt}
-        />
+        <figure className="m-0 w-full shrink-0 lg:w-[432px]">
+          <ZoomableProblemImage
+            src={image.src}
+            alt={image.alt}
+            width={700}
+            height={800}
+            shellClassName="w-full"
+            imgClassName="block h-auto w-full rounded-[12px] border border-black/10"
+            dialogLabel={image.alt}
+          />
+          {image.caption ? (
+            <figcaption className="mt-3 font-sans text-[13px] leading-[1.5] text-black/70">{image.caption}</figcaption>
+          ) : null}
+        </figure>
       ) : (
         <div className="w-full shrink-0 lg:w-[432px]">
           <div

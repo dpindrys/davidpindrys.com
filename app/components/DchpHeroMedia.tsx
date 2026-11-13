@@ -1,4 +1,7 @@
+import { versionedSrc } from "../lib/versionedSrc";
 import FloatingColumns from "./FloatingColumns";
+
+const screen = (src: string, width: number, height: number) => ({ src: versionedSrc(src), width, height });
 
 /** Phone home screen beside drifting columns of portal screens. Render inside FloatingPlaybackProvider. */
 export default function DchpHeroMedia() {
@@ -9,7 +12,7 @@ export default function DchpHeroMedia() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/dellchildrens/home-mobile2.png"
-        alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links, alongside claims, care team, ID card request, and primary care physician screens."
+        alt="Dell Children’s Health Plan member portal on a phone, showing the home screen quick links, alongside care team, provider results, claims, and ID card request screens."
         className="absolute left-[10%] top-[6%] h-auto w-[30%] origin-[50%_84%] transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.03] motion-reduce:transition-none"
       />
       <FloatingColumns
@@ -18,17 +21,18 @@ export default function DchpHeroMedia() {
           {
             duration: 70,
             images: [
-              { src: "/images/dellchildrens/all-claims.png", width: 343, height: 853 },
-              { src: "/images/dellchildrens/care-team.png", width: 343, height: 645 },
+              screen("/images/dellchildrens/carestart.png", 367, 570),
+              screen("/images/dellchildrens/home-long.png", 367, 1156),
+              screen("/images/dellchildrens/all-claims.png", 343, 853),
             ],
           },
           {
             duration: 80,
             delay: 20,
             images: [
-              { src: "/images/dellchildrens/claim.png", width: 375, height: 721 },
-              { src: "/images/dellchildrens/request-cards.png", width: 343, height: 801 },
-              { src: "/images/dellchildrens/choose-pcp.png", width: 343, height: 984 },
+              screen("/images/dellchildrens/careteam2x.png", 367, 1211),
+              screen("/images/dellchildrens/request-cards.png", 343, 801),
+              screen("/images/dellchildrens/claim.png", 375, 721),
             ],
           },
         ]}

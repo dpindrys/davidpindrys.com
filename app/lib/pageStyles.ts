@@ -13,6 +13,8 @@ export const metaTextClass = "font-sans text-[13px] leading-none text-black/70";
 export const tagClass = "border border-black/15 bg-white px-2.5 py-1 font-sans text-[13px] font-bold leading-none text-black/70";
 export const challengeTagClass =
   "border border-black bg-black px-2.5 py-1 font-sans text-[13px] font-bold leading-none text-white";
+export const eyebrowClass =
+  "font-sans text-[13px] font-semibold uppercase leading-none tracking-[0.16em] text-black md:text-[14px]";
 export const filledCardClass = "rounded-[20px] bg-[#E8E5DE] p-6 md:p-8";
 export const outlineCardClass = "border border-black/10 p-5 sm:p-6";
 
