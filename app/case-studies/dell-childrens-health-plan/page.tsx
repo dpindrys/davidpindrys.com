@@ -146,11 +146,10 @@ const careTeamExamples: readonly StoryExample[] = [
       "Results use the member’s location, language preference, and required provider type. Users can adjust their ZIP code or language while reviewing providers.",
     src: "/images/dellchildrens/careteam2x.png",
     width: 734,
-    height: 2422,
+    height: 1795,
     cardLeft: 36,
     cardWidth: 662,
-    cropHeight: 1140,
-    alt: "Provider results beneath Madhavi Khandavalli’s current PCP: “Providers in the 78701” with a Choose New Area Code button, a Speaks Spanish filter, and the first matching provider.",
+    alt: "Provider results: “Primary Care Providers in 78701” with a Choose New ZIP Code button, a Speaks Spanish filter, and two matching providers, each with View Profile and Select This Provider buttons.",
   },
 ];
 

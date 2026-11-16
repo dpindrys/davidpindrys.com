@@ -10,9 +10,9 @@ const startHeight = 1140;
 /** BROWSE NEARBY PROVIDERS button, x 68–665, y 970–1053. */
 const browseCenterX = (68 + 665) / 2;
 const browseCenterY = (970 + 1053) / 2;
-/** careteam2x.png is 734×2422: the same canvas and scale as carestart.png. */
+/** careteam2x.png is 734×1795: the same canvas and scale as carestart.png. */
 const searchWidth = 734;
-const searchHeight = 2422;
+const searchHeight = 1795;
 const searchOffsetX = 0;
 /** “Madhavi Khandavalli”, y 169–215. */
 const memberNameCenter = (169 + 215) / 2;

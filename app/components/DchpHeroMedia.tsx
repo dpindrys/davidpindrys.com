@@ -6,7 +6,7 @@ const screen = (src: string, width: number, height: number) => ({ src: versioned
 /** Phone home screen beside drifting columns of portal screens. Render inside FloatingPlaybackProvider. */
 export default function DchpHeroMedia() {
   return (
-    <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
+    <div className="group/dchp relative aspect-[16/10] w-full overflow-hidden rounded-[12px] border border-black/15">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/images/dellchildrens/hero-bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,7 +30,7 @@ export default function DchpHeroMedia() {
             duration: 80,
             delay: 20,
             images: [
-              screen("/images/dellchildrens/careteam2x.png", 367, 1211),
+              screen("/images/dellchildrens/careteam2x.png", 367, 898),
               screen("/images/dellchildrens/request-cards.png", 343, 801),
               screen("/images/dellchildrens/claim.png", 375, 721),
             ],

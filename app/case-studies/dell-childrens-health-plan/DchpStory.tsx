@@ -59,21 +59,24 @@ export default function DchpStory({
           </div>
         ))}
       </dl>
-      <div className="mt-12 grid grid-cols-1 gap-12 md:mt-16 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-x-8 md:gap-y-0 lg:gap-x-12">
+      <div className="mt-12 flex flex-col gap-12 md:mt-16 md:gap-16">
         {examples.map((example) => {
           const imageSpan = {
             width: `${(example.width / example.cardWidth) * 100}%`,
             marginLeft: `${(-example.cardLeft / example.cardWidth) * 100}%`,
           };
           return (
-            <figure key={example.src} className="m-0 grid min-w-0 gap-6 md:row-span-2 md:grid-rows-subgrid">
+            <figure
+              key={example.src}
+              className="m-0 grid min-w-0 grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-x-8 lg:gap-x-12"
+            >
               <figcaption>
-                <ExampleHeading className="font-sans text-[16px] font-bold leading-[1.4] text-black">
+                <ExampleHeading className={`${caseBodyClass} font-bold`}>
                   {example.title}
                 </ExampleHeading>
                 <p className={`${caseBodyClass} mt-2`}>{example.caption}</p>
               </figcaption>
-              <div className="flex h-full flex-col items-center rounded-[12px] border border-black/15 bg-white p-5 sm:p-8">
+              <div className="flex flex-col items-center rounded-[12px] border border-black/15 bg-white p-5 sm:p-8">
                 <div
                   className="relative min-h-0 w-full max-w-[380px]"
                   style={
