@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import CaseStudyCardCtas from "./components/CaseStudyCardCtas";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
@@ -7,7 +6,7 @@ import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import DchpHeroMedia from "./components/DchpHeroMedia";
 import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
-import { HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
+import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
 import PrototypeCards from "./components/PrototypeCards";
 import { getPhotoGroups } from "./lib/photos";
@@ -98,10 +97,6 @@ type WorkCard = {
   description: string;
   link?: WorkLink;
   media: ReactNode;
-  /** Home case-study layout. `split-card` = outline card, text left / media right. */
-  layout?: "default" | "split-card";
-  /** Optional guided-demo video for split-card View demo CTA (e.g. Fresenius). */
-  demoVideo?: string;
 };
 
 const workCards: readonly WorkCard[] = [
@@ -110,17 +105,21 @@ const workCards: readonly WorkCard[] = [
     client: "Fresenius Medical Care",
     focus: ["Workflow Simplification", "Clinical Workflows", "Exception Handling"],
     description: "Led design of a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups to make refills 70% faster across 2,800+ dialysis clinics.",
-    layout: "split-card",
-    demoVideo: "/images/frx/fresenius.mp4",
     media: (
-      <video
-        src="/images/frx/fresenius.mp4#t=0.001"
-        muted
-        playsInline
-        preload="metadata"
-        aria-label="In-clinic medication refill workflow in CareTeamHub"
-        className="block h-auto w-full rounded-[12px]"
-      />
+      <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/frx:scale-[1.02] motion-reduce:transition-none">
+            <HeroVideo
+              src="/images/frx/fresenius.mp4"
+              label="In-clinic medication refill workflow in CareTeamHub"
+              className="block h-auto w-full rounded-[12px]"
+              style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
+            />
+          </div>
+        </div>
+      </div>
     ),
   },
   {
@@ -128,8 +127,6 @@ const workCards: readonly WorkCard[] = [
     client: "Dell Children’s Health Plan",
     focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
     description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
-    link: { href: "/case-studies/dell-childrens-health-plan", label: "Case study" },
-    layout: "split-card",
     media: <DchpHeroMedia />,
   },
 ];
@@ -160,77 +157,7 @@ function ProjectHero({ project }: { project: WorkCard }) {
   );
 }
 
-function CaseStudyMeta({ project, showStatus = true }: { project: WorkCard; showStatus?: boolean }) {
-  return (
-    <>
-      {showStatus ? (
-        <p className={metaTextClass}>
-          {project.link ? (project.link.external ? "Prototype" : "Case study") : "Case study coming soon"}
-        </p>
-      ) : null}
-      <ul aria-label="Focus areas" className="flex flex-wrap gap-2">
-        {project.focus.map((area) => (
-          <li key={area} className={tagClass}>
-            {area}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
-function CaseStudyTitle({ project, showCue }: { project: WorkCard; showCue: boolean }) {
-  return (
-    <h3 id={`${project.id}-title`} className={`${companyNameClass} flex items-center gap-2`}>
-      {project.client}
-      {showCue ? (
-        <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
-      ) : null}
-    </h3>
-  );
-}
-
 function CaseStudyArticle({ project }: { project: WorkCard }) {
-  if (project.layout === "split-card") {
-    const { link } = project;
-    return (
-      <article
-        id={project.id}
-        aria-labelledby={`${project.id}-title`}
-        className="group/card scroll-mt-32 rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
-      >
-        <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 md:gap-8">
-          <div className="flex min-w-0 flex-col items-start gap-3">
-            <CaseStudyTitle project={project} showCue={Boolean(link)} />
-            <CaseStudyMeta project={project} showStatus={false} />
-            <p className="max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[17px]">
-              {project.description}
-            </p>
-            <CaseStudyCardCtas client={project.client} demoVideo={project.demoVideo} />
-          </div>
-          {/* Provider + toggle outside any <a> so pause stays clickable (WCAG 2.2.2). */}
-          <FloatingPlaybackProvider>
-            <div className="hero-area group/hero relative flex min-w-0 w-full items-center justify-end md:justify-self-end">
-              {link ? (
-                <a
-                  href={link.href}
-                  aria-label={`${link.label}: ${project.client}${link.external ? " (opens in a new tab)" : ""}`}
-                  className="block w-full rounded-[12px]"
-                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {project.media}
-                </a>
-              ) : (
-                project.media
-              )}
-              <FloatingColumnsToggle className={heroToggleClass} />
-            </div>
-          </FloatingPlaybackProvider>
-        </div>
-      </article>
-    );
-  }
-
   return (
     <article
       id={project.id}
@@ -239,9 +166,21 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10">
         <div className="flex flex-col items-start justify-between gap-3">
-          <CaseStudyTitle project={project} showCue />
+          <h3 id={`${project.id}-title`} className={`${companyNameClass} flex items-center gap-2`}>
+            {project.client}
+            <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
+          </h3>
           <div className="flex flex-col gap-3">
-            <CaseStudyMeta project={project} />
+            <p className={metaTextClass}>
+              {project.link ? (project.link.external ? "Prototype" : "Case study") : "Case study coming soon"}
+            </p>
+            <ul aria-label="Focus areas" className="flex flex-wrap gap-2">
+              {project.focus.map((area) => (
+                <li key={area} className={tagClass}>
+                  {area}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <p className="max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[17px]">{project.description}</p>
@@ -271,7 +210,7 @@ export default function Home() {
               <LinkedInButton />
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 underline decoration-black/40 underline-offset-[3px] transition-colors hover:text-black hover:decoration-black sm:ml-2 md:text-[1.75rem]"
+                className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
               >
                 Selected work
                 <svg
@@ -300,10 +239,13 @@ export default function Home() {
               Healthcare interfaces I designed and built in React with AI-assisted development.
             </p>
             <PrototypeCards />
-            <div className="mt-12 md:mt-14">
+            <p className="mt-4 font-sans text-[14px] leading-[1.5] text-black/50 md:text-[15px]">
+              Demos use synthetic patient data.
+            </p>
+            <div className="mt-12 border-t border-black/15 pt-10 md:mt-14">
               <h3 className={workSubheadClass}>Case studies</h3>
               <p className={workIntroClass}>Design decisions and delivered experiences for healthcare teams.</p>
-              <div className="mt-6 flex flex-col gap-4 md:mt-7 md:gap-5">
+              <div className="mt-12 flex flex-col gap-24 md:mt-16 md:gap-32">
                 {workCards.map((project) => (
                   <CaseStudyArticle key={project.id} project={project} />
                 ))}
