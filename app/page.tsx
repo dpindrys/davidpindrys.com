@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import CaseStudyCardCtas from "./components/CaseStudyCardCtas";
+import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import Footer from "./components/Footer";
@@ -11,38 +13,17 @@ import PhotoGroups from "./components/PhotoGroups";
 import PrototypeCards from "./components/PrototypeCards";
 import { getPhotoGroups } from "./lib/photos";
 import {
+  bodyClass,
   cardBodyClass,
   cardTitleClass,
   columnClass,
-  companyNameClass,
   filledCardClass,
   heroToggleClass,
-  metaTextClass,
   outlineCardClass,
   sectionGapClass,
   shellClass,
   sideLeadClass,
-  tagClass,
 } from "./lib/pageStyles";
-
-const heroCueClass =
-  "-translate-x-2 opacity-0 transition duration-200 ease-out group-has-[.hero-area:hover]/card:translate-x-0 group-has-[.hero-area:hover]/card:opacity-100 group-has-[.hero-area_a:focus-visible]/card:translate-x-0 group-has-[.hero-area_a:focus-visible]/card:opacity-100 motion-reduce:transition-none";
-
-function ArrowRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-[0.9em] w-[0.9em] shrink-0" aria-hidden="true" fill="none">
-      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ExternalLinkIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-[0.9em] w-[0.9em] shrink-0" aria-hidden="true" fill="none">
-      <path d="M7 17L17 7M9 7h8v8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 const offerings = [
   {
@@ -84,18 +65,17 @@ const processSteps = [
   },
 ] as const;
 
-type WorkLink = { href: string; label: string; external?: boolean };
-
 const workSubheadClass =
   "font-sans text-[clamp(1.65rem,2.6vw,2.15rem)] font-medium leading-[1.12] tracking-[-0.03em] text-black";
 const workIntroClass = "mt-2 max-w-[42rem] font-sans text-[16px] leading-[1.5] text-black/60 md:text-[18px]";
+const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/55 md:text-[16px]";
 
 type WorkCard = {
   id: string;
   client: string;
-  focus: readonly string[];
+  tagline: string;
   description: string;
-  link?: WorkLink;
+  demoVideo?: string;
   media: ReactNode;
 };
 
@@ -103,10 +83,12 @@ const workCards: readonly WorkCard[] = [
   {
     id: "frx",
     client: "Fresenius Medical Care",
-    focus: ["Workflow Simplification", "Clinical Workflows", "Exception Handling"],
-    description: "Led design of a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups to make refills 70% faster across 2,800+ dialysis clinics.",
+    tagline: "Medication refill workflow",
+    description:
+      "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
+    demoVideo: "/images/frx/fresenius.mp4",
     media: (
-      <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-black/15">
+      <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -125,30 +107,19 @@ const workCards: readonly WorkCard[] = [
   {
     id: "dell",
     client: "Dell Children’s Health Plan",
-    focus: ["Member Self-Service", "Accessibility", "End-to-End Design"],
-    description: "Led the redesign of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
+    tagline: "Member self-service portal",
+    description:
+      "Led design of a children’s Medicaid member portal, launching care team, ID card, and prior authorization tools for 40,000+ members in four months.",
     media: <DchpHeroMedia />,
   },
 ];
 
 function ProjectHero({ project }: { project: WorkCard }) {
-  const { link } = project;
   return (
     <HeroVideoProvider>
       <FloatingPlaybackProvider>
-        <div className="hero-area group/hero relative mt-8">
-          {link ? (
-            <a
-              href={link.href}
-              aria-label={`${link.label}: ${project.client}${link.external ? " (opens in a new tab)" : ""}`}
-              className="block rounded-[20px]"
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            >
-              {project.media}
-            </a>
-          ) : (
-            project.media
-          )}
+        <div className="hero-area group/hero relative mt-5">
+          {project.media}
           <HeroVideoToggle className={heroToggleClass} />
           <FloatingColumnsToggle className={heroToggleClass} />
         </div>
@@ -162,30 +133,20 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className="group/card scroll-mt-32 md:scroll-mt-8"
+      className="scroll-mt-32 rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
     >
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10">
-        <div className="flex flex-col items-start justify-between gap-3">
-          <h3 id={`${project.id}-title`} className={`${companyNameClass} flex items-center gap-2`}>
-            {project.client}
-            <span className={heroCueClass}>{project.link?.external ? <ExternalLinkIcon /> : <ArrowRightIcon />}</span>
-          </h3>
-          <div className="flex flex-col gap-3">
-            <p className={metaTextClass}>
-              {project.link ? (project.link.external ? "Prototype" : "Case study") : "Case study coming soon"}
-            </p>
-            <ul aria-label="Focus areas" className="flex flex-wrap gap-2">
-              {project.focus.map((area) => (
-                <li key={area} className={tagClass}>
-                  {area}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <p className="max-w-[36rem] font-sans text-[16px] leading-[1.6] text-black md:text-[17px]">{project.description}</p>
-      </div>
+      <CaseStudyCardHeader
+        id={project.id}
+        client={project.client}
+        tagline={project.tagline}
+        taglineClass={workTaglineClass}
+        demoVideo={project.demoVideo}
+      />
       <ProjectHero project={project} />
+      <div className="mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8">
+        <p className={bodyClass}>{project.description}</p>
+        <CaseStudyCardCtas />
+      </div>
     </article>
   );
 }
@@ -239,13 +200,10 @@ export default function Home() {
               Healthcare interfaces I designed and built in React with AI-assisted development.
             </p>
             <PrototypeCards />
-            <p className="mt-4 font-sans text-[14px] leading-[1.5] text-black/50 md:text-[15px]">
-              Demos use synthetic patient data.
-            </p>
-            <div className="mt-12 border-t border-black/15 pt-10 md:mt-14">
+            <div className="mt-12 md:mt-14">
               <h3 className={workSubheadClass}>Case studies</h3>
               <p className={workIntroClass}>Design decisions and delivered experiences for healthcare teams.</p>
-              <div className="mt-12 flex flex-col gap-24 md:mt-16 md:gap-32">
+              <div className="mt-6 flex flex-col gap-24 md:mt-7 md:gap-32">
                 {workCards.map((project) => (
                   <CaseStudyArticle key={project.id} project={project} />
                 ))}
