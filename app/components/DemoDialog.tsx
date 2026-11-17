@@ -16,7 +16,7 @@ export type DemoDialogContent = {
   video: string;
   title?: string;
   description?: string;
-  /** Timed captions; only pass for demos that should show them (e.g. VEHR, Vinyl). */
+  /** Timed captions; only pass for demos that should show them (e.g. VEHR, Vinyl, Frx). */
   captions?: readonly DemoCaption[];
 };
 
@@ -42,11 +42,11 @@ function longestCaptionText(captions: readonly DemoCaption[]): string {
  * On devices without hover, keep the mark visible via `@media (hover: hover)`.
  */
 export const viewDemoPlayButtonClass =
-  "group/play absolute inset-0 z-[1] flex cursor-pointer items-center justify-center opacity-100 outline-none transition-opacity duration-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "group/play absolute inset-0 z-[1] flex cursor-pointer items-center justify-center opacity-100 outline-none transition-opacity duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 
-/** Diameter is 50% of the relative media container height (`h-[50%]` + `aspect-square`). */
+/** Diameter ~38% of media height; muted gray fill + white icon (DCHP toggle language, scaled up). */
 export const viewDemoPlayMarkClass =
-  "flex h-[50%] aspect-square items-center justify-center rounded-full bg-white/40 text-black transition-colors group-hover/play:bg-white/55";
+  "pointer-events-none flex h-[38%] aspect-square items-center justify-center rounded-full bg-black/60 text-white";
 
 export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { className?: string }) {
   return (
@@ -71,19 +71,27 @@ export function DemoPlayOverlay({
   captions?: readonly DemoCaption[];
 }) {
   const [open, setOpen] = useState(false);
-  /** After close, CSS :hover can stick while the pointer is still over media. */
-  const [suppressHover, setSuppressHover] = useState(false);
+  /**
+   * After close, parent `.group:hover` often stays true while the pointer is still over the media.
+   * Gate hover-reveal until a real pointer leave (then re-enter) so the mark does not stick.
+   */
+  const [awaitingPointerLeave, setAwaitingPointerLeave] = useState(false);
   const openerRef = useRef<HTMLButtonElement | null>(null);
-  const close = useCallback(() => {
+  const openRef = useRef(false);
+  openRef.current = open;
+
+  const close = useCallback((modality: "keyboard" | "pointer" = "pointer") => {
     setOpen(false);
-    setSuppressHover(true);
+    // Only pointer dismiss leaves a stuck parent :hover under the cursor.
+    if (modality === "pointer") setAwaitingPointerLeave(true);
   }, []);
 
-  const playButtonClass = suppressHover
-    ? // Omit group-hover opacity so a stuck :hover after close stays hidden;
-      // focus-visible still shows the mark for keyboard Escape restore.
-      "group/play absolute inset-0 z-[1] flex cursor-pointer items-center justify-center opacity-100 outline-none transition-opacity duration-200 [@media(hover:hover)]:opacity-0 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : viewDemoPlayButtonClass;
+  // While dialog is open, or until the pointer leaves after a pointer close, force hover-reveal
+  // off (including stuck parent group-hover). focus-visible still reveals for keyboard restore.
+  const blockHoverReveal = open || awaitingPointerLeave;
+  const playButtonClass = blockHoverReveal
+    ? `${viewDemoPlayButtonClass} [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:!opacity-0 focus-visible:opacity-100`
+    : `${viewDemoPlayButtonClass} [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100`;
 
   return (
     <>
@@ -94,7 +102,11 @@ export function DemoPlayOverlay({
           openerRef.current = event.currentTarget;
           setOpen(true);
         }}
-        onMouseLeave={() => setSuppressHover(false)}
+        onPointerLeave={() => {
+          // Only clear the post-close gate once the dialog is gone; leave-on-open
+          // (portal covering the control) must not re-arm hover reveal early.
+          if (!openRef.current) setAwaitingPointerLeave(false);
+        }}
         className={playButtonClass}
       >
         <span className={viewDemoPlayMarkClass} aria-hidden="true">
@@ -116,7 +128,7 @@ export default function DemoDialog({
   openerRef,
 }: {
   demo: DemoDialogContent | null;
-  onClose: () => void;
+  onClose: (modality?: "keyboard" | "pointer") => void;
   openerRef: RefObject<HTMLButtonElement | null>;
 }) {
   const titleId = useId();
@@ -129,6 +141,13 @@ export default function DemoDialog({
   const captions = demo?.captions;
   const hasCaptions = Boolean(captions && captions.length > 0);
   const [captionText, setCaptionText] = useState("");
+
+  const closeFromPointer = useCallback(() => {
+    closeModalityRef.current = "pointer";
+    // Blur before unmount so focus restoration onto the opener cannot flash the play mark.
+    openerRef.current?.blur();
+    onClose("pointer");
+  }, [onClose, openerRef]);
 
   useEffect(() => {
     if (!demo) return;
@@ -145,7 +164,7 @@ export default function DemoDialog({
       if (event.key === "Escape") {
         event.preventDefault();
         closeModalityRef.current = "keyboard";
-        onClose();
+        onClose("keyboard");
         return;
       }
       if (event.key !== "Tab") return;
@@ -210,13 +229,7 @@ export default function DemoDialog({
 
   return createPortal(
     <div className="fixed inset-0 z-[140] flex items-center justify-center p-4 sm:p-6">
-      <div
-        className="absolute inset-0 bg-black/55"
-        onClick={() => {
-          closeModalityRef.current = "pointer";
-          onClose();
-        }}
-      />
+      <div className="absolute inset-0 bg-black/55" onClick={closeFromPointer} />
       <div
         ref={dialogRef}
         role="dialog"
@@ -245,10 +258,7 @@ export default function DemoDialog({
           </div>
           <button
             type="button"
-            onClick={() => {
-              closeModalityRef.current = "pointer";
-              onClose();
-            }}
+            onClick={closeFromPointer}
             aria-label="Close"
             className="flex h-10 w-10 shrink-0 items-center justify-center font-sans text-[22px] leading-none text-black/70 outline-none hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
           >

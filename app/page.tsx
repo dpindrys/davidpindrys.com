@@ -3,7 +3,7 @@ import CaseStudyCardCtas from "./components/CaseStudyCardCtas";
 import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
-import { DemoPlayOverlay } from "./components/DemoDialog";
+import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
@@ -77,8 +77,44 @@ type WorkCard = {
   tagline: string;
   description: string;
   demoVideo?: string;
+  demoTitle?: string;
+  demoDescription?: string;
+  demoCaptions?: readonly DemoCaption[];
   media: ReactNode;
 };
+
+/** Timed captions for the Fresenius guided demo. */
+const frxDemoCaptions: readonly DemoCaption[] = [
+  {
+    start: 0,
+    end: 5,
+    text: "The medication list flags overdue refills and prescriptions on hold.",
+  },
+  {
+    start: 5,
+    end: 10,
+    text: "Supporting information includes forms, insurance, allergies, contact details, and addresses.",
+  },
+  {
+    start: 10,
+    end: 14,
+    text: "Staff select a medication to begin a refill request.",
+  },
+  {
+    start: 14,
+    end: 19,
+    text: "The request opens within Jane’s record, keeping her information and care team visible.",
+  },
+  {
+    start: 19,
+    end: 23,
+    text: "Staff can review shipping details, remaining refills, days’ supply, and copay before submitting.",
+  },
+  {
+    start: 23,
+    text: "Medication refills stay within the application clinic staff already use.",
+  },
+];
 
 const workCards: readonly WorkCard[] = [
   {
@@ -88,6 +124,10 @@ const workCards: readonly WorkCard[] = [
     description:
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
     demoVideo: "/images/frx/fresenius.mp4",
+    demoTitle: "Managing Jane’s medication refills",
+    demoDescription:
+      "Jane Doe is the example patient in this demo. Clinic staff review her refill needs, check patient and prescription information, and prepare a refill request directly in CareTeamHub.",
+    demoCaptions: frxDemoCaptions,
     media: (
       <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -123,7 +163,13 @@ function ProjectHero({ project }: { project: WorkCard }) {
         <div className="hero-area group group/hero relative mt-5">
           {project.media}
           {project.demoVideo ? (
-            <DemoPlayOverlay client={project.client} video={project.demoVideo} />
+            <DemoPlayOverlay
+              client={project.client}
+              video={project.demoVideo}
+              title={project.demoTitle}
+              description={project.demoDescription}
+              captions={project.demoCaptions}
+            />
           ) : null}
           <HeroVideoToggle className={heroToggleClass} />
           <FloatingColumnsToggle className={heroToggleClass} />
