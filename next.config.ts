@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
      */
     localPatterns: [{ pathname: "/images/**" }],
   },
+  /**
+   * `public/` is served as static CDN assets on Vercel. Keep it out of serverless
+   * function traces — filesystem reads under `public/` (e.g. photo scanning) must
+   * not package ~290MB of media into the homepage function (250MB limit).
+   */
+  outputFileTracingExcludes: {
+    "*": ["./public/**/*"],
+  },
   async redirects() {
     return [
       { source: "/work", destination: "/#work", permanent: true },

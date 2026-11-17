@@ -1,0 +1,208 @@
+[
+  {
+    "id": "me",
+    "label": "Along the way",
+    "title": "Good people, good conversations",
+    "description": "Hackathons, conferences, and family, a few of the people who shape how I work.",
+    "photos": [
+      {
+        "src": "/images/photo/me/sonsiel.jpg?v=aabac544bd",
+        "alt": "Five people, most wearing name badges, posing in front of a SONSIEL banner at a conference.",
+        "height": 2166,
+        "width": 3243
+      },
+      {
+        "src": "/images/photo/me/maui.jpeg?v=2102d11cd1",
+        "alt": "Three people in matching green Startup Weekend Maui shirts smiling on a lawn, one giving a shaka sign.",
+        "height": 2448,
+        "width": 3264
+      },
+      {
+        "src": "/images/photo/me/poland.jpg?v=e27bc860c3",
+        "alt": "Five people smiling in front of a stucco house in Poland, one giving bunny ears to two of the others.",
+        "height": 1268,
+        "width": 1687
+      },
+      {
+        "src": "/images/photo/me/seattle.jpeg?v=4f1330fec9",
+        "alt": "A man adjusting a tracker on the arm of a person wearing a VR headset, with the virtual scene on a monitor behind them.",
+        "height": 3024,
+        "width": 4032
+      }
+    ]
+  },
+  {
+    "id": "drawings",
+    "label": "Figure drawing",
+    "title": "Learning to see, one pose at a time",
+    "description": "Quick gesture studies and longer charcoal pieces from figure drawing sessions.",
+    "noun": "drawings",
+    "photos": [
+      {
+        "src": "/images/photo/drawings/1.jpeg?v=ed92c5cfc0",
+        "alt": "Quick pencil gesture drawing of a seated nude figure, one arm raised over the head.",
+        "height": 4032,
+        "width": 3024
+      },
+      {
+        "src": "/images/photo/drawings/2.jpeg?v=f6c6ab7fb8",
+        "alt": "Quick pencil gesture drawing of a standing nude figure with arms crossed over the chest.",
+        "height": 4032,
+        "width": 3024
+      },
+      {
+        "src": "/images/photo/drawings/3.jpeg?v=7455bbe83f",
+        "alt": "Quick pencil gesture drawing of a standing nude figure in profile, one hand resting on the hip.",
+        "height": 4032,
+        "width": 3024
+      },
+      {
+        "src": "/images/photo/drawings/face.jpg?v=856ca24156",
+        "alt": "Charcoal drawing of a close-cropped face emerging from heavy shading, one eye and the nose in sharp detail.",
+        "height": 2028,
+        "width": 1636
+      },
+      {
+        "src": "/images/photo/drawings/boxer.jpg?v=e8440b0311",
+        "alt": "Charcoal drawing of a man with a shaved head in profile, his shoulder and hand outlined in bold strokes.",
+        "height": 2905,
+        "width": 2231
+      },
+      {
+        "src": "/images/photo/drawings/swing.jpg?v=c525be7cd9",
+        "alt": "Charcoal drawing of a seated woman with long hair, her figure framed by dark, smudged shadows.",
+        "height": 2449,
+        "width": 1982
+      },
+      {
+        "src": "/images/photo/drawings/sad.jpg?v=c0bd097240",
+        "alt": "Charcoal drawing of a shirtless older man in profile with his eyes closed, set against dark shading.",
+        "height": 3000,
+        "width": 2250
+      },
+      {
+        "src": "/images/photo/drawings/beauty.jpg?v=fbfa22cb74",
+        "alt": "Framed charcoal drawing of a sleeping face resting on a pillow, rendered in abstract shapes of light and dark.",
+        "height": 2304,
+        "width": 3456
+      }
+    ]
+  },
+  {
+    "id": "photography",
+    "label": "Photography",
+    "title": "Slowing down, looking closer",
+    "description": "Photography helps me slow down and notice the quiet moments I might otherwise pass by. It’s a meditative practice for me, a way to be present and understand a place a little better.",
+    "wide": true,
+    "photos": [
+      {
+        "src": "/images/photo/oaxaca/corn.jpg?v=d15a83143e",
+        "alt": "A woman pouring dried corn kernels into the wind as a girl and a young child look on.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/fes/fes1.jpg?v=d10826aaca",
+        "alt": "A young man walking past others on a cobblestone street beside an ochre wall painted with a shop sign.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/misha/misha1.jpg?v=e1fb70bb57",
+        "alt": "An older man in glasses and a brown jacket seated behind an outdoor chessboard, looking at the camera.",
+        "height": 800,
+        "width": 1200
+      },
+      {
+        "src": "/images/photo/trotitlan/grind.jpg?v=77a890ba76",
+        "alt": "A woman in an apron grinding red pigment on a stone metate, surrounded by woven baskets.",
+        "height": 480,
+        "width": 720
+      },
+      {
+        "src": "/images/photo/uganda/giraffes.jpeg?v=0a1c0fe1f8",
+        "alt": "Several giraffes walking across a wide grassy savanna under a cloudy sky.",
+        "height": 2323,
+        "width": 5472
+      },
+      {
+        "src": "/images/photo/oaxaca/clean.jpg?v=7e281d6121",
+        "alt": "A young boy packing mud into a plastic bottle while a woman sweeps a porch behind him.",
+        "height": 533,
+        "width": 800
+      },
+      {
+        "src": "/images/photo/oaxaca/doll.jpg?v=334be5f587",
+        "alt": "A girl in a pink sweater running past a sunlit wall, carrying a baby doll, her shadow cast beside her.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/oaxaca/fingers.jpg?v=26dbf6d6cd",
+        "alt": "A family at a table, a young woman gesturing with her hands while a small boy drinks from a cup.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/oaxaca/wedding.jpg?v=1b57b3ae1b",
+        "alt": "A woman placing a lazo rosary around a smiling bride and groom during a church wedding.",
+        "height": 682,
+        "width": 1023
+      },
+      {
+        "src": "/images/photo/fes/fes2.jpg?v=9c166547c0",
+        "alt": "A man reading a newspaper at a café table, seen through a doorway beside a Coca-Cola fridge.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/fes/fes3.jpg?v=f39eaf6c6e",
+        "alt": "A vintage pinball machine in the foreground while a young man plays pool in the room behind it.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/misha/misha2.jpg?v=c11000f9b1",
+        "alt": "An older man counting cash at an outdoor chess table, with pieces scattered on the board.",
+        "height": 800,
+        "width": 1200
+      },
+      {
+        "src": "/images/photo/misha/misha3.jpg?v=7a0cb904ae",
+        "alt": "A young man smiling as he watches an older man play chess at an outdoor table.",
+        "height": 800,
+        "width": 1200
+      },
+      {
+        "src": "/images/photo/trotitlan/loom.jpg?v=b51a454292",
+        "alt": "Weavers working at large wooden floor looms in a workshop.",
+        "height": 995,
+        "width": 1565
+      },
+      {
+        "src": "/images/photo/trotitlan/mariano.jpg?v=b7c8feba69",
+        "alt": "A man standing on a hillside among prickly pear cactus, with green mountains behind him.",
+        "height": 933,
+        "width": 1400
+      },
+      {
+        "src": "/images/photo/trotitlan/pouring.jpg?v=d1171728dd",
+        "alt": "Two people pouring deep red dye from a metal pot through a cloth into a concrete basin.",
+        "height": 480,
+        "width": 720
+      },
+      {
+        "src": "/images/photo/uganda/gazelle.jpg?v=69662e8949",
+        "alt": "Antelope grazing in tall golden grass on an open savanna dotted with acacia trees.",
+        "height": 2896,
+        "width": 5472
+      },
+      {
+        "src": "/images/photo/uganda/lions.jpeg?v=2f36ffba0a",
+        "alt": "A lioness and her cub standing on a path through tall golden grass.",
+        "height": 2856,
+        "width": 5417
+      }
+    ]
+  }
+]
