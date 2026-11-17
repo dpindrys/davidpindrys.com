@@ -3,6 +3,7 @@ import CaseStudyCardCtas from "./components/CaseStudyCardCtas";
 import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
+import { DemoPlayOverlay } from "./components/DemoDialog";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
@@ -119,8 +120,11 @@ function ProjectHero({ project }: { project: WorkCard }) {
   return (
     <HeroVideoProvider>
       <FloatingPlaybackProvider>
-        <div className="hero-area group/hero relative mt-5">
+        <div className="hero-area group group/hero relative mt-5">
           {project.media}
+          {project.demoVideo ? (
+            <DemoPlayOverlay client={project.client} video={project.demoVideo} />
+          ) : null}
           <HeroVideoToggle className={heroToggleClass} />
           <FloatingColumnsToggle className={heroToggleClass} />
         </div>
@@ -141,7 +145,6 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
         client={project.client}
         tagline={project.tagline}
         taglineClass={workTaglineClass}
-        demoVideo={project.demoVideo}
       />
       <ProjectHero project={project} />
       <div className="mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8">
@@ -201,10 +204,10 @@ export default function Home() {
               Healthcare interfaces I designed and built in React with AI-assisted development.
             </p>
             <PrototypeCards />
-            <div className="mt-12 md:mt-14">
+            <div className="mt-12">
               <h3 className={workSubheadClass}>Case studies</h3>
               <p className={workIntroClass}>Design decisions and delivered experiences for healthcare teams.</p>
-              <div className="mt-6 flex flex-col gap-24 md:mt-7 md:gap-32">
+              <div className="mt-6 flex flex-col gap-6">
                 {workCards.map((project) => (
                   <CaseStudyArticle key={project.id} project={project} />
                 ))}
