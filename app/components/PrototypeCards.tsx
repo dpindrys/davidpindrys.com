@@ -20,7 +20,7 @@ type Prototype = {
   demoCaptions?: readonly DemoCaption[];
 };
 
-/** Timed captions for the VEHR guided demo only. */
+/** Timed captions for the VEHR guided demo. */
 const vehrDemoCaptions: readonly DemoCaption[] = [
   {
     start: 0,
@@ -53,6 +53,39 @@ const vehrDemoCaptions: readonly DemoCaption[] = [
   },
 ];
 
+/** Timed captions for the Vinyl Health guided demo. */
+const vinylDemoCaptions: readonly DemoCaption[] = [
+  {
+    start: 0,
+    end: 7,
+    text: "The overview highlights new nausea and changes in sleep, activity, and work stress.",
+  },
+  {
+    start: 7,
+    end: 11,
+    text: "Her A1c has improved from 7.2% to 6.8%.",
+  },
+  {
+    start: 11,
+    end: 17,
+    text: "The timeline brings together patient reports, device readings, labs, and clinical visits.",
+  },
+  {
+    start: 17,
+    end: 24,
+    text: "Opening a source reveals why gabapentin was stopped: drowsiness was affecting her work.",
+  },
+  {
+    start: 24,
+    end: 28,
+    text: "The clinician returns to the summary with the supporting record checked.",
+  },
+  {
+    start: 28,
+    text: "Sarah’s preferences stay visible alongside the clinical insights.",
+  },
+];
+
 const prototypes: readonly Prototype[] = [
   {
     id: "vehr",
@@ -81,6 +114,10 @@ const prototypes: readonly Prototype[] = [
       "Vinyl Health overview for Sarah Chen, with prioritized insights linked to source records and a clinical timeline.",
     video: "/videos/vinyl.mp4",
     href: "https://vinylhealth.vercel.app/",
+    demoTitle: "Understanding changes in Sarah’s health",
+    demoDescription:
+      "Sarah Chen is a synthetic patient and high school teacher managing diabetes, back pain, and anxiety. Her blood sugar is improving, but new nausea, reduced sleep, and rising work stress are affecting her daily life.",
+    demoCaptions: vinylDemoCaptions,
   },
 ];
 

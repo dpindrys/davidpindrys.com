@@ -16,7 +16,7 @@ export type DemoDialogContent = {
   video: string;
   title?: string;
   description?: string;
-  /** Timed captions; only pass for demos that should show them (e.g. VEHR). */
+  /** Timed captions; only pass for demos that should show them (e.g. VEHR, Vinyl). */
   captions?: readonly DemoCaption[];
 };
 
