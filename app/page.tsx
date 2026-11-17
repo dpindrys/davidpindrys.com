@@ -67,8 +67,8 @@ const processSteps = [
 
 const workSubheadClass =
   "font-sans text-[clamp(1.65rem,2.6vw,2.15rem)] font-medium leading-[1.12] tracking-[-0.03em] text-black";
-const workIntroClass = "mt-2 max-w-[42rem] font-sans text-[16px] leading-[1.5] text-black/60 md:text-[18px]";
-const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/55 md:text-[16px]";
+const workIntroClass = "mt-2 max-w-[42rem] font-sans text-[16px] leading-[1.5] text-black/70 md:text-[18px]";
+const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]";
 
 type WorkCard = {
   id: string;

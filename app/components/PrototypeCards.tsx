@@ -71,7 +71,7 @@ export default function PrototypeCards() {
               <div className="grid grid-cols-2 items-start gap-3">
                 <div className="min-w-0">
                   <h3 className={companyNameClass}>{item.client}</h3>
-                  <p className="mt-1 font-sans text-[15px] leading-[1.4] text-black/55 md:text-[16px]">
+                  <p className="mt-1 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]">
                     {item.focus}
                   </p>
                 </div>
