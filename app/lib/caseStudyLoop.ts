@@ -1,8 +1,5 @@
-/** Order for next-project: FRx → DCHP → FRx. */
-export const CASE_STUDY_PATHS = [
-  "/case-studies/frx",
-  "/case-studies/dell-childrens-health-plan",
-] as const;
+/** Order for next-project navigation among published case studies. */
+export const CASE_STUDY_PATHS = ["/case-studies/frx"] as const;
 
 export type CaseStudyPath = (typeof CASE_STUDY_PATHS)[number];
 

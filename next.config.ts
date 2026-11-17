@@ -18,7 +18,12 @@ const nextConfig: NextConfig = {
       { source: "/case-studies/visual-ehr", destination: "/#vehr", permanent: true },
       {
         source: "/case-studies/dell-childrens",
-        destination: "/case-studies/dell-childrens-health-plan",
+        destination: "/#dell",
+        permanent: true,
+      },
+      {
+        source: "/case-studies/dell-childrens-health-plan",
+        destination: "/#dell",
         permanent: true,
       },
       { source: "/case-studies/ovcp", destination: "/", permanent: true },
