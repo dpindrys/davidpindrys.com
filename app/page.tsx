@@ -8,7 +8,7 @@ import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
 import DchpHeroMedia from "./components/DchpHeroMedia";
 import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
-import { HeroVideo, HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
+import { HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
 import PrototypeCards from "./components/PrototypeCards";
 import { getPhotoGroups } from "./lib/photos";
@@ -93,9 +93,10 @@ const workCards: readonly WorkCard[] = [
         <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/frx:scale-[1.02] motion-reduce:transition-none">
-            <HeroVideo
-              src="/images/frx/fresenius.mp4"
-              label="In-clinic medication refill workflow in CareTeamHub"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/frx/hero.png"
+              alt="In-clinic medication refill workflow in CareTeamHub"
               className="block h-auto w-full rounded-[12px]"
               style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
             />
