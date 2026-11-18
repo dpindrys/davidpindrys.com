@@ -142,9 +142,20 @@ const CAPTION_FADE_MS = 120;
 export const viewDemoPlayButtonClass =
   "absolute inset-0 z-[1] flex cursor-pointer items-center justify-center select-none outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:!outline-none [-webkit-tap-highlight-color:transparent]";
 
+/** Shared pill chrome for hero “View demo” and in-modal “Start demo”. */
+const viewDemoPlayMarkVisualClass =
+  "flex items-center justify-center rounded-full bg-black/60 px-5 py-3 font-sans text-[15px] font-medium leading-none tracking-[-0.01em] text-white sm:px-6 sm:py-3.5 sm:text-[16px]";
+
 /** Rounded pill; muted gray fill + white label (readable on media). */
-export const viewDemoPlayMarkClass =
-  "pointer-events-none flex items-center justify-center rounded-full bg-black/60 px-5 py-3 font-sans text-[15px] font-medium leading-none tracking-[-0.01em] text-white sm:px-6 sm:py-3.5 sm:text-[16px]";
+export const viewDemoPlayMarkClass = `pointer-events-none ${viewDemoPlayMarkVisualClass}`;
+
+/**
+ * Interactive variant of `viewDemoPlayMarkClass` for the in-modal “Start demo” cue
+ * (same visual pill; pointer-events + focus ring for keyboard/click).
+ */
+const startDemoOverlayMarkClass = `${viewDemoPlayMarkVisualClass} cursor-pointer outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]`;
+
+const START_DEMO_CUE_DELAY_MS = 3000;
 
 const viewDemoPlayMarkFocusRingClass =
   "ring-2 ring-black/25 ring-offset-2 ring-offset-transparent";
@@ -322,6 +333,11 @@ export default function DemoDialog({
   const [captionOpaque, setCaptionOpaque] = useState(true);
   /** False on open so the centered play affordance shows; syncs with native controls. */
   const [playing, setPlaying] = useState(false);
+  /**
+   * Delayed “Start demo” cue over the video: false until 3s after open (or forever if
+   * playback started earlier). Cleared on close via the demo-reset effect below.
+   */
+  const [showStartDemoCue, setShowStartDemoCue] = useState(false);
   /** Pixel diameter for walkthrough play; matches content stack height. */
   const [walkthroughPlaySize, setWalkthroughPlaySize] = useState<number | null>(null);
 
@@ -397,6 +413,7 @@ export default function DemoDialog({
     playbackEndedRef.current = false;
     activeCueRef.current = -1;
     setPlaying(false);
+    setShowStartDemoCue(false);
     if (captionFadeTimeoutRef.current != null) {
       window.clearTimeout(captionFadeTimeoutRef.current);
       captionFadeTimeoutRef.current = null;
@@ -410,6 +427,24 @@ export default function DemoDialog({
       setSegmentFills([]);
       setCaptionOpaque(true);
     }
+  }, [demo]);
+
+  // Delayed “Start demo” overlay: appear 3s after open if still paused; clear on close/unmount.
+  useEffect(() => {
+    if (!demo) {
+      setShowStartDemoCue(false);
+      return;
+    }
+    setShowStartDemoCue(false);
+    const timer = window.setTimeout(() => {
+      const video = videoRef.current;
+      if (video && !video.paused && !video.ended) return;
+      setShowStartDemoCue(true);
+    }, START_DEMO_CUE_DELAY_MS);
+    return () => {
+      window.clearTimeout(timer);
+      setShowStartDemoCue(false);
+    };
   }, [demo]);
 
   useEffect(() => {
@@ -666,6 +701,7 @@ export default function DemoDialog({
       : undefined,
     onPlay: (event: SyntheticEvent<HTMLVideoElement>) => {
       setPlaying(true);
+      setShowStartDemoCue(false);
       if (!hasCaptions) return;
       const video = event.currentTarget;
       if (video.currentTime < 0.25) playbackEndedRef.current = false;
@@ -787,6 +823,18 @@ export default function DemoDialog({
               >
                 <PlayIcon className="ml-[6%] h-[42%] w-[42%] shrink-0" />
               </button>
+            ) : null}
+            {showStartDemoCue && !playing ? (
+              <div className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center">
+                <button
+                  type="button"
+                  aria-label={`Start demo for ${demo.client}`}
+                  className={`pointer-events-auto ${startDemoOverlayMarkClass} motion-safe:animate-page-fade-in`}
+                  onClick={togglePlayback}
+                >
+                  Start demo
+                </button>
+              </div>
             ) : null}
           </div>
 
