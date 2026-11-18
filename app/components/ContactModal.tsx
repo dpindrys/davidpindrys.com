@@ -197,7 +197,7 @@ function ContactDialog({
 
   return createPortal(
     <div className="fixed inset-0 z-[130] md:flex md:items-center md:justify-center md:p-6">
-      <div className="absolute inset-0 hidden bg-black/45 md:block" onClick={onClose} />
+      <div className="absolute inset-0 hidden bg-black/70 md:block" onClick={onClose} />
       <div
         ref={dialogRef}
         role="dialog"

@@ -18,5 +18,8 @@ export const eyebrowClass =
 export const filledCardClass = "rounded-[20px] bg-[#E8E5DE] p-6 md:p-8";
 export const outlineCardClass = "border border-black/10 p-5 sm:p-6";
 
+/** Compact circular play/pause diameter — shared with DemoDialog walkthrough chrome. */
+export const compactPlayControlSizeClass = "h-12 w-12";
+
 export const heroToggleClass =
-  "absolute left-4 top-4 z-[2] flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:left-5 md:top-5";
+  `absolute left-4 top-4 z-[2] flex ${compactPlayControlSizeClass} items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200 group-hover/hero:opacity-100 focus-visible:opacity-100 md:left-5 md:top-5`;

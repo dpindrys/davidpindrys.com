@@ -16,6 +16,8 @@ type Prototype = {
   video: string;
   href: string;
   demoTitle?: string;
+  /** Walkthrough (VEHR): heading beside play, above captions/segments. */
+  demoWalkthroughHeading?: string;
   demoDescription?: string;
   demoCaptions?: readonly DemoCaption[];
 };
@@ -25,7 +27,7 @@ const vehrDemoCaptions: readonly DemoCaption[] = [
   {
     start: 0,
     end: 5,
-    text: "Meet Jordan Reyes, a synthetic patient with type 2 diabetes and hypertension.",
+    text: "Meet Jordan Reyes, a patient with type 2 diabetes and hypertension.",
   },
   {
     start: 5,
@@ -98,9 +100,10 @@ const prototypes: readonly Prototype[] = [
       "VEHR clinical timeline for Jordan Reyes, with conditions, demographics, and a measurement heatmap.",
     video: "/videos/vehr/prototype.mp4",
     href: "https://visual-ehr.vercel.app",
-    demoTitle: "Following Jordan’s health over time",
+    demoTitle: "Jordan’s care journey",
+    demoWalkthroughHeading: "Following Jordan’s health over time",
     demoDescription:
-      "Jordan is a synthetic patient with type 2 diabetes and hypertension. After urgent care and an ER visit, his follow-up records show improving symptoms, blood pressure, and blood sugar.",
+      "Jordan is a patient with type 2 diabetes and hypertension. After urgent care and an ER visit, his follow-up records show improving symptoms, blood pressure, and blood sugar.",
     demoCaptions: vehrDemoCaptions,
   },
   {
@@ -116,7 +119,7 @@ const prototypes: readonly Prototype[] = [
     href: "https://vinylhealth.vercel.app/",
     demoTitle: "Understanding changes in Sarah’s health",
     demoDescription:
-      "Sarah Chen is a synthetic patient and high school teacher managing diabetes, back pain, and anxiety. Her blood sugar is improving, but new nausea, reduced sleep, and rising work stress are affecting her daily life.",
+      "Sarah Chen is a patient and high school teacher managing diabetes, back pain, and anxiety. Her blood sugar is improving, but new nausea, reduced sleep, and rising work stress are affecting her daily life.",
     demoCaptions: vinylDemoCaptions,
   },
 ];
@@ -156,8 +159,10 @@ export default function PrototypeCards() {
                 client={item.client}
                 video={item.video}
                 title={item.demoTitle}
+                walkthroughHeading={item.demoWalkthroughHeading}
                 description={item.demoDescription}
                 captions={item.demoCaptions}
+                layout={item.id === "vehr" ? "walkthrough" : undefined}
               />
             </div>
             <div className="mt-5 flex w-full flex-1 flex-col gap-5">
