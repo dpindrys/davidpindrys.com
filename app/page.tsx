@@ -234,7 +234,7 @@ export default function Home() {
                 href="#work"
                 className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
               >
-                Selected work
+                Explore below
                 <svg
                   viewBox="0 0 24 24"
                   className="h-[1em] w-[1em] shrink-0 transition-transform duration-200 ease-out group-hover:translate-y-1 group-focus-visible:translate-y-1 motion-reduce:transition-none"
