@@ -129,15 +129,21 @@ const workCards: readonly WorkCard[] = [
       "Jane Doe is the example patient in this demo. Clinic staff review her refill needs, check patient and prescription information, and prepare a refill request directly in CareTeamHub.",
     demoCaptions: frxDemoCaptions,
     media: (
-      <div className="group/frx relative aspect-[16/10] w-full overflow-hidden rounded-[12px] border border-black/15">
+      <div className="group/frx relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/frx/bg.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          src="/images/frx/bg.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover/frx:scale-[1.02] motion-reduce:transition-none">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/frx/hero.png"
               alt="In-clinic medication refill workflow in CareTeamHub"
+              draggable={false}
               className="block h-auto w-full rounded-[12px]"
               style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
             />

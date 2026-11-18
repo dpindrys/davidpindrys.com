@@ -107,6 +107,15 @@ summary:focus-visible {
   outline-offset: 3px;
 }
 
+/*
+ * Full-bleed demo play control: unlayered global button:focus-visible above would draw a
+ * box around the entire media. Keyboard affordance lives on the circular mark instead.
+ */
+button[data-demo-play]:focus,
+button[data-demo-play]:focus-visible {
+  outline: none;
+}
+
 @media (min-width: 768px) {
   html {
     scroll-behavior: smooth;

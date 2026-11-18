@@ -20,6 +20,20 @@ export type DemoDialogContent = {
   captions?: readonly DemoCaption[];
 };
 
+function captionEndAt(
+  caption: DemoCaption,
+  index: number,
+  captions: readonly DemoCaption[],
+  duration: number,
+): number {
+  if (caption.end != null) return caption.end;
+  if (Number.isFinite(duration) && duration > 0) return duration;
+  // Duration unknown yet: fall through to next cue start, or a short open-ended span.
+  const next = captions[index + 1];
+  if (next) return next.start;
+  return caption.start + 1;
+}
+
 function captionTextAt(time: number, captions: readonly DemoCaption[], ended: boolean): string {
   if (captions.length === 0) return "";
   if (ended) return captions[captions.length - 1].text;
@@ -32,21 +46,75 @@ function captionTextAt(time: number, captions: readonly DemoCaption[], ended: bo
   return "";
 }
 
+/** 0-based active cue; last cue while ended or past the final start. */
+function captionCueIndexAt(
+  time: number,
+  captions: readonly DemoCaption[],
+  ended: boolean,
+  duration: number,
+): number {
+  if (captions.length === 0) return 0;
+  if (ended) return captions.length - 1;
+
+  for (let i = 0; i < captions.length; i++) {
+    const end = captionEndAt(captions[i], i, captions, duration);
+    if (time >= captions[i].start && time < end) return i;
+  }
+
+  // Gaps / edge seeks: stay on the latest cue that has started.
+  for (let i = captions.length - 1; i >= 0; i--) {
+    if (time >= captions[i].start) return i;
+  }
+  return 0;
+}
+
+/**
+ * Per-cue fill 0–1. Completed cues stay full; the active cue fills by
+ * (currentTime - start) / (end - start) over [start, end). On ended, all 1.
+ */
+function segmentFillsAt(
+  time: number,
+  captions: readonly DemoCaption[],
+  ended: boolean,
+  duration: number,
+): number[] {
+  if (captions.length === 0) return [];
+  if (ended) return captions.map(() => 1);
+
+  return captions.map((caption, i) => {
+    const start = caption.start;
+    const end = captionEndAt(caption, i, captions, duration);
+    if (time >= end) return 1;
+    if (time <= start) return 0;
+    const span = Math.max(end - start, 1e-6);
+    return Math.min(1, Math.max(0, (time - start) / span));
+  });
+}
+
 function longestCaptionText(captions: readonly DemoCaption[]): string {
   return captions.reduce((longest, caption) => (caption.text.length > longest.length ? caption.text : longest), "");
 }
 
+const CAPTION_FADE_MS = 120;
+
 /**
  * Full-bleed clickable media overlay; circular play mark is visual-only.
- * Hide the mark until the parent `group` is hovered (or the control is focus-visible).
- * On devices without hover, keep the mark visible via `@media (hover: hover)`.
+ * Mark visibility is React-controlled (pointer + focus-visible) — never CSS group-hover —
+ * so stuck :hover after click/modal close cannot fight hide. Touch / no-hover devices keep
+ * the mark visible until force-hidden/open.
+ *
+ * !outline-none beats unlayered `button:focus-visible` in globals.css (utilities lose to
+ * unlayered rules). Keyboard affordance is a ring on the mark, not the full-bleed button.
  */
 export const viewDemoPlayButtonClass =
-  "group/play absolute inset-0 z-[1] flex cursor-pointer items-center justify-center opacity-100 outline-none transition-opacity duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  "absolute inset-0 z-[1] flex cursor-pointer items-center justify-center select-none outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:!outline-none [-webkit-tap-highlight-color:transparent]";
 
 /** Diameter ~38% of media height; muted gray fill + white icon (DCHP toggle language, scaled up). */
 export const viewDemoPlayMarkClass =
   "pointer-events-none flex h-[38%] aspect-square items-center justify-center rounded-full bg-black/60 text-white";
+
+const viewDemoPlayMarkFocusRingClass =
+  "ring-2 ring-black/25 ring-offset-2 ring-offset-transparent";
 
 export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { className?: string }) {
   return (
@@ -56,7 +124,7 @@ export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { c
   );
 }
 
-/** Play control + dialog; place inside a `relative group` media container. */
+/** Play control + dialog; place inside a `relative` media container. */
 export function DemoPlayOverlay({
   client,
   video,
@@ -72,46 +140,79 @@ export function DemoPlayOverlay({
 }) {
   const [open, setOpen] = useState(false);
   /**
-   * After close, parent `.group:hover` often stays true while the pointer is still over the media.
-   * Gate hover-reveal until a real pointer leave (then re-enter) so the mark does not stick.
+   * Set on activate. Keeps the mark unmounted while the dialog is open and after close
+   * until the pointer actually leaves the media.
    */
-  const [awaitingPointerLeave, setAwaitingPointerLeave] = useState(false);
+  const [forceHidden, setForceHidden] = useState(false);
+  const [pointerInside, setPointerInside] = useState(false);
+  const [focusVisible, setFocusVisible] = useState(false);
+  /**
+   * `null` until mounted (avoid desktop flash of the mark). Then `true` when the primary
+   * input can hover; `false` on touch / coarse pointers (mark stays visible).
+   */
+  const [hoverCapable, setHoverCapable] = useState<boolean | null>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const openRef = useRef(false);
   openRef.current = open;
 
-  const close = useCallback((modality: "keyboard" | "pointer" = "pointer") => {
-    setOpen(false);
-    // Only pointer dismiss leaves a stuck parent :hover under the cursor.
-    if (modality === "pointer") setAwaitingPointerLeave(true);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover)");
+    const apply = () => setHoverCapable(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
   }, []);
 
-  // While dialog is open, or until the pointer leaves after a pointer close, force hover-reveal
-  // off (including stuck parent group-hover). focus-visible still reveals for keyboard restore.
-  const blockHoverReveal = open || awaitingPointerLeave;
-  const playButtonClass = blockHoverReveal
-    ? `${viewDemoPlayButtonClass} [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:!opacity-0 focus-visible:opacity-100`
-    : `${viewDemoPlayButtonClass} [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100`;
+  const close = useCallback((_modality: "keyboard" | "pointer" = "pointer") => {
+    setOpen(false);
+  }, []);
+
+  // Pure React visibility — no group-hover / opacity tug-of-war.
+  // focusVisible wins over forceHidden so Escape focus restore still shows the mark.
+  const showMark =
+    !open &&
+    (focusVisible ||
+      (!forceHidden && (hoverCapable === false || (hoverCapable === true && pointerInside))));
 
   return (
     <>
       <button
         type="button"
+        data-demo-play=""
         aria-label={`View demo for ${client}`}
+        className={viewDemoPlayButtonClass}
+        onPointerEnter={() => setPointerInside(true)}
+        onPointerLeave={() => {
+          setPointerInside(false);
+          // Portal cover can fire leave while open — do not clear until dialog is gone.
+          if (!openRef.current) setForceHidden(false);
+        }}
+        onFocus={(event) => {
+          setFocusVisible(event.currentTarget.matches(":focus-visible"));
+        }}
+        onBlur={() => setFocusVisible(false)}
         onClick={(event) => {
           openerRef.current = event.currentTarget;
+          setForceHidden(true);
+          setFocusVisible(false);
+          // Pointer activate: drop focus so unlayered global focus-visible outline cannot
+          // paint a ring around the full-bleed control (especially noticeable on Frx).
+          event.currentTarget.blur();
           setOpen(true);
         }}
-        onPointerLeave={() => {
-          // Only clear the post-close gate once the dialog is gone; leave-on-open
-          // (portal covering the control) must not re-arm hover reveal early.
-          if (!openRef.current) setAwaitingPointerLeave(false);
-        }}
-        className={playButtonClass}
       >
-        <span className={viewDemoPlayMarkClass} aria-hidden="true">
-          <PlayIcon />
-        </span>
+        {showMark ? (
+          <span
+            className={
+              focusVisible
+                ? `${viewDemoPlayMarkClass} ${viewDemoPlayMarkFocusRingClass}`
+                : viewDemoPlayMarkClass
+            }
+            aria-hidden="true"
+          >
+            <PlayIcon />
+          </span>
+        ) : null}
       </button>
       <DemoDialog
         demo={open ? { client, video, title, description, captions } : null}
@@ -138,9 +239,14 @@ export default function DemoDialog({
   const closeModalityRef = useRef<"keyboard" | "pointer">("pointer");
   /** Latch so the final caption stays visible after `ended` until replay/seek-to-start. */
   const playbackEndedRef = useRef(false);
+  /** Last applied cue index; -1 until the first sync so open does not fade-in. */
+  const activeCueRef = useRef(-1);
+  const captionFadeTimeoutRef = useRef<number | null>(null);
   const captions = demo?.captions;
   const hasCaptions = Boolean(captions && captions.length > 0);
   const [captionText, setCaptionText] = useState("");
+  const [segmentFills, setSegmentFills] = useState<number[]>([]);
+  const [captionOpaque, setCaptionOpaque] = useState(true);
 
   const closeFromPointer = useCallback(() => {
     closeModalityRef.current = "pointer";
@@ -203,12 +309,59 @@ export default function DemoDialog({
 
   useEffect(() => {
     playbackEndedRef.current = false;
+    activeCueRef.current = -1;
+    if (captionFadeTimeoutRef.current != null) {
+      window.clearTimeout(captionFadeTimeoutRef.current);
+      captionFadeTimeoutRef.current = null;
+    }
     if (demo?.captions?.length) {
       setCaptionText(captionTextAt(0, demo.captions, false));
+      setSegmentFills(demo.captions.map(() => 0));
+      setCaptionOpaque(true);
     } else {
       setCaptionText("");
+      setSegmentFills([]);
+      setCaptionOpaque(true);
     }
   }, [demo]);
+
+  useEffect(() => {
+    return () => {
+      if (captionFadeTimeoutRef.current != null) {
+        window.clearTimeout(captionFadeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const applyCaptionCue = useCallback((index: number, text: string) => {
+    const prev = activeCueRef.current;
+    activeCueRef.current = index;
+
+    if (prev === -1 || prev === index) {
+      setCaptionText(text);
+      setCaptionOpaque(true);
+      return;
+    }
+
+    if (captionFadeTimeoutRef.current != null) {
+      window.clearTimeout(captionFadeTimeoutRef.current);
+      captionFadeTimeoutRef.current = null;
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setCaptionText(text);
+      setCaptionOpaque(true);
+      return;
+    }
+
+    setCaptionOpaque(false);
+    captionFadeTimeoutRef.current = window.setTimeout(() => {
+      setCaptionText(text);
+      setCaptionOpaque(true);
+      captionFadeTimeoutRef.current = null;
+    }, CAPTION_FADE_MS);
+  }, []);
 
   const syncCaptionsFromVideo = useCallback(
     (video: HTMLVideoElement) => {
@@ -218,9 +371,14 @@ export default function DemoDialog({
       if (playbackEndedRef.current && time < 0.25) {
         playbackEndedRef.current = false;
       }
-      setCaptionText(captionTextAt(time, captions, playbackEndedRef.current));
+      const ended = playbackEndedRef.current;
+      const duration = Number.isFinite(video.duration) ? video.duration : Number.NaN;
+      const index = captionCueIndexAt(time, captions, ended, duration);
+      const text = captionTextAt(time, captions, ended);
+      setSegmentFills(segmentFillsAt(time, captions, ended, duration));
+      applyCaptionCue(index, text);
     },
-    [captions],
+    [applyCaptionCue, captions],
   );
 
   if (!demo || typeof document === "undefined") return null;
@@ -286,6 +444,13 @@ export default function DemoDialog({
                 }
               : undefined
           }
+          onLoadedMetadata={
+            hasCaptions
+              ? (event) => {
+                  syncCaptionsFromVideo(event.currentTarget);
+                }
+              : undefined
+          }
           onPlay={
             hasCaptions
               ? (event) => {
@@ -300,13 +465,15 @@ export default function DemoDialog({
               ? (event) => {
                   playbackEndedRef.current = true;
                   if (captions?.length) {
-                    setCaptionText(captionTextAt(event.currentTarget.currentTime, captions, true));
+                    const last = captions.length - 1;
+                    setSegmentFills(captions.map(() => 1));
+                    applyCaptionCue(last, captionTextAt(event.currentTarget.currentTime, captions, true));
                   }
                 }
               : undefined
           }
         />
-        {hasCaptions ? (
+        {hasCaptions && captions ? (
           <div className="bg-[#F4F2EE] px-4 py-3 sm:px-5 sm:py-4">
             <div className="relative" aria-live="polite">
               <p
@@ -317,10 +484,28 @@ export default function DemoDialog({
               </p>
               <p
                 id={captionsId}
-                className="absolute inset-0 font-sans text-[15px] font-bold leading-[1.45] text-black/80 sm:text-[16px]"
+                className={`absolute inset-0 font-sans text-[15px] font-bold leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
+                  captionOpaque ? "opacity-100" : "opacity-0"
+                }`}
               >
                 {captionText}
               </p>
+            </div>
+            <div
+              className="mt-3 flex gap-1 sm:gap-1.5"
+              aria-hidden="true"
+            >
+              {segmentFills.map((fill, i) => (
+                <div
+                  key={i}
+                  className="h-1 min-w-0 flex-1 overflow-hidden rounded-[1px] bg-black/10"
+                >
+                  <div
+                    className="h-full bg-[rgb(15_12_19)]"
+                    style={{ width: `${Math.round(fill * 1000) / 10}%` }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         ) : null}
