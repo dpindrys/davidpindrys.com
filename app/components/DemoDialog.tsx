@@ -95,6 +95,17 @@ function longestCaptionText(captions: readonly DemoCaption[]): string {
   return captions.reduce((longest, caption) => (caption.text.length > longest.length ? caption.text : longest), "");
 }
 
+/** Accessible name for a caption timeline segment control. */
+function captionSegmentLabel(caption: DemoCaption, index: number, total: number): string {
+  const trimmed = caption.text.trim();
+  const truncated =
+    trimmed.length > 64 ? `${trimmed.slice(0, 61).trimEnd()}…` : trimmed;
+  if (truncated) {
+    return `Go to caption ${index + 1} of ${total}: ${truncated}`;
+  }
+  return `Go to caption ${index + 1} of ${total}`;
+}
+
 const CAPTION_FADE_MS = 120;
 
 /**
@@ -235,6 +246,7 @@ export default function DemoDialog({
   const titleId = useId();
   const captionsId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   /** Pointer closes should not leave a sticky focus ring on the opener. */
   const closeModalityRef = useRef<"keyboard" | "pointer">("pointer");
   /** Latch so the final caption stays visible after `ended` until replay/seek-to-start. */
@@ -381,6 +393,19 @@ export default function DemoDialog({
     [applyCaptionCue, captions],
   );
 
+  /** Seek to cue `start`; leave play/pause as-is. Caption/progress update via onSeeked sync. */
+  const seekToCaption = useCallback(
+    (index: number) => {
+      const video = videoRef.current;
+      if (!video || !captions?.length) return;
+      const caption = captions[index];
+      if (!caption) return;
+      playbackEndedRef.current = false;
+      video.currentTime = caption.start;
+    },
+    [captions],
+  );
+
   if (!demo || typeof document === "undefined") return null;
 
   const captionSpacer = hasCaptions && captions ? longestCaptionText(captions) : "";
@@ -424,6 +449,7 @@ export default function DemoDialog({
           </button>
         </div>
         <video
+          ref={videoRef}
           src={demo.video}
           controls
           autoPlay
@@ -493,18 +519,23 @@ export default function DemoDialog({
             </div>
             <div
               className="mt-3 flex gap-1 sm:gap-1.5"
-              aria-hidden="true"
+              role="group"
+              aria-label="Caption timeline"
             >
               {segmentFills.map((fill, i) => (
-                <div
+                <button
                   key={i}
-                  className="h-1 min-w-0 flex-1 overflow-hidden rounded-[1px] bg-black/10"
+                  type="button"
+                  aria-label={captionSegmentLabel(captions[i], i, captions.length)}
+                  onClick={() => seekToCaption(i)}
+                  className="h-1 min-w-0 flex-1 cursor-pointer overflow-hidden rounded-[1px] bg-black/10 outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
                 >
-                  <div
-                    className="h-full bg-[rgb(15_12_19)]"
+                  <span
+                    className="block h-full bg-[rgb(15_12_19)]"
                     style={{ width: `${Math.round(fill * 1000) / 10}%` }}
+                    aria-hidden="true"
                   />
-                </div>
+                </button>
               ))}
             </div>
           </div>
