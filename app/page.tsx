@@ -78,6 +78,8 @@ type WorkCard = {
   description: string;
   demoVideo?: string;
   demoTitle?: string;
+  /** Walkthrough: heading beside play, above captions/segments. */
+  demoWalkthroughHeading?: string;
   demoDescription?: string;
   demoCaptions?: readonly DemoCaption[];
   media: ReactNode;
@@ -124,7 +126,8 @@ const workCards: readonly WorkCard[] = [
     description:
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
     demoVideo: "/images/frx/fresenius.mp4",
-    demoTitle: "Managing Jane’s medication refills",
+    demoTitle: "Jane’s refill journey",
+    demoWalkthroughHeading: "Managing Jane’s medication refills",
     demoDescription:
       "Jane Doe is the example patient in this demo. Clinic staff review her refill needs, check patient and prescription information, and prepare a refill request directly in CareTeamHub.",
     demoCaptions: frxDemoCaptions,
@@ -173,8 +176,10 @@ function ProjectHero({ project }: { project: WorkCard }) {
               client={project.client}
               video={project.demoVideo}
               title={project.demoTitle}
+              walkthroughHeading={project.demoWalkthroughHeading}
               description={project.demoDescription}
               captions={project.demoCaptions}
+              layout="walkthrough"
             />
           ) : null}
           <HeroVideoToggle className={heroToggleClass} />

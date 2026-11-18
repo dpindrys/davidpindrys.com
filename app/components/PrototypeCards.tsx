@@ -16,7 +16,7 @@ type Prototype = {
   video: string;
   href: string;
   demoTitle?: string;
-  /** Walkthrough (VEHR): heading beside play, above captions/segments. */
+  /** Walkthrough: heading beside play, above captions/segments. */
   demoWalkthroughHeading?: string;
   demoDescription?: string;
   demoCaptions?: readonly DemoCaption[];
@@ -117,7 +117,8 @@ const prototypes: readonly Prototype[] = [
       "Vinyl Health overview for Sarah Chen, with prioritized insights linked to source records and a clinical timeline.",
     video: "/videos/vinyl.mp4",
     href: "https://vinylhealth.vercel.app/",
-    demoTitle: "Understanding changes in Sarah’s health",
+    demoTitle: "Sarah’s care journey",
+    demoWalkthroughHeading: "Understanding changes in Sarah’s health",
     demoDescription:
       "Sarah Chen is a patient and high school teacher managing diabetes, back pain, and anxiety. Her blood sugar is improving, but new nausea, reduced sleep, and rising work stress are affecting her daily life.",
     demoCaptions: vinylDemoCaptions,
@@ -162,7 +163,7 @@ export default function PrototypeCards() {
                 walkthroughHeading={item.demoWalkthroughHeading}
                 description={item.demoDescription}
                 captions={item.demoCaptions}
-                layout={item.id === "vehr" ? "walkthrough" : undefined}
+                layout="walkthrough"
               />
             </div>
             <div className="mt-5 flex w-full flex-1 flex-col gap-5">
