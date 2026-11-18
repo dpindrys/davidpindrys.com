@@ -109,7 +109,7 @@ function captionSegmentLabel(caption: DemoCaption, index: number, total: number)
 const CAPTION_FADE_MS = 120;
 
 /**
- * Full-bleed clickable media overlay; circular play mark is visual-only.
+ * Full-bleed clickable media overlay; "View demo" mark is visual-only.
  * Mark visibility is React-controlled (pointer + focus-visible) — never CSS group-hover —
  * so stuck :hover after click/modal close cannot fight hide. Touch / no-hover devices keep
  * the mark visible until force-hidden/open.
@@ -120,12 +120,16 @@ const CAPTION_FADE_MS = 120;
 export const viewDemoPlayButtonClass =
   "absolute inset-0 z-[1] flex cursor-pointer items-center justify-center select-none outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:!outline-none [-webkit-tap-highlight-color:transparent]";
 
-/** Diameter ~38% of media height; muted gray fill + white icon (DCHP toggle language, scaled up). */
+/** Rounded pill; muted gray fill + white label (readable on media). */
 export const viewDemoPlayMarkClass =
-  "pointer-events-none flex h-[38%] aspect-square items-center justify-center rounded-full bg-black/60 text-white";
+  "pointer-events-none flex items-center justify-center rounded-full bg-black/60 px-5 py-3 font-sans text-[15px] font-medium leading-none tracking-[-0.01em] text-white sm:px-6 sm:py-3.5 sm:text-[16px]";
 
 const viewDemoPlayMarkFocusRingClass =
   "ring-2 ring-black/25 ring-offset-2 ring-offset-transparent";
+
+/** In-modal centered play control; DCHP toggle language (gray circle + white icon), scaled up. */
+const modalPlayButtonClass =
+  "absolute left-1/2 top-1/2 z-[1] flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-20 sm:w-20 [-webkit-tap-highlight-color:transparent]";
 
 export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { className?: string }) {
   return (
@@ -221,7 +225,7 @@ export function DemoPlayOverlay({
             }
             aria-hidden="true"
           >
-            <PlayIcon />
+            View demo
           </span>
         ) : null}
       </button>
@@ -259,6 +263,8 @@ export default function DemoDialog({
   const [captionText, setCaptionText] = useState("");
   const [segmentFills, setSegmentFills] = useState<number[]>([]);
   const [captionOpaque, setCaptionOpaque] = useState(true);
+  /** False on open so the centered play affordance shows; syncs with native controls. */
+  const [playing, setPlaying] = useState(false);
 
   const closeFromPointer = useCallback(() => {
     closeModalityRef.current = "pointer";
@@ -322,6 +328,7 @@ export default function DemoDialog({
   useEffect(() => {
     playbackEndedRef.current = false;
     activeCueRef.current = -1;
+    setPlaying(false);
     if (captionFadeTimeoutRef.current != null) {
       window.clearTimeout(captionFadeTimeoutRef.current);
       captionFadeTimeoutRef.current = null;
@@ -448,57 +455,75 @@ export default function DemoDialog({
             <span aria-hidden>×</span>
           </button>
         </div>
-        <video
-          ref={videoRef}
-          src={demo.video}
-          controls
-          autoPlay
-          playsInline
-          className="block max-h-[min(78vh,820px)] w-full bg-black"
-          aria-label={`Guided demo for ${demo.client}`}
-          onTimeUpdate={
-            hasCaptions
-              ? (event) => {
-                  syncCaptionsFromVideo(event.currentTarget);
-                }
-              : undefined
-          }
-          onSeeked={
-            hasCaptions
-              ? (event) => {
-                  syncCaptionsFromVideo(event.currentTarget);
-                }
-              : undefined
-          }
-          onLoadedMetadata={
-            hasCaptions
-              ? (event) => {
-                  syncCaptionsFromVideo(event.currentTarget);
-                }
-              : undefined
-          }
-          onPlay={
-            hasCaptions
-              ? (event) => {
-                  const video = event.currentTarget;
-                  if (video.currentTime < 0.25) playbackEndedRef.current = false;
-                  syncCaptionsFromVideo(video);
-                }
-              : undefined
-          }
-          onEnded={
-            hasCaptions
-              ? (event) => {
-                  playbackEndedRef.current = true;
-                  if (captions?.length) {
-                    const last = captions.length - 1;
-                    setSegmentFills(captions.map(() => 1));
-                    applyCaptionCue(last, captionTextAt(event.currentTarget.currentTime, captions, true));
+        <div className="relative bg-black">
+          <video
+            ref={videoRef}
+            src={demo.video}
+            controls
+            playsInline
+            preload="metadata"
+            className="block max-h-[min(78vh,820px)] w-full bg-black"
+            aria-label={`Guided demo for ${demo.client}`}
+            onTimeUpdate={
+              hasCaptions
+                ? (event) => {
+                    syncCaptionsFromVideo(event.currentTarget);
                   }
-                }
-              : undefined
-          }
-        />
+                : undefined
+            }
+            onSeeked={
+              hasCaptions
+                ? (event) => {
+                    syncCaptionsFromVideo(event.currentTarget);
+                  }
+                : undefined
+            }
+            onLoadedMetadata={
+              hasCaptions
+                ? (event) => {
+                    syncCaptionsFromVideo(event.currentTarget);
+                  }
+                : undefined
+            }
+            onPlay={(event) => {
+              setPlaying(true);
+              if (!hasCaptions) return;
+              const video = event.currentTarget;
+              if (video.currentTime < 0.25) playbackEndedRef.current = false;
+              syncCaptionsFromVideo(video);
+            }}
+            onPause={() => {
+              setPlaying(false);
+            }}
+            onEnded={
+              hasCaptions
+                ? (event) => {
+                    setPlaying(false);
+                    playbackEndedRef.current = true;
+                    if (captions?.length) {
+                      const last = captions.length - 1;
+                      setSegmentFills(captions.map(() => 1));
+                      applyCaptionCue(last, captionTextAt(event.currentTarget.currentTime, captions, true));
+                    }
+                  }
+                : () => {
+                    setPlaying(false);
+                  }
+            }
+          />
+          {!playing ? (
+            <button
+              type="button"
+              aria-label={`Play demo for ${demo.client}`}
+              className={modalPlayButtonClass}
+              onClick={() => {
+                void videoRef.current?.play();
+              }}
+            >
+              <PlayIcon className="ml-[6%] h-[42%] w-[42%] shrink-0" />
+            </button>
+          ) : null}
+        </div>
         {hasCaptions && captions ? (
           <div className="bg-[#F4F2EE] px-4 py-3 sm:px-5 sm:py-4">
             <div className="relative" aria-live="polite">
