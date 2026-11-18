@@ -629,6 +629,25 @@ export default function DemoDialog({
     </h2>
   );
 
+  /** Desktop-only × beside the title row; Escape + backdrop still dismiss on mobile. */
+  const closeButton = (
+    <button
+      type="button"
+      onClick={closeFromPointer}
+      aria-label="Close"
+      className="hidden h-10 w-10 shrink-0 items-center justify-center font-sans text-[22px] leading-none text-black/70 outline-none hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] md:flex"
+    >
+      <span aria-hidden>×</span>
+    </button>
+  );
+
+  const titleRow = (
+    <div className="flex items-start justify-between gap-4">
+      <div className="min-w-0 flex-1">{titleHeading}</div>
+      {closeButton}
+    </div>
+  );
+
   const videoHandlers = {
     onTimeUpdate: hasCaptions
       ? (event: SyntheticEvent<HTMLVideoElement>) => {
@@ -676,121 +695,123 @@ export default function DemoDialog({
       .join(" ") || undefined;
 
   return createPortal(
-    <div className="fixed inset-0 z-[140] flex items-center justify-center p-4 sm:p-6">
-      <div className="absolute inset-0 bg-black/70" onClick={closeFromPointer} />
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={describedBy}
-        tabIndex={-1}
-        className="relative w-full max-w-5xl overflow-hidden rounded-[16px] bg-black shadow-[0_24px_80px_-32px_rgba(0,0,0,0.55)] outline-none focus:outline-none"
-      >
-        {isWalkthrough ? (
-          <div className="relative bg-[#F4F2EE]">
-            <div className="px-4 pb-3 pt-3 sm:px-5 sm:pb-3.5 sm:pt-4">
-              {titleHeading}
-              {demo.description ? (
-                <p
-                  id={descriptionId}
-                  className="mt-1 font-sans text-[14px] font-normal leading-[1.4] text-black/70 sm:text-[15px]"
-                >
-                  {demo.description}
-                </p>
-              ) : null}
-            </div>
-            <div className="h-px w-full bg-black/10" aria-hidden="true" />
-            <div className="flex items-start gap-3 px-4 pb-3 pt-3 sm:gap-4 sm:px-5 sm:pb-4 sm:pt-3.5">
-              <button
-                type="button"
-                aria-label={playing ? `Pause demo for ${demo.client}` : `Play demo for ${demo.client}`}
-                className={walkthroughPlayButtonClass}
-                style={
-                  walkthroughPlaySize != null
-                    ? { width: walkthroughPlaySize, height: walkthroughPlaySize }
-                    : undefined
-                }
-                onClick={togglePlayback}
-              >
-                {playing ? (
-                  <PauseIcon className="h-[38%] w-[38%] shrink-0" />
-                ) : (
-                  <PlayIcon className="ml-[6%] h-[38%] w-[38%] shrink-0" />
-                )}
-              </button>
-              <div ref={walkthroughStackRef} className="min-w-0 flex-1">
-                {demo.walkthroughHeading ? (
-                  <h3 className="font-sans text-[16px] font-bold leading-snug text-black">
-                    {demo.walkthroughHeading}
-                  </h3>
-                ) : null}
-                {captionBody ? (
-                  <div className={demo.walkthroughHeading ? "mt-2" : undefined}>{captionBody}</div>
+    // Overlay scrolls (body is overflow-locked). items-start pins the panel to the top
+    // so short viewports can reach chrome + video + shortcuts; mobile fills the screen.
+    <div className="fixed inset-0 z-[140] overflow-y-auto overscroll-contain">
+      <div className="flex min-h-full items-start justify-center p-0 sm:p-4">
+        <div className="fixed inset-0 bg-black/70" onClick={closeFromPointer} aria-hidden="true" />
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={describedBy}
+          tabIndex={-1}
+          className="relative z-[1] flex min-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-none bg-black shadow-[0_24px_80px_-32px_rgba(0,0,0,0.55)] outline-none focus:outline-none sm:min-h-0 sm:rounded-[16px]"
+        >
+          {isWalkthrough ? (
+            <div className="relative shrink-0 bg-[#F4F2EE]">
+              <div className="px-4 pb-3 pt-3 sm:px-5 sm:pb-3.5 sm:pt-4">
+                {titleRow}
+                {demo.description ? (
+                  <p
+                    id={descriptionId}
+                    className="mt-1 font-sans text-[14px] font-normal leading-[1.4] text-black/70 sm:text-[15px]"
+                  >
+                    {demo.description}
+                  </p>
                 ) : null}
               </div>
+              <div className="h-px w-full bg-black/10" aria-hidden="true" />
+              <div className="flex items-start gap-3 px-4 pb-3 pt-3 sm:gap-4 sm:px-5 sm:pb-4 sm:pt-3.5">
+                <button
+                  type="button"
+                  aria-label={playing ? `Pause demo for ${demo.client}` : `Play demo for ${demo.client}`}
+                  className={walkthroughPlayButtonClass}
+                  style={
+                    walkthroughPlaySize != null
+                      ? { width: walkthroughPlaySize, height: walkthroughPlaySize }
+                      : undefined
+                  }
+                  onClick={togglePlayback}
+                >
+                  {playing ? (
+                    <PauseIcon className="h-[38%] w-[38%] shrink-0" />
+                  ) : (
+                    <PlayIcon className="ml-[6%] h-[38%] w-[38%] shrink-0" />
+                  )}
+                </button>
+                <div ref={walkthroughStackRef} className="min-w-0 flex-1">
+                  {demo.walkthroughHeading ? (
+                    <h3 className="font-sans text-[16px] font-bold leading-snug text-black">
+                      {demo.walkthroughHeading}
+                    </h3>
+                  ) : null}
+                  {captionBody ? (
+                    <div className={demo.walkthroughHeading ? "mt-2" : undefined}>{captionBody}</div>
+                  ) : null}
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="bg-[#F4F2EE] px-4 py-3 sm:px-5">
-            <div className="min-w-0">
-              {titleHeading}
+          ) : (
+            <div className="shrink-0 bg-[#F4F2EE] px-4 py-3 sm:px-5">
+              {titleRow}
               {demo.description ? (
                 <p className="mt-1 font-sans text-[14px] font-normal leading-[1.4] text-black/70 sm:text-[15px]">
                   {demo.description}
                 </p>
               ) : null}
             </div>
+          )}
+
+          <div className="relative min-h-0 flex-1 bg-black">
+            <video
+              ref={videoRef}
+              src={demo.video}
+              controls={!isWalkthrough}
+              playsInline
+              preload="metadata"
+              className="block max-h-[min(78vh,820px)] w-full bg-black"
+              aria-label={`Guided demo for ${demo.client}`}
+              {...videoHandlers}
+            />
+            {!isWalkthrough && !playing ? (
+              <button
+                type="button"
+                aria-label={`Play demo for ${demo.client}`}
+                className={modalPlayButtonClass}
+                onClick={() => {
+                  void videoRef.current?.play();
+                }}
+              >
+                <PlayIcon className="ml-[6%] h-[42%] w-[42%] shrink-0" />
+              </button>
+            ) : null}
           </div>
-        )}
 
-        <div className="relative bg-black">
-          <video
-            ref={videoRef}
-            src={demo.video}
-            controls={!isWalkthrough}
-            playsInline
-            preload="metadata"
-            className="block max-h-[min(78vh,820px)] w-full bg-black"
-            aria-label={`Guided demo for ${demo.client}`}
-            {...videoHandlers}
-          />
-          {!isWalkthrough && !playing ? (
-            <button
-              type="button"
-              aria-label={`Play demo for ${demo.client}`}
-              className={modalPlayButtonClass}
-              onClick={() => {
-                void videoRef.current?.play();
-              }}
-            >
-              <PlayIcon className="ml-[6%] h-[42%] w-[42%] shrink-0" />
-            </button>
-          ) : null}
-        </div>
-
-        <div
-          className="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-black/10 bg-[#F4F2EE] px-4 py-3 sm:gap-x-6 sm:px-5 sm:py-3.5"
-          aria-hidden="true"
-        >
-          <span className="inline-flex items-center gap-2 font-sans text-[13px] font-normal leading-none text-black/70 sm:text-[14px]">
-            <kbd className={demoShortcutKbdClass}>Space</kbd>
-            Play / Pause
-          </span>
-          {hasCaptions ? (
+          <div
+            className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2 border-t border-black/10 bg-[#F4F2EE] px-4 py-3 sm:gap-x-6 sm:px-5 sm:py-3.5"
+            aria-hidden="true"
+          >
             <span className="inline-flex items-center gap-2 font-sans text-[13px] font-normal leading-none text-black/70 sm:text-[14px]">
-              <span className="inline-flex items-center gap-1">
-                <kbd className={demoShortcutKbdCompactClass}>←</kbd>
-                <kbd className={demoShortcutKbdCompactClass}>→</kbd>
-              </span>
-              Previous / Next
+              <kbd className={demoShortcutKbdClass}>Space</kbd>
+              Play / Pause
             </span>
+            {hasCaptions ? (
+              <span className="inline-flex items-center gap-2 font-sans text-[13px] font-normal leading-none text-black/70 sm:text-[14px]">
+                <span className="inline-flex items-center gap-1">
+                  <kbd className={demoShortcutKbdCompactClass}>←</kbd>
+                  <kbd className={demoShortcutKbdCompactClass}>→</kbd>
+                </span>
+                Previous / Next
+              </span>
+            ) : null}
+          </div>
+
+          {!isWalkthrough && hasCaptions && captions ? (
+            <div className="shrink-0 bg-[#F4F2EE] px-4 pb-3 pt-0 sm:px-5 sm:pb-4">{captionBlock}</div>
           ) : null}
         </div>
-
-        {!isWalkthrough && hasCaptions && captions ? (
-          <div className="bg-[#F4F2EE] px-4 pb-3 pt-0 sm:px-5 sm:pb-4">{captionBlock}</div>
-        ) : null}
       </div>
     </div>,
     document.body,
