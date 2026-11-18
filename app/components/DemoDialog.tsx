@@ -695,10 +695,11 @@ export default function DemoDialog({
       .join(" ") || undefined;
 
   return createPortal(
-    // Overlay scrolls (body is overflow-locked). items-start pins the panel to the top
-    // so short viewports can reach chrome + video + shortcuts; mobile fills the screen.
+    // Overlay scrolls (body is overflow-locked). items-center-safe centers when the
+    // panel fits; falls back to start so short viewports can scroll without clipping
+    // the top. Mobile still fills via min-h-[100dvh] on the panel.
     <div className="fixed inset-0 z-[140] overflow-y-auto overscroll-contain">
-      <div className="flex min-h-full items-start justify-center p-0 sm:p-4">
+      <div className="flex min-h-full items-center-safe justify-center p-0 sm:p-4">
         <div className="fixed inset-0 bg-black/70" onClick={closeFromPointer} aria-hidden="true" />
         <div
           ref={dialogRef}
