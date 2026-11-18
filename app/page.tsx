@@ -225,7 +225,7 @@ export default function Home() {
               id="hero-title"
               className="max-w-[16ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black"
             >
-              Healthcare workflows that people can actually use.
+              Healthcare workflows that actually work.
             </h1>
             <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-12">
               <TalkButton variant="hero">Let&apos;s talk</TalkButton>
