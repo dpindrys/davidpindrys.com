@@ -783,7 +783,7 @@ export default function DemoDialog({
                 <kbd className={demoShortcutKbdCompactClass}>←</kbd>
                 <kbd className={demoShortcutKbdCompactClass}>→</kbd>
               </span>
-              Seek segments
+              Previous / Next
             </span>
           ) : null}
         </div>
