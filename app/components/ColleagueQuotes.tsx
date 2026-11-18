@@ -86,8 +86,8 @@ export default function ColleagueQuotes() {
                 />
                 <div className="min-w-0">
                   <p className="font-sans text-[15px] font-medium leading-[1.35] text-black">{item.name}</p>
-                  <p className="font-sans text-[13px] leading-[1.4] text-black/55">{item.title}</p>
-                  <p className="font-sans text-[13px] leading-[1.4] text-black/55">{item.company}</p>
+                  <p className="font-sans text-[13px] leading-[1.4] text-black/70">{item.title}</p>
+                  <p className="font-sans text-[13px] leading-[1.4] text-black/70">{item.company}</p>
                 </div>
               </figcaption>
               <a

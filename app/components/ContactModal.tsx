@@ -133,7 +133,7 @@ function ContactForm() {
         <button type="submit" disabled={state.submitting} className={primaryButtonClass}>
           {state.submitting ? "Sending…" : "Send it"}
         </button>
-        <p className="font-sans text-[13px] leading-[1.45] text-black/55">I won&apos;t share this with anyone.</p>
+        <p className="font-sans text-[13px] leading-[1.45] text-black/70">I won&apos;t share this with anyone.</p>
       </div>
     </form>
   );

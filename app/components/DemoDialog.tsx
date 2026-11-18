@@ -477,14 +477,14 @@ export default function DemoDialog({
           <div className="bg-[#F4F2EE] px-4 py-3 sm:px-5 sm:py-4">
             <div className="relative" aria-live="polite">
               <p
-                className="invisible font-sans text-[15px] font-bold leading-[1.45] sm:text-[16px]"
+                className="invisible font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
                 aria-hidden="true"
               >
                 {captionSpacer}
               </p>
               <p
                 id={captionsId}
-                className={`absolute inset-0 font-sans text-[15px] font-bold leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
+                className={`absolute inset-0 font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
                   captionOpaque ? "opacity-100" : "opacity-0"
                 }`}
               >

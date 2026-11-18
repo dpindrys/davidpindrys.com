@@ -3,7 +3,7 @@ import { CONTACT_HREF } from "./Header";
 import LinkedInButton from "./LinkedInButton";
 import { heroBandClass } from "../lib/heroBand";
 
-const linkClass = "font-sans text-[13px] text-black/55 transition-colors hover:text-black";
+const linkClass = "font-sans text-[13px] text-black/70 transition-colors hover:text-black";
 
 export default function Footer({ linkBase = "" }: { linkBase?: string }) {
   return (
@@ -32,7 +32,7 @@ export default function Footer({ linkBase = "" }: { linkBase?: string }) {
           </div>
         </section>
         <div className="mt-14 flex flex-col gap-4 border-t border-black/10 py-8 md:mt-16 md:flex-row md:items-center md:justify-between">
-          <p className="font-sans text-[13px] text-black/55">
+          <p className="font-sans text-[13px] text-black/70">
             © 2026 David Pindrys · Senior Product Designer · Boston, USA
           </p>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
