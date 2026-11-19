@@ -78,36 +78,59 @@ const vehrDemoCaptions: readonly DemoCaption[] = [
   },
 ];
 
-/** Timed captions for the Vinyl Health guided demo. */
+/**
+ * Cache-bust tokens from `stat` mtimes of `public/audio/vinyl#.wav`.
+ * Bump the matching entry (or re-stat) whenever a narration file is replaced.
+ */
+const VINYL_AUDIO_V = {
+  1: 1795126161,
+  2: 1795126196,
+  3: 1795126220,
+  4: 1795126246,
+  5: 1795126457,
+  6: 1795126293,
+} as const;
+
+function vinylAudio(n: keyof typeof VINYL_AUDIO_V): string {
+  return `/audio/vinyl${n}.wav?v=${VINYL_AUDIO_V[n]}`;
+}
+
+/** Timed captions for the Vinyl Health guided demo (narration: public/audio/vinyl1–6.wav). */
 const vinylDemoCaptions: readonly DemoCaption[] = [
   {
     start: 0,
     end: 7,
     text: "The overview highlights new nausea and changes in sleep, activity, and work stress.",
+    audio: vinylAudio(1),
   },
   {
     start: 7,
     end: 11,
     text: "Her A1c has improved from 7.2% to 6.8%.",
+    audio: vinylAudio(2),
   },
   {
     start: 11,
     end: 17,
     text: "The timeline brings together patient reports, device readings, labs, and clinical visits.",
+    audio: vinylAudio(3),
   },
   {
     start: 17,
     end: 24,
     text: "Opening a source reveals why gabapentin was stopped: drowsiness was affecting her work.",
+    audio: vinylAudio(4),
   },
   {
     start: 24,
     end: 28,
     text: "The clinician returns to the summary with the supporting record checked.",
+    audio: vinylAudio(5),
   },
   {
     start: 28,
     text: "Sarah’s preferences stay visible alongside the clinical insights.",
+    audio: vinylAudio(6),
   },
 ];
 
