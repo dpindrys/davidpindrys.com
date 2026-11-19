@@ -39,13 +39,15 @@ function getFocusable(root: HTMLElement) {
   );
 }
 
-function ContactForm() {
+function ContactForm({ onSucceeded }: { onSucceeded?: () => void }) {
   const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID);
   const statusRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    if (state.succeeded) statusRef.current?.focus();
-  }, [state.succeeded]);
+    if (!state.succeeded) return;
+    statusRef.current?.focus();
+    onSucceeded?.();
+  }, [state.succeeded, onSucceeded]);
 
   if (state.succeeded) {
     return (
@@ -150,6 +152,11 @@ function ContactDialog({
 }) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const [succeeded, setSucceeded] = useState(false);
+
+  useEffect(() => {
+    if (!open) setSucceeded(false);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -210,7 +217,9 @@ function ContactDialog({
             id={titleId}
             className="font-sans text-[clamp(1.5rem,3vw,2rem)] font-normal leading-[1.15] tracking-[-0.03em] text-black"
           >
-            Tell me what you&apos;re working on
+            {succeeded
+              ? "You told me what you’re working on!"
+              : <>Tell me what you&apos;re working on</>}
           </h2>
           <button
             type="button"
@@ -221,7 +230,7 @@ function ContactDialog({
             <span aria-hidden>×</span>
           </button>
         </div>
-        <ContactForm />
+        <ContactForm onSucceeded={() => setSucceeded(true)} />
       </div>
     </div>,
     document.body,
