@@ -25,9 +25,11 @@ const cardClass = `${frxOutlineCardClass} overflow-hidden bg-white`;
 const modalNavButtonClass =
   "absolute top-1/2 z-[101] -translate-y-1/2 rounded-lg bg-white/10 px-3 py-4 font-sans text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60";
 
+const SLIDE_HOLD_MS = 2800;
+const LAST_SLIDE_HOLD_MS = 4200;
+
 /**
- * One white card with three address thumbnails visible at once.
- * Zoom lives only in the modal (arrows / keyboard cycle there).
+ * One white card cycling shipping-address screens; click opens zoom modal.
  */
 export default function FrxPrototypeScanGallery() {
   const labelId = useId();
@@ -93,6 +95,17 @@ export default function FrxPrototypeScanGallery() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (open) return;
+
+    const holdMs = index === count - 1 ? LAST_SLIDE_HOLD_MS : SLIDE_HOLD_MS;
+    const timer = window.setTimeout(() => {
+      setIndex((i) => (i + 1) % count);
+    }, holdMs);
+
+    return () => window.clearTimeout(timer);
+  }, [index, open, count]);
+
   return (
     <>
       <div
@@ -107,25 +120,20 @@ export default function FrxPrototypeScanGallery() {
           Shipping address screens
         </p>
 
-        <ul className="grid w-full min-w-0 grid-cols-3 gap-2 sm:gap-3">
-          {SLIDES.map((item, i) => (
-            <li key={item.src} className="min-w-0">
-              <button
-                type="button"
-                className="relative w-full cursor-zoom-in border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                aria-label={`View larger: ${item.alt} (${i + 1} of ${count})`}
-                onClick={() => openAt(i)}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="pointer-events-none block h-auto w-full rounded-md border border-black/10"
-                />
-              </button>
-            </li>
-          ))}
-        </ul>
+        <button
+          type="button"
+          className="relative w-full min-w-0 cursor-zoom-in border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          aria-label={`View larger: ${slide.alt} (${index + 1} of ${count})`}
+          onClick={() => openAt(index)}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt={slide.alt}
+            className="pointer-events-none block h-auto w-full rounded-md border border-black/10 motion-safe:animate-page-fade-in"
+          />
+        </button>
       </div>
 
       {open ? (

@@ -4,7 +4,6 @@ import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
 import FrxPrototypeScanGallery from "./FrxPrototypeScanGallery";
 import {
-  frxCenteredIntroBlockClass,
   frxMetaEyebrowClass,
   frxOutlineCardClass,
   frxSectionBodyClass,
@@ -94,26 +93,33 @@ export function FrxSectionsBeforeSolution() {
       >
         <p className={frxMetaEyebrowClass}>Strategy</p>
         <div className="mt-6 flex w-full flex-col gap-6 md:gap-8">
-          <div className={frxCenteredIntroBlockClass}>
+          <div className={frxSplitRowGridClass}>
             <div className={frxSectionIntroStackClass}>
               <h2
                 id="frx-strategy-structure-heading"
                 className={frxStrategyHeadlineClass}
               >
-                Defining the structure
+                Identifying the elements of a refill
               </h2>
               <p className={frxSectionBodyClass}>
-                Reducing cognitive load by structuring information around how
-                clinicians actually work.
+                Structuring the digital workflow around how nurses handle
+                refills in the clinic.
               </p>
               <p className={frxSectionBodyClass}>
-                Before any wireframes, I mapped the system&apos;s underlying
-                objects and the relationships between them, then validated those
-                mental models with clinic staff. Getting the structure right at
-                this stage meant the visual design could reflect how nurses think
-                about a refill, not how the database stores one.
+                I observed nurses processing refills using paper and fax, then
+                used object-oriented UX (OOUX) to map the key elements, their
+                relationships, and the actions nurses needed to take. That map
+                grounded the digital workflow in familiar clinical practices
+                before I began wireframing.
               </p>
             </div>
+            <ZoomableProblemImage
+              src="/images/frx/disconnected.png"
+              alt="Clinic desk with paper refill forms, laptop, and phone alongside clinical workflow materials"
+              shellClassName={`${mediaCardClass} w-full`}
+              imgClassName="block h-auto w-full rounded-md border-0"
+              elevateOnHover={false}
+            />
           </div>
 
           <div
@@ -142,7 +148,26 @@ export function FrxSectionsBeforeSolution() {
       >
         <p className={frxMetaEyebrowClass}>Prototyping and iterating</p>
         <div className="mt-6 flex w-full flex-col gap-6 md:gap-8">
-          <div className={frxCenteredIntroBlockClass}>
+          <div
+            className={`${mediaCardClass} grid w-full min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:gap-5`}
+          >
+              <ZoomableProblemImage
+                src="/images/frx/test1.png"
+                alt="Refill interface emphasizing essential information with secondary details deferred"
+                shellClassName={zoomMediaShellClass}
+                imgClassName="block h-auto w-full rounded-md border-0"
+                elevateOnHover={false}
+              />
+              <ZoomableProblemImage
+                src="/images/frx/test2.png"
+                alt="Refill form with today’s date pre-selected to reduce decision friction"
+                shellClassName={zoomMediaShellClass}
+                imgClassName="block h-auto w-full rounded-md border-0"
+                elevateOnHover={false}
+              />
+          </div>
+
+          <div className={frxSplitRowGridClass}>
             <div className={frxSectionIntroStackClass}>
               <h2
                 id="frx-testing-iterating-heading"
@@ -164,28 +189,7 @@ export function FrxSectionsBeforeSolution() {
                 clinic-vs-home shipping that needed clearer in-flow messaging.
               </p>
             </div>
-          </div>
-
-          <div className={frxSplitRowGridClass}>
-            <div
-              className={`${mediaCardClass} grid w-full min-w-0 grid-cols-1 gap-4 md:gap-5`}
-            >
-              <ZoomableProblemImage
-                src="/images/frx/test1.png"
-                alt="Refill interface emphasizing essential information with secondary details deferred"
-                shellClassName={zoomMediaShellClass}
-                imgClassName="block h-auto w-full rounded-md border-0"
-                elevateOnHover={false}
-              />
-              <ZoomableProblemImage
-                src="/images/frx/test2.png"
-                alt="Refill form with today’s date pre-selected to reduce decision friction"
-                shellClassName={zoomMediaShellClass}
-                imgClassName="block h-auto w-full rounded-md border-0"
-                elevateOnHover={false}
-              />
-            </div>
-            <div className="min-w-0 w-full self-start">
+            <div className="min-w-0 w-full">
               <FrxPrototypeScanGallery />
             </div>
           </div>

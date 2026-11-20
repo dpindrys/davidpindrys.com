@@ -14,7 +14,9 @@ import {
 import {
   frxFilledBandClass,
   frxMetaEyebrowClass,
+  frxSectionBodyClass,
   frxSectionGapClass,
+  frxSectionIntroStackClass,
   frxStrategyHeadlineClass,
 } from "./frxCaseStudyTypography";
 
@@ -90,13 +92,27 @@ function FrxImpactThemeIcon({
           </>
         )}
         {theme === "blue" && (
-          <path
-            d="M11.5 12h9a2 2 0 012 2v6.5a2 2 0 01-2 2h-1.5l-2.5 2.5V20.5h-1.5a2 2 0 01-2-2V12z"
-            stroke={accent}
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <>
+            <circle
+              cx="16"
+              cy="16"
+              r="10"
+              stroke={accent}
+              strokeWidth="1.75"
+            />
+            <path
+              d="M12.5 14.5h.01M19.5 14.5h.01"
+              stroke={accent}
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M11.5 19c1.75 2.25 3.25 3.25 4.5 3.25s2.75-1 4.5-3.25"
+              stroke={accent}
+              strokeWidth="1.75"
+              strokeLinecap="round"
+            />
+          </>
         )}
         {theme === "slate" && (
           <>
@@ -219,12 +235,23 @@ export default function FrxImpactSection() {
     >
       <header>
         <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
-        <h2
-          id="frx-impact-heading"
-          className={`${frxStrategyHeadlineClass} mt-4 md:mt-5`}
-        >
-          {frxImpactSectionIntro.title}
-        </h2>
+        <div className={`${frxSectionIntroStackClass} mt-4 md:mt-5`}>
+          <h2 id="frx-impact-heading" className={frxStrategyHeadlineClass}>
+            {frxImpactSectionIntro.title}
+          </h2>
+          <p className={frxSectionBodyClass}>
+            The final workflow let staff move from refill need to submission in
+            one place: scan the essentials, verify prescription details, and
+            submit with the required patient, shipping, and confirmation context
+            close at hand.
+          </p>
+          <p className={frxSectionBodyClass}>
+            I partnered closely with front-end engineers through build,
+            reviewing each implementation against the prototype to keep
+            interaction details, edge case handling, and information density
+            intact from design through release.
+          </p>
+        </div>
       </header>
 
       <div className="mt-8 overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] md:mt-10">

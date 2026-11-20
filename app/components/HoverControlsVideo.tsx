@@ -29,6 +29,7 @@ export default function HoverControlsVideo({
 }: HoverControlsVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [focusVisible, setFocusVisible] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -69,11 +70,24 @@ export default function HoverControlsVideo({
       />
       <button
         type="button"
-        onClick={toggle}
+        data-hover-video-play=""
+        onClick={(event) => {
+          toggle();
+          // Pointer activate: drop focus so the full-bleed control cannot flash an outline.
+          event.currentTarget.blur();
+        }}
+        onFocus={(event) => {
+          setFocusVisible(event.currentTarget.matches(":focus-visible"));
+        }}
+        onBlur={() => setFocusVisible(false)}
         aria-label={`${playing ? "Pause" : "Play"} video: ${label}`}
-        className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 outline-none transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100"
+        className="absolute inset-0 flex cursor-pointer items-center justify-center opacity-0 outline-none !outline-none transition-opacity duration-200 focus:outline-none focus-visible:outline-none focus-visible:!outline-none group-hover:opacity-100 focus-visible:opacity-100 [-webkit-tap-highlight-color:transparent]"
       >
-        <span className="flex h-20 w-20 items-center justify-center rounded-full bg-black/60 text-white md:h-24 md:w-24">
+        <span
+          className={`flex h-20 w-20 items-center justify-center rounded-full bg-black/60 text-white md:h-24 md:w-24${
+            focusVisible ? " ring-2 ring-white/40 ring-offset-2 ring-offset-transparent" : ""
+          }`}
+        >
           {playing ? (
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className="h-9 w-9 md:h-11 md:w-11">
               <rect x="6" y="5" width="4" height="14" rx="1" />

@@ -8,7 +8,6 @@ import {
 import { FrxSectionsBeforeSolution } from "./FrxExtendedSections";
 import FrxImpactSection from "./FrxImpactSection";
 import FrxChallengeCard from "./FrxChallengeCard";
-import FrxSolutionSteps from "./FrxSolutionSteps";
 import FrxDeviceHeroMockup from "./FrxDeviceHeroMockup";
 import {
   frxCenteredIntroBlockClass,
@@ -86,8 +85,6 @@ export default function FrxCaseStudyPage() {
             <FrxChallengeCard />
 
             <FrxSectionsBeforeSolution />
-
-            <FrxSolutionSteps />
 
             <FrxImpactSection />
           </div>

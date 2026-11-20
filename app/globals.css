@@ -108,11 +108,15 @@ summary:focus-visible {
 }
 
 /*
- * Full-bleed demo play control: unlayered global button:focus-visible above would draw a
+ * Full-bleed play controls: unlayered global button:focus-visible above would draw a
  * box around the entire media. Keyboard affordance lives on the circular mark instead.
  */
 button[data-demo-play]:focus,
-button[data-demo-play]:focus-visible {
+button[data-demo-play]:focus-visible,
+button[data-frx-hero-play]:focus,
+button[data-frx-hero-play]:focus-visible,
+button[data-hover-video-play]:focus,
+button[data-hover-video-play]:focus-visible {
   outline: none;
 }
 

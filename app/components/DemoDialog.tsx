@@ -1223,6 +1223,56 @@ export default function DemoDialog({
     [applyCaptionCue, captions, clearFreezeState],
   );
 
+  /**
+   * True when the guided session has finished (latch, native ended, or paused
+   * within a hair of duration). Used so Play / Space restarts from cue 0.
+   */
+  const isPlaybackAtEnd = useCallback((video: HTMLVideoElement): boolean => {
+    if (playbackEndedRef.current) return true;
+    if (video.ended) return true;
+    const duration = video.duration;
+    if (
+      video.paused &&
+      Number.isFinite(duration) &&
+      duration > 0 &&
+      video.currentTime >= duration - 0.08
+    ) {
+      return true;
+    }
+    return false;
+  }, []);
+
+  /** Seek to 0, reset captions/narration to the first cue, then play. */
+  const replayFromStart = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    clearFreezeState();
+    playbackEndedRef.current = false;
+    stopNarration();
+
+    if (captions?.length) {
+      applyCaptionCue(0, captions[0].text);
+      setSegmentFills(captions.map(() => 0));
+      setCaptionOpaque(true);
+    }
+
+    programmaticSeekRef.current = true;
+    video.currentTime = 0;
+    setPlaying(true);
+    setShowStartDemoCue(false);
+    applyNarratedPlaybackRate(video);
+    void video.play().catch(() => {
+      setPlaying(false);
+    });
+  }, [
+    applyCaptionCue,
+    applyNarratedPlaybackRate,
+    captions,
+    clearFreezeState,
+    stopNarration,
+  ]);
+
   const togglePlayback = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -1284,6 +1334,12 @@ export default function DemoDialog({
       return;
     }
 
+    // Ended / near end while paused: Play / Space restarts from the beginning.
+    if (video.paused && isPlaybackAtEnd(video)) {
+      replayFromStart();
+      return;
+    }
+
     if (video.paused) {
       void video.play();
     } else {
@@ -1293,7 +1349,9 @@ export default function DemoDialog({
     captions,
     clearBreathTimer,
     estimateHoldDurationMs,
+    isPlaybackAtEnd,
     peekHoldFill,
+    replayFromStart,
     startBreathAfterNarration,
     startHoldFillAnimation,
     stopHoldFillAnimation,
@@ -1606,9 +1664,7 @@ export default function DemoDialog({
                 type="button"
                 aria-label={`Play demo for ${demo.client}`}
                 className={modalPlayButtonClass}
-                onClick={() => {
-                  void videoRef.current?.play();
-                }}
+                onClick={togglePlayback}
               >
                 <PlayIcon className="ml-[6%] h-[42%] w-[42%] shrink-0" />
               </button>

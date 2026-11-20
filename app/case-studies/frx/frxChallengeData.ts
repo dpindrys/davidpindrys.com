@@ -2,9 +2,9 @@ export const frxChallengeIntro = {
   title: "Paper refills pulled nurses away from patient care",
   body:
     "Before digitization, in-clinic refills depended on paper forms, fax handoffs, clipboards, and phone calls with pharmacy. Nurses spent time printing, tracking, signing, and refaxing forms — while refill status disappeared from view once paperwork left the clinic.",
-  imageSrc: "/images/frx/disconnected.png",
+  imageSrc: "/images/frx/overload.png",
   imageAlt:
-    "Clinic desk with paper refill forms, laptop, and phone alongside clinical workflow materials",
+    "Information overload from paper and fax refill workflows",
 } as const;
 
 export const frxClinicQuotes = [
