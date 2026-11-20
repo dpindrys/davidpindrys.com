@@ -1,20 +1,22 @@
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import {
   frxCenteredIntroBlockClass,
-  frxPaddedEyebrowClass,
+  frxMetaEyebrowClass,
   frxSectionBodyClass,
+  frxSectionGapClass,
   frxSectionIntroStackClass,
+  frxStrategyHeadlineClass,
 } from "./frxCaseStudyTypography";
-import { frxStrategyHeadlineClass, mediaCardClass } from "./FrxExtendedSections";
+import { mediaCardClass } from "./FrxExtendedSections";
 
 export default function FrxSolutionSteps() {
   return (
     <section
-      className="relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20"
+      className={frxSectionGapClass}
       aria-labelledby="frx-solution-intro-heading"
     >
-      <p className={frxPaddedEyebrowClass}>The Solution</p>
-      <div className="flex w-full flex-col gap-10 pb-12 md:gap-12 md:pb-16 lg:gap-14 lg:pb-20">
+      <p className={frxMetaEyebrowClass}>The Solution</p>
+      <div className="mt-6 flex w-full flex-col gap-6 md:gap-8">
         <div className={frxCenteredIntroBlockClass}>
           <div className={frxSectionIntroStackClass}>
             <h2

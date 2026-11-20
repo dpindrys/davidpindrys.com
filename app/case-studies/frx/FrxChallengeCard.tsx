@@ -4,24 +4,23 @@ import {
   frxClinicQuotes,
 } from "./frxChallengeData";
 import {
+  frxFilledBandClass,
   frxMetaEyebrowClass,
-  frxPaddedEyebrowClass,
   frxSectionBodyClass,
+  frxSectionGapClass,
   frxSectionTitleClass,
   frxSplitRowGridClass,
+  frxStrategyHeadlineClass,
 } from "./frxCaseStudyTypography";
 
-const frxChallengeAccent = "#7B6FD6";
-const frxChallengeAccentMuted = "#E8E4F5";
+/** Site green accent (no purple). */
+const frxChallengeAccent = "#3A7D5C";
+const frxChallengeAccentMuted = "#D8EDE3";
 
-const frxChallengeTitleClass =
-  "font-sans text-[clamp(22px,2.8vw,32px)] font-semibold leading-[1.25] tracking-[-0.01em] text-black";
-
-const frxClinicQuoteClass =
-  "font-sans text-[16px] font-normal leading-[1.5] text-black md:text-[17px]";
+const frxClinicQuoteClass = frxSectionBodyClass;
 
 const frxClinicAttributionClass =
-  "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
+  "font-sans text-[13px] font-normal uppercase tracking-[0.12em] text-black/70";
 
 function FrxQuoteMarkIcon() {
   return (
@@ -31,7 +30,7 @@ function FrxQuoteMarkIcon() {
       viewBox="0 0 40 32"
       fill="none"
       aria-hidden
-      className="shrink-0 text-gray-800"
+      className="shrink-0 text-black/70"
     >
       <path
         d="M8 32V18.4C8 11.2 11.2 5.6 18.4 2.4L20.8 6.4C16 8.8 13.6 12 13.6 16H20V32H8ZM28 32V18.4C28 11.2 31.2 5.6 38.4 2.4L40.8 6.4C36 8.8 33.6 12 33.6 16H40V32H28Z"
@@ -72,15 +71,15 @@ function FrxImpactIcon() {
 export default function FrxChallengeCard() {
   return (
     <section
-      className="relative mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 rounded-2xl bg-[#E8E6E1] py-12 md:mt-32 md:py-16 lg:mt-40 lg:py-20 lg:w-[calc(100%+8rem)] lg:-mx-16"
+      className={`${frxSectionGapClass} ${frxFilledBandClass}`}
       aria-labelledby="frx-problem-heading"
     >
-      <p className={`left-8 lg:left-16 ${frxPaddedEyebrowClass}`}>Challenge</p>
+      <p className={frxMetaEyebrowClass}>Challenge</p>
 
-      <div className="px-8 lg:px-16">
+      <div className="mt-6">
         <div className={frxSplitRowGridClass}>
           <div className="flex min-w-0 flex-col gap-4 text-left">
-            <h2 id="frx-problem-heading" className={frxChallengeTitleClass}>
+            <h2 id="frx-problem-heading" className={frxStrategyHeadlineClass}>
               {frxChallengeIntro.title}
             </h2>
             <p className={frxSectionBodyClass}>{frxChallengeIntro.body}</p>
@@ -91,23 +90,23 @@ export default function FrxChallengeCard() {
             <img
               src={frxChallengeIntro.imageSrc}
               alt={frxChallengeIntro.imageAlt}
-              className="h-auto w-full rounded-2xl border border-black/10 bg-white/40 object-cover"
+              className="h-auto w-full rounded-[16px] border border-black/15 bg-white/40 object-cover"
             />
           </div>
         </div>
 
-        <div className="mt-12 md:mt-16 lg:mt-20">
+        <div className="mt-12">
           <p className={frxMetaEyebrowClass}>From the clinic</p>
 
-          <div className="mt-6 grid grid-cols-1 md:mt-8 md:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3">
             {frxClinicQuotes.map((item, index) => (
               <figure
                 key={item.attribution + index}
-                className={`flex min-w-0 flex-col gap-5 py-8 md:gap-6 md:py-0 md:pr-8 lg:pr-10 ${
+                className={`flex min-w-0 flex-col gap-5 py-6 md:gap-6 md:py-0 md:pr-6 lg:pr-8 ${
                   index > 0
-                    ? "border-t border-black/10 pt-8 md:border-t-0 md:border-l md:pl-8 md:pt-0 lg:pl-10"
+                    ? "border-t border-black/10 pt-6 md:border-t-0 md:border-l md:pl-6 md:pt-0 lg:pl-8"
                     : ""
-                } ${index < frxClinicQuotes.length - 1 ? "md:pr-8 lg:pr-10" : ""}`}
+                } ${index < frxClinicQuotes.length - 1 ? "md:pr-6 lg:pr-8" : ""}`}
               >
                 <FrxQuoteMarkIcon />
                 <blockquote className={frxClinicQuoteClass}>
@@ -122,7 +121,7 @@ export default function FrxChallengeCard() {
         </div>
 
         <div
-          className="mt-10 flex gap-4 border-t border-black/10 pt-8 md:mt-12 md:gap-5 md:pt-10 lg:mt-14"
+          className="mt-10 flex gap-4 border-t border-black/10 pt-8 md:mt-12 md:gap-5 md:pt-10"
           role="region"
           aria-label={frxChallengeImpact.title}
         >

@@ -33,7 +33,7 @@ export default function Footer({ linkBase = "" }: { linkBase?: string }) {
         </section>
         <div className="mt-14 flex flex-col gap-4 border-t border-black/10 py-8 md:mt-16 md:flex-row md:items-center md:justify-between">
           <p className="font-sans text-[13px] text-black/70">
-            © 2026 David Pindrys · Senior Product Designer · Boston, USA
+            © 2026 David Pindrys · Boston, USA
           </p>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
             <a href={`${linkBase}#work`} className={linkClass}>
@@ -41,6 +41,9 @@ export default function Footer({ linkBase = "" }: { linkBase?: string }) {
             </a>
             <a href={`${linkBase}#services`} className={linkClass}>
               Services
+            </a>
+            <a href={`${linkBase}#process`} className={linkClass}>
+              About
             </a>
           </nav>
         </div>

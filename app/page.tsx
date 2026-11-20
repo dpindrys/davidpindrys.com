@@ -76,6 +76,8 @@ type WorkCard = {
   client: string;
   tagline: string;
   description: string;
+  /** When set, enables the View case study CTA. Omit for coming-soon cards. */
+  caseStudyHref?: string;
   demoVideo?: string;
   demoTitle?: string;
   /** Walkthrough: heading beside play, above captions/segments. */
@@ -148,6 +150,7 @@ const workCards: readonly WorkCard[] = [
     tagline: "Medication refill workflow",
     description:
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
+    caseStudyHref: "/case-studies/frx",
     demoVideo: "/images/frx/fresenius.mp4",
     demoTitle: "Jane’s refill journey",
     demoWalkthroughHeading: "Managing Jane’s medication refills",
@@ -229,7 +232,7 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
       <ProjectHero project={project} />
       <div className="mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8">
         <p className={bodyClass}>{project.description}</p>
-        <CaseStudyCardCtas />
+        <CaseStudyCardCtas href={project.caseStudyHref} />
       </div>
     </article>
   );

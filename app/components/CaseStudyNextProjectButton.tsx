@@ -15,7 +15,7 @@ export default function CaseStudyNextProjectButton({
     <div className="mt-16 flex w-full justify-center md:mt-20">
       <Link
         href={href}
-        className={`inline-flex h-12 items-center gap-2 px-5 font-sans text-[16px] font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${PRIMARY_FILLED_INTERACTIVE}`}
+        className={`inline-flex h-12 items-center gap-2 rounded-[8px] px-5 font-sans text-[16px] font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${PRIMARY_FILLED_INTERACTIVE}`}
       >
         <span>Next project</span>
         <span aria-hidden className="text-[18px] font-normal leading-none">

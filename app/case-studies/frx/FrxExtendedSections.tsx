@@ -2,18 +2,20 @@ import type { ReactNode } from "react";
 
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
-import FrxAddressImageCycle from "./FrxAddressImageCycle";
+import FrxPrototypeScanGallery from "./FrxPrototypeScanGallery";
 import {
   frxCenteredIntroBlockClass,
+  frxMetaEyebrowClass,
+  frxOutlineCardClass,
   frxSectionBodyClass,
+  frxSectionGapClass,
   frxSectionIntroStackClass,
   frxSectionTitleClass,
-  frxPaddedEyebrowClass,
   frxSplitRowGridClass,
+  frxStrategyHeadlineClass,
 } from "./frxCaseStudyTypography";
 
-const mediaCardClass =
-  "overflow-hidden rounded-2xl border border-black/10 bg-white p-4 shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1),0_4px_12px_-4px_rgba(0,0,0,0.06)] md:p-5";
+const mediaCardClass = `${frxOutlineCardClass} overflow-hidden bg-white`;
 
 /** Legacy exports for DCHP, OVCP, VEHR — unchanged large type. */
 export const rowHeadingClass =
@@ -38,7 +40,7 @@ export function FrxProcessRowShell({
     align === "start" ? "md:items-start" : "md:items-center";
   return (
     <div
-      className={`grid grid-cols-1 gap-8 md:grid-cols-2 ${itemAlign} md:gap-12 lg:gap-14 ${isFirst ? "pt-0" : "border-t border-black/10 pt-12 md:pt-16 lg:pt-20"} pb-12 md:pb-16 lg:pb-20`}
+      className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${itemAlign} md:gap-8 lg:gap-10 ${isFirst ? "pt-0" : "border-t border-black/10 pt-10 md:pt-12"} pb-10 md:pb-12`}
     >
       <div className="order-1 flex min-w-0 flex-col gap-0 md:order-none">
         {left}
@@ -78,23 +80,20 @@ export function FrxProcessRow({
   );
 }
 
-export { mediaCardClass };
+export { mediaCardClass, frxStrategyHeadlineClass };
 
 const zoomMediaShellClass = "min-w-0 w-full";
-
-export const frxStrategyHeadlineClass =
-  "font-sans text-[clamp(22px,2.8vw,32px)] font-semibold leading-[1.25] tracking-[-0.01em] text-black";
 
 /** Mapping + testing — after the main problem card, before the solution walkthrough. */
 export function FrxSectionsBeforeSolution() {
   return (
     <>
       <section
-        className="relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20"
+        className={frxSectionGapClass}
         aria-labelledby="frx-strategy-structure-heading"
       >
-        <p className={frxPaddedEyebrowClass}>Strategy</p>
-        <div className="flex w-full flex-col gap-10 pb-12 md:gap-12 md:pb-16 lg:gap-14 lg:pb-20">
+        <p className={frxMetaEyebrowClass}>Strategy</p>
+        <div className="mt-6 flex w-full flex-col gap-6 md:gap-8">
           <div className={frxCenteredIntroBlockClass}>
             <div className={frxSectionIntroStackClass}>
               <h2
@@ -138,11 +137,11 @@ export function FrxSectionsBeforeSolution() {
       </section>
 
       <section
-        className="relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20"
+        className={frxSectionGapClass}
         aria-labelledby="frx-testing-iterating-heading"
       >
-        <p className={frxPaddedEyebrowClass}>Prototyping and iterating</p>
-        <div className="flex w-full flex-col gap-10 pb-12 md:gap-12 md:pb-16 lg:gap-14 lg:pb-20">
+        <p className={frxMetaEyebrowClass}>Prototyping and iterating</p>
+        <div className="mt-6 flex w-full flex-col gap-6 md:gap-8">
           <div className={frxCenteredIntroBlockClass}>
             <div className={frxSectionIntroStackClass}>
               <h2
@@ -186,8 +185,8 @@ export function FrxSectionsBeforeSolution() {
                 elevateOnHover={false}
               />
             </div>
-            <div className={`${mediaCardClass} min-w-0 w-full self-start`}>
-              <FrxAddressImageCycle />
+            <div className="min-w-0 w-full self-start">
+              <FrxPrototypeScanGallery />
             </div>
           </div>
         </div>

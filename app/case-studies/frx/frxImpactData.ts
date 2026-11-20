@@ -3,7 +3,7 @@ export const frxImpactSectionIntro = {
   title: "What changed for staff and patients",
 } as const;
 
-export type FrxImpactThemeKey = "green" | "blue" | "purple";
+export type FrxImpactThemeKey = "green" | "blue" | "slate";
 
 export type FrxImpactEvidenceRow = {
   theme: FrxImpactThemeKey;
@@ -31,7 +31,7 @@ export const frxImpactEvidenceRows: readonly FrxImpactEvidenceRow[] = [
     attribution: "HT program manager",
   },
   {
-    theme: "purple",
+    theme: "slate",
     headline: "Better medication adherence",
     description:
       "Clinicians can see refill history and catch gaps before patients run out.",
@@ -57,5 +57,5 @@ export const frxImpactThemeColors: Record<
 > = {
   green: { accent: "#3A7D5C", muted: "#D8EDE3" },
   blue: { accent: "#2F6B9E", muted: "#D4E6F3" },
-  purple: { accent: "#7B6FD6", muted: "#E8E4F5" },
+  slate: { accent: "#4A5568", muted: "#E8E5DE" },
 };

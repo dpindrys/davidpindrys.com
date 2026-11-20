@@ -5,21 +5,21 @@ import {
   frxHeroFocusPills,
   frxProductContext,
 } from "./frxBelowHeroData";
-import {
-  FrxSectionsBeforeSolution,
-  frxStrategyHeadlineClass,
-} from "./FrxExtendedSections";
+import { FrxSectionsBeforeSolution } from "./FrxExtendedSections";
 import FrxImpactSection from "./FrxImpactSection";
 import FrxChallengeCard from "./FrxChallengeCard";
 import FrxSolutionSteps from "./FrxSolutionSteps";
-import CaseStudyNextProjectButton from "../../components/CaseStudyNextProjectButton";
 import FrxDeviceHeroMockup from "./FrxDeviceHeroMockup";
 import {
   frxCenteredIntroBlockClass,
   frxCenteredIntroSectionClass,
+  frxColumnClass,
   frxHeroTitleClass,
   frxHeroTitleMaxWidthClass,
   frxSectionBodyClass,
+  frxShellClass,
+  frxStrategyHeadlineClass,
+  frxTagClass,
 } from "./frxCaseStudyTypography";
 
 import type { Metadata } from "next";
@@ -35,37 +35,34 @@ export const metadata: Metadata = {
   },
 };
 
-const frxHeroPillClass =
-  "inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 font-sans text-[13px] font-bold leading-none text-black/70";
-
 export default function FrxCaseStudyPage() {
   return (
     <>
       <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
-        <div className="flex w-full justify-center overflow-x-visible px-8 lg:px-16">
-          <div className="flex w-full max-w-[1200px] flex-col items-stretch overflow-x-visible pb-32 pt-4">
-            <section className="flex w-full flex-col gap-8 pt-8 md:gap-10 md:pt-12 lg:pt-16">
+        <div className={`${frxShellClass} pb-20 pt-10 md:pb-28 md:pt-14`}>
+          <div className={`${frxColumnClass} flex flex-col items-stretch overflow-x-visible`}>
+            <section className="flex w-full flex-col gap-6">
               <h1 className={`${frxHeroTitleClass} ${frxHeroTitleMaxWidthClass}`}>
                 A one-click refill workflow for 2,800+ dialysis clinics
               </h1>
-              <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-visible md:max-w-[50%]">
+              <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-visible md:max-w-[42rem]">
                 <p className={frxSectionBodyClass}>
                   {frxBelowHeroSummaryBlock.body}
                 </p>
                 <ul
-                  className="flex flex-wrap gap-2 overflow-visible md:flex-nowrap"
+                  className="flex flex-wrap gap-2 overflow-visible"
                   aria-label="Focus areas"
                 >
                   {frxHeroFocusPills.map((label) => (
                     <li key={label} className="shrink-0">
-                      <span className={frxHeroPillClass}>{label}</span>
+                      <span className={frxTagClass}>{label}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </section>
 
-            <section className="mt-16 w-full md:mt-24 lg:mt-28">
+            <section className="mt-12 w-full">
               <FrxDeviceHeroMockup />
             </section>
 
@@ -93,8 +90,6 @@ export default function FrxCaseStudyPage() {
             <FrxSolutionSteps />
 
             <FrxImpactSection />
-
-            <CaseStudyNextProjectButton currentPath="/case-studies/frx" />
           </div>
         </div>
       </main>

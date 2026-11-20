@@ -6,30 +6,29 @@ import {
   type FrxImpactEvidenceRow,
   type FrxImpactThemeKey,
 } from "./frxImpactData";
-import { frxMetaEyebrowClass } from "./frxCaseStudyTypography";
+import {
+  bodyClass,
+  cardBodyClass,
+  cardTitleClass,
+} from "../../lib/pageStyles";
+import {
+  frxFilledBandClass,
+  frxMetaEyebrowClass,
+  frxSectionGapClass,
+  frxStrategyHeadlineClass,
+} from "./frxCaseStudyTypography";
 
-const frxImpactProblemBg = "#E8E6E1";
-/** Site primary blue (`--color-blue` in globals.css). */
-const frxImpactPrimaryBlue = "#00AAFF";
-const frxImpactPrimaryBlueMuted = "#D9F4FF";
+const frxImpactPrimaryBlue = "#2F6B9E";
+const frxImpactPrimaryBlueMuted = "#D4E6F3";
 
-const frxImpactSectionTitleClass =
-  "font-sans text-[clamp(24px,3.2vw,36px)] font-semibold leading-[1.2] tracking-[-0.02em] text-black";
-
-const frxImpactRowTitleClass =
-  "font-sans text-[16px] font-semibold leading-[1.4] text-black md:text-[17px]";
-
-const frxImpactRowBodyClass =
-  "font-sans text-[15px] font-normal leading-[1.55] text-black/75 md:text-[16px]";
-
-const frxImpactQuoteClass =
-  "font-sans text-[15px] font-normal leading-[1.55] text-black md:text-[16px]";
-
+const frxImpactRowTitleClass = cardTitleClass;
+const frxImpactRowBodyClass = cardBodyClass;
+const frxImpactQuoteClass = bodyClass;
 const frxImpactAttributionClass =
-  "font-sans text-[11px] font-normal uppercase tracking-[0.12em]";
+  "font-sans text-[13px] font-normal uppercase tracking-[0.12em] text-black/70";
 
 const frxImpactRowGridClass =
-  "grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-0";
+  "grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-0";
 
 function FrxImpactQuoteMark() {
   return (
@@ -39,7 +38,7 @@ function FrxImpactQuoteMark() {
       viewBox="0 0 40 32"
       fill="none"
       aria-hidden
-      className="shrink-0 text-blue"
+      className="shrink-0 text-black/70"
     >
       <path
         d="M8 32V18.4C8 11.2 11.2 5.6 18.4 2.4L20.8 6.4C16 8.8 13.6 12 13.6 16H20V32H8ZM28 32V18.4C28 11.2 31.2 5.6 38.4 2.4L40.8 6.4C36 8.8 33.6 12 33.6 16H40V32H28Z"
@@ -99,7 +98,7 @@ function FrxImpactThemeIcon({
             strokeLinejoin="round"
           />
         )}
-        {theme === "purple" && (
+        {theme === "slate" && (
           <>
             <rect
               x="8"
@@ -163,8 +162,8 @@ function FrxImpactQuoteRow({
 
   return (
     <article
-      className={`${frxImpactRowGridClass} px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-11 ${
-        isLast ? "" : "border-b border-black/[0.06]"
+      className={`${frxImpactRowGridClass} px-5 py-6 md:px-6 md:py-8 ${
+        isLast ? "" : "border-b border-black/10"
       }`}
     >
       <div className="flex min-w-0 gap-5 md:gap-6 lg:pr-10">
@@ -175,17 +174,12 @@ function FrxImpactQuoteRow({
         </div>
       </div>
 
-      <figure className="flex min-w-0 flex-col gap-4 border-black/[0.06] lg:border-l lg:pl-10">
+      <figure className="flex min-w-0 flex-col gap-4 border-black/10 lg:border-l lg:pl-10">
         <FrxImpactQuoteMark />
         <blockquote className={frxImpactQuoteClass}>
           &ldquo;{quote}&rdquo;
         </blockquote>
-        <figcaption
-          className={frxImpactAttributionClass}
-          style={{ color: accent }}
-        >
-          {attribution}
-        </figcaption>
+        <figcaption className={frxImpactAttributionClass}>{attribution}</figcaption>
       </figure>
     </article>
   );
@@ -194,8 +188,7 @@ function FrxImpactQuoteRow({
 function FrxImpactScaleRow() {
   return (
     <article
-      className={`${frxImpactRowGridClass} rounded-2xl px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-11`}
-      style={{ backgroundColor: frxImpactProblemBg }}
+      className={`${frxImpactRowGridClass} rounded-[16px] border border-black/15 bg-[#F4F2EE] px-5 py-6 md:px-6 md:py-8`}
     >
       <div className="flex min-w-0 gap-5 md:gap-6 lg:pr-10">
         <FrxImpactClinicsIcon
@@ -208,13 +201,11 @@ function FrxImpactScaleRow() {
         </div>
       </div>
 
-      <div className="flex min-w-0 flex-col gap-4 border-black/[0.06] sm:flex-row sm:items-start sm:gap-6 lg:border-l lg:pl-10">
-        <p className="shrink-0 font-sans text-[clamp(52px,10vw,80px)] font-semibold leading-none tracking-[-0.03em] text-blue">
+      <div className="flex min-w-0 flex-col gap-4 border-black/10 sm:flex-row sm:items-start sm:gap-6 lg:border-l lg:pl-10">
+        <p className="shrink-0 font-sans text-[clamp(52px,10vw,80px)] font-medium leading-none tracking-[-0.03em] text-black">
           {frxImpactScale.stat}
         </p>
-        <p className="max-w-sm pt-1 font-sans text-[15px] font-normal leading-[1.55] text-black/80 md:text-[16px] md:leading-[1.6]">
-          {frxImpactScale.statDetail}
-        </p>
+        <p className={`${bodyClass} max-w-sm pt-1`}>{frxImpactScale.statDetail}</p>
       </div>
     </article>
   );
@@ -223,36 +214,31 @@ function FrxImpactScaleRow() {
 export default function FrxImpactSection() {
   return (
     <section
-      className="relative mt-24 w-[calc(100%+4rem)] max-w-none -mx-8 md:mt-32 lg:mt-40 lg:w-[calc(100%+8rem)] lg:-mx-16"
+      className={`${frxSectionGapClass} ${frxFilledBandClass}`}
       aria-labelledby="frx-impact-heading"
     >
-      <div
-        className="rounded-2xl px-6 py-10 md:px-10 md:py-12 lg:px-14 lg:py-14"
-        style={{ backgroundColor: frxImpactProblemBg }}
-      >
-        <header>
-          <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
-          <h2
-            id="frx-impact-heading"
-            className={`${frxImpactSectionTitleClass} mt-4 md:mt-5`}
-          >
-            {frxImpactSectionIntro.title}
-          </h2>
-        </header>
+      <header>
+        <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
+        <h2
+          id="frx-impact-heading"
+          className={`${frxStrategyHeadlineClass} mt-4 md:mt-5`}
+        >
+          {frxImpactSectionIntro.title}
+        </h2>
+      </header>
 
-        <div className="mt-8 overflow-hidden rounded-2xl bg-[#F4F2EE] md:mt-10 lg:mt-12">
-          {frxImpactEvidenceRows.map((row, index) => (
-            <FrxImpactQuoteRow
-              key={row.headline}
-              {...row}
-              isLast={index === frxImpactEvidenceRows.length - 1}
-            />
-          ))}
-        </div>
+      <div className="mt-8 overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] md:mt-10">
+        {frxImpactEvidenceRows.map((row, index) => (
+          <FrxImpactQuoteRow
+            key={row.headline}
+            {...row}
+            isLast={index === frxImpactEvidenceRows.length - 1}
+          />
+        ))}
+      </div>
 
-        <div className="mt-4 md:mt-5">
-          <FrxImpactScaleRow />
-        </div>
+      <div className="mt-6">
+        <FrxImpactScaleRow />
       </div>
     </section>
   );
