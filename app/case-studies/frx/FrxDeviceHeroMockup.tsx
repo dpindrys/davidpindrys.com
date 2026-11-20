@@ -112,12 +112,7 @@ export default function FrxDeviceHeroMockup() {
         <video
           ref={videoRef}
           src={FRX_HERO_VIDEO_SRC}
-          className="block h-auto w-full rounded-[16px]"
-          style={{
-            transform: "scale(0.985)",
-            transformOrigin: "center",
-            clipPath: "inset(0 0 0 1px round 16px)",
-          }}
+          className="block h-auto w-[calc(100%+1px)] max-w-none -translate-x-px"
           aria-label={FRX_HERO_LABEL}
           aria-describedby={showCaptionBar ? captionsId : undefined}
           muted
