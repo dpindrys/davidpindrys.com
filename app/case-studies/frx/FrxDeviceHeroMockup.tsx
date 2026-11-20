@@ -107,7 +107,7 @@ export default function FrxDeviceHeroMockup() {
     <>
       <figure
         ref={heroRef}
-        className="group relative w-full overflow-hidden rounded-[16px] border border-black/15"
+        className="group relative w-full overflow-hidden rounded-[16px]"
       >
         <video
           ref={videoRef}
