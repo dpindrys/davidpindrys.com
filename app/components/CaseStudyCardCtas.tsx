@@ -8,7 +8,7 @@ const disabledPrimaryButtonClass = `inline-flex cursor-not-allowed items-center 
 
 export default function CaseStudyCardCtas({ href }: { href?: string }) {
   return (
-    <div className="flex flex-col items-start gap-3 md:justify-self-end md:items-end">
+    <div className="flex flex-col items-start gap-3">
       {href ? (
         <Link href={href} className={primaryCtaClass}>
           View case study

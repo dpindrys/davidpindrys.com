@@ -11,7 +11,8 @@ import DchpHeroMedia from "./components/DchpHeroMedia";
 import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
 import { HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
-import PrototypeCards from "./components/PrototypeCards";
+import { PrototypeCard } from "./components/PrototypeCards";
+import { prototypes } from "./lib/prototypes";
 import { getPhotoGroups } from "./lib/photos";
 import { frxDemoCaptions } from "./lib/frxDemoCaptions";
 import {
@@ -67,9 +68,6 @@ const processSteps = [
   },
 ] as const;
 
-const workSubheadClass =
-  "font-sans text-[clamp(1.65rem,2.6vw,2.15rem)] font-medium leading-[1.12] tracking-[-0.03em] text-black";
-const workIntroClass = "mt-2 max-w-[42rem] font-sans text-[16px] leading-[1.5] text-black/70 md:text-[18px]";
 const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]";
 
 type WorkCard = {
@@ -136,6 +134,11 @@ const workCards: readonly WorkCard[] = [
   },
 ];
 
+const vehrPrototype = prototypes.find((item) => item.id === "vehr")!;
+// const vinylPrototype = prototypes.find((item) => item.id === "vinyl")!;
+const frxCaseStudy = workCards.find((item) => item.id === "frx")!;
+// const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
+
 function ProjectHero({ project }: { project: WorkCard }) {
   return (
     <HeroVideoProvider>
@@ -166,7 +169,7 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className="scroll-mt-32 rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
+      className="flex h-full min-w-0 scroll-mt-32 flex-col rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
     >
       <CaseStudyCardHeader
         id={project.id}
@@ -175,7 +178,7 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
         taglineClass={workTaglineClass}
       />
       <ProjectHero project={project} />
-      <div className="mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8">
+      <div className="mt-5 flex w-full flex-1 flex-col gap-5">
         <p className={bodyClass}>{project.description}</p>
         <CaseStudyCardCtas href={project.caseStudyHref} />
       </div>
@@ -227,19 +230,11 @@ export default function Home() {
             >
               Selected work
             </h2>
-            <h3 className={`mt-6 ${workSubheadClass}`}>Interactive prototypes</h3>
-            <p className={workIntroClass}>
-              Healthcare interfaces I designed and built in React with AI-assisted development.
-            </p>
-            <PrototypeCards />
-            <div className="mt-12">
-              <h3 className={workSubheadClass}>Case studies</h3>
-              <p className={workIntroClass}>Design decisions and delivered experiences for healthcare teams.</p>
-              <div className="mt-6 flex flex-col gap-6">
-                {workCards.map((project) => (
-                  <CaseStudyArticle key={project.id} project={project} />
-                ))}
-              </div>
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <PrototypeCard item={vehrPrototype} />
+              <CaseStudyArticle project={frxCaseStudy} />
+              {/* <PrototypeCard item={vinylPrototype} /> */}
+              {/* <CaseStudyArticle project={dellCaseStudy} /> */}
             </div>
           </div>
         </section>
