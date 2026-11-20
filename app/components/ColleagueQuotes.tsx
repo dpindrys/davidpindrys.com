@@ -72,10 +72,10 @@ export default function ColleagueQuotes() {
         return (
           <li key={item.name} className="flex">
             <figure className="relative flex h-full w-full flex-col border border-black/10 bg-white p-5">
-              <blockquote className="font-sans text-[15px] leading-[1.55] text-black/80">
+              <blockquote className="flex-1 font-sans text-[15px] leading-[1.55] text-black/80">
                 {item.quote}
               </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3 pr-12">
+              <figcaption className="mt-auto flex shrink-0 items-center gap-3 pt-6 pr-12">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.avatarSrc}
@@ -95,7 +95,7 @@ export default function ColleagueQuotes() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={linkedIn ? `${item.name} on LinkedIn` : `${item.name} profile`}
-                className="group absolute bottom-4 right-4 inline-flex h-11 w-11 items-center justify-center text-[#0A66C2] hover:text-[#004182]"
+                className="group absolute bottom-5 right-5 inline-flex h-11 w-11 items-center justify-center text-[#0A66C2] hover:text-[#004182]"
               >
                 {"linkIconSrc" in item ? (
                   <span
