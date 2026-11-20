@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { cardTitleClass } from "../lib/pageStyles";
 import type { Photo, PhotoGroup } from "../lib/photos";
 
 const PREVIEW_COUNT = 3;
@@ -194,7 +195,7 @@ function GroupCard({ group, onOpen }: { group: PhotoGroup; onOpen: (index: numbe
       <p className="font-sans text-[12px] font-medium uppercase leading-none tracking-[0.14em] text-black/70">
         {group.label} · {count} {count === 1 ? noun.replace(/s$/, "") : noun}
       </p>
-      <h3 className="mt-3 font-sans text-[1.375rem] font-medium leading-[1.2] tracking-[-0.02em] text-black md:text-[1.625rem]">
+      <h3 className={`mt-3 ${cardTitleClass}`}>
         {group.title}
       </h3>
       {group.description ? (

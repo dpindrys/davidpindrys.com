@@ -224,10 +224,7 @@ export default function Home() {
 
         <section id="work" aria-labelledby="work-title" className={`${shellClass} scroll-mt-32 pt-10 md:-scroll-mt-6 md:pt-14`}>
           <div className={columnClass}>
-            <h2
-              id="work-title"
-              className="font-sans text-[clamp(2.4rem,4.4vw,3.15rem)] font-medium leading-[1.02] tracking-[-0.035em] text-black"
-            >
+            <h2 id="work-title" className={sideLeadClass}>
               Selected work
             </h2>
             <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">

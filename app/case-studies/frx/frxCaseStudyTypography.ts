@@ -6,6 +6,7 @@ import {
   filledCardClass,
   metaTextClass,
   shellClass,
+  sideLeadClass,
   tagClass,
 } from "../../lib/pageStyles";
 
@@ -13,7 +14,7 @@ import {
 export const frxShellClass = shellClass;
 export const frxColumnClass = columnClass;
 
-/** Case study hero title — same scale/weight as homepage “Selected work” heading. */
+/** Case study page h1 — display scale (not sitewide h2/h3). */
 export const frxHeroTitleClass =
   "font-sans text-[clamp(2.4rem,4.4vw,3.15rem)] font-medium leading-[1.02] tracking-[-0.035em] text-black";
 
@@ -28,9 +29,8 @@ export const frxSectionTitleClass = cardTitleClass;
 
 export const frxSectionBodyClass = bodyClass;
 
-/** Section lead (strategy / solution / product context). */
-export const frxStrategyHeadlineClass =
-  "font-sans text-[clamp(1.65rem,2.6vw,2.15rem)] font-medium leading-[1.12] tracking-[-0.03em] text-black";
+/** Section h2 — matches homepage services / about headings. */
+export const frxStrategyHeadlineClass = sideLeadClass;
 
 export const frxTagClass = tagClass;
 

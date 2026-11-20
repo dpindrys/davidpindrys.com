@@ -13,6 +13,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import { sideLeadClass } from "../lib/pageStyles";
+
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID?.trim() || "mykqbbye";
 
 const labelClass = "font-sans text-[13px] font-medium leading-none text-black/70";
@@ -213,10 +215,7 @@ function ContactDialog({
         className="relative h-full w-full overflow-y-auto bg-[#F4F2EE] p-6 md:h-auto md:max-h-[min(92vh,760px)] md:max-w-[36rem] md:p-8 md:shadow-[0_24px_80px_-32px_rgba(0,0,0,0.45)]"
       >
         <div className="flex items-start justify-between gap-4">
-          <h2
-            id={titleId}
-            className="font-sans text-[clamp(1.5rem,3vw,2rem)] font-normal leading-[1.15] tracking-[-0.03em] text-black"
-          >
+          <h2 id={titleId} className={sideLeadClass}>
             {succeeded
               ? "You told me what you’re working on!"
               : <>Tell me what you&apos;re working on</>}

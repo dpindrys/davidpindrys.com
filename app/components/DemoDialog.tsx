@@ -11,7 +11,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import { companyNameClass, compactPlayControlSizeClass } from "../lib/pageStyles";
+import { cardTitleClass, compactPlayControlSizeClass, sideLeadClass } from "../lib/pageStyles";
 
 export type DemoCaption = {
   /** Inclusive start time in seconds. */
@@ -1469,8 +1469,8 @@ export default function DemoDialog({
       className={
         demo.title
           ? isWalkthrough
-            ? companyNameClass
-            : "font-sans text-[16px] font-bold leading-snug text-black"
+            ? sideLeadClass
+            : sideLeadClass
           : "font-sans text-[16px] font-medium leading-none text-black"
       }
     >
@@ -1627,7 +1627,7 @@ export default function DemoDialog({
                 </button>
                 <div ref={walkthroughStackRef} className="min-w-0 flex-1">
                   {demo.walkthroughHeading ? (
-                    <h3 className="font-sans text-[16px] font-bold leading-snug text-black">
+                    <h3 className={cardTitleClass}>
                       {demo.walkthroughHeading}
                     </h3>
                   ) : null}

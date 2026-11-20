@@ -4,8 +4,10 @@ export const sectionGapClass = "mt-20 md:mt-28";
 
 export const sideLeadClass =
   "font-sans text-[1.375rem] font-normal leading-[1.35] tracking-[-0.02em] text-black md:text-[1.75rem]";
-export const companyNameClass = "font-sans text-[1.375rem] font-medium leading-[1.1] text-black md:text-[1.75rem]";
-export const cardTitleClass = "font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black";
+export const cardTitleClass =
+  "font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black";
+/** Work card client names and other h3 headings — same scale as services card titles. */
+export const companyNameClass = cardTitleClass;
 export const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
 export const cardBodyClass = "font-sans text-[15px] leading-[1.55] text-black/70";
 export const metaTextClass = "font-sans text-[13px] leading-none text-black/70";
