@@ -137,7 +137,7 @@ const workCards: readonly WorkCard[] = [
 const vehrPrototype = prototypes.find((item) => item.id === "vehr")!;
 // const vinylPrototype = prototypes.find((item) => item.id === "vinyl")!;
 const frxCaseStudy = workCards.find((item) => item.id === "frx")!;
-// const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
+const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
 
 function ProjectHero({ project }: { project: WorkCard }) {
   return (
@@ -164,12 +164,23 @@ function ProjectHero({ project }: { project: WorkCard }) {
   );
 }
 
-function CaseStudyArticle({ project }: { project: WorkCard }) {
+function CaseStudyArticle({
+  project,
+  wide = false,
+}: {
+  project: WorkCard;
+  /** Full-width row: side-by-side body and CTA on md+, like pre-grid case study cards. */
+  wide?: boolean;
+}) {
   return (
     <article
       id={project.id}
       aria-labelledby={`${project.id}-title`}
-      className="flex h-full min-w-0 scroll-mt-32 flex-col rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
+      className={
+        wide
+          ? "scroll-mt-32 rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
+          : "flex h-full min-w-0 scroll-mt-32 flex-col rounded-[16px] border border-black/15 p-5 md:scroll-mt-8 md:p-6"
+      }
     >
       <CaseStudyCardHeader
         id={project.id}
@@ -178,9 +189,15 @@ function CaseStudyArticle({ project }: { project: WorkCard }) {
         taglineClass={workTaglineClass}
       />
       <ProjectHero project={project} />
-      <div className="mt-5 flex w-full flex-1 flex-col gap-5">
+      <div
+        className={
+          wide
+            ? "mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8"
+            : "mt-5 flex w-full flex-1 flex-col gap-5"
+        }
+      >
         <p className={bodyClass}>{project.description}</p>
-        <CaseStudyCardCtas href={project.caseStudyHref} />
+        <CaseStudyCardCtas href={project.caseStudyHref} wide={wide} />
       </div>
     </article>
   );
@@ -227,11 +244,13 @@ export default function Home() {
             <h2 id="work-title" className={sideLeadClass}>
               Selected work
             </h2>
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-              <PrototypeCard item={vehrPrototype} />
-              <CaseStudyArticle project={frxCaseStudy} />
-              {/* <PrototypeCard item={vinylPrototype} /> */}
-              {/* <CaseStudyArticle project={dellCaseStudy} /> */}
+            <div className="mt-6 flex flex-col gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <PrototypeCard item={vehrPrototype} />
+                <CaseStudyArticle project={frxCaseStudy} />
+                {/* <PrototypeCard item={vinylPrototype} /> */}
+              </div>
+              <CaseStudyArticle project={dellCaseStudy} wide />
             </div>
           </div>
         </section>

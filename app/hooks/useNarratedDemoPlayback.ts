@@ -23,6 +23,10 @@ import {
   shouldFreezeNarratedCue,
   type DemoCaption,
 } from "../lib/demoNarration";
+import {
+  readNarrationMutedPreference,
+  writeNarrationMutedPreference,
+} from "../lib/narrationMute";
 
 export type UseNarratedDemoPlaybackOptions = {
   captions?: readonly DemoCaption[];
@@ -75,6 +79,10 @@ export function useNarratedDemoPlayback({
 
   const hasCaptions = Boolean(captions && captions.length > 0);
   const hasNarrationAudio = Boolean(captions?.some((caption) => Boolean(caption.audio)));
+
+  const [narrationMuted, setNarrationMuted] = useState(readNarrationMutedPreference);
+  const narrationMutedRef = useRef(narrationMuted);
+  narrationMutedRef.current = narrationMuted;
 
   const [captionText, setCaptionText] = useState("");
   const [segmentFills, setSegmentFills] = useState<number[]>([]);
@@ -172,6 +180,21 @@ export function useNarratedDemoPlayback({
     freezeCueIndexRef.current = -1;
     userPausedDuringFreezeRef.current = false;
   }, [clearBreathTimer, stopHoldFillAnimation]);
+
+  const toggleNarrationMute = useCallback(() => {
+    setNarrationMuted((prev) => {
+      const next = !prev;
+      writeNarrationMutedPreference(next);
+      const audio = narrationAudioRef.current;
+      if (audio) audio.muted = next;
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    const audio = narrationAudioRef.current;
+    if (audio) audio.muted = narrationMuted;
+  }, [narrationMuted]);
 
   const stopNarration = useCallback(() => {
     const audio = narrationAudioRef.current;
@@ -545,9 +568,11 @@ export function useNarratedDemoPlayback({
         audio = new Audio();
         audio.preload = "auto";
         audio.playbackRate = 1;
+        audio.muted = narrationMutedRef.current;
         narrationAudioRef.current = audio;
       } else {
         audio.playbackRate = 1;
+        audio.muted = narrationMutedRef.current;
       }
 
       const offset = Math.max(0, time - caption.start);
@@ -954,6 +979,8 @@ export function useNarratedDemoPlayback({
     captionsId,
     hasCaptions,
     hasNarrationAudio,
+    narrationMuted,
+    toggleNarrationMute,
     captions,
     captionText,
     captionOpaque,

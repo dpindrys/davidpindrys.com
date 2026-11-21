@@ -11,7 +11,12 @@ import {
   type SyntheticEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import { DemoCaptionBody } from "./DemoCaptionChrome";
 import { cardTitleClass, compactPlayControlSizeClass, sideLeadClass } from "../lib/pageStyles";
+import {
+  readNarrationMutedPreference,
+  writeNarrationMutedPreference,
+} from "../lib/narrationMute";
 
 export type DemoCaption = {
   /** Inclusive start time in seconds. */
@@ -219,17 +224,6 @@ function segmentFillsDuringHold(
 
 function longestCaptionText(captions: readonly DemoCaption[]): string {
   return captions.reduce((longest, caption) => (caption.text.length > longest.length ? caption.text : longest), "");
-}
-
-/** Accessible name for a caption timeline segment control. */
-function captionSegmentLabel(caption: DemoCaption, index: number, total: number): string {
-  const trimmed = caption.text.trim();
-  const truncated =
-    trimmed.length > 64 ? `${trimmed.slice(0, 61).trimEnd()}…` : trimmed;
-  if (truncated) {
-    return `Go to caption ${index + 1} of ${total}: ${truncated}`;
-  }
-  return `Go to caption ${index + 1} of ${total}`;
 }
 
 const CAPTION_FADE_MS = 120;
@@ -459,6 +453,9 @@ export default function DemoDialog({
   const hasCaptions = Boolean(captions && captions.length > 0);
   const hasNarrationAudio = Boolean(captions?.some((caption) => Boolean(caption.audio)));
   const isWalkthrough = demo?.layout === "walkthrough";
+  const [narrationMuted, setNarrationMuted] = useState(readNarrationMutedPreference);
+  const narrationMutedRef = useRef(narrationMuted);
+  narrationMutedRef.current = narrationMuted;
   const [captionText, setCaptionText] = useState("");
   const [segmentFills, setSegmentFills] = useState<number[]>([]);
   /**
@@ -666,6 +663,21 @@ export default function DemoDialog({
       // Ignore load errors on emptied src.
     }
   }, []);
+
+  const toggleNarrationMute = useCallback(() => {
+    setNarrationMuted((prev) => {
+      const next = !prev;
+      writeNarrationMutedPreference(next);
+      const audio = narrationAudioRef.current;
+      if (audio) audio.muted = next;
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    const audio = narrationAudioRef.current;
+    if (audio) audio.muted = narrationMuted;
+  }, [narrationMuted]);
 
   useEffect(() => {
     playbackEndedRef.current = false;
@@ -1112,9 +1124,11 @@ export default function DemoDialog({
         audio = new Audio();
         audio.preload = "auto";
         audio.playbackRate = 1;
+        audio.muted = narrationMutedRef.current;
         narrationAudioRef.current = audio;
       } else {
         audio.playbackRate = 1;
+        audio.muted = narrationMutedRef.current;
       }
 
       const offset = Math.max(0, time - caption.start);
@@ -1419,45 +1433,18 @@ export default function DemoDialog({
 
   const captionBody =
     hasCaptions && captions ? (
-      <>
-        <div className="relative" aria-live="polite">
-          <p
-            className="invisible font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
-            aria-hidden="true"
-          >
-            {captionSpacer}
-          </p>
-          <p
-            id={captionsId}
-            className={`absolute inset-0 font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
-              captionOpaque ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {captionText}
-          </p>
-        </div>
-        <div
-          className="mt-3 flex gap-1 sm:gap-1.5"
-          role="group"
-          aria-label="Caption timeline"
-        >
-          {timelineFills.map((fill, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={captionSegmentLabel(captions[i], i, captions.length)}
-              onClick={() => seekToCaption(i)}
-              className="h-1 min-w-0 flex-1 cursor-pointer overflow-hidden rounded-[1px] bg-black/10 outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]"
-            >
-              <span
-                className="block h-full bg-[rgb(15_12_19)]"
-                style={{ width: `${Math.round(fill * 1000) / 10}%` }}
-                aria-hidden="true"
-              />
-            </button>
-          ))}
-        </div>
-      </>
+      <DemoCaptionBody
+        captions={captions}
+        captionText={captionText}
+        captionOpaque={captionOpaque}
+        captionSpacer={captionSpacer}
+        segmentFills={timelineFills}
+        captionsId={captionsId}
+        onSeekToCaption={seekToCaption}
+        hasNarrationAudio={hasNarrationAudio}
+        narrationMuted={narrationMuted}
+        onToggleNarrationMute={toggleNarrationMute}
+      />
     ) : null;
 
   /** Default (Vinyl/Frx): captions alone below the video. */

@@ -96,16 +96,16 @@
     "wide": true,
     "photos": [
       {
-        "src": "/images/photo/oaxaca/corn.jpg?v=d15a83143e",
+        "src": "/images/photo/oaxaca/corn.png?v=14c152e056",
         "alt": "A woman pouring dried corn kernels into the wind as a girl and a young child look on.",
-        "height": 933,
-        "width": 1400
+        "width": 5056,
+        "height": 3368
       },
       {
-        "src": "/images/photo/fes/fes1.jpg?v=d10826aaca",
+        "src": "/images/photo/fes/faissel.png?v=0a28024278",
         "alt": "A young man walking past others on a cobblestone street beside an ochre wall painted with a shop sign.",
-        "height": 933,
-        "width": 1400
+        "width": 5056,
+        "height": 3368
       },
       {
         "src": "/images/photo/misha/misha1.jpg?v=e1fb70bb57",
@@ -114,52 +114,46 @@
         "width": 1200
       },
       {
-        "src": "/images/photo/trotitlan/grind.jpg?v=77a890ba76",
+        "src": "/images/photo/trotitlan/grind.png?v=bab6f37002",
         "alt": "A woman in an apron grinding red pigment on a stone metate, surrounded by woven baskets.",
-        "height": 480,
-        "width": 720
+        "width": 5056,
+        "height": 3372
       },
       {
-        "src": "/images/photo/uganda/giraffes.jpeg?v=0a1c0fe1f8",
+        "src": "/images/photo/uganda/giraffes.png?v=9c3267e9a0",
         "alt": "Several giraffes walking across a wide grassy savanna under a cloudy sky.",
-        "height": 2323,
-        "width": 5472
+        "width": 6336,
+        "height": 2688
       },
       {
-        "src": "/images/photo/oaxaca/clean.jpg?v=7e281d6121",
+        "src": "/images/photo/oaxaca/clean.png?v=642d042c53",
         "alt": "A young boy packing mud into a plastic bottle while a woman sweeps a porch behind him.",
-        "height": 533,
-        "width": 800
+        "width": 5056,
+        "height": 3368
       },
       {
-        "src": "/images/photo/oaxaca/doll.jpg?v=334be5f587",
+        "src": "/images/photo/oaxaca/doll.png?v=287e6e98a8",
         "alt": "A girl in a pink sweater running past a sunlit wall, carrying a baby doll, her shadow cast beside her.",
-        "height": 933,
-        "width": 1400
+        "width": 5056,
+        "height": 3368
       },
       {
-        "src": "/images/photo/oaxaca/fingers.jpg?v=26dbf6d6cd",
+        "src": "/images/photo/oaxaca/fingers.png?v=f0c1884586",
         "alt": "A family at a table, a young woman gesturing with her hands while a small boy drinks from a cup.",
-        "height": 933,
-        "width": 1400
+        "width": 5056,
+        "height": 3368
       },
       {
-        "src": "/images/photo/oaxaca/wedding.jpg?v=1b57b3ae1b",
+        "src": "/images/photo/oaxaca/weddin.png?v=9d820b964b",
         "alt": "A woman placing a lazo rosary around a smiling bride and groom during a church wedding.",
-        "height": 682,
-        "width": 1023
+        "width": 5056,
+        "height": 3372
       },
       {
-        "src": "/images/photo/fes/fes2.jpg?v=9c166547c0",
+        "src": "/images/photo/fes/cocacola.png?v=c36d444e89",
         "alt": "A man reading a newspaper at a café table, seen through a doorway beside a Coca-Cola fridge.",
-        "height": 933,
-        "width": 1400
-      },
-      {
-        "src": "/images/photo/fes/fes3.jpg?v=f39eaf6c6e",
-        "alt": "A vintage pinball machine in the foreground while a young man plays pool in the room behind it.",
-        "height": 933,
-        "width": 1400
+        "width": 5056,
+        "height": 3368
       },
       {
         "src": "/images/photo/misha/misha2.jpg?v=c11000f9b1",
@@ -174,34 +168,22 @@
         "width": 1200
       },
       {
-        "src": "/images/photo/trotitlan/loom.jpg?v=b51a454292",
-        "alt": "Weavers working at large wooden floor looms in a workshop.",
-        "height": 995,
-        "width": 1565
-      },
-      {
-        "src": "/images/photo/trotitlan/mariano.jpg?v=b7c8feba69",
-        "alt": "A man standing on a hillside among prickly pear cactus, with green mountains behind him.",
-        "height": 933,
-        "width": 1400
-      },
-      {
-        "src": "/images/photo/trotitlan/pouring.jpg?v=d1171728dd",
+        "src": "/images/photo/trotitlan/pour.png?v=a557c13710",
         "alt": "Two people pouring deep red dye from a metal pot through a cloth into a concrete basin.",
-        "height": 480,
-        "width": 720
+        "width": 5056,
+        "height": 3372
       },
       {
-        "src": "/images/photo/uganda/gazelle.jpg?v=69662e8949",
+        "src": "/images/photo/uganda/gazelle.png?v=4b2dedf3b2",
         "alt": "Antelope grazing in tall golden grass on an open savanna dotted with acacia trees.",
-        "height": 2896,
-        "width": 5472
+        "width": 5684,
+        "height": 3008
       },
       {
-        "src": "/images/photo/uganda/lions.jpeg?v=2f36ffba0a",
+        "src": "/images/photo/uganda/lions.png?v=80d36384da",
         "alt": "A lioness and her cub standing on a path through tall golden grass.",
-        "height": 2856,
-        "width": 5417
+        "width": 5696,
+        "height": 3004
       }
     ]
   }

@@ -11,6 +11,53 @@ const shortcutKbdBaseClass =
 export const demoShortcutKbdClass = `${shortcutKbdBaseClass} px-2.5 py-1`;
 export const demoShortcutKbdCompactClass = `${shortcutKbdBaseClass} px-1.5 py-1`;
 
+const narrationMuteButtonClass =
+  "flex w-10 shrink-0 cursor-pointer self-stretch items-center justify-center rounded-md text-black/55 outline-none transition-colors hover:text-black/80 focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] sm:w-11";
+const narrationMuteIconClass = "h-[22px] w-[22px] sm:h-6 sm:w-6";
+
+function NarrationSoundOnIcon({ className = "h-[18px] w-[18px]" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 5 6 9H3v6h3l5 4V5z" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      <path d="M18.07 5.93a8.5 8.5 0 0 1 0 12.14" />
+    </svg>
+  );
+}
+
+function NarrationMutedIcon({ className = "h-[18px] w-[18px]" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 5 6 9H3v6h3l5 4V5z" />
+      <path d="m22 9-6 6M16 9l6 6" />
+    </svg>
+  );
+}
+
+export function DemoNarrationMuteButton({
+  muted,
+  onToggle,
+}: {
+  muted: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={narrationMuteButtonClass}
+      aria-label={muted ? "Unmute narration" : "Mute narration"}
+      aria-pressed={muted}
+      onClick={onToggle}
+    >
+      {muted ? (
+        <NarrationMutedIcon className={narrationMuteIconClass} />
+      ) : (
+        <NarrationSoundOnIcon className={narrationMuteIconClass} />
+      )}
+    </button>
+  );
+}
+
 export function DemoCaptionBody({
   captions,
   captionText,
@@ -19,6 +66,9 @@ export function DemoCaptionBody({
   segmentFills,
   captionsId,
   onSeekToCaption,
+  hasNarrationAudio = false,
+  narrationMuted = false,
+  onToggleNarrationMute,
 }: {
   captions: readonly DemoCaption[];
   captionText: string;
@@ -27,24 +77,38 @@ export function DemoCaptionBody({
   segmentFills: number[];
   captionsId: string;
   onSeekToCaption: (index: number) => void;
+  hasNarrationAudio?: boolean;
+  narrationMuted?: boolean;
+  onToggleNarrationMute?: () => void;
 }) {
+  const showNarrationMute =
+    hasNarrationAudio && onToggleNarrationMute != null;
+
   return (
     <>
-      <div className="relative" aria-live="polite">
-        <p
-          className="invisible font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
-          aria-hidden="true"
-        >
-          {captionSpacer}
-        </p>
-        <p
-          id={captionsId}
-          className={`absolute inset-0 font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
-            captionOpaque ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {captionText}
-        </p>
+      <div className="flex items-stretch gap-2 sm:gap-2.5">
+        <div className="relative min-w-0 flex-1" aria-live="polite">
+          <p
+            className="invisible font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
+            aria-hidden="true"
+          >
+            {captionSpacer}
+          </p>
+          <p
+            id={captionsId}
+            className={`absolute inset-0 font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
+              captionOpaque ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {captionText}
+          </p>
+        </div>
+        {showNarrationMute ? (
+          <DemoNarrationMuteButton
+            muted={narrationMuted}
+            onToggle={onToggleNarrationMute}
+          />
+        ) : null}
       </div>
       <div
         className="mt-3 flex gap-1 sm:gap-1.5"

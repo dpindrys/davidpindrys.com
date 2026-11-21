@@ -42,7 +42,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={quicksand.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={quicksand.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="bg-[#F4F2EE] text-black font-sans">
         <ContactProvider>
           <a href="#main-content" className="skip-link">

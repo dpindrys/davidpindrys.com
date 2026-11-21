@@ -78,7 +78,7 @@ export function PrototypeCard({ item }: { item: Prototype }) {
       </div>
       <div className="mt-5 flex w-full flex-1 flex-col gap-5">
         <p className={bodyClass}>{item.summary}</p>
-        <div>
+        <div className="mt-auto">
           <a
             href={item.href}
             target="_blank"

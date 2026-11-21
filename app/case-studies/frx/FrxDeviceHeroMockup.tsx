@@ -53,6 +53,9 @@ export default function FrxDeviceHeroMockup() {
     videoRef,
     captionsId,
     hasCaptions,
+    hasNarrationAudio,
+    narrationMuted,
+    toggleNarrationMute,
     captions,
     captionText,
     captionOpaque,
@@ -168,6 +171,9 @@ export default function FrxDeviceHeroMockup() {
                   segmentFills={segmentFills}
                   captionsId={captionsId}
                   onSeekToCaption={seekToCaption}
+                  hasNarrationAudio={hasNarrationAudio}
+                  narrationMuted={narrationMuted}
+                  onToggleNarrationMute={toggleNarrationMute}
                 />
                 <div className="mt-3 border-t border-black/10 pt-3 sm:mt-3.5 sm:pt-3.5">
                   <DemoShortcutHints showCaptions />
