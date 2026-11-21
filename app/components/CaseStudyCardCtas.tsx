@@ -5,10 +5,10 @@ import Link from "next/link";
 import { instantScrollToTop } from "../lib/instantScrollToTop";
 import { PRIMARY_FILLED_INTERACTIVE } from "./buttonTokens";
 
-function ExternalIcon() {
+function ArrowRightIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-[0.9em] w-[0.9em] shrink-0" aria-hidden="true" fill="none">
-      <path d="M7 17L17 7M9 7h8v8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 12h14M13 7l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -29,13 +29,13 @@ export default function CaseStudyCardCtas({ href, wide = false }: { href?: strin
       {href ? (
         <Link href={href} className={primaryCtaClass} onClick={instantScrollToTop}>
           View case study
-          <ExternalIcon />
+          <ArrowRightIcon />
         </Link>
       ) : (
         <>
           <button type="button" disabled className={disabledPrimaryButtonClass}>
             View case study
-            <ExternalIcon />
+            <ArrowRightIcon />
           </button>
           <span className="border border-black/15 px-2.5 py-1 font-sans text-[13px] leading-none text-black/70">
             Case study coming soon

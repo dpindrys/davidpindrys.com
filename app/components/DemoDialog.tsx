@@ -229,7 +229,7 @@ function longestCaptionText(captions: readonly DemoCaption[]): string {
 const CAPTION_FADE_MS = 120;
 
 /**
- * Full-bleed clickable media overlay; "View demo" mark is visual-only.
+ * Full-bleed clickable media overlay; "Play demo" mark is visual-only.
  * Mark visibility is React-controlled (pointer + focus-visible) — never CSS group-hover —
  * so stuck :hover after click/modal close cannot fight hide. Touch / no-hover devices keep
  * the mark visible until force-hidden/open.
@@ -240,9 +240,9 @@ const CAPTION_FADE_MS = 120;
 export const viewDemoPlayButtonClass =
   "absolute inset-0 z-[1] flex cursor-pointer items-center justify-center select-none outline-none !outline-none focus:outline-none focus-visible:outline-none focus-visible:!outline-none [-webkit-tap-highlight-color:transparent]";
 
-/** Shared pill chrome for hero “View demo” marks on cards. */
+/** Shared pill chrome for hero “Play demo” marks on cards. */
 const viewDemoPlayMarkVisualClass =
-  "flex items-center justify-center rounded-full bg-black/60 px-5 py-3 font-sans text-[15px] font-medium leading-none tracking-[-0.01em] text-white sm:px-6 sm:py-3.5 sm:text-[16px]";
+  "flex items-center justify-center gap-2 rounded-full bg-black/60 px-5 py-3 font-sans text-[15px] font-medium leading-none tracking-[-0.01em] text-white sm:px-6 sm:py-3.5 sm:text-[16px]";
 
 /** Rounded pill; muted gray fill + white label (readable on media). */
 export const viewDemoPlayMarkClass = `pointer-events-none ${viewDemoPlayMarkVisualClass}`;
@@ -354,7 +354,7 @@ export function DemoPlayOverlay({
       <button
         type="button"
         data-demo-play=""
-        aria-label={`View demo for ${client}`}
+        aria-label={`Play demo for ${client}`}
         className={viewDemoPlayButtonClass}
         onPointerEnter={() => setPointerInside(true)}
         onPointerLeave={() => {
@@ -385,7 +385,8 @@ export function DemoPlayOverlay({
             }
             aria-hidden="true"
           >
-            View demo
+            Play demo
+            <PlayIcon className="h-[0.9em] w-[0.9em] shrink-0" />
           </span>
         ) : null}
       </button>
