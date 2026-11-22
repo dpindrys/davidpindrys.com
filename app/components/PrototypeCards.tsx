@@ -70,8 +70,10 @@ export function PrototypeCard({ item }: { item: Prototype }) {
           client={item.client}
           video={item.video}
           title={item.demoTitle}
+          subtitle={item.demoSubtitle}
           walkthroughHeading={item.demoWalkthroughHeading}
           description={item.demoDescription}
+          bgImage={item.bgImage}
           captions={item.demoCaptions}
           layout="walkthrough"
         />

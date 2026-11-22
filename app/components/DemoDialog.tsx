@@ -31,10 +31,15 @@ export type DemoDialogLayout = "default" | "walkthrough";
 export type DemoDialogContent = {
   client: string;
   video: string;
+  /** Modal header title. */
   title?: string;
+  /** Modal header subtitle (e.g. client name). */
+  subtitle?: string;
   description?: string;
-  /** @deprecated Superseded by viewer footer; kept for callers. */
+  /** Caption list section heading. */
   walkthroughHeading?: string;
+  /** Hero gradient behind the walkthrough video (matches project card). */
+  bgImage?: string;
   captions?: readonly DemoCaption[];
   layout?: DemoDialogLayout;
 };
@@ -58,7 +63,7 @@ const viewDemoPlayMarkFocusRingClass =
   "ring-2 ring-black/25 ring-offset-2 ring-offset-transparent";
 
 const dialogCloseButtonClass =
-  "absolute right-3 top-3 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md font-sans text-[26px] leading-none text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black/80 sm:right-4 sm:top-4";
+  "absolute right-3 top-3 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md font-sans text-[26px] leading-none text-black/45 outline-none transition-colors hover:text-black/75 focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] sm:right-4 sm:top-4";
 
 export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { className?: string }) {
   return (
@@ -73,16 +78,20 @@ export function DemoPlayOverlay({
   client,
   video,
   title,
+  subtitle,
   description,
   walkthroughHeading,
+  bgImage,
   captions,
   layout,
 }: {
   client: string;
   video: string;
   title?: string;
+  subtitle?: string;
   description?: string;
   walkthroughHeading?: string;
+  bgImage?: string;
   captions?: readonly DemoCaption[];
   layout?: DemoDialogLayout;
 }) {
@@ -153,7 +162,17 @@ export function DemoPlayOverlay({
       <DemoDialog
         demo={
           open
-            ? { client, video, title, description, walkthroughHeading, captions, layout }
+            ? {
+                client,
+                video,
+                title,
+                subtitle,
+                description,
+                walkthroughHeading,
+                bgImage,
+                captions,
+                layout,
+              }
             : null
         }
         onClose={close}
@@ -310,7 +329,11 @@ export default function DemoDialog({
   if (!demo || typeof document === "undefined") return null;
 
   const descriptionId = demo.description ? `${titleId}-desc` : undefined;
-  const walkthroughTitle = demo.title ?? `${demo.client} guided demo`;
+  const isWalkthrough = demo.layout === "walkthrough";
+  const modalTitle = demo.title ?? demo.client;
+  const modalAriaLabel = demo.subtitle
+    ? `${modalTitle}, ${demo.subtitle}`
+    : modalTitle;
   const captionCount = captions?.length ?? 0;
   const canGoPrev = hasCaptions && activeCueIndex > 0;
   const canGoNext = hasCaptions && activeCueIndex < captionCount - 1;
@@ -318,23 +341,41 @@ export default function DemoDialog({
   const describedBy =
     [hasCaptions ? captionsId : null, descriptionId].filter(Boolean).join(" ") || undefined;
 
+  const shellClass = isWalkthrough
+    ? "relative z-[1] flex max-h-[min(900px,calc(100dvh-1.5rem))] w-full max-w-[min(1180px,calc(100vw-1.5rem))] min-h-0 flex-col overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] outline-none focus:outline-none md:max-h-[min(860px,calc(100dvh-2rem))]"
+    : "relative z-[1] flex h-dvh max-h-dvh w-full flex-col overflow-hidden bg-black/80 outline-none focus:outline-none";
+
+  const closeClass = isWalkthrough
+    ? dialogCloseButtonClass
+    : "absolute right-3 top-3 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md font-sans text-[26px] leading-none text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black/80 sm:right-4 sm:top-4";
+
   return createPortal(
-    <div className="fixed inset-0 z-[140] flex h-dvh max-h-dvh flex-col overflow-hidden">
-      <div className="fixed inset-0 bg-black/70" onClick={closeFromPointer} aria-hidden="true" />
+    <div
+      className={
+        isWalkthrough
+          ? "fixed inset-0 z-[140] flex items-center justify-center overflow-hidden p-3 sm:p-4 md:p-6"
+          : "fixed inset-0 z-[140] flex h-dvh max-h-dvh flex-col overflow-hidden"
+      }
+    >
+      <div
+        className="fixed inset-0 bg-black/80"
+        onClick={closeFromPointer}
+        aria-hidden="true"
+      />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={walkthroughTitle}
+        aria-label={modalAriaLabel}
         aria-describedby={describedBy}
         tabIndex={-1}
-        className="relative z-[1] flex h-dvh max-h-dvh w-full flex-col overflow-hidden bg-black/80 outline-none focus:outline-none"
+        className={shellClass}
       >
         <button
           type="button"
           onClick={closeFromPointer}
           aria-label="Close"
-          className={dialogCloseButtonClass}
+          className={closeClass}
         >
           <span aria-hidden>×</span>
         </button>
@@ -342,75 +383,106 @@ export default function DemoDialog({
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           <div
             ref={videoStageRef}
-            className="relative flex min-h-0 flex-1 items-center justify-center"
+            className={
+              isWalkthrough
+                ? "relative flex min-h-[min(48vw,320px)] min-w-0 flex-1 flex-col md:min-h-0"
+                : "relative flex min-h-0 flex-1 items-center justify-center"
+            }
             onPointerMove={bumpOverlayActivity}
             onTouchStart={bumpOverlayActivity}
           >
-            <video
-              ref={videoRef}
-              src={demo.video}
-              controls={false}
-              playsInline
-              preload="metadata"
-              className="max-h-full max-w-full object-contain"
-              aria-label={`Guided demo for ${demo.client}`}
-              onClick={() => {
-                bumpOverlayActivity();
-              }}
-              {...mergedVideoHandlers}
-            />
-            <DemoVideoOverlayControls
-              client={demo.client}
-              playing={playing}
-              onTogglePlayback={togglePlayback}
-              currentTime={videoTime}
-              duration={videoDuration}
-              onSeekToTime={seekToTime}
-              onPrevExplanation={() => seekToAdjacentCaption(-1)}
-              onNextExplanation={() => seekToAdjacentCaption(1)}
-              hasCaptions={hasCaptions}
-              canGoPrev={canGoPrev}
-              canGoNext={canGoNext}
-              activityTick={overlayActivityTick}
-            />
+            {isWalkthrough && demo.bgImage ? (
+              <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${demo.bgImage})` }}
+                aria-hidden
+              />
+            ) : null}
+            <div
+              className={
+                isWalkthrough
+                  ? "relative flex min-h-0 flex-1 items-center justify-center p-4 sm:p-5 md:p-6"
+                  : "contents"
+              }
+            >
+              <video
+                ref={videoRef}
+                src={demo.video}
+                controls={false}
+                playsInline
+                preload="metadata"
+                className="max-h-full max-w-full object-contain"
+                aria-label={`Guided demo for ${demo.client}`}
+                onClick={() => {
+                  bumpOverlayActivity();
+                }}
+                {...mergedVideoHandlers}
+              />
+              <DemoVideoOverlayControls
+                client={demo.client}
+                playing={playing}
+                onTogglePlayback={togglePlayback}
+                currentTime={videoTime}
+                duration={videoDuration}
+                onSeekToTime={seekToTime}
+                onPrevExplanation={() => seekToAdjacentCaption(-1)}
+                onNextExplanation={() => seekToAdjacentCaption(1)}
+                hasCaptions={hasCaptions}
+                canGoPrev={canGoPrev}
+                canGoNext={canGoNext}
+                activityTick={overlayActivityTick}
+              />
+            </div>
           </div>
 
-          <aside className="flex max-h-[45vh] w-full shrink-0 flex-col border-t border-white/10 md:max-h-none md:w-[min(100%,320px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
-            {hasCaptions && captions ? (
-              <DemoWalkthroughSidebar
-                title={walkthroughTitle}
-                description={demo.description}
-                titleId={titleId}
-                descriptionId={descriptionId}
-                captions={captions}
-                captionsId={captionsId}
-                activeCueIndex={activeCueIndex}
-                onSeekToCaption={seekToCaption}
-                hasNarrationAudio={hasNarrationAudio}
-                narrationMuted={narrationMuted}
-                onToggleNarrationMute={toggleNarrationMute}
-              />
-            ) : (
-              <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-labelledby={titleId}>
-                <div className="shrink-0 px-4 py-4 sm:px-5 sm:py-5">
-                  <h2
-                    id={titleId}
-                    className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-white sm:text-[18px]"
-                  >
-                    {walkthroughTitle}
-                  </h2>
-                  {demo.description ? (
-                    <p
-                      id={descriptionId}
-                      className="mt-2 font-sans text-[14px] font-normal leading-[1.45] text-white/65 sm:text-[15px]"
+          {isWalkthrough ? (
+            <aside className="flex max-h-[min(52vh,480px)] w-full shrink-0 flex-col border-t border-black/10 md:max-h-none md:w-[min(100%,340px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
+              {hasCaptions && captions ? (
+                <DemoWalkthroughSidebar
+                  title={modalTitle}
+                  subtitle={demo.subtitle}
+                  journeyHeading={demo.walkthroughHeading}
+                  description={demo.description}
+                  titleId={titleId}
+                  descriptionId={descriptionId}
+                  captions={captions}
+                  captionsId={captionsId}
+                  activeCueIndex={activeCueIndex}
+                  onSeekToCaption={seekToCaption}
+                  hasNarrationAudio={hasNarrationAudio}
+                  narrationMuted={narrationMuted}
+                  onToggleNarrationMute={toggleNarrationMute}
+                />
+              ) : (
+                <section
+                  className="flex min-h-0 flex-1 flex-col overflow-hidden"
+                  aria-labelledby={titleId}
+                >
+                  <div className="shrink-0 px-4 py-4 pr-12 sm:px-5 sm:py-5 sm:pr-14">
+                    <h2
+                      id={titleId}
+                      className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-black sm:text-[18px]"
                     >
-                      {demo.description}
-                    </p>
-                  ) : null}
-                </div>
-              </section>
-            )}
-          </aside>
+                      {modalTitle}
+                    </h2>
+                    {demo.subtitle ? (
+                      <p className="mt-1 font-sans text-[14px] font-normal leading-snug text-black/55 sm:text-[15px]">
+                        {demo.subtitle}
+                      </p>
+                    ) : null}
+                    {demo.description ? (
+                      <p
+                        id={descriptionId}
+                        className="mt-3 font-sans text-[14px] font-normal leading-[1.45] text-black/70 sm:text-[15px]"
+                      >
+                        {demo.description}
+                      </p>
+                    ) : null}
+                  </div>
+                </section>
+              )}
+            </aside>
+          ) : null}
         </div>
       </div>
     </div>,

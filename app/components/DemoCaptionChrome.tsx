@@ -15,9 +15,6 @@ import {
 } from "../lib/demoNarration";
 import { compactPlayControlSizeClass } from "../lib/pageStyles";
 
-const walkthroughSidebarMuteButtonClass =
-  "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md text-white/55 outline-none transition-colors hover:text-white/85 focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black/80";
-
 const overlayIconButtonClass =
   "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]";
 
@@ -375,6 +372,8 @@ function OverlaySkipForwardIcon({ className = "h-5 w-5" }: { className?: string 
 
 export function DemoWalkthroughSidebar({
   title,
+  subtitle,
+  journeyHeading,
   description,
   titleId,
   descriptionId,
@@ -387,6 +386,8 @@ export function DemoWalkthroughSidebar({
   onToggleNarrationMute,
 }: {
   title: string;
+  subtitle?: string;
+  journeyHeading?: string;
   description?: string;
   titleId: string;
   descriptionId?: string;
@@ -414,47 +415,46 @@ export function DemoWalkthroughSidebar({
     }
   }, [activeCueIndex]);
 
+  const sectionHeading = journeyHeading ?? "Walkthrough";
+
   return (
     <section className="flex min-h-0 flex-1 flex-col overflow-hidden" aria-labelledby={titleId}>
-      <div className="shrink-0 border-b border-white/10 px-4 py-4 sm:px-5 sm:py-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <h2
-              id={titleId}
-              className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-white sm:text-[18px]"
-            >
-              {title}
-            </h2>
-            {description ? (
-              <p
-                id={descriptionId}
-                className="mt-2 font-sans text-[14px] font-normal leading-[1.45] text-white/65 sm:text-[15px]"
-              >
-                {description}
-              </p>
-            ) : null}
-          </div>
+      <div className="shrink-0 px-4 py-4 pr-12 sm:px-5 sm:py-5 sm:pr-14">
+        <h2
+          id={titleId}
+          className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-black sm:text-[18px]"
+        >
+          {title}
+        </h2>
+        {subtitle ? (
+          <p className="mt-1 font-sans text-[14px] font-normal leading-snug text-black/55 sm:text-[15px]">
+            {subtitle}
+          </p>
+        ) : null}
+        {description ? (
+          <p
+            id={descriptionId}
+            className="mt-3 font-sans text-[14px] font-normal leading-[1.45] text-black/70 sm:text-[15px]"
+          >
+            {description}
+          </p>
+        ) : null}
+        <div className="mt-4 flex items-center justify-between gap-3 border-t border-black/10 pt-4">
+          <h3 className="min-w-0 font-sans text-[15px] font-medium leading-snug tracking-[-0.01em] text-black sm:text-[16px]">
+            {sectionHeading}
+          </h3>
           {hasNarrationAudio ? (
-            <button
-              type="button"
-              className={walkthroughSidebarMuteButtonClass}
-              aria-label={narrationMuted ? "Unmute narration" : "Mute narration"}
-              aria-pressed={narrationMuted}
-              onClick={onToggleNarrationMute}
-            >
-              {narrationMuted ? (
-                <NarrationMutedIcon className="h-[22px] w-[22px]" />
-              ) : (
-                <NarrationSoundOnIcon className="h-[22px] w-[22px]" />
-              )}
-            </button>
+            <DemoNarrationMuteButton
+              muted={narrationMuted}
+              onToggle={onToggleNarrationMute}
+            />
           ) : null}
         </div>
       </div>
 
       <div
         ref={listRef}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-2 sm:px-3 sm:py-3"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain border-t border-black/10"
         role="list"
         aria-label="Walkthrough explanations"
       >
@@ -469,24 +469,24 @@ export function DemoWalkthroughSidebar({
               aria-current={active ? "step" : undefined}
               aria-label={captionSegmentLabel(caption, index, captions.length)}
               onClick={() => onSeekToCaption(index)}
-              className={`relative mb-0.5 flex w-full gap-3 rounded-md px-3 py-2.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black/80 ${
+              className={`relative block w-full border-b border-black/10 px-4 py-3.5 text-left outline-none transition-colors last:border-b-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-black/20 sm:px-5 sm:py-4 ${
                 active
-                  ? "bg-white/10 text-white"
-                  : "text-white/55 hover:bg-white/[0.04] hover:text-white/75"
+                  ? "bg-black/[0.04] text-black"
+                  : "text-black/60 hover:bg-black/[0.02] hover:text-black/75"
               }`}
             >
               {active ? (
                 <span
-                  className="absolute bottom-2 left-0 top-2 w-0.5 rounded-full bg-[rgb(232_124_62)]"
+                  className="absolute bottom-3 left-0 top-3 w-0.5 rounded-full bg-black sm:bottom-4 sm:top-4"
                   aria-hidden="true"
                 />
               ) : null}
-              <span className="w-[3.1rem] shrink-0 pt-0.5 font-sans text-[12px] font-medium tabular-nums leading-none text-white/45 sm:text-[13px]">
+              <span className="block font-sans text-[12px] font-medium tabular-nums leading-none text-black/45 sm:text-[13px]">
                 {formatDemoTime(caption.start)}
               </span>
               <span
-                className={`min-w-0 flex-1 font-sans text-[14px] leading-[1.45] sm:text-[15px] ${
-                  active ? "font-medium" : "font-normal"
+                className={`mt-2 block font-sans text-[14px] leading-[1.45] sm:text-[15px] ${
+                  active ? "font-semibold text-black" : "font-normal"
                 }`}
               >
                 {caption.text}

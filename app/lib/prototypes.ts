@@ -11,8 +11,11 @@ export type Prototype = {
   bgImage?: string;
   video: string;
   href: string;
+  /** Modal header title (e.g. “Clinical Timeline”). */
   demoTitle?: string;
-  /** Walkthrough: heading beside play, above captions/segments. */
+  /** Modal header subtitle (e.g. client name). */
+  demoSubtitle?: string;
+  /** Caption list section heading (e.g. “Jordan’s care journey”). */
   demoWalkthroughHeading?: string;
   demoDescription?: string;
   demoCaptions?: readonly DemoCaption[];
@@ -143,8 +146,9 @@ export const prototypes: readonly Prototype[] = [
     bgImage: "/images/vehr/bg.png",
     video: "/videos/vehr/prototype.mp4",
     href: "https://visual-ehr.vercel.app",
-    demoTitle: "Jordan’s care journey",
-    demoWalkthroughHeading: "Following Jordan’s health over time",
+    demoTitle: "Clinical Timeline",
+    demoSubtitle: "VEHR Technologies",
+    demoWalkthroughHeading: "Jordan’s care journey",
     demoDescription:
       "Jordan is a patient with type 2 diabetes and hypertension. After urgent care and an ER visit, his follow-up records show improving symptoms, blood pressure, and blood sugar.",
     demoCaptions: vehrDemoCaptions,
@@ -161,8 +165,9 @@ export const prototypes: readonly Prototype[] = [
     bgImage: "/images/vinyl/bg.png",
     video: "/videos/vinyl.mp4",
     href: "https://vinylhealth.vercel.app/",
-    demoTitle: "Sarah’s care journey",
-    demoWalkthroughHeading: "Understanding changes in Sarah’s health",
+    demoTitle: "AI-assisted patient overview",
+    demoSubtitle: "Vinyl Health",
+    demoWalkthroughHeading: "Sarah’s care journey",
     demoDescription:
       "Sarah Chen is a patient and high school teacher managing diabetes, back pain, and anxiety. Her blood sugar is improving, but new nausea, reduced sleep, and rising work stress are affecting her daily life.",
     demoCaptions: vinylDemoCaptions,
