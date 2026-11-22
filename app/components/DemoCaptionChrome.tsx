@@ -354,69 +354,66 @@ export function DemoShortcutHints({ showCaptions }: { showCaptions: boolean }) {
   );
 }
 
-const MOBILE_CAPTION_SCROLL_SETTLE_MS = 180;
+const mobileCaptionNavButtonClass =
+  "flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center self-center rounded-none text-black/50 outline-none transition-colors active:text-black/75 disabled:cursor-default disabled:text-black/20 [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE]";
 
-/** Horizontal swipeable caption strip for walkthrough modal on narrow viewports. */
+function CaptionNavChevronLeftIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
+function CaptionNavChevronRightIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  );
+}
+
+/** Active caption carousel for walkthrough modal on narrow viewports. */
 export function DemoWalkthroughMobileCaptions({
   journeyHeading,
   captions,
   activeCueIndex,
-  onSeekToCaption,
+  onSeekToAdjacentCaption,
 }: {
   journeyHeading?: string;
   captions: readonly DemoCaption[];
   activeCueIndex: number;
-  onSeekToCaption: (index: number) => void;
+  onSeekToAdjacentCaption: (delta: -1 | 1) => void;
 }) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const activeCardRef = useRef<HTMLButtonElement | null>(null);
-  const userInteractingRef = useRef(false);
-  const settleTimerRef = useRef<number | null>(null);
-
-  const scrollActiveIntoView = useCallback((behavior: ScrollBehavior = "smooth") => {
-    const card = activeCardRef.current;
-    const scroller = scrollerRef.current;
-    if (!card || !scroller) return;
-    const cardLeft = card.offsetLeft;
-    const cardRight = cardLeft + card.offsetWidth;
-    const viewLeft = scroller.scrollLeft;
-    const viewRight = viewLeft + scroller.clientWidth;
-    if (cardLeft < viewLeft || cardRight > viewRight) {
-      card.scrollIntoView({
-        behavior,
-        block: "nearest",
-        inline: "nearest",
-      });
-    }
-  }, []);
-
-  const markInteraction = useCallback(() => {
-    userInteractingRef.current = true;
-    if (settleTimerRef.current != null) {
-      window.clearTimeout(settleTimerRef.current);
-    }
-    settleTimerRef.current = window.setTimeout(() => {
-      userInteractingRef.current = false;
-      settleTimerRef.current = null;
-      scrollActiveIntoView();
-    }, MOBILE_CAPTION_SCROLL_SETTLE_MS);
-  }, [scrollActiveIntoView]);
-
-  useEffect(
-    () => () => {
-      if (settleTimerRef.current != null) {
-        window.clearTimeout(settleTimerRef.current);
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    if (userInteractingRef.current) return;
-    scrollActiveIntoView();
-  }, [activeCueIndex, scrollActiveIntoView]);
-
   const sectionHeading = journeyHeading ?? "Walkthrough";
+  const activeCaption = captions[activeCueIndex];
+  const atLastCaption = activeCueIndex >= captions.length - 1;
+
+  if (!activeCaption) return null;
+
+  const stepLabel = captionSegmentLabel(
+    activeCaption,
+    activeCueIndex,
+    captions.length,
+  );
 
   return (
     <div className="shrink-0 border-t border-black/10 bg-[#F4F2EE] md:hidden">
@@ -425,46 +422,38 @@ export function DemoWalkthroughMobileCaptions({
           {sectionHeading}
         </h3>
       </div>
-      <div
-        ref={scrollerRef}
-        role="list"
-        aria-label="Walkthrough explanations"
-        onScroll={markInteraction}
-        onTouchStart={markInteraction}
-        onTouchEnd={markInteraction}
-        onPointerDown={markInteraction}
-        className="flex gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth px-4 pb-4 pt-2.5 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {captions.map((caption, index) => {
-          const active = index === activeCueIndex;
-          return (
-            <button
-              key={`${caption.start}-${index}`}
-              ref={active ? activeCardRef : undefined}
-              type="button"
-              role="listitem"
-              aria-current={active ? "step" : undefined}
-              aria-label={captionSegmentLabel(caption, index, captions.length)}
-              onClick={() => onSeekToCaption(index)}
-              className={`snap-start shrink-0 w-[min(78vw,260px)] cursor-pointer rounded-[12px] border px-3.5 py-3 text-left outline-none transition-colors [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${
-                active
-                  ? "border-black/20 bg-black/[0.05] text-black"
-                  : "border-black/10 bg-white/60 text-black/65 active:bg-black/[0.03]"
-              }`}
-            >
-              <span className="block font-sans text-[11px] font-medium tabular-nums leading-none text-black/45">
-                {formatDemoTime(caption.start)}
-              </span>
-              <span
-                className={`mt-1.5 block font-sans text-[13px] leading-[1.4] ${
-                  active ? "font-semibold text-black" : "font-normal"
-                }`}
-              >
-                {caption.text}
-              </span>
-            </button>
-          );
-        })}
+      <div className="relative px-4 pb-4 pt-2.5">
+        <button
+          type="button"
+          className={`${mobileCaptionNavButtonClass} absolute left-1 top-1/2 z-10 -translate-y-1/2`}
+          aria-label="Previous explanation"
+          onClick={() => onSeekToAdjacentCaption(-1)}
+        >
+          <CaptionNavChevronLeftIcon />
+        </button>
+        <div
+          role="status"
+          aria-live="polite"
+          aria-current="step"
+          aria-label={stepLabel}
+          className="mx-auto w-[80%] min-w-0 bg-black/[0.05] px-3.5 py-3 text-left"
+        >
+          <span className="block font-sans text-[11px] font-medium tabular-nums leading-none text-black/45">
+            {formatDemoTime(activeCaption.start)}
+          </span>
+          <span className="mt-1.5 block font-sans text-[13px] font-semibold leading-[1.4] text-black">
+            {activeCaption.text}
+          </span>
+        </div>
+        <button
+          type="button"
+          className={`${mobileCaptionNavButtonClass} absolute right-1 top-1/2 z-10 -translate-y-1/2`}
+          aria-label="Next explanation"
+          disabled={atLastCaption}
+          onClick={() => onSeekToAdjacentCaption(1)}
+        >
+          <CaptionNavChevronRightIcon />
+        </button>
       </div>
     </div>
   );

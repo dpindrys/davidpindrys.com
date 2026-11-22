@@ -642,7 +642,7 @@ export default function DemoDialog({
               journeyHeading={demo.walkthroughHeading}
               captions={captions}
               activeCueIndex={activeCueIndex}
-              onSeekToCaption={seekToCaption}
+              onSeekToAdjacentCaption={seekToAdjacentCaption}
             />
           ) : null}
         </div>
