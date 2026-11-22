@@ -89,7 +89,7 @@ export function PrototypeCard({ item }: { item: Prototype }) {
             rel="noopener noreferrer"
             className={`inline-flex items-center gap-2 rounded-[8px] px-4 py-2.5 font-sans text-[14px] font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${PRIMARY_FILLED_INTERACTIVE}`}
           >
-            View prototype
+            Explore prototype
             <ExternalIcon />
             <span className="sr-only"> (opens in a new tab)</span>
           </a>

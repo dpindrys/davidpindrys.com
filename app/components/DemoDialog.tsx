@@ -69,6 +69,39 @@ const viewDemoPlayMarkFocusRingClass =
 const dialogCloseButtonClass =
   "absolute right-3 top-3 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md font-sans text-[26px] leading-none text-black/45 outline-none transition-colors hover:text-black/75 focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] sm:right-4 sm:top-4";
 
+/** Min horizontal gutter (overlay centering vs. card) before showing outside demo-switch chevrons. */
+const DEMO_SWITCH_CHEVRON_MIN_GUTTER_PX = 48;
+
+const demoSwitchChevronButtonClass =
+  "absolute top-1/2 z-[2] flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-[#F4F2EE]/92 text-black/65 shadow-sm outline-none transition-colors hover:bg-[#F4F2EE] hover:text-black/85 focus-visible:ring-2 focus-visible:ring-[#F4F2EE] focus-visible:ring-offset-2 focus-visible:ring-offset-black/80 [-webkit-tap-highlight-color:transparent]";
+
+function DemoSwitchChevronIcon({
+  direction,
+  className = "h-5 w-5",
+}: {
+  direction: "prev" | "next";
+  className?: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {direction === "prev" ? (
+        <path d="m14 6-6 6 6 6" />
+      ) : (
+        <path d="m10 6 6 6-6 6" />
+      )}
+    </svg>
+  );
+}
+
 export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="currentColor">
@@ -222,6 +255,7 @@ export default function DemoDialog({
   demoSwitchId?: WorkDemoSwitchId;
 }) {
   const titleId = useId();
+  const overlayRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const videoStageRef = useRef<HTMLDivElement>(null);
   const closeModalityRef = useRef<DemoCloseModality>("pointer");
@@ -229,6 +263,7 @@ export default function DemoDialog({
   const [videoTime, setVideoTime] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
   const [overlayActivityTick, setOverlayActivityTick] = useState(0);
+  const [demoSwitchSideGutterPx, setDemoSwitchSideGutterPx] = useState(0);
 
   const resetKey = demo ? `${demo.client}:${demo.video}` : null;
 
@@ -266,6 +301,19 @@ export default function DemoDialog({
     [onClose, openerRef, pauseSession],
   );
 
+  const switchToAdjacentDemo = useCallback(
+    (delta: -1 | 1) => {
+      if (!demoSwitchId || !workDemoSwitch || demo?.layout !== "walkthrough") return;
+      const nextId = workDemoSwitch.getAdjacentId(demoSwitchId, delta);
+      if (!nextId) return;
+      pauseSession();
+      closeModalityRef.current = "switch";
+      onClose("switch");
+      workDemoSwitch.openDemo(nextId);
+    },
+    [demo?.layout, demoSwitchId, onClose, pauseSession, workDemoSwitch],
+  );
+
   const closeFromPointer = useCallback(() => {
     requestClose("pointer");
   }, [requestClose]);
@@ -293,12 +341,7 @@ export default function DemoDialog({
       }
       const isHorizontal =
         event.key === "ArrowLeft" || event.key === "ArrowRight";
-      if (
-        isHorizontal &&
-        demoSwitchId &&
-        workDemoSwitch &&
-        demo.layout === "walkthrough"
-      ) {
+      if (isHorizontal && demo.layout === "walkthrough") {
         const target = event.target;
         if (
           !(
@@ -308,23 +351,23 @@ export default function DemoDialog({
           )
         ) {
           const delta = event.key === "ArrowLeft" ? -1 : 1;
-          const nextId = workDemoSwitch.getAdjacentId(demoSwitchId, delta);
-          if (nextId) {
-            event.preventDefault();
-            pauseSession();
-            closeModalityRef.current = "switch";
-            onClose("switch");
-            workDemoSwitch.openDemo(nextId);
-            return;
+          if (demoSwitchId && workDemoSwitch) {
+            const nextId = workDemoSwitch.getAdjacentId(demoSwitchId, delta);
+            if (nextId) {
+              event.preventDefault();
+              switchToAdjacentDemo(delta);
+              return;
+            }
           }
         }
       }
       if (event.key !== "Tab") return;
       const dialog = dialogRef.current;
-      if (!dialog) return;
+      const focusRoot = overlayRef.current ?? dialog;
+      if (!focusRoot || !dialog) return;
       const focusable = [
-        ...dialog.querySelectorAll<HTMLElement>(
-          "button, video, a[href], input[type='range']",
+        ...focusRoot.querySelectorAll<HTMLElement>(
+          "[data-demo-switch-chevron], button, video, a[href], input[type='range']",
         ),
       ].filter((el) => el.tabIndex !== -1);
       if (focusable.length === 0) {
@@ -335,10 +378,16 @@ export default function DemoDialog({
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       const active = document.activeElement;
-      if (event.shiftKey && (active === first || active === dialog || !dialog.contains(active))) {
+      if (
+        event.shiftKey &&
+        (active === first || active === dialog || !focusRoot.contains(active))
+      ) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && (active === last || active === dialog)) {
+      } else if (
+        !event.shiftKey &&
+        (active === last || active === dialog || active === focusRoot)
+      ) {
         event.preventDefault();
         first.focus();
       }
@@ -355,13 +404,51 @@ export default function DemoDialog({
         opener?.blur();
       }
     };
-  }, [demo, demoSwitchId, onClose, openerRef, pauseSession, requestClose, workDemoSwitch]);
+  }, [
+    demo,
+    demoSwitchId,
+    onClose,
+    openerRef,
+    pauseSession,
+    requestClose,
+    switchToAdjacentDemo,
+    workDemoSwitch,
+  ]);
 
   useEffect(() => {
     if (!demo) {
       setVideoTime(0);
       setVideoDuration(0);
+      setDemoSwitchSideGutterPx(0);
     }
+  }, [demo]);
+
+  useEffect(() => {
+    if (!demo || demo.layout !== "walkthrough") {
+      setDemoSwitchSideGutterPx(0);
+      return;
+    }
+    const dialog = dialogRef.current;
+    const overlay = overlayRef.current;
+    if (!dialog || !overlay) return;
+
+    const measure = () => {
+      const gutter =
+        (overlay.getBoundingClientRect().width -
+          dialog.getBoundingClientRect().width) /
+        2;
+      setDemoSwitchSideGutterPx(Number.isFinite(gutter) ? Math.max(0, gutter) : 0);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(dialog);
+    ro.observe(overlay);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
   }, [demo]);
 
   const mergedVideoHandlers = {
@@ -393,23 +480,176 @@ export default function DemoDialog({
   const modalAriaLabel = demo.subtitle
     ? `${modalTitle}, ${demo.subtitle}`
     : modalTitle;
-  const captionCount = captions?.length ?? 0;
-  const canGoPrev = hasCaptions && activeCueIndex > 0;
-  const canGoNext = hasCaptions && activeCueIndex < captionCount - 1;
-
   const describedBy =
     [hasCaptions ? captionsId : null, descriptionId].filter(Boolean).join(" ") || undefined;
 
+  const walkthroughShellMaxW = "max-w-[min(1180px,calc(100vw-1.5rem))]";
+
   const shellClass = isWalkthrough
-    ? "relative z-[1] flex max-h-[min(900px,calc(100dvh-1.5rem))] w-full max-w-[min(1180px,calc(100vw-1.5rem))] min-h-0 flex-col overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] outline-none focus:outline-none md:max-h-[min(860px,calc(100dvh-2rem))]"
+    ? "relative flex max-h-[min(900px,calc(100dvh-1.5rem))] w-full min-h-0 flex-col overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] outline-none focus:outline-none md:max-h-[min(860px,calc(100dvh-2rem))]"
     : "relative z-[1] flex h-dvh max-h-dvh w-full flex-col overflow-hidden bg-black/80 outline-none focus:outline-none";
+
+  const canCycleWorkDemos =
+    isWalkthrough &&
+    demoSwitchId &&
+    workDemoSwitch &&
+    workDemoSwitch.getAdjacentId(demoSwitchId, 1) != null;
+
+  const showDemoSwitchChevrons =
+    canCycleWorkDemos &&
+    demoSwitchSideGutterPx >= DEMO_SWITCH_CHEVRON_MIN_GUTTER_PX;
 
   const closeClass = isWalkthrough
     ? dialogCloseButtonClass
     : "absolute right-3 top-3 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md font-sans text-[26px] leading-none text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black/80 sm:right-4 sm:top-4";
 
+  const demoSwitchChevrons = showDemoSwitchChevrons ? (
+    <>
+      <button
+        type="button"
+        data-demo-switch-chevron=""
+        className={`${demoSwitchChevronButtonClass} right-full mr-2`}
+        aria-label="Previous demo"
+        onClick={() => switchToAdjacentDemo(-1)}
+      >
+        <DemoSwitchChevronIcon direction="prev" />
+      </button>
+      <button
+        type="button"
+        data-demo-switch-chevron=""
+        className={`${demoSwitchChevronButtonClass} left-full ml-2`}
+        aria-label="Next demo"
+        onClick={() => switchToAdjacentDemo(1)}
+      >
+        <DemoSwitchChevronIcon direction="next" />
+      </button>
+    </>
+  ) : null;
+
+  const dialogPanel = (
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={modalAriaLabel}
+      aria-describedby={describedBy}
+      tabIndex={-1}
+      className={shellClass}
+    >
+      <button
+        type="button"
+        onClick={closeFromPointer}
+        aria-label="Close"
+        className={closeClass}
+      >
+        <span aria-hidden>×</span>
+      </button>
+
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+        <div
+          ref={videoStageRef}
+          className={
+            isWalkthrough
+              ? "relative flex min-h-[min(48vw,320px)] min-w-0 flex-1 flex-col md:min-h-0"
+              : "relative flex min-h-0 flex-1 items-center justify-center"
+          }
+          onPointerMove={bumpOverlayActivity}
+          onTouchStart={bumpOverlayActivity}
+        >
+          {isWalkthrough && demo.bgImage ? (
+            <div
+              className="pointer-events-none absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${demo.bgImage})` }}
+              aria-hidden
+            />
+          ) : null}
+          <div
+            className={
+              isWalkthrough
+                ? "relative flex min-h-0 flex-1 items-center justify-center p-4 sm:p-5 md:p-6"
+                : "contents"
+            }
+          >
+            <video
+              ref={videoRef}
+              src={demo.video}
+              controls={false}
+              playsInline
+              preload="metadata"
+              className="max-h-full max-w-full object-contain"
+              aria-label={`Guided demo for ${demo.client}`}
+              onClick={() => {
+                bumpOverlayActivity();
+              }}
+              {...mergedVideoHandlers}
+            />
+            <DemoVideoOverlayControls
+              client={demo.client}
+              playing={playing}
+              onTogglePlayback={togglePlayback}
+              currentTime={videoTime}
+              duration={videoDuration}
+              onSeekToTime={seekToTime}
+              activityTick={overlayActivityTick}
+            />
+          </div>
+        </div>
+
+        {isWalkthrough ? (
+          <aside className="flex max-h-[min(52vh,480px)] w-full shrink-0 flex-col border-t border-black/10 md:max-h-none md:w-[min(100%,340px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
+            {hasCaptions && captions ? (
+              <DemoWalkthroughSidebar
+                title={modalTitle}
+                subtitle={demo.subtitle}
+                journeyHeading={demo.walkthroughHeading}
+                description={demo.description}
+                titleId={titleId}
+                descriptionId={descriptionId}
+                captions={captions}
+                captionsId={captionsId}
+                activeCueIndex={activeCueIndex}
+                onSeekToCaption={seekToCaption}
+                hasNarrationAudio={hasNarrationAudio}
+                narrationMuted={narrationMuted}
+                onToggleNarrationMute={toggleNarrationMute}
+              />
+            ) : (
+              <section
+                className="flex min-h-0 flex-1 flex-col overflow-hidden"
+                aria-labelledby={titleId}
+              >
+                <div className="shrink-0 px-4 py-4 pr-12 sm:px-5 sm:py-5 sm:pr-14">
+                  <h2
+                    id={titleId}
+                    className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-black sm:text-[18px]"
+                  >
+                    {modalTitle}
+                  </h2>
+                  {demo.subtitle ? (
+                    <p className="mt-1 font-sans text-[14px] font-normal leading-snug text-black/55 sm:text-[15px]">
+                      {demo.subtitle}
+                    </p>
+                  ) : null}
+                  {demo.description ? (
+                    <p
+                      id={descriptionId}
+                      className="mt-3 font-sans text-[14px] font-normal leading-[1.45] text-black/70 sm:text-[15px]"
+                    >
+                      {demo.description}
+                    </p>
+                  ) : null}
+                </div>
+              </section>
+            )}
+          </aside>
+        ) : null}
+      </div>
+    </div>
+  );
+
   return createPortal(
     <div
+      ref={isWalkthrough ? overlayRef : undefined}
       className={
         isWalkthrough
           ? "fixed inset-0 z-[140] flex items-center justify-center overflow-hidden p-3 sm:p-4 md:p-6"
@@ -421,129 +661,16 @@ export default function DemoDialog({
         onClick={closeFromPointer}
         aria-hidden="true"
       />
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={modalAriaLabel}
-        aria-describedby={describedBy}
-        tabIndex={-1}
-        className={shellClass}
-      >
-        <button
-          type="button"
-          onClick={closeFromPointer}
-          aria-label="Close"
-          className={closeClass}
+      {isWalkthrough ? (
+        <div
+          className={`relative z-[1] w-full min-w-0 ${walkthroughShellMaxW}`}
         >
-          <span aria-hidden>×</span>
-        </button>
-
-        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-          <div
-            ref={videoStageRef}
-            className={
-              isWalkthrough
-                ? "relative flex min-h-[min(48vw,320px)] min-w-0 flex-1 flex-col md:min-h-0"
-                : "relative flex min-h-0 flex-1 items-center justify-center"
-            }
-            onPointerMove={bumpOverlayActivity}
-            onTouchStart={bumpOverlayActivity}
-          >
-            {isWalkthrough && demo.bgImage ? (
-              <div
-                className="pointer-events-none absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${demo.bgImage})` }}
-                aria-hidden
-              />
-            ) : null}
-            <div
-              className={
-                isWalkthrough
-                  ? "relative flex min-h-0 flex-1 items-center justify-center p-4 sm:p-5 md:p-6"
-                  : "contents"
-              }
-            >
-              <video
-                ref={videoRef}
-                src={demo.video}
-                controls={false}
-                playsInline
-                preload="metadata"
-                className="max-h-full max-w-full object-contain"
-                aria-label={`Guided demo for ${demo.client}`}
-                onClick={() => {
-                  bumpOverlayActivity();
-                }}
-                {...mergedVideoHandlers}
-              />
-              <DemoVideoOverlayControls
-                client={demo.client}
-                playing={playing}
-                onTogglePlayback={togglePlayback}
-                currentTime={videoTime}
-                duration={videoDuration}
-                onSeekToTime={seekToTime}
-                onPrevExplanation={() => seekToAdjacentCaption(-1)}
-                onNextExplanation={() => seekToAdjacentCaption(1)}
-                hasCaptions={hasCaptions}
-                canGoPrev={canGoPrev}
-                canGoNext={canGoNext}
-                activityTick={overlayActivityTick}
-              />
-            </div>
-          </div>
-
-          {isWalkthrough ? (
-            <aside className="flex max-h-[min(52vh,480px)] w-full shrink-0 flex-col border-t border-black/10 md:max-h-none md:w-[min(100%,340px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
-              {hasCaptions && captions ? (
-                <DemoWalkthroughSidebar
-                  title={modalTitle}
-                  subtitle={demo.subtitle}
-                  journeyHeading={demo.walkthroughHeading}
-                  description={demo.description}
-                  titleId={titleId}
-                  descriptionId={descriptionId}
-                  captions={captions}
-                  captionsId={captionsId}
-                  activeCueIndex={activeCueIndex}
-                  onSeekToCaption={seekToCaption}
-                  hasNarrationAudio={hasNarrationAudio}
-                  narrationMuted={narrationMuted}
-                  onToggleNarrationMute={toggleNarrationMute}
-                />
-              ) : (
-                <section
-                  className="flex min-h-0 flex-1 flex-col overflow-hidden"
-                  aria-labelledby={titleId}
-                >
-                  <div className="shrink-0 px-4 py-4 pr-12 sm:px-5 sm:py-5 sm:pr-14">
-                    <h2
-                      id={titleId}
-                      className="font-sans text-[17px] font-semibold leading-snug tracking-[-0.02em] text-black sm:text-[18px]"
-                    >
-                      {modalTitle}
-                    </h2>
-                    {demo.subtitle ? (
-                      <p className="mt-1 font-sans text-[14px] font-normal leading-snug text-black/55 sm:text-[15px]">
-                        {demo.subtitle}
-                      </p>
-                    ) : null}
-                    {demo.description ? (
-                      <p
-                        id={descriptionId}
-                        className="mt-3 font-sans text-[14px] font-normal leading-[1.45] text-black/70 sm:text-[15px]"
-                      >
-                        {demo.description}
-                      </p>
-                    ) : null}
-                  </div>
-                </section>
-              )}
-            </aside>
-          ) : null}
+          {demoSwitchChevrons}
+          {dialogPanel}
         </div>
-      </div>
+      ) : (
+        dialogPanel
+      )}
     </div>,
     document.body,
   );

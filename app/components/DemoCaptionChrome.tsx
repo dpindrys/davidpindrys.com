@@ -15,9 +15,6 @@ import {
 } from "../lib/demoNarration";
 import { compactPlayControlSizeClass } from "../lib/pageStyles";
 
-const overlayIconButtonClass =
-  "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]";
-
 const overlayPlayButtonClass = `flex ${compactPlayControlSizeClass} shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white outline-none transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]`;
 
 const OVERLAY_IDLE_MS = 2800;
@@ -354,22 +351,6 @@ export function DemoShortcutHints({ showCaptions }: { showCaptions: boolean }) {
   );
 }
 
-function OverlaySkipBackIcon({ className = "h-5 w-5" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="currentColor">
-      <path d="M10.5 5.25 6 9v12h2.25V11.09l4.5 2.94V5.25Zm7.5 0v5.78l-4.5-2.94V21h2.25V5.25Z" />
-    </svg>
-  );
-}
-
-function OverlaySkipForwardIcon({ className = "h-5 w-5" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="currentColor">
-      <path d="M6 5.25v5.78l4.5-2.94V21H8.25V9.16L3.75 6.22V5.25H6Zm10.5 0V21H18v-8.84l4.5-2.94V5.25h-2.25Z" />
-    </svg>
-  );
-}
-
 export function DemoWalkthroughSidebar({
   title,
   subtitle,
@@ -509,11 +490,6 @@ export function DemoVideoOverlayControls({
   currentTime,
   duration,
   onSeekToTime,
-  onPrevExplanation,
-  onNextExplanation,
-  hasCaptions,
-  canGoPrev,
-  canGoNext,
   activityTick,
 }: {
   client: string;
@@ -522,11 +498,6 @@ export function DemoVideoOverlayControls({
   currentTime: number;
   duration: number;
   onSeekToTime: (time: number) => void;
-  onPrevExplanation: () => void;
-  onNextExplanation: () => void;
-  hasCaptions: boolean;
-  canGoPrev: boolean;
-  canGoNext: boolean;
   /** Bumped by the video stage on pointer / touch activity to reveal the overlay. */
   activityTick: number;
 }) {
@@ -634,16 +605,7 @@ export function DemoVideoOverlayControls({
           {formatDemoTime(duration)}
         </span>
 
-        <div className="flex min-w-0 flex-1 items-center justify-center gap-1 sm:gap-2">
-          <button
-            type="button"
-            className={overlayIconButtonClass}
-            aria-label="Previous explanation"
-            disabled={!hasCaptions || !canGoPrev}
-            onClick={onPrevExplanation}
-          >
-            <OverlaySkipBackIcon className={!hasCaptions || !canGoPrev ? "opacity-35" : undefined} />
-          </button>
+        <div className="flex min-w-0 flex-1 items-center justify-center">
           <button
             type="button"
             className={overlayPlayButtonClass}
@@ -651,17 +613,6 @@ export function DemoVideoOverlayControls({
             onClick={onTogglePlayback}
           >
             {playing ? <FooterPauseIcon className="h-[38%] w-[38%]" /> : <FooterPlayIcon />}
-          </button>
-          <button
-            type="button"
-            className={overlayIconButtonClass}
-            aria-label="Next explanation"
-            disabled={!hasCaptions || !canGoNext}
-            onClick={onNextExplanation}
-          >
-            <OverlaySkipForwardIcon
-              className={!hasCaptions || !canGoNext ? "opacity-35" : undefined}
-            />
           </button>
         </div>
 
