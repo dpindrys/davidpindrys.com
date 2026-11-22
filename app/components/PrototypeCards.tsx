@@ -6,6 +6,7 @@ import { type Prototype } from "../lib/prototypes";
 import { bodyClass, companyNameClass } from "../lib/pageStyles";
 import { PRIMARY_FILLED_INTERACTIVE } from "./buttonTokens";
 import { DemoPlayOverlay } from "./DemoDialog";
+import type { WorkDemoSwitchId } from "./WorkDemoSwitchContext";
 
 function ExternalIcon() {
   return (
@@ -76,6 +77,7 @@ export function PrototypeCard({ item }: { item: Prototype }) {
           bgImage={item.bgImage}
           captions={item.demoCaptions}
           layout="walkthrough"
+          demoSwitchId={item.id as WorkDemoSwitchId}
         />
       </div>
       <div className="mt-5 flex w-full flex-1 flex-col gap-5">

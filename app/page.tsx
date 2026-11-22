@@ -4,6 +4,7 @@ import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
+import { WorkDemoSwitchProvider } from "./components/WorkDemoSwitchContext";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
@@ -83,6 +84,7 @@ type WorkCard = {
   demoWalkthroughHeading?: string;
   demoDescription?: string;
   demoCaptions?: readonly DemoCaption[];
+  bgImage?: string;
   media: ReactNode;
 };
 
@@ -95,6 +97,7 @@ const workCards: readonly WorkCard[] = [
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
     caseStudyHref: "/case-studies/frx",
     demoVideo: "/images/frx/fresenius.mp4",
+    bgImage: "/images/frx/bg.png",
     demoTitle: "Jane’s refill journey",
     demoWalkthroughHeading: "Managing Jane’s medication refills",
     demoDescription:
@@ -150,10 +153,13 @@ function ProjectHero({ project }: { project: WorkCard }) {
               client={project.client}
               video={project.demoVideo}
               title={project.demoTitle}
+              subtitle={project.client}
               walkthroughHeading={project.demoWalkthroughHeading}
               description={project.demoDescription}
+              bgImage={project.bgImage}
               captions={project.demoCaptions}
               layout="walkthrough"
+              demoSwitchId="frx"
             />
           ) : null}
           <HeroVideoToggle className={heroToggleClass} />
@@ -245,11 +251,13 @@ export default function Home() {
               Selected work
             </h2>
             <div className="mt-6 flex flex-col gap-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <PrototypeCard item={vehrPrototype} />
-                <CaseStudyArticle project={frxCaseStudy} />
-                {/* <PrototypeCard item={vinylPrototype} /> */}
-              </div>
+              <WorkDemoSwitchProvider>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <PrototypeCard item={vehrPrototype} />
+                  <CaseStudyArticle project={frxCaseStudy} />
+                  {/* <PrototypeCard item={vinylPrototype} /> */}
+                </div>
+              </WorkDemoSwitchProvider>
               <CaseStudyArticle project={dellCaseStudy} wide />
             </div>
           </div>

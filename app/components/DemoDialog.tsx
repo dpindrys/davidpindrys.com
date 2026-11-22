@@ -15,6 +15,10 @@ import {
   DemoWalkthroughSidebar,
 } from "./DemoCaptionChrome";
 import { useNarratedDemoPlayback } from "../hooks/useNarratedDemoPlayback";
+import {
+  useWorkDemoSwitch,
+  type WorkDemoSwitchId,
+} from "./WorkDemoSwitchContext";
 
 export type DemoCaption = {
   /** Inclusive start time in seconds. */
@@ -73,6 +77,8 @@ export function PlayIcon({ className = "ml-[6%] h-[38%] w-[38%] shrink-0" }: { c
   );
 }
 
+type DemoCloseModality = "keyboard" | "pointer" | "switch";
+
 /** Play control + dialog; place inside a `relative` media container. */
 export function DemoPlayOverlay({
   client,
@@ -84,6 +90,7 @@ export function DemoPlayOverlay({
   bgImage,
   captions,
   layout,
+  demoSwitchId,
 }: {
   client: string;
   video: string;
@@ -94,6 +101,8 @@ export function DemoPlayOverlay({
   bgImage?: string;
   captions?: readonly DemoCaption[];
   layout?: DemoDialogLayout;
+  /** When set, Left/Right arrows cycle work-grid demos (homepage). */
+  demoSwitchId?: WorkDemoSwitchId;
 }) {
   const [open, setOpen] = useState(false);
   const [forceHidden, setForceHidden] = useState(false);
@@ -103,6 +112,24 @@ export function DemoPlayOverlay({
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const openRef = useRef(false);
   openRef.current = open;
+  const workDemoSwitch = useWorkDemoSwitch();
+
+  const openFromSwitch = useCallback(() => {
+    const opener = openerRef.current;
+    setForceHidden(true);
+    setFocusVisible(false);
+    opener?.blur();
+    setOpen(true);
+  }, []);
+
+  useEffect(() => {
+    if (!demoSwitchId || !workDemoSwitch) return;
+    return workDemoSwitch.register({
+      id: demoSwitchId,
+      isOpen: () => openRef.current,
+      openFromSwitch,
+    });
+  }, [demoSwitchId, openFromSwitch, workDemoSwitch]);
 
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover)");
@@ -112,7 +139,7 @@ export function DemoPlayOverlay({
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  const close = useCallback((_modality: "keyboard" | "pointer" = "pointer") => {
+  const close = useCallback((_modality?: DemoCloseModality) => {
     setOpen(false);
   }, []);
 
@@ -177,6 +204,7 @@ export function DemoPlayOverlay({
         }
         onClose={close}
         openerRef={openerRef}
+        demoSwitchId={demoSwitchId}
       />
     </>
   );
@@ -186,15 +214,18 @@ export default function DemoDialog({
   demo,
   onClose,
   openerRef,
+  demoSwitchId,
 }: {
   demo: DemoDialogContent | null;
-  onClose: (modality?: "keyboard" | "pointer") => void;
+  onClose: (modality?: DemoCloseModality) => void;
   openerRef: RefObject<HTMLButtonElement | null>;
+  demoSwitchId?: WorkDemoSwitchId;
 }) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const videoStageRef = useRef<HTMLDivElement>(null);
-  const closeModalityRef = useRef<"keyboard" | "pointer">("pointer");
+  const closeModalityRef = useRef<DemoCloseModality>("pointer");
+  const workDemoSwitch = useWorkDemoSwitch();
   const [videoTime, setVideoTime] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
   const [overlayActivityTick, setOverlayActivityTick] = useState(0);
@@ -224,7 +255,7 @@ export default function DemoDialog({
   });
 
   const requestClose = useCallback(
-    (modality: "keyboard" | "pointer") => {
+    (modality: DemoCloseModality) => {
       pauseSession();
       closeModalityRef.current = modality;
       if (modality === "pointer") {
@@ -260,6 +291,34 @@ export default function DemoDialog({
         requestClose("keyboard");
         return;
       }
+      const isHorizontal =
+        event.key === "ArrowLeft" || event.key === "ArrowRight";
+      if (
+        isHorizontal &&
+        demoSwitchId &&
+        workDemoSwitch &&
+        demo.layout === "walkthrough"
+      ) {
+        const target = event.target;
+        if (
+          !(
+            target instanceof HTMLElement &&
+            (target.isContentEditable ||
+              target.closest("input, textarea, select, [contenteditable='true']"))
+          )
+        ) {
+          const delta = event.key === "ArrowLeft" ? -1 : 1;
+          const nextId = workDemoSwitch.getAdjacentId(demoSwitchId, delta);
+          if (nextId) {
+            event.preventDefault();
+            pauseSession();
+            closeModalityRef.current = "switch";
+            onClose("switch");
+            workDemoSwitch.openDemo(nextId);
+            return;
+          }
+        }
+      }
       if (event.key !== "Tab") return;
       const dialog = dialogRef.current;
       if (!dialog) return;
@@ -292,11 +351,11 @@ export default function DemoDialog({
       document.body.style.overflow = previousOverflow;
       if (closeModalityRef.current === "keyboard") {
         opener?.focus({ preventScroll: true });
-      } else {
+      } else if (closeModalityRef.current !== "switch") {
         opener?.blur();
       }
     };
-  }, [demo, openerRef, requestClose]);
+  }, [demo, demoSwitchId, onClose, openerRef, pauseSession, requestClose, workDemoSwitch]);
 
   useEffect(() => {
     if (!demo) {

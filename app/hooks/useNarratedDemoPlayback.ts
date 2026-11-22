@@ -909,7 +909,8 @@ export function useNarratedDemoPlayback({
 
     const onKeyDown = (event: KeyboardEvent) => {
       const isSpace = event.key === " " || event.key === "Spacebar";
-      const isArrow = event.key === "ArrowLeft" || event.key === "ArrowRight";
+      const isArrow =
+        event.key === "ArrowUp" || event.key === "ArrowDown";
       if (!isSpace && !isArrow) return;
       if (isArrow && !captions?.length) return;
 
@@ -929,24 +930,10 @@ export function useNarratedDemoPlayback({
         return;
       }
 
-      const video = videoRef.current;
-      if (!video || !captions?.length) return;
-
-      const duration = Number.isFinite(video.duration) ? video.duration : Number.NaN;
-      let current = activeCueRef.current;
-      if (current < 0) {
-        current = captionCueIndexAt(
-          video.currentTime,
-          captions,
-          playbackEndedRef.current,
-          duration,
-        );
-      }
-
-      if (event.key === "ArrowLeft") {
-        seekToCaption(current <= 0 ? 0 : current - 1);
-      } else if (current < captions.length - 1) {
-        seekToCaption(current + 1);
+      if (event.key === "ArrowUp") {
+        seekToAdjacentCaption(-1);
+      } else {
+        seekToAdjacentCaption(1);
       }
     };
 
@@ -958,7 +945,7 @@ export function useNarratedDemoPlayback({
     keyboardEnabled,
     keyboardRequiresPlaybackStarted,
     playbackStarted,
-    seekToCaption,
+    seekToAdjacentCaption,
     togglePlayback,
   ]);
 
