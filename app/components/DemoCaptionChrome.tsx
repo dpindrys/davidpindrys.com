@@ -17,6 +17,9 @@ import { compactPlayControlSizeClass } from "../lib/pageStyles";
 
 const overlayPlayButtonClass = `flex ${compactPlayControlSizeClass} shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white outline-none transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]`;
 
+const overlayPlayButtonMobileCenterClass =
+  "flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center rounded-full bg-black/55 text-white shadow-sm outline-none transition-colors active:bg-black/65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]";
+
 const OVERLAY_IDLE_MS = 2800;
 
 /** Tactile shortcut keys in the cream caption chrome (pure CSS, non-interactive). */
@@ -351,6 +354,122 @@ export function DemoShortcutHints({ showCaptions }: { showCaptions: boolean }) {
   );
 }
 
+const MOBILE_CAPTION_SCROLL_SETTLE_MS = 180;
+
+/** Horizontal swipeable caption strip for walkthrough modal on narrow viewports. */
+export function DemoWalkthroughMobileCaptions({
+  journeyHeading,
+  captions,
+  activeCueIndex,
+  onSeekToCaption,
+}: {
+  journeyHeading?: string;
+  captions: readonly DemoCaption[];
+  activeCueIndex: number;
+  onSeekToCaption: (index: number) => void;
+}) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const activeCardRef = useRef<HTMLButtonElement | null>(null);
+  const userInteractingRef = useRef(false);
+  const settleTimerRef = useRef<number | null>(null);
+
+  const scrollActiveIntoView = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const card = activeCardRef.current;
+    const scroller = scrollerRef.current;
+    if (!card || !scroller) return;
+    const cardLeft = card.offsetLeft;
+    const cardRight = cardLeft + card.offsetWidth;
+    const viewLeft = scroller.scrollLeft;
+    const viewRight = viewLeft + scroller.clientWidth;
+    if (cardLeft < viewLeft || cardRight > viewRight) {
+      card.scrollIntoView({
+        behavior,
+        block: "nearest",
+        inline: "nearest",
+      });
+    }
+  }, []);
+
+  const markInteraction = useCallback(() => {
+    userInteractingRef.current = true;
+    if (settleTimerRef.current != null) {
+      window.clearTimeout(settleTimerRef.current);
+    }
+    settleTimerRef.current = window.setTimeout(() => {
+      userInteractingRef.current = false;
+      settleTimerRef.current = null;
+      scrollActiveIntoView();
+    }, MOBILE_CAPTION_SCROLL_SETTLE_MS);
+  }, [scrollActiveIntoView]);
+
+  useEffect(
+    () => () => {
+      if (settleTimerRef.current != null) {
+        window.clearTimeout(settleTimerRef.current);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (userInteractingRef.current) return;
+    scrollActiveIntoView();
+  }, [activeCueIndex, scrollActiveIntoView]);
+
+  const sectionHeading = journeyHeading ?? "Walkthrough";
+
+  return (
+    <div className="shrink-0 border-t border-black/10 bg-[#F4F2EE] md:hidden">
+      <div className="px-4 pt-3">
+        <h3 className="font-sans text-[14px] font-medium leading-snug tracking-[-0.01em] text-black/80">
+          {sectionHeading}
+        </h3>
+      </div>
+      <div
+        ref={scrollerRef}
+        role="list"
+        aria-label="Walkthrough explanations"
+        onScroll={markInteraction}
+        onTouchStart={markInteraction}
+        onTouchEnd={markInteraction}
+        onPointerDown={markInteraction}
+        className="flex gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth px-4 pb-4 pt-2.5 snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {captions.map((caption, index) => {
+          const active = index === activeCueIndex;
+          return (
+            <button
+              key={`${caption.start}-${index}`}
+              ref={active ? activeCardRef : undefined}
+              type="button"
+              role="listitem"
+              aria-current={active ? "step" : undefined}
+              aria-label={captionSegmentLabel(caption, index, captions.length)}
+              onClick={() => onSeekToCaption(index)}
+              className={`snap-start shrink-0 w-[min(78vw,260px)] cursor-pointer rounded-[12px] border px-3.5 py-3 text-left outline-none transition-colors [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${
+                active
+                  ? "border-black/20 bg-black/[0.05] text-black"
+                  : "border-black/10 bg-white/60 text-black/65 active:bg-black/[0.03]"
+              }`}
+            >
+              <span className="block font-sans text-[11px] font-medium tabular-nums leading-none text-black/45">
+                {formatDemoTime(caption.start)}
+              </span>
+              <span
+                className={`mt-1.5 block font-sans text-[13px] leading-[1.4] ${
+                  active ? "font-semibold text-black" : "font-normal"
+                }`}
+              >
+                {caption.text}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function DemoWalkthroughSidebar({
   title,
   subtitle,
@@ -359,7 +478,6 @@ export function DemoWalkthroughSidebar({
   titleId,
   descriptionId,
   captions,
-  captionsId,
   activeCueIndex,
   onSeekToCaption,
   hasNarrationAudio,
@@ -373,7 +491,6 @@ export function DemoWalkthroughSidebar({
   titleId: string;
   descriptionId?: string;
   captions: readonly DemoCaption[];
-  captionsId: string;
   activeCueIndex: number;
   onSeekToCaption: (index: number) => void;
   hasNarrationAudio: boolean;
@@ -475,9 +592,6 @@ export function DemoWalkthroughSidebar({
             </button>
           );
         })}
-        <p id={captionsId} className="sr-only" aria-live="polite">
-          {captions[activeCueIndex]?.text ?? ""}
-        </p>
       </div>
     </section>
   );
@@ -562,61 +676,86 @@ export function DemoVideoOverlayControls({
   const scrubMax = duration > 0 ? duration : 0;
   const scrubValue = Math.min(Math.max(0, currentTime), scrubMax || 0);
 
+  const playPauseLabel = playing
+    ? `Pause demo for ${client}`
+    : `Play demo for ${client}`;
+
   return (
     <div
       ref={overlayRef}
       onFocusCapture={onOverlayFocusIn}
       onBlurCapture={onOverlayFocusOut}
       inert={visible ? undefined : true}
-      className={`pointer-events-auto absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-3 pb-3 pt-10 transition-opacity duration-300 ease-out motion-reduce:transition-none sm:px-4 sm:pb-4 ${
-        visible ? "opacity-100" : "pointer-events-none opacity-0"
+      className={`pointer-events-none absolute inset-0 transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+        visible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <label htmlFor={scrubberId} className="sr-only">
-        Scrub through demo video
-      </label>
-      <input
-        id={scrubberId}
-        type="range"
-        min={0}
-        max={scrubMax || 1}
-        step={0.05}
-        value={scrubValue}
-        disabled={scrubMax <= 0}
-        onPointerDown={() => {
-          setScrubbing(true);
-          setVisible(true);
-          clearIdleTimer();
-        }}
-        onPointerUp={() => {
-          setScrubbing(false);
-          if (playing) scheduleHide();
-        }}
-        onChange={(event) => {
-          onSeekToTime(Number(event.target.value));
-        }}
-        className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/25 accent-white disabled:opacity-40 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
-      />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center md:hidden">
+        <button
+          type="button"
+          className={`pointer-events-auto ${overlayPlayButtonMobileCenterClass} ${
+            visible ? "" : "pointer-events-none"
+          }`}
+          aria-label={playPauseLabel}
+          onClick={onTogglePlayback}
+        >
+          {playing ? (
+            <FooterPauseIcon className="h-9 w-9" />
+          ) : (
+            <FooterPlayIcon className="ml-1 h-9 w-9" />
+          )}
+        </button>
+      </div>
 
-      <div className="mt-2.5 flex items-center gap-2 sm:mt-3">
-        <span className="shrink-0 font-sans text-[12px] font-medium tabular-nums leading-none text-white/70 sm:text-[13px]">
-          {formatDemoTime(currentTime)}
-          <span className="text-white/40"> / </span>
-          {formatDemoTime(duration)}
-        </span>
+      <div
+        className={`pointer-events-auto absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-3 pb-3 pt-10 sm:px-4 sm:pb-4 ${
+          visible ? "" : "pointer-events-none"
+        }`}
+      >
+        <label htmlFor={scrubberId} className="sr-only">
+          Scrub through demo video
+        </label>
+        <input
+          id={scrubberId}
+          type="range"
+          min={0}
+          max={scrubMax || 1}
+          step={0.05}
+          value={scrubValue}
+          disabled={scrubMax <= 0}
+          onPointerDown={() => {
+            setScrubbing(true);
+            setVisible(true);
+            clearIdleTimer();
+          }}
+          onPointerUp={() => {
+            setScrubbing(false);
+            if (playing) scheduleHide();
+          }}
+          onChange={(event) => {
+            onSeekToTime(Number(event.target.value));
+          }}
+          className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/25 accent-white disabled:opacity-40 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
+        />
 
-        <div className="flex min-w-0 flex-1 items-center justify-center">
+        <div className="mt-2.5 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-3">
+          <span className="justify-self-start font-sans text-[12px] font-medium tabular-nums leading-none text-white/70 sm:text-[13px]">
+            {formatDemoTime(currentTime)}
+            <span className="text-white/40"> / </span>
+            {formatDemoTime(duration)}
+          </span>
+
           <button
             type="button"
-            className={overlayPlayButtonClass}
-            aria-label={playing ? `Pause demo for ${client}` : `Play demo for ${client}`}
+            className={`${overlayPlayButtonClass} hidden justify-self-center md:flex`}
+            aria-label={playPauseLabel}
             onClick={onTogglePlayback}
           >
             {playing ? <FooterPauseIcon className="h-[38%] w-[38%]" /> : <FooterPlayIcon />}
           </button>
-        </div>
 
-        <span className="hidden w-[4.5rem] shrink-0 sm:block" aria-hidden="true" />
+          <span className="hidden justify-self-end md:block" aria-hidden="true" />
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,9 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import {
+  DemoNarrationMuteButton,
   DemoVideoOverlayControls,
+  DemoWalkthroughMobileCaptions,
   DemoWalkthroughSidebar,
 } from "./DemoCaptionChrome";
 import { useNarratedDemoPlayback } from "../hooks/useNarratedDemoPlayback";
@@ -483,10 +485,8 @@ export default function DemoDialog({
   const describedBy =
     [hasCaptions ? captionsId : null, descriptionId].filter(Boolean).join(" ") || undefined;
 
-  const walkthroughShellMaxW = "max-w-[min(1180px,calc(100vw-1.5rem))]";
-
   const shellClass = isWalkthrough
-    ? "relative flex max-h-[min(900px,calc(100dvh-1.5rem))] w-full min-h-0 flex-col overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] outline-none focus:outline-none md:max-h-[min(860px,calc(100dvh-2rem))]"
+    ? "relative flex h-dvh max-h-dvh w-full min-h-0 flex-col overflow-hidden rounded-none bg-[#F4F2EE] outline-none focus:outline-none md:max-h-[min(860px,calc(100dvh-2rem))] md:rounded-[16px] md:border md:border-black/15"
     : "relative z-[1] flex h-dvh max-h-dvh w-full flex-col overflow-hidden bg-black/80 outline-none focus:outline-none";
 
   const canCycleWorkDemos =
@@ -545,58 +545,110 @@ export default function DemoDialog({
         <span aria-hidden>×</span>
       </button>
 
+      {hasCaptions && captions ? (
+        <p id={captionsId} className="sr-only" aria-live="polite">
+          {captions[activeCueIndex]?.text ?? ""}
+        </p>
+      ) : null}
+
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         <div
-          ref={videoStageRef}
           className={
             isWalkthrough
-              ? "relative flex min-h-[min(48vw,320px)] min-w-0 flex-1 flex-col md:min-h-0"
-              : "relative flex min-h-0 flex-1 items-center justify-center"
+              ? "flex min-h-0 min-w-0 flex-1 flex-col md:min-h-0"
+              : "contents"
           }
-          onPointerMove={bumpOverlayActivity}
-          onTouchStart={bumpOverlayActivity}
         >
-          {isWalkthrough && demo.bgImage ? (
-            <div
-              className="pointer-events-none absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${demo.bgImage})` }}
-              aria-hidden
-            />
+          {isWalkthrough ? (
+            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-black/10 px-4 py-3 pr-12 md:hidden">
+              <div className="min-w-0">
+                <h2 className="font-sans text-[16px] font-semibold leading-snug tracking-[-0.02em] text-black">
+                  {modalTitle}
+                </h2>
+                {demo.subtitle ? (
+                  <p className="mt-0.5 font-sans text-[13px] font-normal leading-snug text-black/55">
+                    {demo.subtitle}
+                  </p>
+                ) : null}
+                {!hasCaptions && demo.description ? (
+                  <p
+                    id={descriptionId}
+                    className="mt-2 font-sans text-[13px] font-normal leading-[1.45] text-black/70"
+                  >
+                    {demo.description}
+                  </p>
+                ) : null}
+              </div>
+              {hasNarrationAudio ? (
+                <DemoNarrationMuteButton
+                  muted={narrationMuted}
+                  onToggle={toggleNarrationMute}
+                />
+              ) : null}
+            </div>
           ) : null}
+
           <div
+            ref={videoStageRef}
             className={
               isWalkthrough
-                ? "relative flex min-h-0 flex-1 items-center justify-center p-4 sm:p-5 md:p-6"
-                : "contents"
+                ? "relative flex min-h-0 min-w-0 flex-1 flex-col"
+                : "relative flex min-h-0 flex-1 items-center justify-center"
             }
+            onPointerMove={bumpOverlayActivity}
+            onTouchStart={bumpOverlayActivity}
           >
-            <video
-              ref={videoRef}
-              src={demo.video}
-              controls={false}
-              playsInline
-              preload="metadata"
-              className="max-h-full max-w-full object-contain"
-              aria-label={`Guided demo for ${demo.client}`}
-              onClick={() => {
-                bumpOverlayActivity();
-              }}
-              {...mergedVideoHandlers}
-            />
-            <DemoVideoOverlayControls
-              client={demo.client}
-              playing={playing}
-              onTogglePlayback={togglePlayback}
-              currentTime={videoTime}
-              duration={videoDuration}
-              onSeekToTime={seekToTime}
-              activityTick={overlayActivityTick}
-            />
+            {isWalkthrough && demo.bgImage ? (
+              <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${demo.bgImage})` }}
+                aria-hidden
+              />
+            ) : null}
+            <div
+              className={
+                isWalkthrough
+                  ? "relative flex min-h-0 flex-1 items-center justify-center p-3 sm:p-4 md:p-6"
+                  : "contents"
+              }
+            >
+              <video
+                ref={videoRef}
+                src={demo.video}
+                controls={false}
+                playsInline
+                preload="metadata"
+                className="max-h-full max-w-full object-contain"
+                aria-label={`Guided demo for ${demo.client}`}
+                onClick={() => {
+                  bumpOverlayActivity();
+                }}
+                {...mergedVideoHandlers}
+              />
+              <DemoVideoOverlayControls
+                client={demo.client}
+                playing={playing}
+                onTogglePlayback={togglePlayback}
+                currentTime={videoTime}
+                duration={videoDuration}
+                onSeekToTime={seekToTime}
+                activityTick={overlayActivityTick}
+              />
+            </div>
           </div>
+
+          {isWalkthrough && hasCaptions && captions ? (
+            <DemoWalkthroughMobileCaptions
+              journeyHeading={demo.walkthroughHeading}
+              captions={captions}
+              activeCueIndex={activeCueIndex}
+              onSeekToCaption={seekToCaption}
+            />
+          ) : null}
         </div>
 
         {isWalkthrough ? (
-          <aside className="flex max-h-[min(52vh,480px)] w-full shrink-0 flex-col border-t border-black/10 md:max-h-none md:w-[min(100%,340px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
+          <aside className="hidden min-h-0 w-full shrink-0 flex-col border-t border-black/10 md:flex md:max-h-none md:w-[min(100%,340px)] md:min-w-[300px] md:max-w-[340px] md:border-l md:border-t-0">
             {hasCaptions && captions ? (
               <DemoWalkthroughSidebar
                 title={modalTitle}
@@ -606,7 +658,6 @@ export default function DemoDialog({
                 titleId={titleId}
                 descriptionId={descriptionId}
                 captions={captions}
-                captionsId={captionsId}
                 activeCueIndex={activeCueIndex}
                 onSeekToCaption={seekToCaption}
                 hasNarrationAudio={hasNarrationAudio}
@@ -652,7 +703,7 @@ export default function DemoDialog({
       ref={isWalkthrough ? overlayRef : undefined}
       className={
         isWalkthrough
-          ? "fixed inset-0 z-[140] flex items-center justify-center overflow-hidden p-3 sm:p-4 md:p-6"
+          ? "fixed inset-0 z-[140] flex items-stretch justify-center overflow-hidden p-0 md:items-center md:p-6"
           : "fixed inset-0 z-[140] flex h-dvh max-h-dvh flex-col overflow-hidden"
       }
     >
@@ -662,9 +713,7 @@ export default function DemoDialog({
         aria-hidden="true"
       />
       {isWalkthrough ? (
-        <div
-          className={`relative z-[1] w-full min-w-0 ${walkthroughShellMaxW}`}
-        >
+        <div className="relative z-[1] flex h-full w-full min-w-0 md:h-auto md:max-w-[min(1180px,calc(100vw-1.5rem))]">
           {demoSwitchChevrons}
           {dialogPanel}
         </div>
