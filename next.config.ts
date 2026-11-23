@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
       { source: "/work", destination: "/#work", permanent: true },
       { source: "/contact", destination: "/#contact", permanent: true },
       { source: "/about", destination: "/", permanent: true },
-      { source: "/case-studies/visual-ehr", destination: "/#vehr", permanent: true },
       {
         source: "/case-studies/dell-childrens",
         destination: "/#dell",

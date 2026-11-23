@@ -10,7 +10,7 @@ import {
 } from "react";
 
 /** Homepage work-grid demo ids in left-to-right / top-to-bottom order. */
-export const WORK_DEMO_SWITCH_ORDER = ["vehr", "frx", "vinyl"] as const;
+export const WORK_DEMO_SWITCH_ORDER = ["vehr", "vinyl"] as const;
 
 export type WorkDemoSwitchId = (typeof WORK_DEMO_SWITCH_ORDER)[number];
 

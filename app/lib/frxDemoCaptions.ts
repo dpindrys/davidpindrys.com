@@ -14,8 +14,18 @@ function frxAudio(n: keyof typeof FRX_AUDIO_V): string {
   return `/audio/frx${n}.wav?v=${FRX_AUDIO_V[n]}`;
 }
 
-/** Timed captions for the Fresenius guided demo (narration: public/audio/frx1–6.wav). */
+/**
+ * Timed captions for the Fresenius guided demo (narration: public/audio/frx1–6.wav).
+ * Cue 0 is a silent rest lead (start === end === 0): shown on open / at rest /
+ * before narration via preferRestLead. Timed lookup skips it so cue 1 still owns
+ * t ∈ [0, 5) once playback starts. Cues 1–6 keep video + frx1–6 narration sync.
+ */
 export const frxDemoCaptions: readonly DemoCaption[] = [
+  {
+    start: 0,
+    end: 0,
+    text: "Jane Doe is prescribed 4 medications through FreseniusRX. One is on hold and one refill is 30 days past due.",
+  },
   {
     start: 0,
     end: 5,

@@ -3,6 +3,7 @@ import {
   frxChallengeIntro,
   frxClinicQuotes,
 } from "./frxChallengeData";
+import { frxNavScrollMtClass } from "./frxCaseStudyNav";
 import {
   frxFilledBandClass,
   frxMetaEyebrowClass,
@@ -74,61 +75,67 @@ export default function FrxChallengeCard() {
       className={`${frxSectionGapClass} ${frxFilledBandClass}`}
       aria-labelledby="frx-problem-heading"
     >
-      <p className={frxMetaEyebrowClass}>Challenge</p>
+      <div
+        id="frx-nav-challenge"
+        data-frx-case-study-section=""
+        className={frxNavScrollMtClass}
+      >
+        <p className={frxMetaEyebrowClass}>Challenge</p>
 
-      <div className="mt-6">
-        <div className={frxSplitRowGridClass}>
-          <div className="flex min-w-0 flex-col gap-4 text-left">
-            <h2 id="frx-problem-heading" className={frxStrategyHeadlineClass}>
-              {frxChallengeIntro.title}
-            </h2>
-            <p className={frxSectionBodyClass}>{frxChallengeIntro.body}</p>
+        <div className="mt-6">
+          <div className={frxSplitRowGridClass}>
+            <div className="flex min-w-0 flex-col gap-4 text-left">
+              <h2 id="frx-problem-heading" className={frxStrategyHeadlineClass}>
+                {frxChallengeIntro.title}
+              </h2>
+              <p className={frxSectionBodyClass}>{frxChallengeIntro.body}</p>
+            </div>
+
+            <div className="min-w-0 w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={frxChallengeIntro.imageSrc}
+                alt={frxChallengeIntro.imageAlt}
+                className="h-auto w-full rounded-[16px] border border-black/15 bg-white/40 object-cover"
+              />
+            </div>
           </div>
 
-          <div className="min-w-0 w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={frxChallengeIntro.imageSrc}
-              alt={frxChallengeIntro.imageAlt}
-              className="h-auto w-full rounded-[16px] border border-black/15 bg-white/40 object-cover"
-            />
+          <div className="mt-12">
+            <p className={frxMetaEyebrowClass}>From the clinic</p>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3">
+              {frxClinicQuotes.map((item, index) => (
+                <figure
+                  key={item.attribution + index}
+                  className={`flex min-w-0 flex-col gap-5 py-6 md:gap-6 md:py-0 md:pr-6 lg:pr-8 ${
+                    index > 0
+                      ? "border-t border-black/10 pt-6 md:border-t-0 md:border-l md:pl-6 md:pt-0 lg:pl-8"
+                      : ""
+                  } ${index < frxClinicQuotes.length - 1 ? "md:pr-6 lg:pr-8" : ""}`}
+                >
+                  <FrxQuoteMarkIcon />
+                  <blockquote className={frxClinicQuoteClass}>
+                    &ldquo;{item.quote}&rdquo;
+                  </blockquote>
+                  <figcaption className={frxClinicAttributionClass}>
+                    {item.attribution}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-12">
-          <p className={frxMetaEyebrowClass}>From the clinic</p>
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3">
-            {frxClinicQuotes.map((item, index) => (
-              <figure
-                key={item.attribution + index}
-                className={`flex min-w-0 flex-col gap-5 py-6 md:gap-6 md:py-0 md:pr-6 lg:pr-8 ${
-                  index > 0
-                    ? "border-t border-black/10 pt-6 md:border-t-0 md:border-l md:pl-6 md:pt-0 lg:pl-8"
-                    : ""
-                } ${index < frxClinicQuotes.length - 1 ? "md:pr-6 lg:pr-8" : ""}`}
-              >
-                <FrxQuoteMarkIcon />
-                <blockquote className={frxClinicQuoteClass}>
-                  &ldquo;{item.quote}&rdquo;
-                </blockquote>
-                <figcaption className={frxClinicAttributionClass}>
-                  {item.attribution}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className="mt-10 flex gap-4 border-t border-black/10 pt-8 md:mt-12 md:gap-5 md:pt-10"
-          role="region"
-          aria-label={frxChallengeImpact.title}
-        >
-          <FrxImpactIcon />
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <h3 className={frxSectionTitleClass}>{frxChallengeImpact.title}</h3>
-            <p className={frxSectionBodyClass}>{frxChallengeImpact.body}</p>
+          <div
+            className="mt-10 flex gap-4 border-t border-black/10 pt-8 md:mt-12 md:gap-5 md:pt-10"
+            role="region"
+            aria-label={frxChallengeImpact.title}
+          >
+            <FrxImpactIcon />
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <h3 className={frxSectionTitleClass}>{frxChallengeImpact.title}</h3>
+              <p className={frxSectionBodyClass}>{frxChallengeImpact.body}</p>
+            </div>
           </div>
         </div>
       </div>

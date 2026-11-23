@@ -38,11 +38,18 @@ export function captionEndAt(
 }
 
 /**
- * Segment 1 (cue index 0) plays continuously into the next cue — no freeze-at-
+ * First narrated (audio) cue plays continuously into the next — no freeze-at-
  * next-start, wait-for-audio, or breath. Later narrated cues keep that hold.
+ * Silent lead-in cues (no audio) before the first narrated cue do not shift this.
  */
-export function shouldFreezeNarratedCue(index: number): boolean {
-  return index > 0;
+export function shouldFreezeNarratedCue(
+  index: number,
+  captions?: readonly DemoCaption[],
+): boolean {
+  if (!captions?.length) return index > 0;
+  const firstAudioIndex = captions.findIndex((caption) => Boolean(caption.audio));
+  if (firstAudioIndex < 0) return index > 0;
+  return index > firstAudioIndex;
 }
 
 /**
@@ -71,15 +78,30 @@ export function narratedFreezeHoldTime(
   return holdAt;
 }
 
+/**
+ * Silent lead-in cue used at rest / before narration (typically start === end === 0).
+ * Half-open [start, end) is empty, so timed lookup never selects it — callers must
+ * pass preferRestLead while playback has not started.
+ */
+export function isSilentRestLeadCue(caption: DemoCaption | undefined): boolean {
+  if (!caption) return false;
+  return !caption.audio && caption.end != null && caption.end <= caption.start;
+}
+
 export function captionTextAt(
   time: number,
   captions: readonly DemoCaption[],
   ended: boolean,
+  options?: { preferRestLead?: boolean },
 ): string {
   if (captions.length === 0) return "";
   if (ended) return captions[captions.length - 1].text;
+  if (options?.preferRestLead && isSilentRestLeadCue(captions[0])) {
+    return captions[0].text;
+  }
 
   for (const caption of captions) {
+    if (isSilentRestLeadCue(caption)) continue;
     const end = caption.end ?? Number.POSITIVE_INFINITY;
     if (time >= caption.start && time < end) return caption.text;
   }
@@ -93,16 +115,22 @@ export function captionCueIndexAt(
   captions: readonly DemoCaption[],
   ended: boolean,
   duration: number,
+  options?: { preferRestLead?: boolean },
 ): number {
   if (captions.length === 0) return 0;
   if (ended) return captions.length - 1;
+  if (options?.preferRestLead && isSilentRestLeadCue(captions[0])) {
+    return 0;
+  }
 
   for (let i = 0; i < captions.length; i++) {
+    if (isSilentRestLeadCue(captions[i])) continue;
     const end = captionEndAt(captions[i], i, captions, duration);
     if (time >= captions[i].start && time < end) return i;
   }
 
   for (let i = captions.length - 1; i >= 0; i--) {
+    if (isSilentRestLeadCue(captions[i])) continue;
     if (time >= captions[i].start) return i;
   }
   return 0;
@@ -160,7 +188,7 @@ export function segmentFillsAt(
     const end = captionEndAt(caption, i, captions, duration);
     if (time >= end) return 1;
     if (time <= start) return 0;
-    if (caption.audio && shouldFreezeNarratedCue(i)) {
+    if (caption.audio && shouldFreezeNarratedCue(i, captions)) {
       return narratedCueFillDuringVideo(time, caption, i, captions, duration, activeAudioDur);
     }
     const span = Math.max(end - start, 1e-6);

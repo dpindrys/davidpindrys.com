@@ -1,11 +1,14 @@
-import { cardTitleClass, sideLeadClass } from "../../lib/pageStyles";
-import { frxSectionBodyClass, frxSectionTitleClass } from "../frx/frxCaseStudyTypography";
+import {
+  frxSectionBodyClass,
+  frxSectionTitleClass,
+} from "../frx/frxCaseStudyTypography";
 
 export const vehrEyebrowClass =
   "font-sans text-[12px] font-normal uppercase tracking-[0.12em] text-gray-800";
 
-/** Section h2 — matches homepage section leads. */
-export const vehrSectionTitleClass = `w-full ${sideLeadClass}`;
+/** Large section titles (problem arc, legacy blocks). */
+export const vehrSectionTitleClass =
+  "w-full font-sans text-[clamp(26px,4vw,38px)] font-semibold leading-[1.15] tracking-[-0.02em] text-black";
 
 /** Applied-example article titles — matches FRx process row headings. */
 export const vehrAppliedArticleTitleClass = frxSectionTitleClass;
@@ -24,8 +27,8 @@ export const vehrProblemArcDividerClass =
 
 export const vehrSectionGapClass = "mt-16 w-full md:mt-20 lg:mt-24";
 
-/** Subsection h3 — matches services card titles. */
-export const vehrSubsectionTitleClass = `scroll-mt-28 w-full ${cardTitleClass}`;
+export const vehrSubsectionTitleClass =
+  "scroll-mt-28 w-full font-sans text-[clamp(22px,3.2vw,32px)] font-semibold leading-[1.2] tracking-[-0.02em] text-black";
 
 export const vehrAppliedExampleIntroClass =
   `w-full max-w-[52rem] ${frxSectionBodyClass}`;

@@ -1,16 +1,33 @@
-import { frxBelowHeroMeta } from "./frxBelowHeroData";
 import {
+  frxBelowHeroMeta,
+  frxOverviewSection,
+} from "./frxBelowHeroData";
+import {
+  frxMetaEyebrowClass,
   frxMetaLabelClass,
   frxMetaValueClass,
+  frxSectionBodyClass,
 } from "./frxCaseStudyTypography";
 
 export default function FrxBelowHero() {
   return (
     <section
-      className="mt-12 flex w-full flex-col"
-      aria-label="Project context"
+      className="mt-12 flex w-full flex-col gap-8 md:gap-10"
+      aria-labelledby="frx-overview-heading"
     >
-      <div className="flex flex-col gap-0 md:flex-row md:gap-0">
+      <div className="flex min-w-0 flex-col">
+        <p id="frx-overview-heading" className={frxMetaEyebrowClass}>
+          {frxOverviewSection.eyebrow}
+        </p>
+        <p className={`${frxSectionBodyClass} mt-4 md:mt-5`}>
+          {frxOverviewSection.body}
+        </p>
+      </div>
+
+      <div
+        className="flex flex-col gap-0 md:flex-row md:gap-0"
+        aria-label="Project context"
+      >
         {frxBelowHeroMeta.map((item, i) => (
           <div
             key={`${item.label}-${i}`}

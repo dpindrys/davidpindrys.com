@@ -3,8 +3,9 @@ import CaseStudyCardCtas from "./components/CaseStudyCardCtas";
 import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
+import CaseStudyHeroLink from "./components/CaseStudyHeroLink";
+import FrxCaseStudyHeroOpener from "./case-studies/frx/FrxCaseStudyHeroOpener";
 import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
-import { WorkDemoSwitchProvider } from "./components/WorkDemoSwitchContext";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { heroBandClass } from "./lib/heroBand";
@@ -12,10 +13,7 @@ import DchpHeroMedia from "./components/DchpHeroMedia";
 import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
 import { HeroVideoProvider, HeroVideoToggle } from "./components/HeroVideo";
 import PhotoGroups from "./components/PhotoGroups";
-import { PrototypeCard } from "./components/PrototypeCards";
-import { prototypes } from "./lib/prototypes";
 import { getPhotoGroups } from "./lib/photos";
-import { frxDemoCaptions } from "./lib/frxDemoCaptions";
 import {
   bodyClass,
   cardBodyClass,
@@ -76,8 +74,10 @@ type WorkCard = {
   client: string;
   tagline: string;
   description: string;
-  /** When set, enables the View case study CTA. Omit for coming-soon cards. */
+  /** When set, enables the View case study CTA (unless `heroCaseStudyLink`). */
   caseStudyHref?: string;
+  /** Whole hero links to `caseStudyHref`; no play-demo overlay or separate CTA. */
+  heroCaseStudyLink?: boolean;
   demoVideo?: string;
   demoTitle?: string;
   /** Walkthrough: heading beside play, above captions/segments. */
@@ -90,19 +90,45 @@ type WorkCard = {
 
 const workCards: readonly WorkCard[] = [
   {
+    id: "vehr",
+    client: "VEHR Technologies",
+    tagline: "Clinical timeline",
+    description:
+      "A clinical timeline that brings symptoms, encounters, and measurements into one view, helping clinicians follow a patient’s history and see how changes connect.",
+    caseStudyHref: "/case-studies/visual-ehr",
+    heroCaseStudyLink: true,
+    media: (
+      <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/vehr/bg.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/vehr/hero.png"
+              alt=""
+              draggable={false}
+              className="block h-auto w-full rounded-[12px]"
+              style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
+            />
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
     id: "frx",
     client: "Fresenius Medical Care",
-    tagline: "Medication refill workflow",
+    tagline: "In-clinic refill workflow",
     description:
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
     caseStudyHref: "/case-studies/frx",
-    demoVideo: "/images/frx/fresenius.mp4",
-    bgImage: "/images/frx/bg.png",
-    demoTitle: "Jane’s refill journey",
-    demoWalkthroughHeading: "Managing Jane’s medication refills",
-    demoDescription:
-      "Jane Doe is the example patient in this demo. Clinic staff review her refill needs, check patient and prescription information, and prepare a refill request directly in CareTeamHub.",
-    demoCaptions: frxDemoCaptions,
+    heroCaseStudyLink: true,
     media: (
       <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -117,7 +143,7 @@ const workCards: readonly WorkCard[] = [
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/frx/hero.png"
-              alt="In-clinic medication refill workflow in CareTeamHub"
+              alt=""
               draggable={false}
               className="block h-auto w-full rounded-[12px]"
               style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
@@ -137,18 +163,33 @@ const workCards: readonly WorkCard[] = [
   },
 ];
 
-const vehrPrototype = prototypes.find((item) => item.id === "vehr")!;
-// const vinylPrototype = prototypes.find((item) => item.id === "vinyl")!;
+const vehrCaseStudy = workCards.find((item) => item.id === "vehr")!;
 const frxCaseStudy = workCards.find((item) => item.id === "frx")!;
 const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
 
 function ProjectHero({ project }: { project: WorkCard }) {
+  const heroMedia =
+    project.id === "frx" ? (
+      <FrxCaseStudyHeroOpener label={`View ${project.client} case study`}>
+        {project.media}
+      </FrxCaseStudyHeroOpener>
+    ) : project.heroCaseStudyLink && project.caseStudyHref ? (
+      <CaseStudyHeroLink
+        href={project.caseStudyHref}
+        label={`View ${project.client} case study`}
+      >
+        {project.media}
+      </CaseStudyHeroLink>
+    ) : (
+      project.media
+    );
+
   return (
     <HeroVideoProvider>
       <FloatingPlaybackProvider>
         <div className="hero-area group group/hero relative mt-5">
-          {project.media}
-          {project.demoVideo ? (
+          {heroMedia}
+          {project.demoVideo && !project.heroCaseStudyLink ? (
             <DemoPlayOverlay
               client={project.client}
               video={project.demoVideo}
@@ -159,7 +200,7 @@ function ProjectHero({ project }: { project: WorkCard }) {
               bgImage={project.bgImage}
               captions={project.demoCaptions}
               layout="walkthrough"
-              demoSwitchId="frx"
+              demoSwitchId={project.id as "vehr" | "vinyl"}
             />
           ) : null}
           <HeroVideoToggle className={heroToggleClass} />
@@ -203,7 +244,9 @@ function CaseStudyArticle({
         }
       >
         <p className={bodyClass}>{project.description}</p>
-        <CaseStudyCardCtas href={project.caseStudyHref} wide={wide} />
+        {!project.heroCaseStudyLink ? (
+          <CaseStudyCardCtas href={project.caseStudyHref} wide={wide} />
+        ) : null}
       </div>
     </article>
   );
@@ -251,13 +294,10 @@ export default function Home() {
               Selected work
             </h2>
             <div className="mt-6 flex flex-col gap-6">
-              <WorkDemoSwitchProvider>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <PrototypeCard item={vehrPrototype} />
-                  <CaseStudyArticle project={frxCaseStudy} />
-                  {/* <PrototypeCard item={vinylPrototype} /> */}
-                </div>
-              </WorkDemoSwitchProvider>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <CaseStudyArticle project={vehrCaseStudy} />
+                <CaseStudyArticle project={frxCaseStudy} />
+              </div>
               <CaseStudyArticle project={dellCaseStudy} wide />
             </div>
           </div>

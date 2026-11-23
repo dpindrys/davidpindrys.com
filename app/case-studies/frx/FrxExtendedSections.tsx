@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
 import FrxPrototypeScanGallery from "./FrxPrototypeScanGallery";
+import { frxNavScrollMtClass } from "./frxCaseStudyNav";
 import {
   frxMetaEyebrowClass,
   frxOutlineCardClass,
@@ -88,7 +89,9 @@ export function FrxSectionsBeforeSolution() {
   return (
     <>
       <section
-        className={frxSectionGapClass}
+        id="frx-nav-strategy"
+        data-frx-case-study-section=""
+        className={`${frxSectionGapClass} ${frxNavScrollMtClass}`}
         aria-labelledby="frx-strategy-structure-heading"
       >
         <p className={frxMetaEyebrowClass}>Strategy</p>
@@ -143,7 +146,9 @@ export function FrxSectionsBeforeSolution() {
       </section>
 
       <section
-        className={frxSectionGapClass}
+        id="frx-nav-prototyping"
+        data-frx-case-study-section=""
+        className={`${frxSectionGapClass} ${frxNavScrollMtClass}`}
         aria-labelledby="frx-testing-iterating-heading"
       >
         <p className={frxMetaEyebrowClass}>Prototyping and iterating</p>

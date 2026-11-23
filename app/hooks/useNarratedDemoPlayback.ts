@@ -15,6 +15,7 @@ import {
   captionCueIndexAt,
   captionEndAt,
   captionTextAt,
+  isSilentRestLeadCue,
   longestCaptionText,
   narratedCueFillDuringVideo,
   narratedFreezeHoldTime,
@@ -90,7 +91,18 @@ export function useNarratedDemoPlayback({
   const [playing, setPlaying] = useState(false);
   playingRef.current = playing;
   const [playbackStarted, setPlaybackStarted] = useState(false);
+  const playbackStartedRef = useRef(false);
   const [activeCueIndex, setActiveCueIndex] = useState(0);
+
+  const markPlaybackStarted = useCallback(() => {
+    playbackStartedRef.current = true;
+    setPlaybackStarted(true);
+  }, []);
+
+  const clearPlaybackStarted = useCallback(() => {
+    playbackStartedRef.current = false;
+    setPlaybackStarted(false);
+  }, []);
 
   const clearBreathTimer = useCallback(() => {
     if (breathTimerRef.current != null) {
@@ -218,7 +230,7 @@ export function useNarratedDemoPlayback({
     programmaticPauseRef.current = false;
     programmaticSeekRef.current = false;
     setPlaying(false);
-    setPlaybackStarted(false);
+    clearPlaybackStarted();
     setActiveCueIndex(0);
     stopNarration();
     if (captionFadeTimeoutRef.current != null) {
@@ -226,7 +238,7 @@ export function useNarratedDemoPlayback({
       captionFadeTimeoutRef.current = null;
     }
     if (captions?.length) {
-      setCaptionText(captionTextAt(0, captions, false));
+      setCaptionText(captions[0].text);
       setSegmentFills(captions.map(() => 0));
       setCaptionOpaque(true);
     } else {
@@ -236,7 +248,7 @@ export function useNarratedDemoPlayback({
     }
     const video = videoRef.current;
     if (video) video.playbackRate = 1;
-  }, [captions, clearFreezeState, stopNarration]);
+  }, [captions, clearFreezeState, clearPlaybackStarted, stopNarration]);
 
   useEffect(() => {
     resetPlaybackSession();
@@ -308,15 +320,19 @@ export function useNarratedDemoPlayback({
       }
       const ended = playbackEndedRef.current;
       const duration = Number.isFinite(video.duration) ? video.duration : Number.NaN;
+      const preferRestLead =
+        !playbackStartedRef.current && isSilentRestLeadCue(captions[0]);
+      const cueOptions = preferRestLead ? { preferRestLead: true } : undefined;
 
       let finishing = activeCueRef.current;
       if (finishing < 0 || finishing >= captions.length) {
-        finishing = captionCueIndexAt(time, captions, ended, duration);
+        finishing = captionCueIndexAt(time, captions, ended, duration, cueOptions);
       }
       const finishingCaption = captions[finishing];
       if (
         !ended &&
-        shouldFreezeNarratedCue(finishing) &&
+        !preferRestLead &&
+        shouldFreezeNarratedCue(finishing, captions) &&
         finishingCaption?.audio &&
         captions[finishing + 1] &&
         !userPausedDuringFreezeRef.current
@@ -346,8 +362,13 @@ export function useNarratedDemoPlayback({
         }
       }
 
-      const index = captionCueIndexAt(time, captions, ended, duration);
-      const text = captionTextAt(time, captions, ended);
+      const index = captionCueIndexAt(time, captions, ended, duration, cueOptions);
+      const text = captionTextAt(time, captions, ended, cueOptions);
+      if (preferRestLead) {
+        setSegmentFills(captions.map(() => 0));
+        applyCaptionCue(index, text);
+        return;
+      }
       const audio = narrationAudioRef.current;
       const activeCueAudioDurationSec =
         audio &&
@@ -423,7 +444,7 @@ export function useNarratedDemoPlayback({
   const enterFreezeAtCue = useCallback(
     (video: HTMLVideoElement, index: number) => {
       if (!captions?.length || freezeActiveRef.current) return;
-      if (!shouldFreezeNarratedCue(index)) return;
+      if (!shouldFreezeNarratedCue(index, captions)) return;
       const caption = captions[index];
       if (!caption?.audio) return;
 
@@ -513,7 +534,7 @@ export function useNarratedDemoPlayback({
         index = captionCueIndexAt(time, captions, false, duration);
       }
       const caption = captions[index];
-      if (!caption?.audio || !shouldFreezeNarratedCue(index)) return;
+      if (!caption?.audio || !shouldFreezeNarratedCue(index, captions)) return;
 
       const holdAt = narratedFreezeHoldTime(caption, index, captions, duration);
       if (time + 1e-3 >= holdAt || (video.ended && index === captions.length - 1)) {
@@ -532,6 +553,12 @@ export function useNarratedDemoPlayback({
 
       if (freezeActiveRef.current) return;
 
+      // Rest / before play: keep silent lead caption; do not latch first narrated audio.
+      if (!playbackStartedRef.current && isSilentRestLeadCue(captions[0])) {
+        stopNarration();
+        return;
+      }
+
       const time = video.currentTime;
       if (playbackEndedRef.current && time < 0.25) {
         playbackEndedRef.current = false;
@@ -549,7 +576,7 @@ export function useNarratedDemoPlayback({
       } else {
         const finishing = captions[index];
         const next = captions[index + 1];
-        if (shouldFreezeNarratedCue(index) && finishing?.audio && next) {
+        if (shouldFreezeNarratedCue(index, captions) && finishing?.audio && next) {
           const end = captionEndAt(finishing, index, captions, duration);
           const holdAt = narratedFreezeHoldTime(finishing, index, captions, duration);
           if (!(time + 1e-3 >= end && time + 1e-3 < holdAt)) {
@@ -670,7 +697,7 @@ export function useNarratedDemoPlayback({
       applyCaptionCue(index, caption.text);
       programmaticSeekRef.current = true;
       video.currentTime = caption.start;
-      setPlaybackStarted(true);
+      markPlaybackStarted();
 
       if (resumeAfterSeek) {
         void video.play().catch(() => {
@@ -678,7 +705,7 @@ export function useNarratedDemoPlayback({
         });
       }
     },
-    [applyCaptionCue, captions, clearFreezeState, shouldResumeAfterSeek],
+    [applyCaptionCue, captions, clearFreezeState, markPlaybackStarted, shouldResumeAfterSeek],
   );
 
   const seekToTime = useCallback(
@@ -697,13 +724,13 @@ export function useNarratedDemoPlayback({
       playbackEndedRef.current = false;
       programmaticSeekRef.current = true;
       video.currentTime = clamped;
-      setPlaybackStarted(true);
+      markPlaybackStarted();
 
       if (resumeAfterSeek) {
         void video.play().catch(() => {});
       }
     },
-    [clearFreezeState, shouldResumeAfterSeek],
+    [clearFreezeState, markPlaybackStarted, shouldResumeAfterSeek],
   );
 
   const seekToAdjacentCaption = useCallback(
@@ -769,7 +796,7 @@ export function useNarratedDemoPlayback({
 
     programmaticSeekRef.current = true;
     video.currentTime = 0;
-    setPlaybackStarted(true);
+    markPlaybackStarted();
     setPlaying(true);
     applyNarratedPlaybackRate(video);
     void video.play().catch(() => {
@@ -780,6 +807,7 @@ export function useNarratedDemoPlayback({
     applyNarratedPlaybackRate,
     captions,
     clearFreezeState,
+    markPlaybackStarted,
     stopNarration,
   ]);
 
@@ -808,7 +836,7 @@ export function useNarratedDemoPlayback({
 
       userPausedDuringFreezeRef.current = false;
       setPlaying(true);
-      setPlaybackStarted(true);
+      markPlaybackStarted();
 
       const index = freezeCueIndexRef.current;
       if (index >= 0 && captions?.length) {
@@ -855,6 +883,7 @@ export function useNarratedDemoPlayback({
     clearBreathTimer,
     estimateHoldDurationMs,
     isPlaybackAtEnd,
+    markPlaybackStarted,
     peekHoldFill,
     replayFromStart,
     startBreathAfterNarration,
@@ -983,7 +1012,7 @@ export function useNarratedDemoPlayback({
     },
     onPlay: (event: SyntheticEvent<HTMLVideoElement>) => {
       setPlaying(true);
-      setPlaybackStarted(true);
+      markPlaybackStarted();
       const video = event.currentTarget;
       applyNarratedPlaybackRate(video);
       if (video.currentTime < 0.25) playbackEndedRef.current = false;

@@ -11,13 +11,13 @@ export const frxHeroFocusPills = [
   "Enterprise Systems",
 ] as const;
 
-export const frxProductContext = {
-  title: "FreseniusRx and CareTeamHub",
-  body:
-    "FreseniusRx is Fresenius Medical Care's in-house pharmacy, dispensing medications to dialysis patients across the company's clinic network. This project digitized the in-clinic refill workflow inside CareTeamHub, the Salesforce-based application nurses and dietitians use at the point of care.",
-} as const;
-
 export const frxBelowHeroSummaryBlock = {
   body:
-    "I led research and design for an in-chart refill workflow that replaced the paper, fax, and phone-tag process nurses and dietitians had relied on for years. Staff now complete refills 70% faster and can see shipment and prescription status without calling the pharmacy. Deployed across 2,800+ clinics serving 43,000+ patients.",
+    "FreseniusRx is Fresenius Medical Care's in-house pharmacy for dialysis patients. I led research and design for a refill workflow within CareTeamHub, the Salesforce application nurses and dietitians use at the point of care. Staff can request refills and track prescription and shipment status directly in the patient chart, replacing paper, fax, and phone follow-ups.\n\nThe workflow made refills 70% faster across 2,800+ clinics serving 43,000+ patients.",
+} as const;
+
+/** Modal/page Overview band above the ROLE / CLIENT meta row. */
+export const frxOverviewSection = {
+  eyebrow: "Overview",
+  body: "I led research and design for a refill workflow in CareTeamHub, connecting clinic staff with FreseniusRx, Fresenius Medical Care's pharmacy for dialysis patients. Replacing paper, fax, and phone follow-ups made refills 70% faster across 2,800+ clinics serving 43,000+ patients.",
 } as const;

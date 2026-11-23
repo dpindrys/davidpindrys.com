@@ -63,4 +63,4 @@ export const frxPaddedEyebrowClass = `absolute top-0 left-0 z-10 flex h-10 items
 export const frxCenteredIntroSectionClass =
   "mt-12 flex w-full flex-col items-center md:mt-16";
 export const frxCenteredIntroBlockClass =
-  "flex w-full min-w-0 max-w-full flex-col gap-3 text-left md:max-w-[50%]";
+  "flex w-full min-w-0 max-w-full flex-col gap-3 text-left";

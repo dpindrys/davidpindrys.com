@@ -11,9 +11,42 @@ import {
 import {
   captionSegmentLabel,
   formatDemoTime,
+  isSilentRestLeadCue,
   type DemoCaption,
 } from "../lib/demoNarration";
 import { compactPlayControlSizeClass } from "../lib/pageStyles";
+
+/** Timed / seekable cues for segment bars (skips silent rest-lead at index 0). */
+export function demoSegmentCaptions(
+  captions: readonly DemoCaption[],
+): readonly DemoCaption[] {
+  if (captions.length > 0 && isSilentRestLeadCue(captions[0])) {
+    return captions.slice(1);
+  }
+  return captions;
+}
+
+/** Maps active caption index → segment index (rest lead shares segment 0 with first timed cue). */
+export function demoActiveSegmentIndex(
+  activeCueIndex: number,
+  captions: readonly DemoCaption[],
+): number {
+  if (captions.length > 0 && isSilentRestLeadCue(captions[0])) {
+    return Math.max(0, activeCueIndex - 1);
+  }
+  return Math.max(0, activeCueIndex);
+}
+
+/** Maps segment bar index → caption index for seek. */
+export function demoSegmentCueIndex(
+  segmentIndex: number,
+  captions: readonly DemoCaption[],
+): number {
+  if (captions.length > 0 && isSilentRestLeadCue(captions[0])) {
+    return segmentIndex + 1;
+  }
+  return segmentIndex;
+}
 
 const overlayPlayButtonClass = `flex ${compactPlayControlSizeClass} shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/20 text-white outline-none transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [-webkit-tap-highlight-color:transparent]`;
 
@@ -32,9 +65,15 @@ const narrationMuteButtonClass =
   "flex w-10 shrink-0 cursor-pointer self-stretch items-center justify-center rounded-md text-black/55 outline-none transition-colors hover:text-black/80 focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] sm:w-11";
 const narrationMuteIconClass = "h-[22px] w-[22px] sm:h-6 sm:w-6";
 
-function NarrationSoundOnIcon({ className = "h-[18px] w-[18px]" }: { className?: string }) {
+function NarrationSoundOnIcon({
+  className = "h-[18px] w-[18px]",
+  strokeWidth = 1.75,
+}: {
+  className?: string;
+  strokeWidth?: number | string;
+}) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 5 6 9H3v6h3l5 4V5z" />
       <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
       <path d="M18.07 5.93a8.5 8.5 0 0 1 0 12.14" />
@@ -42,9 +81,15 @@ function NarrationSoundOnIcon({ className = "h-[18px] w-[18px]" }: { className?:
   );
 }
 
-function NarrationMutedIcon({ className = "h-[18px] w-[18px]" }: { className?: string }) {
+function NarrationMutedIcon({
+  className = "h-[18px] w-[18px]",
+  strokeWidth = 1.75,
+}: {
+  className?: string;
+  strokeWidth?: number | string;
+}) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 5 6 9H3v6h3l5 4V5z" />
       <path d="m22 9-6 6M16 9l6 6" />
     </svg>
@@ -106,14 +151,14 @@ export function DemoCaptionBody({
       <div className="flex items-stretch gap-2 sm:gap-2.5">
         <div className="relative min-w-0 flex-1" aria-live="polite">
           <p
-            className="invisible font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
+            className="invisible whitespace-pre-line font-sans text-[15px] font-normal leading-[1.45] sm:text-[16px]"
             aria-hidden="true"
           >
             {captionSpacer}
           </p>
           <p
             id={captionsId}
-            className={`absolute inset-0 font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
+            className={`absolute inset-0 whitespace-pre-line font-sans text-[15px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[16px] ${
               captionOpaque ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -254,14 +299,14 @@ export function DemoViewerFooter({
         {hasCaptions ? (
           <div className="relative min-h-[2.9em] min-w-0 flex-1" aria-live="polite">
             <p
-              className="invisible font-sans text-[14px] font-normal leading-[1.45] sm:text-[15px]"
+              className="invisible whitespace-pre-line font-sans text-[14px] font-normal leading-[1.45] sm:text-[15px]"
               aria-hidden="true"
             >
               {captionSpacer}
             </p>
             <p
               id={captionsId}
-              className={`absolute inset-0 font-sans text-[14px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[15px] ${
+              className={`absolute inset-0 whitespace-pre-line font-sans text-[14px] font-normal leading-[1.45] text-black/80 transition-opacity duration-150 ease-out motion-reduce:transition-none sm:text-[15px] ${
                 captionOpaque ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -391,19 +436,103 @@ function CaptionNavChevronRightIcon({ className = "h-5 w-5" }: { className?: str
   );
 }
 
+/**
+ * Play control sized to the caption stack: 2-line caption (48px) + gap-2 (8px) +
+ * segment row (12px) ≈ 68px. Explicit size avoids self-stretch + aspect-square blow-up.
+ */
+const frxCaptionBarPlayButtonClass =
+  "flex h-[68px] w-[68px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#4D4D4D] text-[#E8E5DE] outline-none transition-colors hover:bg-[#3D3D3D] focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] [-webkit-tap-highlight-color:transparent]";
+
+/** Middle mute / skip column — matches play + caption stack height. */
+const frxCaptionBarSideControlsClass =
+  "flex h-[68px] shrink-0 flex-col items-center justify-between text-[#4D4D4D]";
+
+const frxCaptionBarIconButtonClass =
+  "flex min-h-[38.36px] min-w-[38.36px] shrink-0 cursor-pointer items-center justify-center rounded-sm p-1 text-[#4D4D4D] outline-none transition-colors hover:text-black disabled:cursor-default disabled:opacity-25 focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-1 focus-visible:ring-offset-[#F4F2EE] [-webkit-tap-highlight-color:transparent]";
+
+const frxCaptionBarIconClass = "size-[30.36px] shrink-0";
+
+/** Fixed 2-line caption block: 16px × leading 1.5 × 2. */
+const frxCaptionTextBlockClass =
+  "h-[3em] overflow-hidden font-sans text-[16px] font-medium leading-[1.5] text-black";
+
+function FrxSkipBackIcon({ className = frxCaptionBarIconClass }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 5v14" />
+      <path d="m18 5-10 7 10 7V5z" />
+    </svg>
+  );
+}
+
+function FrxSkipForwardIcon({ className = frxCaptionBarIconClass }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 5v14" />
+      <path d="m6 5 10 7-10 7V5z" />
+    </svg>
+  );
+}
+
 /** Active caption carousel for walkthrough modal on narrow viewports. */
 export function DemoWalkthroughMobileCaptions({
   journeyHeading,
   captions,
   activeCueIndex,
   onSeekToAdjacentCaption,
+  showFromMd = false,
+  showNavArrows = true,
+  flush = false,
+  playing,
+  onTogglePlayback,
+  onSeekToCaption,
+  playbackClient,
+  hasNarrationAudio = false,
+  narrationMuted = false,
+  onToggleNarrationMute,
 }: {
   journeyHeading?: string;
   captions: readonly DemoCaption[];
   activeCueIndex: number;
   onSeekToAdjacentCaption: (delta: -1 | 1) => void;
+  /** When true, carousel stays visible at md+ (e.g. Frx case study modal). */
+  showFromMd?: boolean;
+  /** Prev/next chevrons beside the caption chip. */
+  showNavArrows?: boolean;
+  /**
+   * Full-width Frx caption bar: play + mute/skip + 2-line caption + segment row
+   * in shared body gutters (`px-4`). Other demos keep the chip carousel.
+   */
+  flush?: boolean;
+  /** Required with `flush` for the left play/pause control. */
+  playing?: boolean;
+  onTogglePlayback?: () => void;
+  onSeekToCaption?: (index: number) => void;
+  /** Client name for play/pause aria-label when `flush`. */
+  playbackClient?: string;
+  /** When `flush`, optional mute control in the middle column. */
+  hasNarrationAudio?: boolean;
+  narrationMuted?: boolean;
+  onToggleNarrationMute?: () => void;
 }) {
-  const sectionHeading = journeyHeading ?? "Walkthrough";
   const activeCaption = captions[activeCueIndex];
   const atLastCaption = activeCueIndex >= captions.length - 1;
 
@@ -415,22 +544,150 @@ export function DemoWalkthroughMobileCaptions({
     captions.length,
   );
 
-  return (
-    <div className="shrink-0 border-t border-black/10 bg-[#F4F2EE] md:hidden">
-      <div className="px-4 pt-3">
-        <h3 className="font-sans text-[14px] font-medium leading-snug tracking-[-0.01em] text-black/80">
-          {sectionHeading}
-        </h3>
+  if (flush) {
+    const segmentCaptions = demoSegmentCaptions(captions);
+    const activeSegment = demoActiveSegmentIndex(activeCueIndex, captions);
+    const canSkipBack = activeSegment > 0;
+    const canSkipForward = activeSegment < segmentCaptions.length - 1;
+    const showMute =
+      hasNarrationAudio && onToggleNarrationMute != null;
+    const playLabel =
+      playing != null && playbackClient
+        ? playing
+          ? `Pause demo for ${playbackClient}`
+          : `Play demo for ${playbackClient}`
+        : playing
+          ? "Pause demo"
+          : "Play demo";
+
+    return (
+      <div
+        className={`shrink-0 bg-black/[0.05] ${showFromMd ? "" : "md:hidden"}`}
+      >
+        <div className="flex items-start gap-3 px-4 py-3 sm:gap-3.5">
+          {onTogglePlayback ? (
+            <button
+              type="button"
+              className={frxCaptionBarPlayButtonClass}
+              aria-label={playLabel}
+              onClick={onTogglePlayback}
+            >
+              {playing ? (
+                <FooterPauseIcon className="h-[38%] w-[38%] text-[#E8E5DE]" />
+              ) : (
+                <FooterPlayIcon className="ml-[6%] h-[38%] w-[38%] text-[#E8E5DE]" />
+              )}
+            </button>
+          ) : null}
+          <div className={frxCaptionBarSideControlsClass}>
+            {showMute ? (
+              <button
+                type="button"
+                className={frxCaptionBarIconButtonClass}
+                aria-label={narrationMuted ? "Unmute narration" : "Mute narration"}
+                aria-pressed={narrationMuted}
+                onClick={onToggleNarrationMute}
+              >
+                {narrationMuted ? (
+                  <NarrationMutedIcon className={frxCaptionBarIconClass} strokeWidth={2} />
+                ) : (
+                  <NarrationSoundOnIcon className={frxCaptionBarIconClass} strokeWidth={2} />
+                )}
+              </button>
+            ) : (
+              <span className="min-h-[38.36px] min-w-[38.36px] shrink-0" aria-hidden="true" />
+            )}
+            <div className="flex shrink-0 items-center gap-0.5">
+              <button
+                type="button"
+                className={frxCaptionBarIconButtonClass}
+                aria-label="Previous caption"
+                disabled={!canSkipBack}
+                onClick={() => onSeekToAdjacentCaption(-1)}
+              >
+                <FrxSkipBackIcon />
+              </button>
+              <button
+                type="button"
+                className={frxCaptionBarIconButtonClass}
+                aria-label="Next caption"
+                disabled={!canSkipForward}
+                onClick={() => onSeekToAdjacentCaption(1)}
+              >
+                <FrxSkipForwardIcon />
+              </button>
+            </div>
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            <div
+              role="status"
+              aria-live="polite"
+              aria-current="step"
+              aria-label={stepLabel}
+              className="min-w-0 w-full text-left"
+            >
+              <p className={`${frxCaptionTextBlockClass} line-clamp-2`}>
+                {activeCaption.text}
+              </p>
+            </div>
+            {segmentCaptions.length > 0 && onSeekToCaption ? (
+              <div
+                className="flex w-full gap-1.5"
+                role="group"
+                aria-label="Caption timeline"
+              >
+                {segmentCaptions.map((caption, segmentIndex) => {
+                  const cueIndex = demoSegmentCueIndex(segmentIndex, captions);
+                  const active = segmentIndex === activeSegment;
+                  return (
+                    <button
+                      key={`${caption.start}-${cueIndex}`}
+                      type="button"
+                      aria-label={captionSegmentLabel(
+                        caption,
+                        cueIndex,
+                        captions.length,
+                      )}
+                      aria-current={active ? "step" : undefined}
+                      onClick={() => onSeekToCaption(cueIndex)}
+                      className={`h-3 min-w-0 flex-1 cursor-pointer rounded-[1px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EE] ${
+                        active ? "bg-[#4D4D4D]" : "bg-black/15"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
-      <div className="relative px-4 pb-4 pt-2.5">
-        <button
-          type="button"
-          className={`${mobileCaptionNavButtonClass} absolute left-1 top-1/2 z-10 -translate-y-1/2`}
-          aria-label="Previous explanation"
-          onClick={() => onSeekToAdjacentCaption(-1)}
-        >
-          <CaptionNavChevronLeftIcon />
-        </button>
+    );
+  }
+
+  return (
+    <div
+      className={`shrink-0 border-t border-black/10 bg-[#F4F2EE] ${
+        showFromMd ? "" : "md:hidden"
+      }`}
+    >
+      {journeyHeading ? (
+        <div className="px-4 pt-3">
+          <h3 className="font-sans text-[14px] font-medium leading-snug tracking-[-0.01em] text-black/80">
+            {journeyHeading}
+          </h3>
+        </div>
+      ) : null}
+      <div className={`relative px-4 pb-4 ${journeyHeading ? "pt-2.5" : "pt-3"}`}>
+        {showNavArrows ? (
+          <button
+            type="button"
+            className={`${mobileCaptionNavButtonClass} absolute left-1 top-1/2 z-10 -translate-y-1/2`}
+            aria-label="Previous explanation"
+            onClick={() => onSeekToAdjacentCaption(-1)}
+          >
+            <CaptionNavChevronLeftIcon />
+          </button>
+        ) : null}
         <div
           role="status"
           aria-live="polite"
@@ -438,22 +695,21 @@ export function DemoWalkthroughMobileCaptions({
           aria-label={stepLabel}
           className="mx-auto w-[80%] min-w-0 bg-black/[0.05] px-3.5 py-3 text-left"
         >
-          <span className="block font-sans text-[11px] font-medium tabular-nums leading-none text-black/45">
-            {formatDemoTime(activeCaption.start)}
-          </span>
-          <span className="mt-1.5 block font-sans text-[13px] font-semibold leading-[1.4] text-black">
+          <span className="block whitespace-pre-line font-sans text-[16px] font-semibold leading-[1.6] text-black md:text-[17px]">
             {activeCaption.text}
           </span>
         </div>
-        <button
-          type="button"
-          className={`${mobileCaptionNavButtonClass} absolute right-1 top-1/2 z-10 -translate-y-1/2`}
-          aria-label="Next explanation"
-          disabled={atLastCaption}
-          onClick={() => onSeekToAdjacentCaption(1)}
-        >
-          <CaptionNavChevronRightIcon />
-        </button>
+        {showNavArrows ? (
+          <button
+            type="button"
+            className={`${mobileCaptionNavButtonClass} absolute right-1 top-1/2 z-10 -translate-y-1/2`}
+            aria-label="Next explanation"
+            disabled={atLastCaption}
+            onClick={() => onSeekToAdjacentCaption(1)}
+          >
+            <CaptionNavChevronRightIcon />
+          </button>
+        ) : null}
       </div>
     </div>
   );

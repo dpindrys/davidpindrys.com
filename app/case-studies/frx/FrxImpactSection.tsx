@@ -11,6 +11,7 @@ import {
   cardBodyClass,
   cardTitleClass,
 } from "../../lib/pageStyles";
+import { frxNavScrollMtClass } from "./frxCaseStudyNav";
 import {
   frxFilledBandClass,
   frxMetaEyebrowClass,
@@ -233,39 +234,45 @@ export default function FrxImpactSection() {
       className={`${frxSectionGapClass} ${frxFilledBandClass}`}
       aria-labelledby="frx-impact-heading"
     >
-      <header>
-        <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
-        <div className={`${frxSectionIntroStackClass} mt-4 md:mt-5`}>
-          <h2 id="frx-impact-heading" className={frxStrategyHeadlineClass}>
-            {frxImpactSectionIntro.title}
-          </h2>
-          <p className={frxSectionBodyClass}>
-            The final workflow let staff move from refill need to submission in
-            one place: scan the essentials, verify prescription details, and
-            submit with the required patient, shipping, and confirmation context
-            close at hand.
-          </p>
-          <p className={frxSectionBodyClass}>
-            I partnered closely with front-end engineers through build,
-            reviewing each implementation against the prototype to keep
-            interaction details, edge case handling, and information density
-            intact from design through release.
-          </p>
+      <div
+        id="frx-nav-impact"
+        data-frx-case-study-section=""
+        className={frxNavScrollMtClass}
+      >
+        <header>
+          <p className={frxMetaEyebrowClass}>{frxImpactSectionIntro.eyebrow}</p>
+          <div className={`${frxSectionIntroStackClass} mt-4 md:mt-5`}>
+            <h2 id="frx-impact-heading" className={frxStrategyHeadlineClass}>
+              {frxImpactSectionIntro.title}
+            </h2>
+            <p className={frxSectionBodyClass}>
+              The final workflow let staff move from refill need to submission in
+              one place: scan the essentials, verify prescription details, and
+              submit with the required patient, shipping, and confirmation context
+              close at hand.
+            </p>
+            <p className={frxSectionBodyClass}>
+              I partnered closely with front-end engineers through build,
+              reviewing each implementation against the prototype to keep
+              interaction details, edge case handling, and information density
+              intact from design through release.
+            </p>
+          </div>
+        </header>
+
+        <div className="mt-8 overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] md:mt-10">
+          {frxImpactEvidenceRows.map((row, index) => (
+            <FrxImpactQuoteRow
+              key={row.headline}
+              {...row}
+              isLast={index === frxImpactEvidenceRows.length - 1}
+            />
+          ))}
         </div>
-      </header>
 
-      <div className="mt-8 overflow-hidden rounded-[16px] border border-black/15 bg-[#F4F2EE] md:mt-10">
-        {frxImpactEvidenceRows.map((row, index) => (
-          <FrxImpactQuoteRow
-            key={row.headline}
-            {...row}
-            isLast={index === frxImpactEvidenceRows.length - 1}
-          />
-        ))}
-      </div>
-
-      <div className="mt-6">
-        <FrxImpactScaleRow />
+        <div className="mt-6">
+          <FrxImpactScaleRow />
+        </div>
       </div>
     </section>
   );
