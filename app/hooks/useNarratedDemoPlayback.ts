@@ -43,6 +43,11 @@ export type UseNarratedDemoPlaybackOptions = {
    * Omit for page-level heroes that keep one session.
    */
   resetKey?: string | number | null;
+  /**
+   * Fired when the user starts or resumes playback (play button / Space),
+   * not on pause or caption seek.
+   */
+  onPlayIntent?: () => void;
 };
 
 /**
@@ -54,9 +59,12 @@ export function useNarratedDemoPlayback({
   keyboardEnabled = true,
   keyboardRequiresPlaybackStarted = false,
   resetKey = null,
+  onPlayIntent,
 }: UseNarratedDemoPlaybackOptions) {
   const captionsId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const onPlayIntentRef = useRef(onPlayIntent);
+  onPlayIntentRef.current = onPlayIntent;
   const narrationAudioRef = useRef<HTMLAudioElement | null>(null);
   const narrationCueRef = useRef(-1);
   const playbackEndedRef = useRef(false);
@@ -835,6 +843,7 @@ export function useNarratedDemoPlayback({
       }
 
       userPausedDuringFreezeRef.current = false;
+      onPlayIntentRef.current?.();
       setPlaying(true);
       markPlaybackStarted();
 
@@ -869,11 +878,13 @@ export function useNarratedDemoPlayback({
 
     // Ended / near end while paused: Play / Space restarts from the beginning.
     if (video.paused && isPlaybackAtEnd(video)) {
+      onPlayIntentRef.current?.();
       replayFromStart();
       return;
     }
 
     if (video.paused) {
+      onPlayIntentRef.current?.();
       void video.play();
     } else {
       video.pause();

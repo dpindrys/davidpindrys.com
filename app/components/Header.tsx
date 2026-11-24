@@ -172,8 +172,17 @@ export default function Header() {
   };
 
   const concealed = hidden && !menuOpen;
-  const onHome = usePathname() === "/";
+  const pathname = usePathname();
+  const onHome = pathname === "/";
   const sectionHref = (href: string) => (onHome ? href : `/${href}`);
+
+  // Full-viewport sticky sidebar case studies: skip site chrome to avoid double nav.
+  if (
+    pathname === "/case-studies/frx" ||
+    pathname === "/case-studies/visual-ehr"
+  ) {
+    return null;
+  }
 
   return (
     <>

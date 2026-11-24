@@ -1,5 +1,6 @@
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
 import { vehrStrategySection } from "./vehrStrategyData";
+import { vehrNavScrollMtClass } from "./vehrCaseStudyNav";
 import {
   frxStrategyHeadlineClass,
   mediaCardClass,
@@ -20,7 +21,9 @@ export default function VehrStrategySection() {
 
   return (
     <section
-      className="relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20"
+      id="vehr-nav-strategy"
+      data-vehr-case-study-section=""
+      className={`relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20 ${vehrNavScrollMtClass}`}
       aria-labelledby="vehr-strategy-heading"
     >
       <p className={frxPaddedEyebrowClass}>{eyebrow}</p>

@@ -1,9 +1,4 @@
-import Footer from "../../components/Footer";
-import FrxCaseStudyBody from "./FrxCaseStudyBody";
-import {
-  frxColumnClass,
-  frxShellClass,
-} from "./frxCaseStudyTypography";
+import FrxCaseStudyView from "./FrxCaseStudyView";
 
 import type { Metadata } from "next";
 
@@ -19,16 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function FrxCaseStudyPage() {
-  return (
-    <>
-      <main id="main-content" className="min-h-screen overflow-x-visible bg-[#F4F2EE]">
-        <div className={`${frxShellClass} pb-20 pt-10 md:pb-28 md:pt-14`}>
-          <div className={`${frxColumnClass} flex flex-col items-stretch overflow-x-visible`}>
-            <FrxCaseStudyBody variant="page" />
-          </div>
-        </div>
-      </main>
-      <Footer linkBase="/" />
-    </>
-  );
+  return <FrxCaseStudyView />;
 }

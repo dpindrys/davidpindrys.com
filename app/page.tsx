@@ -4,7 +4,6 @@ import CaseStudyCardHeader from "./components/CaseStudyCardHeader";
 import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import CaseStudyHeroLink from "./components/CaseStudyHeroLink";
-import FrxCaseStudyHeroOpener from "./case-studies/frx/FrxCaseStudyHeroOpener";
 import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
@@ -169,11 +168,7 @@ const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
 
 function ProjectHero({ project }: { project: WorkCard }) {
   const heroMedia =
-    project.id === "frx" ? (
-      <FrxCaseStudyHeroOpener label={`View ${project.client} case study`}>
-        {project.media}
-      </FrxCaseStudyHeroOpener>
-    ) : project.heroCaseStudyLink && project.caseStudyHref ? (
+    project.heroCaseStudyLink && project.caseStudyHref ? (
       <CaseStudyHeroLink
         href={project.caseStudyHref}
         label={`View ${project.client} case study`}

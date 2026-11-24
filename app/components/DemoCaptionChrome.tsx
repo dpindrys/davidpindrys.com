@@ -564,7 +564,7 @@ export function DemoWalkthroughMobileCaptions({
       <div
         className={`shrink-0 bg-black/[0.05] ${showFromMd ? "" : "md:hidden"}`}
       >
-        <div className="flex items-start gap-3 px-4 py-3 sm:gap-3.5">
+        <div className="mx-auto flex w-full max-w-[1200px] items-start gap-3 px-4 py-3 sm:gap-3.5">
           {onTogglePlayback ? (
             <button
               type="button"

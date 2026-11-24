@@ -1,4 +1,4 @@
-/** Scroll targets in the Frx case study (modal nav + scrollspy). */
+/** Scroll targets in the Frx case study (sidebar nav + scrollspy). */
 export const frxCaseStudyNavSections = [
   { id: "frx-nav-overview", label: "Overview" },
   { id: "frx-nav-challenge", label: "Challenge" },
@@ -7,8 +7,8 @@ export const frxCaseStudyNavSections = [
   { id: "frx-nav-impact", label: "Impact" },
 ] as const;
 
-/** Gap above section eyebrows when the modal nav scrolls to a section. */
-export const frxNavScrollMtClass = "scroll-mt-8";
+/** Gap above section eyebrows; clears mobile sticky chrome, modest on desktop sidebar. */
+export const frxNavScrollMtClass = "scroll-mt-28 md:scroll-mt-8";
 
 export type FrxCaseStudyNavId = (typeof frxCaseStudyNavSections)[number]["id"];
 

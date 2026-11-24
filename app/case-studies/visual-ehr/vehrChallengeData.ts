@@ -13,7 +13,32 @@ export const vehrChallengeIntro = {
   title: "Source-based records fragment longitudinal reasoning",
   body:
     "Most EHRs organize information by storage type rather than by how clinicians reconstruct patient history. Labs, medications, vitals, diagnoses, and notes are separated across tabs, tables, and isolated trend views — forcing clinicians to manually piece together what changed, when it changed, and why it mattered.",
+  imageSrc: "/images/vehr/source-oriented.png",
+  imageAlt:
+    "Clinician overwhelmed at a cluttered source-oriented EHR, with a thought bubble of scattered paper records",
 } as const;
+
+/** Removed from the Challenge card; kept for reuse elsewhere. */
+export const vehrChallengeQuotesUnused = [
+  {
+    quote:
+      "The trends are technically there, but interpreting them takes work.",
+    attribution: "Internal Medicine Physician",
+  },
+  {
+    quote:
+      "Labs, meds, vitals, notes: everything lives in separate places, so clinical context gets fragmented.",
+    attribution: "Hospital Clinician",
+  },
+] as const;
+
+export const vehrChallengeQuotes = [
+  {
+    quote:
+      "Rather than an HPI followed by a chart scavenger hunt, the clinician's mind desires a story enfolded with history.",
+    attribution: "Cole Marolf, MD",
+  },
+] as const;
 
 export const vehrChallengeClusters: readonly VehrChallengeCluster[] = [
   {
@@ -39,7 +64,7 @@ export const vehrChallengeClusters: readonly VehrChallengeCluster[] = [
     imageAlt:
       "Epic EHR encounter list organized as disconnected modules across the chart",
     quote:
-      "Labs, meds, vitals, notes — everything lives in separate places, so clinical context gets fragmented.",
+      "Labs, meds, vitals, notes: everything lives in separate places, so clinical context gets fragmented.",
     attribution: "Hospital Clinician",
   },
   {

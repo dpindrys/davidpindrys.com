@@ -12,7 +12,7 @@ import {
 export default function FrxBelowHero() {
   return (
     <section
-      className="mt-12 flex w-full flex-col gap-8 md:gap-10"
+      className="mt-6 flex w-full flex-col gap-8 md:mt-8 md:gap-10"
       aria-labelledby="frx-overview-heading"
     >
       <div className="flex min-w-0 flex-col">

@@ -144,7 +144,7 @@ export const prototypes: readonly Prototype[] = [
     imageAlt:
       "VEHR clinical timeline for Jordan Reyes, with conditions, demographics, and a measurement heatmap.",
     bgImage: "/images/vehr/bg.png",
-    video: "/videos/vehr/prototype.mp4",
+    video: "/videos/vehr-zoom-subtly.mp4",
     href: "https://visual-ehr.vercel.app",
     demoTitle: "Clinical Timeline",
     demoSubtitle: "VEHR Technologies",

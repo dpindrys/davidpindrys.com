@@ -16,6 +16,12 @@ export const vehrHeroLead = {
     "I collaborated with a practicing physician founder to design a timeline-based chart review platform that reorganizes fragmented EHR data into longitudinal clinical narratives. I led workflow design, information architecture, and scalable UI systems now being implemented by the VEHR engineering team.",
 } as const;
 
+/** Page Overview band above the ROLE / CLIENT meta row. */
+export const vehrOverviewSection = {
+  eyebrow: "Overview",
+  body: vehrHeroLead.body,
+} as const;
+
 export const vehrProductContext = {
   title: "Chart review for an EHR startup",
   body:

@@ -1,16 +1,30 @@
-import { vehrBelowHeroMeta } from "./vehrBelowHeroData";
+import { vehrBelowHeroMeta, vehrOverviewSection } from "./vehrBelowHeroData";
 import {
+  frxMetaEyebrowClass,
   frxMetaLabelClass,
   frxMetaValueClass,
+  frxSectionBodyClass,
 } from "../frx/frxCaseStudyTypography";
 
 export default function VehrBelowHero() {
   return (
     <section
-      className="mt-12 flex w-full flex-col"
-      aria-label="Project context"
+      className="mt-6 flex w-full flex-col gap-8 md:mt-8 md:gap-10"
+      aria-labelledby="vehr-overview-heading"
     >
-      <div className="flex flex-col gap-0 md:flex-row md:gap-0">
+      <div className="flex min-w-0 flex-col">
+        <p id="vehr-overview-heading" className={frxMetaEyebrowClass}>
+          {vehrOverviewSection.eyebrow}
+        </p>
+        <p className={`${frxSectionBodyClass} mt-4 md:mt-5`}>
+          {vehrOverviewSection.body}
+        </p>
+      </div>
+
+      <div
+        className="flex flex-col gap-0 md:flex-row md:gap-0"
+        aria-label="Project context"
+      >
         {vehrBelowHeroMeta.map((item, i) => (
           <div
             key={`${item.label}-${i}`}
