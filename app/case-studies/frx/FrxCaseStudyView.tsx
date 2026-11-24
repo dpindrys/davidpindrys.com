@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import CaseStudyHeroVideo from "../../components/CaseStudyHeroVideo";
 import CaseStudyMobileStickyChrome from "../../components/CaseStudyMobileStickyChrome";
@@ -19,6 +19,7 @@ import {
 } from "./frxCaseStudyNav";
 
 const FRX_HERO_VIDEO_SRC = "/videos/fresenius-guided-zoom-v1.mp4";
+const FRX_HERO_POSTER = "/images/frx/hero-poster.jpg";
 const FRX_HERO_BG = "/images/frx/bg.png";
 const FRX_PLAYBACK_CLIENT = "Fresenius Medical Care";
 
@@ -55,6 +56,7 @@ function SidebarBackChevronIcon() {
  */
 export default function FrxCaseStudyView() {
   const titleId = useId();
+  const heroCaptionRef = useRef<HTMLElement>(null);
   const [activeNavId, setActiveNavId] = useState<FrxCaseStudyNavId>(
     frxCaseStudyNavSections[0].id,
   );
@@ -78,6 +80,7 @@ export default function FrxCaseStudyView() {
     keyboardEnabled: true,
     resetKey: "frx-case-study-page",
     onPlayIntent: instantScrollToTop,
+    pauseWhenOffscreenRef: heroCaptionRef,
   });
 
   const scrollToSection = useCallback((sectionId: FrxCaseStudyNavId) => {
@@ -189,7 +192,10 @@ export default function FrxCaseStudyView() {
             title={FRX_CASE_STUDY_MODAL_TITLE}
             subtitle={FRX_CASE_STUDY_MODAL_SUBTITLE}
           >
-            <header className="relative border-b border-black/10">
+            <header
+              ref={heroCaptionRef}
+              className="relative border-b border-black/10"
+            >
               <h1 id={titleId} className="sr-only">
                 {FRX_CASE_STUDY_MODAL_TITLE}
               </h1>
@@ -202,6 +208,7 @@ export default function FrxCaseStudyView() {
                     <CaseStudyHeroVideo
                       videoRef={videoRef}
                       src={FRX_HERO_VIDEO_SRC}
+                      poster={FRX_HERO_POSTER}
                       label="In-clinic digital refill workflow in CareTeamHub"
                       playing={playing}
                       onTogglePlayback={togglePlayback}

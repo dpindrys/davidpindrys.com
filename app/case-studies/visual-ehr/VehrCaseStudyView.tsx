@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import CaseStudyHeroVideo from "../../components/CaseStudyHeroVideo";
 import CaseStudyMobileStickyChrome from "../../components/CaseStudyMobileStickyChrome";
@@ -19,6 +19,7 @@ import {
 } from "./vehrCaseStudyNav";
 
 const VEHR_HERO_VIDEO_SRC = "/videos/vehr-zoom-subtly.mp4";
+const VEHR_HERO_POSTER = "/images/vehr/hero-poster.jpg";
 const VEHR_HERO_BG = "/images/vehr/bg.png";
 const VEHR_PLAYBACK_CLIENT = "VEHR Technologies";
 
@@ -56,6 +57,7 @@ function SidebarBackChevronIcon() {
  */
 export default function VehrCaseStudyView() {
   const titleId = useId();
+  const heroCaptionRef = useRef<HTMLElement>(null);
   const [activeNavId, setActiveNavId] = useState<VehrCaseStudyNavId>(
     vehrCaseStudyNavSections[0].id,
   );
@@ -79,6 +81,7 @@ export default function VehrCaseStudyView() {
     keyboardEnabled: true,
     resetKey: "vehr-case-study-page",
     onPlayIntent: instantScrollToTop,
+    pauseWhenOffscreenRef: heroCaptionRef,
   });
 
   const scrollToSection = useCallback((sectionId: VehrCaseStudyNavId) => {
@@ -190,7 +193,10 @@ export default function VehrCaseStudyView() {
             title={VEHR_CASE_STUDY_MODAL_TITLE}
             subtitle={VEHR_CASE_STUDY_MODAL_SUBTITLE}
           >
-            <header className="relative border-b border-black/10">
+            <header
+              ref={heroCaptionRef}
+              className="relative border-b border-black/10"
+            >
               <h1 id={titleId} className="sr-only">
                 {VEHR_CASE_STUDY_MODAL_TITLE}
               </h1>
@@ -203,6 +209,7 @@ export default function VehrCaseStudyView() {
                     <CaseStudyHeroVideo
                       videoRef={videoRef}
                       src={VEHR_HERO_VIDEO_SRC}
+                      poster={VEHR_HERO_POSTER}
                       label="VEHR clinical timeline prototype for Jordan Reyes"
                       playing={playing}
                       onTogglePlayback={togglePlayback}

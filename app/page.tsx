@@ -7,6 +7,7 @@ import CaseStudyHeroLink from "./components/CaseStudyHeroLink";
 import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
 import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
+import { buttonPrimaryClass } from "./components/buttonTokens";
 import { heroBandClass } from "./lib/heroBand";
 import DchpHeroMedia from "./components/DchpHeroMedia";
 import { FloatingColumnsToggle, FloatingPlaybackProvider } from "./components/FloatingColumns";
@@ -66,7 +67,7 @@ const processSteps = [
   },
 ] as const;
 
-const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]";
+const workTaglineClass = "mt-1 font-sans text-[15px] leading-[1.4] text-black/80 md:text-[16px]";
 
 type WorkCard = {
   id: string;
@@ -256,29 +257,43 @@ export default function Home() {
           className={`${shellClass} ${heroBandClass} flex min-h-[80svh] flex-col justify-center pb-16 pt-16 md:pb-24 md:pt-24`}
         >
           <div className={columnClass}>
+            <p className="font-sans text-[15px] font-medium leading-none text-black/80 md:text-[16px]">
+              Senior Product Designer
+            </p>
             <h1
               id="hero-title"
-              className="max-w-[16ch] font-sans text-[clamp(2.75rem,6.4vw,5.25rem)] font-normal leading-[0.98] tracking-[-0.045em] text-black"
+              className="mt-5 max-w-[18ch] font-sans text-[clamp(2.5rem,6vw,4.75rem)] font-medium leading-[1.02] tracking-[-0.04em] text-black md:mt-6"
             >
-              Healthcare workflows that actually work.
+              I design healthcare
+              <br />
+              software that simplifies
+              <br />
+              clinical work.
             </h1>
-            <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center md:mt-12">
-              <TalkButton variant="hero">Let&apos;s talk</TalkButton>
-              <LinkedInButton />
-              <a
-                href="#work"
-                className="group inline-flex items-center gap-2 font-sans text-[1.375rem] font-medium leading-[1.1] text-black/70 transition-colors hover:text-black sm:ml-2 md:text-[1.75rem]"
-              >
-                Explore below
+            <p className={`mt-6 max-w-[36rem] md:mt-8 ${bodyClass}`}>
+              From patient record review to medication refills, I lead research, workflow design, and
+              prototyping to help clinicians and care teams get things done.
+            </p>
+            <div className="mt-8 flex flex-col items-start gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+              <a href="#work" className={`group ${buttonPrimaryClass}`}>
+                View my work
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-[1em] w-[1em] shrink-0 transition-transform duration-200 ease-out group-hover:translate-y-1 group-focus-visible:translate-y-1 motion-reduce:transition-none"
+                  className="h-[1em] w-[1em] shrink-0 transition-transform duration-200 ease-out group-hover:translate-y-0.5 group-focus-visible:translate-y-0.5 motion-reduce:transition-none"
                   aria-hidden="true"
                   fill="none"
                 >
-                  <path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M12 5v14M6 13l6 6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </a>
+              <TalkButton variant="outline">Let&apos;s talk</TalkButton>
+              <LinkedInButton />
             </div>
           </div>
         </section>
@@ -342,7 +357,7 @@ export default function Home() {
             <h2 id="process-title" className={sideLeadClass}>
               My design process
             </h2>
-            <p className="mt-4 font-sans text-[16px] leading-[1.6] text-black/70 md:mt-5 md:text-[18px]">
+            <p className={`mt-4 md:mt-5 ${bodyClass}`}>
               I bring a human factors engineering perspective to healthcare design. I study how people understand
               information, make decisions, and complete tasks within the realities of care, then work with clinical
               and product teams to turn that understanding into accessible, usable experiences that remove barriers to

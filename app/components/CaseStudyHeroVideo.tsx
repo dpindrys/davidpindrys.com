@@ -13,6 +13,8 @@ const FIRST_FRAME_EPS = 0.05;
 type CaseStudyHeroVideoProps = {
   videoRef: RefObject<HTMLVideoElement | null>;
   src: string;
+  /** First frame shown before iOS decodes the video. Safari leaves the element transparent until play. */
+  poster: string;
   label: string;
   playing: boolean;
   onTogglePlayback: () => void;
@@ -27,6 +29,7 @@ type CaseStudyHeroVideoProps = {
 export default function CaseStudyHeroVideo({
   videoRef,
   src,
+  poster,
   label,
   playing,
   onTogglePlayback,
@@ -64,7 +67,9 @@ export default function CaseStudyHeroVideo({
       <video
         ref={videoRef}
         src={src}
-        className="block h-auto w-full"
+        poster={poster}
+        className="block h-auto w-full bg-cover bg-center"
+        style={{ backgroundImage: `url(${poster})` }}
         playsInline
         preload="metadata"
         aria-label={label}

@@ -8,11 +8,12 @@ export const cardTitleClass =
   "font-sans text-[20px] font-medium leading-[1.25] tracking-[-0.02em] text-black";
 /** Work card client names and other h3 headings — same scale as services card titles. */
 export const companyNameClass = cardTitleClass;
-export const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/70 md:text-[17px]";
-export const cardBodyClass = "font-sans text-[15px] leading-[1.55] text-black/70";
-export const metaTextClass = "font-sans text-[13px] leading-none text-black/70";
+/** Case study + homepage body paragraphs — AA on bone `#E8E5DE` / cream. */
+export const bodyClass = "font-sans text-[16px] leading-[1.6] text-black/80 md:text-[17px]";
+export const cardBodyClass = "font-sans text-[15px] leading-[1.55] text-black/80";
+export const metaTextClass = "font-sans text-[13px] leading-none text-black/80";
 
-export const tagClass = "border border-black/15 bg-white px-2.5 py-1 font-sans text-[13px] font-bold leading-none text-black/70";
+export const tagClass = "border border-black/15 bg-white px-2.5 py-1 font-sans text-[13px] font-bold leading-none text-black/80";
 export const challengeTagClass =
   "border border-black bg-black px-2.5 py-1 font-sans text-[13px] font-bold leading-none text-white";
 export const eyebrowClass =

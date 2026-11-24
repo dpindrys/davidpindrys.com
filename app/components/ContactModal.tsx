@@ -13,23 +13,19 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import {
+  buttonNavClass,
+  buttonOutlineClass,
+  buttonPrimaryClass,
+} from "./buttonTokens";
 import { sideLeadClass } from "../lib/pageStyles";
 
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID?.trim() || "mykqbbye";
 
-const labelClass = "font-sans text-[13px] font-medium leading-none text-black/70";
+const labelClass = "font-sans text-[13px] font-medium leading-none text-black/80";
 const inputClass =
   "w-full border border-black/15 bg-white px-4 py-3 font-sans text-[16px] leading-normal text-black outline-none placeholder:text-black/35 focus-visible:border-black disabled:cursor-not-allowed disabled:opacity-60";
 const errorClass = "font-sans text-[14px] leading-[1.5] text-red-700";
-
-const primaryButtonClass =
-  "inline-flex items-center gap-2 bg-[#1F2621] px-5 py-3.5 font-sans text-[15px] font-medium text-[#F4F2EE] transition-colors hover:bg-[#2A332C] disabled:cursor-not-allowed disabled:opacity-60";
-
-const navButtonClass =
-  "inline-flex items-center gap-2 bg-[#1F2621] px-4 py-2.5 font-sans text-[14px] font-medium leading-none text-[#F4F2EE] transition-colors hover:bg-[#2A332C]";
-
-const heroButtonClass =
-  "inline-flex items-center gap-2 bg-[#1F2621] px-6 py-3.5 font-sans text-[1.375rem] font-medium leading-[1.1] text-[#F4F2EE] transition-colors hover:bg-[#2A332C] md:px-7 md:py-4 md:text-[1.75rem]";
 
 type OpenContact = (opener: HTMLElement | null) => void;
 
@@ -134,10 +130,10 @@ function ContactForm({ onSucceeded }: { onSucceeded?: () => void }) {
       <ValidationError errors={state.errors} className={errorClass} />
 
       <div className="flex flex-col items-start gap-3">
-        <button type="submit" disabled={state.submitting} className={primaryButtonClass}>
+        <button type="submit" disabled={state.submitting} className={buttonPrimaryClass}>
           {state.submitting ? "Sending…" : "Send it"}
         </button>
-        <p className="font-sans text-[13px] leading-[1.45] text-black/70">I won&apos;t share this with anyone.</p>
+        <p className="font-sans text-[13px] leading-[1.45] text-black/80">I won&apos;t share this with anyone.</p>
       </div>
     </form>
   );
@@ -224,7 +220,7 @@ function ContactDialog({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="flex h-11 w-11 shrink-0 items-center justify-center bg-transparent font-sans text-[20px] leading-none text-black/70 hover:text-black"
+            className="flex h-11 w-11 shrink-0 items-center justify-center bg-transparent font-sans text-[20px] leading-none text-black/80 hover:text-black"
           >
             <span aria-hidden>×</span>
           </button>
@@ -276,11 +272,17 @@ export function TalkButton({
   className = "",
 }: {
   children: ReactNode;
-  variant?: "primary" | "nav" | "hero";
+  /** `hero` is an alias of `primary` (same CTA system as homepage). */
+  variant?: "primary" | "nav" | "hero" | "outline";
   className?: string;
 }) {
   const openContact = useContext(ContactContext);
-  const buttonClass = variant === "hero" ? heroButtonClass : variant === "nav" ? navButtonClass : primaryButtonClass;
+  const buttonClass =
+    variant === "nav"
+      ? buttonNavClass
+      : variant === "outline"
+        ? buttonOutlineClass
+        : buttonPrimaryClass;
   return (
     <button
       type="button"

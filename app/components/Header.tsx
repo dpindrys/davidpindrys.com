@@ -232,7 +232,7 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <TalkButton variant="nav">Let&apos;s talk</TalkButton>
+          <TalkButton variant="outline">Let&apos;s talk</TalkButton>
         </nav>
       </div>
     </header>

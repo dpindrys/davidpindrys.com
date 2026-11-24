@@ -6,6 +6,7 @@ import {
   useId,
   useRef,
   useState,
+  type RefObject,
   type SyntheticEvent,
 } from "react";
 import {
@@ -48,6 +49,11 @@ export type UseNarratedDemoPlaybackOptions = {
    * not on pause or caption seek.
    */
   onPlayIntent?: () => void;
+  /**
+   * When this element leaves the viewport (e.g. case study hero + caption),
+   * pause narration in place via pauseSession. Does not auto-resume on scroll-back.
+   */
+  pauseWhenOffscreenRef?: RefObject<Element | null>;
 };
 
 /**
@@ -60,6 +66,7 @@ export function useNarratedDemoPlayback({
   keyboardRequiresPlaybackStarted = false,
   resetKey = null,
   onPlayIntent,
+  pauseWhenOffscreenRef,
 }: UseNarratedDemoPlaybackOptions) {
   const captionsId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -941,6 +948,25 @@ export function useNarratedDemoPlayback({
     peekHoldFill,
     stopHoldFillAnimation,
   ]);
+
+  // Case study heroes: pause when hero + caption leave the viewport.
+  useEffect(() => {
+    const el = pauseWhenOffscreenRef?.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry || entry.isIntersecting) return;
+        pauseSession();
+      },
+      // Fire once the observed block is fully out (scrolled past).
+      { threshold: 0 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [pauseSession, pauseWhenOffscreenRef]);
 
   useEffect(() => {
     if (!keyboardEnabled || !hasCaptions) return;
