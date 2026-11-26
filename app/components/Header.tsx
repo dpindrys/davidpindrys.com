@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { heroBandClass } from "../lib/heroBand";
+import { columnClass } from "../lib/pageStyles";
 import { MessageIcon, TalkButton, useOpenContact } from "./ContactModal";
 
 const linkClass =
@@ -179,7 +180,9 @@ export default function Header() {
   // Full-viewport sticky sidebar case studies: skip site chrome to avoid double nav.
   if (
     pathname === "/case-studies/frx" ||
-    pathname === "/case-studies/visual-ehr"
+    pathname === "/case-studies/visual-ehr" ||
+    pathname === "/case-studies/vinyl" ||
+    pathname === "/case-studies/dell-childrens"
   ) {
     return null;
   }
@@ -194,7 +197,7 @@ export default function Header() {
         concealed ? "pointer-events-none -translate-y-full" : "translate-y-0"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-x-4 py-6 md:py-8">
+      <div className={`${columnClass} flex items-center justify-between gap-x-4 py-6 md:py-8`}>
         <a
           href={onHome ? "#top" : "/"}
           onClick={(event) => {

@@ -9,7 +9,6 @@ import {
 } from "../frx/FrxExtendedSections";
 import {
   frxMetaEyebrowClass,
-  frxPaddedEyebrowClass,
   frxSectionBodyClass,
   frxSectionIntroStackClass,
   frxSplitRowGridClass,
@@ -27,16 +26,15 @@ const trendsCluster = vehrChallengeClusters.find(
 const vehrCardGray = "#DBD8D1";
 
 export default function VehrGroundworkSection() {
-  const { eyebrow, title, body, image } = vehrGroundworkSection;
+  const { title, body, image } = vehrGroundworkSection;
 
   return (
     <section
       id="vehr-nav-groundwork"
       data-vehr-case-study-section=""
-      className={`relative mt-16 w-full pt-12 md:mt-24 md:pt-16 lg:mt-28 lg:pt-20 ${vehrNavScrollMtClass}`}
+      className={`relative mt-16 w-full md:mt-24 lg:mt-28 ${vehrNavScrollMtClass}`}
       aria-labelledby="vehr-groundwork-heading"
     >
-      <p className={frxPaddedEyebrowClass}>{eyebrow}</p>
       <div className={frxSplitRowGridClass}>
         <div className={`${frxSectionIntroStackClass} self-start`}>
           <h2 id="vehr-groundwork-heading" className={frxStrategyHeadlineClass}>
@@ -49,35 +47,6 @@ export default function VehrGroundworkSection() {
           <ZoomableProblemImage
             src={image.src}
             alt={image.alt}
-            shellClassName={imageShellClass}
-            imgClassName={imageClass}
-            elevateOnHover={false}
-          />
-        </div>
-      </div>
-
-      <div className={`${mediaCardClass} mt-8 w-full md:mt-10`}>
-        <ZoomableProblemImage
-          src="/images/vehr/diagnoses-encounters.png"
-          alt="Diagnoses and encounters aligned on shared timeline visit columns"
-          shellClassName={imageShellClass}
-          imgClassName={imageClass}
-          elevateOnHover={false}
-        />
-      </div>
-
-      <div className={`${frxSplitRowGridClass} mt-8 md:mt-10`}>
-        <div className={`${frxSectionIntroStackClass} self-start`}>
-          <h2 id="vehr-vitals-labs-heading" className={frxStrategyHeadlineClass}>
-            Vitals and labs
-          </h2>
-          <p className={frxSectionBodyClass}>{body}</p>
-        </div>
-
-        <div className={`${mediaCardClass} min-w-0 w-full self-start`}>
-          <ZoomableProblemImage
-            src="/images/vehr/vitals-linegraph.png"
-            alt="Heart rate, blood pressure, and oxygen saturation drawn as line graphs across visits"
             shellClassName={imageShellClass}
             imgClassName={imageClass}
             elevateOnHover={false}

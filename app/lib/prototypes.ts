@@ -95,7 +95,7 @@ function vinylAudio(n: keyof typeof VINYL_AUDIO_V): string {
 }
 
 /** Timed captions for the Vinyl Health guided demo (narration: public/audio/vinyl1–6.wav). */
-const vinylDemoCaptions: readonly DemoCaption[] = [
+export const vinylDemoCaptions: readonly DemoCaption[] = [
   {
     start: 0,
     end: 7,

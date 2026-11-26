@@ -94,8 +94,6 @@ const workCards: readonly WorkCard[] = [
     tagline: "Clinical timeline",
     description:
       "A clinical timeline that brings symptoms, encounters, and measurements into one view, helping clinicians follow a patient’s history and see how changes connect.",
-    caseStudyHref: "/case-studies/visual-ehr",
-    heroCaseStudyLink: true,
     media: (
       <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -121,13 +119,41 @@ const workCards: readonly WorkCard[] = [
     ),
   },
   {
+    id: "vinyl",
+    client: "Vinyl Health",
+    tagline: "AI-assisted patient overview",
+    description:
+      "An AI-assisted overview that helps clinicians review changes in a patient’s condition and trace generated summaries back to the underlying clinical records.",
+    media: (
+      <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/vinyl/bg.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/vinyl/hero.png"
+              alt=""
+              draggable={false}
+              className="block h-auto w-full rounded-[12px]"
+              style={{ clipPath: "inset(0 0 0 1px round 12px)" }}
+            />
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
     id: "frx",
     client: "Fresenius Medical Care",
     tagline: "In-clinic refill workflow",
     description:
       "Designed a medication refill workflow within clinic staff’s Salesforce application, replacing paper, fax, and phone follow-ups and making refills 70% faster across 2,800+ dialysis clinics.",
-    caseStudyHref: "/case-studies/frx",
-    heroCaseStudyLink: true,
     media: (
       <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-[12px] border border-black/15">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -163,6 +189,7 @@ const workCards: readonly WorkCard[] = [
 ];
 
 const vehrCaseStudy = workCards.find((item) => item.id === "vehr")!;
+const vinylCaseStudy = workCards.find((item) => item.id === "vinyl")!;
 const frxCaseStudy = workCards.find((item) => item.id === "frx")!;
 const dellCaseStudy = workCards.find((item) => item.id === "dell")!;
 
@@ -233,13 +260,15 @@ function CaseStudyArticle({
       <ProjectHero project={project} />
       <div
         className={
-          wide
+          wide && !project.heroCaseStudyLink
             ? "mt-5 flex w-full flex-col gap-5 md:grid md:grid-cols-2 md:gap-8"
-            : "mt-5 flex w-full flex-1 flex-col gap-5"
+            : wide
+              ? "mt-5 flex w-full flex-col gap-5"
+              : "mt-5 flex w-full flex-1 flex-col gap-5"
         }
       >
         <p className={bodyClass}>{project.description}</p>
-        {!project.heroCaseStudyLink ? (
+        {project.caseStudyHref && !project.heroCaseStudyLink ? (
           <CaseStudyCardCtas href={project.caseStudyHref} wide={wide} />
         ) : null}
       </div>
@@ -302,12 +331,14 @@ export default function Home() {
             <h2 id="work-title" className={sideLeadClass}>
               Selected work
             </h2>
-            <div className="mt-6 flex flex-col gap-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <CaseStudyArticle project={vehrCaseStudy} />
-                <CaseStudyArticle project={frxCaseStudy} />
-              </div>
-              <CaseStudyArticle project={dellCaseStudy} wide />
+            <p className="mt-3 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]">
+              Case studies coming soon
+            </p>
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <CaseStudyArticle project={frxCaseStudy} />
+              <CaseStudyArticle project={dellCaseStudy} />
+              <CaseStudyArticle project={vehrCaseStudy} />
+              <CaseStudyArticle project={vinylCaseStudy} />
             </div>
           </div>
         </section>

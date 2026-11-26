@@ -24,13 +24,8 @@ const nextConfig: NextConfig = {
       { source: "/contact", destination: "/#contact", permanent: true },
       { source: "/about", destination: "/", permanent: true },
       {
-        source: "/case-studies/dell-childrens",
-        destination: "/#dell",
-        permanent: true,
-      },
-      {
         source: "/case-studies/dell-childrens-health-plan",
-        destination: "/#dell",
+        destination: "/case-studies/dell-childrens",
         permanent: true,
       },
       { source: "/case-studies/ovcp", destination: "/", permanent: true },

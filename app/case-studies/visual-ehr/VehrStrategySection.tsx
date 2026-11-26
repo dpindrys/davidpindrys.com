@@ -56,7 +56,6 @@ export default function VehrStrategySection() {
           elevateOnHover={false}
         />
       </div>
-      <div className="pb-12 md:pb-16 lg:pb-20" />
     </section>
   );
 }

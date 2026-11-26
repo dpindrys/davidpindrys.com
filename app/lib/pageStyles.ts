@@ -1,5 +1,6 @@
 export const shellClass = "w-full px-6 md:px-10";
-export const columnClass = "mx-auto w-full max-w-[1200px]";
+/** Homepage column: case-study content (1200) plus the desktop sidebar (280). */
+export const columnClass = "mx-auto w-full max-w-[1480px]";
 export const sectionGapClass = "mt-20 md:mt-28";
 
 export const sideLeadClass =
