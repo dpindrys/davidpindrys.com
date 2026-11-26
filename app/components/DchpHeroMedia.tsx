@@ -15,7 +15,7 @@ export default function DchpHeroMedia({ framed = true }: { framed?: boolean }) {
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         />
       ) : null}
-      <div className="pointer-events-none absolute inset-0 origin-center transition-transform duration-500 ease-out motion-safe:group-hover/dchp:scale-[1.02] motion-reduce:transition-none">
+      <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-[5%] top-1/2 w-[74%] -translate-y-1/2 overflow-hidden rounded-[12px] bg-white shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

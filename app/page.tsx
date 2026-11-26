@@ -104,7 +104,7 @@ const workCards: readonly WorkCard[] = [
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/vehr/hero.png"
@@ -134,7 +134,7 @@ const workCards: readonly WorkCard[] = [
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/vinyl/hero.png"
@@ -164,7 +164,7 @@ const workCards: readonly WorkCard[] = [
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)] transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none">
+          <div className="w-[78%] rounded-[12px] shadow-[0_24px_60px_-20px_rgba(15,40,80,0.35)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/frx/hero.png"
