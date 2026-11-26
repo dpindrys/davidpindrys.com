@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import ZoomableProblemImage from "../../components/ZoomableProblemImage";
-import ZoomableProblemVideo from "../../components/ZoomableProblemVideo";
+import ZoomableProblemMediaPair from "../../components/ZoomableProblemMediaPair";
 import FrxPrototypeScanGallery from "./FrxPrototypeScanGallery";
 import { frxNavScrollMtClass } from "./frxCaseStudyNav";
 import {
@@ -84,6 +84,19 @@ export { mediaCardClass, frxStrategyHeadlineClass };
 
 const zoomMediaShellClass = "min-w-0 w-full";
 
+const strategyMedia = [
+  {
+    kind: "image" as const,
+    src: "/images/frx/objectmap.png",
+    alt: "Object map of refill workflow: patients, medications, prescriptions, refills, and related entities",
+  },
+  {
+    kind: "video" as const,
+    src: "/videos/frx/fresenius-objectwireframe.mp4",
+    label: "Early object wireframe prototype connecting refill workflow steps",
+  },
+];
+
 /** Mapping + testing — after the main problem card, before the solution walkthrough. */
 export function FrxSectionsBeforeSolution() {
   return (
@@ -128,18 +141,9 @@ export function FrxSectionsBeforeSolution() {
           <div
             className={`${mediaCardClass} grid w-full min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:gap-5`}
           >
-            <ZoomableProblemImage
-              src="/images/frx/objectmap.png"
-              alt="Object map of refill workflow: patients, medications, prescriptions, refills, and related entities"
-              shellClassName={zoomMediaShellClass}
-              imgClassName="block h-auto w-full rounded-md border-0"
-              elevateOnHover={false}
-            />
-            <ZoomableProblemVideo
-              src="/videos/frx/fresenius-objectwireframe.mp4"
-              ariaLabel="Early object wireframe prototype connecting refill workflow steps"
-              cardClassName={zoomMediaShellClass}
-              dialogLabel="Early workflow wireframe video"
+            <ZoomableProblemMediaPair
+              dialogLabel="Refill object map and early wireframe"
+              items={strategyMedia}
             />
           </div>
         </div>

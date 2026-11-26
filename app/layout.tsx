@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import { ContactProvider } from "./components/ContactModal";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import "./globals.css";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
           </a>
           <Header />
           {children}
+          <Footer />
         </ContactProvider>
       </body>
     </html>

@@ -5,7 +5,6 @@ import ColleagueQuotes from "./components/ColleagueQuotes";
 import { TalkButton } from "./components/ContactModal";
 import CaseStudyHeroLink from "./components/CaseStudyHeroLink";
 import { DemoPlayOverlay, type DemoCaption } from "./components/DemoDialog";
-import Footer from "./components/Footer";
 import LinkedInButton from "./components/LinkedInButton";
 import { buttonPrimaryClass } from "./components/buttonTokens";
 import { heroBandClass } from "./lib/heroBand";
@@ -399,7 +398,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

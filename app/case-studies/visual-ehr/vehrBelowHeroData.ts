@@ -13,19 +13,13 @@ export const vehrHeroFocusPills = [
 
 export const vehrHeroLead = {
   body:
-    "I collaborated with a practicing physician founder to design a timeline-based chart review platform that reorganizes fragmented EHR data into longitudinal clinical narratives. I led workflow design, information architecture, and scalable UI systems now being implemented by the VEHR engineering team.",
+    "As founding product design lead, I partnered with VEHR’s physician founder to design a new way to review patient charts. I led workflow design, information architecture, and the UI system that VEHR’s engineering team is now implementing.",
 } as const;
 
 /** Page Overview band above the ROLE / CLIENT meta row. */
 export const vehrOverviewSection = {
   eyebrow: "Overview",
   body: vehrHeroLead.body,
-} as const;
-
-export const vehrProductContext = {
-  title: "Chart review for an EHR startup",
-  body:
-    "VEHR Technologies is developing a timeline-based chart review platform designed around how clinicians naturally interpret patient history over time. The platform reorganizes fragmented EHR data into connected clinical narratives that support contextual review, pattern recognition, and longitudinal sensemaking across complex patient records.",
 } as const;
 
 export const vehrBelowHeroTestimonial = {

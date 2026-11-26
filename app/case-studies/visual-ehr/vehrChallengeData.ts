@@ -35,8 +35,8 @@ export const vehrChallengeQuotesUnused = [
 export const vehrChallengeQuotes = [
   {
     quote:
-      "Rather than an HPI followed by a chart scavenger hunt, the clinician's mind desires a story enfolded with history.",
-    attribution: "Cole Marolf, MD",
+      "Labs, meds, vitals, notes: everything lives in separate places, so clinical context gets fragmented.",
+    attribution: "Hospital Clinician",
   },
 ] as const;
 

@@ -12,12 +12,12 @@ import {
   frxSplitRowGridClass,
 } from "../frx/frxCaseStudyTypography";
 
-const strategyImageShellClass = "flex min-h-0 min-w-0 w-full [&_button]:w-full";
-
-const strategyImageClass = "block w-full rounded-md border-0 object-contain";
+const strategyImageShellClass =
+  "flex min-h-0 min-w-0 w-full [&_button]:block [&_button]:w-full";
 
 export default function VehrStrategySection() {
-  const { eyebrow, title, bodyLead, bodyFollow, image } = vehrStrategySection;
+  const { eyebrow, title, bodyLead, bodyFollow, images } = vehrStrategySection;
+  const [noteImage, mapImage] = images;
 
   return (
     <section
@@ -27,7 +27,7 @@ export default function VehrStrategySection() {
       aria-labelledby="vehr-strategy-heading"
     >
       <p className={frxPaddedEyebrowClass}>{eyebrow}</p>
-      <div className={`${frxSplitRowGridClass} pb-12 md:pb-16 lg:pb-20`}>
+      <div className={frxSplitRowGridClass}>
         <div className={`${frxSectionIntroStackClass} self-start`}>
           <h2 id="vehr-strategy-heading" className={frxStrategyHeadlineClass}>
             {title}
@@ -38,14 +38,25 @@ export default function VehrStrategySection() {
 
         <div className={`${mediaCardClass} min-w-0 w-full self-start`}>
           <ZoomableProblemImage
-            src={image.src}
-            alt={image.alt}
+            src={noteImage.src}
+            alt={noteImage.alt}
             shellClassName={strategyImageShellClass}
-            imgClassName={strategyImageClass}
+            imgClassName="block h-auto w-full rounded-md border-0"
             elevateOnHover={false}
           />
         </div>
       </div>
+
+      <div className={`${mediaCardClass} mt-8 w-full md:mt-10`}>
+        <ZoomableProblemImage
+          src={mapImage.src}
+          alt={mapImage.alt}
+          shellClassName={strategyImageShellClass}
+          imgClassName="block h-auto w-full rounded-md border-0"
+          elevateOnHover={false}
+        />
+      </div>
+      <div className="pb-12 md:pb-16 lg:pb-20" />
     </section>
   );
 }

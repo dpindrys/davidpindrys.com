@@ -19,5 +19,5 @@ export const frxBelowHeroSummaryBlock = {
 /** Modal/page Overview band above the ROLE / CLIENT meta row. */
 export const frxOverviewSection = {
   eyebrow: "Overview",
-  body: "I led research and design for a refill workflow in CareTeamHub, connecting clinic staff with FreseniusRx, Fresenius Medical Care's pharmacy for dialysis patients. Replacing paper, fax, and phone follow-ups made refills 70% faster across 2,800+ clinics serving 43,000+ patients.",
+  body: "I led research and design for a refill workflow in CareTeamHub that connected clinic staff with FreseniusRx, Fresenius Medical Care’s pharmacy for dialysis patients. The new workflow made refills 70% faster across 2,800+ clinics serving 43,000+ patients.",
 } as const;

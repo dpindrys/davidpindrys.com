@@ -25,23 +25,7 @@ export default function VehrSymptomsOnTimelineSection() {
           >
             Symptoms on the Timeline
           </h3>
-          <p className={frxSectionBodyClass}>
-            Fatigue, thirst, and insomnia align to the same visit columns as
-            encounters, labs, and medications. Burden intensifies into Sep 09 and
-            eases across PCP and telehealth—so patient-reported change reads with
-            the clinical events around it.
-          </p>
         </div>
-      </div>
-
-      <div className={`${mediaCardClass} w-full min-w-0`}>
-        <ZoomableProblemImage
-          src="/images/vehr/diagnoses-encounters.png"
-          alt="Diagnoses and encounters aligned on shared timeline visit columns"
-          shellClassName={imageShellClass}
-          imgClassName={imageClass}
-          elevateOnHover={false}
-        />
       </div>
 
       <div className={frxCenteredIntroBlockClass}>

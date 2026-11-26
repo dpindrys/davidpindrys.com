@@ -1,9 +1,10 @@
 /** Scroll targets in the Visual EHR case study (sidebar nav + scrollspy). */
 export const vehrCaseStudyNavSections = [
   { id: "vehr-nav-overview", label: "Overview" },
-  { id: "vehr-nav-challenge", label: "Challenge" },
+  { id: "vehr-nav-challenge", label: "Challenge #1" },
   { id: "vehr-nav-strategy", label: "Strategy" },
-  { id: "vehr-nav-groundwork", label: "Groundwork" },
+  { id: "vehr-nav-groundwork", label: "Foundation" },
+  { id: "vehr-nav-trends", label: "Challenge #2" },
   { id: "vehr-nav-examples", label: "Examples" },
   { id: "vehr-nav-prototype", label: "Prototype" },
 ] as const;

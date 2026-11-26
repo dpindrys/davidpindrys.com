@@ -50,8 +50,9 @@ export type UseNarratedDemoPlaybackOptions = {
    */
   onPlayIntent?: () => void;
   /**
-   * When this element leaves the viewport (e.g. case study hero + caption),
-   * pause narration in place via pauseSession. Does not auto-resume on scroll-back.
+   * Hero + caption block. Once it has scrolled fully above the viewport,
+   * playback stays paused: Space does not start it, and narration cannot play.
+   * Scrolling back does not auto-resume.
    */
   pauseWhenOffscreenRef?: RefObject<Element | null>;
 };
@@ -107,6 +108,8 @@ export function useNarratedDemoPlayback({
   playingRef.current = playing;
   const [playbackStarted, setPlaybackStarted] = useState(false);
   const playbackStartedRef = useRef(false);
+  /** True after the hero + caption block has left the viewport. */
+  const heroOffscreenRef = useRef(false);
   const [activeCueIndex, setActiveCueIndex] = useState(0);
 
   const markPlaybackStarted = useCallback(() => {
@@ -125,6 +128,30 @@ export function useNarratedDemoPlayback({
       breathTimerRef.current = null;
     }
   }, []);
+
+  const heroBlockIsPast = useCallback(() => {
+    if (!pauseWhenOffscreenRef) return false;
+    const el = pauseWhenOffscreenRef.current;
+    if (!el) return heroOffscreenRef.current;
+    return el.getBoundingClientRect().bottom <= 1;
+  }, [pauseWhenOffscreenRef]);
+
+  /** Pause picture and narration. Muted so a late play() cannot be heard. */
+  const silenceHeroMedia = useCallback(() => {
+    clearBreathTimer();
+    if (freezeActiveRef.current) userPausedDuringFreezeRef.current = true;
+    const video = videoRef.current;
+    if (video && !video.paused) video.pause();
+    const audio = narrationAudioRef.current;
+    if (audio) {
+      audio.muted = true;
+      if (!audio.paused) audio.pause();
+    }
+    if (playingRef.current) {
+      playingRef.current = false;
+      setPlaying(false);
+    }
+  }, [clearBreathTimer]);
 
   const stopHoldFillAnimation = useCallback(() => {
     if (holdFillRafRef.current != null) {
@@ -403,6 +430,7 @@ export function useNarratedDemoPlayback({
   const advanceAfterBreath = useCallback(() => {
     const video = videoRef.current;
     if (!video || !captions?.length) return;
+    if (heroOffscreenRef.current || heroBlockIsPast()) return;
     if (userPausedDuringFreezeRef.current) return;
 
     const cueIndex = freezeCueIndexRef.current;
@@ -429,13 +457,15 @@ export function useNarratedDemoPlayback({
       programmaticSeekRef.current = true;
       video.currentTime = next.start;
     }
+    if (heroOffscreenRef.current || heroBlockIsPast()) return;
     void video.play().catch(() => {
       // Autoplay blocked after programmatic advance — UI stays paused.
     });
-  }, [applyCaptionCue, captions, clearFreezeState, stopNarration]);
+  }, [applyCaptionCue, captions, clearFreezeState, heroBlockIsPast, stopNarration]);
 
   const startBreathAfterNarration = useCallback(() => {
     clearBreathTimer();
+    if (heroOffscreenRef.current || heroBlockIsPast()) return;
     if (!freezeActiveRef.current || userPausedDuringFreezeRef.current) return;
 
     const cueIndex = freezeCueIndexRef.current;
@@ -452,6 +482,7 @@ export function useNarratedDemoPlayback({
     advanceAfterBreath,
     captions,
     clearBreathTimer,
+    heroBlockIsPast,
     peekHoldFill,
     startHoldFillAnimation,
   ]);
@@ -511,7 +542,7 @@ export function useNarratedDemoPlayback({
         audio.src !== "" &&
         audio.error == null;
 
-      if (narrationStillPlaying) {
+      if (narrationStillPlaying && !heroOffscreenRef.current && !heroBlockIsPast()) {
         if (audio.paused && !userPausedDuringFreezeRef.current) {
           void audio.play().catch(() => {
             startBreathAfterNarration();
@@ -531,6 +562,7 @@ export function useNarratedDemoPlayback({
       captions,
       clearBreathTimer,
       estimateHoldDurationMs,
+      heroBlockIsPast,
       startBreathAfterNarration,
       startHoldFillAnimation,
     ],
@@ -563,6 +595,15 @@ export function useNarratedDemoPlayback({
     (video: HTMLVideoElement, options?: { forceAudioSeek?: boolean }) => {
       if (!hasNarrationAudio || !captions?.length) {
         stopNarration();
+        return;
+      }
+
+      if (heroOffscreenRef.current || heroBlockIsPast()) {
+        const audio = narrationAudioRef.current;
+        if (audio) {
+          audio.muted = true;
+          if (!audio.paused) audio.pause();
+        }
         return;
       }
 
@@ -614,6 +655,11 @@ export function useNarratedDemoPlayback({
         audio.preload = "auto";
         audio.playbackRate = 1;
         audio.muted = narrationMutedRef.current;
+        audio.addEventListener("play", () => {
+          if (!heroOffscreenRef.current && !heroBlockIsPast()) return;
+          audio!.muted = true;
+          audio!.pause();
+        });
         narrationAudioRef.current = audio;
       } else {
         audio.playbackRate = 1;
@@ -639,10 +685,12 @@ export function useNarratedDemoPlayback({
       };
 
       const playOrPauseWithVideo = () => {
-        if (video.paused) {
+        if (heroOffscreenRef.current || heroBlockIsPast() || video.paused) {
+          audio!.muted = heroOffscreenRef.current || heroBlockIsPast() ? true : narrationMutedRef.current;
           if (!audio!.paused) audio!.pause();
           return;
         }
+        audio!.muted = narrationMutedRef.current;
         if (!audio!.paused || audio!.ended) return;
         void audio!.play().catch(() => {
           // Autoplay policy, missing file, or decode error: leave silent.
@@ -681,7 +729,7 @@ export function useNarratedDemoPlayback({
       }
       playOrPauseWithVideo();
     },
-    [captions, hasNarrationAudio, stopNarration],
+    [captions, hasNarrationAudio, heroBlockIsPast, stopNarration],
   );
 
   const applyNarratedPlaybackRate = useCallback(
@@ -714,13 +762,13 @@ export function useNarratedDemoPlayback({
       video.currentTime = caption.start;
       markPlaybackStarted();
 
-      if (resumeAfterSeek) {
+      if (resumeAfterSeek && !heroOffscreenRef.current && !heroBlockIsPast()) {
         void video.play().catch(() => {
           // Autoplay policy: leave paused; captions still sync via onSeeked.
         });
       }
     },
-    [applyCaptionCue, captions, clearFreezeState, markPlaybackStarted, shouldResumeAfterSeek],
+    [applyCaptionCue, captions, clearFreezeState, heroBlockIsPast, markPlaybackStarted, shouldResumeAfterSeek],
   );
 
   const seekToTime = useCallback(
@@ -741,11 +789,11 @@ export function useNarratedDemoPlayback({
       video.currentTime = clamped;
       markPlaybackStarted();
 
-      if (resumeAfterSeek) {
+      if (resumeAfterSeek && !heroOffscreenRef.current && !heroBlockIsPast()) {
         void video.play().catch(() => {});
       }
     },
-    [clearFreezeState, markPlaybackStarted, shouldResumeAfterSeek],
+    [clearFreezeState, heroBlockIsPast, markPlaybackStarted, shouldResumeAfterSeek],
   );
 
   const seekToAdjacentCaption = useCallback(
@@ -798,6 +846,7 @@ export function useNarratedDemoPlayback({
   const replayFromStart = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    if (heroOffscreenRef.current || heroBlockIsPast()) return;
 
     clearFreezeState();
     playbackEndedRef.current = false;
@@ -822,6 +871,7 @@ export function useNarratedDemoPlayback({
     applyNarratedPlaybackRate,
     captions,
     clearFreezeState,
+    heroBlockIsPast,
     markPlaybackStarted,
     stopNarration,
   ]);
@@ -829,6 +879,11 @@ export function useNarratedDemoPlayback({
   const togglePlayback = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    if (heroOffscreenRef.current || heroBlockIsPast()) {
+      heroOffscreenRef.current = true;
+      silenceHeroMedia();
+      return;
+    }
 
     if (freezeActiveRef.current) {
       if (!userPausedDuringFreezeRef.current && playingRef.current) {
@@ -900,10 +955,12 @@ export function useNarratedDemoPlayback({
     captions,
     clearBreathTimer,
     estimateHoldDurationMs,
+    heroBlockIsPast,
     isPlaybackAtEnd,
     markPlaybackStarted,
     peekHoldFill,
     replayFromStart,
+    silenceHeroMedia,
     startBreathAfterNarration,
     startHoldFillAnimation,
     stopHoldFillAnimation,
@@ -949,24 +1006,36 @@ export function useNarratedDemoPlayback({
     stopHoldFillAnimation,
   ]);
 
-  // Case study heroes: pause when hero + caption leave the viewport.
+  // Case study heroes: once the hero + caption block is fully above the viewport,
+  // keep picture and narration stopped until the user plays again on screen.
   useEffect(() => {
-    const el = pauseWhenOffscreenRef?.current;
-    if (!el) return;
+    if (!pauseWhenOffscreenRef) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry || entry.isIntersecting) return;
-        pauseSession();
-      },
-      // Fire once the observed block is fully out (scrolled past).
-      { threshold: 0 },
-    );
+    const apply = () => {
+      const past = heroBlockIsPast();
+      const wasPast = heroOffscreenRef.current;
+      heroOffscreenRef.current = past;
+      if (past) {
+        silenceHeroMedia();
+        return;
+      }
+      if (!wasPast) return;
+      const audio = narrationAudioRef.current;
+      if (audio) audio.muted = narrationMutedRef.current;
+    };
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [pauseSession, pauseWhenOffscreenRef]);
+    apply();
+    const el = pauseWhenOffscreenRef.current;
+    const observer = el ? new IntersectionObserver(apply, { threshold: 0 }) : null;
+    if (el && observer) observer.observe(el);
+    window.addEventListener("scroll", apply, { passive: true });
+    window.addEventListener("resize", apply);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("scroll", apply);
+      window.removeEventListener("resize", apply);
+    };
+  }, [heroBlockIsPast, pauseWhenOffscreenRef, silenceHeroMedia]);
 
   useEffect(() => {
     if (!keyboardEnabled || !hasCaptions) return;
@@ -989,6 +1058,12 @@ export function useNarratedDemoPlayback({
         return;
       }
 
+      // Past the hero, Space should scroll the page — not start the demo or its narration.
+      if (heroOffscreenRef.current || heroBlockIsPast()) {
+        heroOffscreenRef.current = true;
+        return;
+      }
+
       event.preventDefault();
 
       if (isSpace) {
@@ -1008,6 +1083,7 @@ export function useNarratedDemoPlayback({
   }, [
     captions,
     hasCaptions,
+    heroBlockIsPast,
     keyboardEnabled,
     keyboardRequiresPlaybackStarted,
     playbackStarted,
@@ -1048,6 +1124,12 @@ export function useNarratedDemoPlayback({
       if (hasNarrationAudio) syncNarrationFromVideo(video);
     },
     onPlay: (event: SyntheticEvent<HTMLVideoElement>) => {
+      if (heroOffscreenRef.current || heroBlockIsPast()) {
+        heroOffscreenRef.current = true;
+        event.currentTarget.pause();
+        silenceHeroMedia();
+        return;
+      }
       setPlaying(true);
       markPlaybackStarted();
       const video = event.currentTarget;

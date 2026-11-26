@@ -9,14 +9,8 @@ import {
   frxMetaEyebrowClass,
   frxSectionBodyClass,
   frxSectionGapClass,
-  frxSectionTitleClass,
-  frxSplitRowGridClass,
   frxStrategyHeadlineClass,
 } from "./frxCaseStudyTypography";
-
-/** Site green accent (no purple). */
-const frxChallengeAccent = "#3A7D5C";
-const frxChallengeAccentMuted = "#D8EDE3";
 
 const frxClinicQuoteClass = frxSectionBodyClass;
 
@@ -42,103 +36,85 @@ function FrxQuoteMarkIcon() {
   );
 }
 
-function FrxImpactIcon() {
+function FrxClinicQuote({
+  quote,
+  attribution,
+}: {
+  quote: string;
+  attribution: string;
+}) {
   return (
-    <div
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full md:h-14 md:w-14"
-      style={{ backgroundColor: frxChallengeAccentMuted }}
-      aria-hidden
-    >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle
-          cx="12"
-          cy="12"
-          r="9"
-          stroke={frxChallengeAccent}
-          strokeWidth="1.5"
-        />
-        <path
-          d="M12 8v5"
-          stroke={frxChallengeAccent}
-          strokeWidth="1.75"
-          strokeLinecap="round"
-        />
-        <circle cx="12" cy="16" r="1" fill={frxChallengeAccent} />
-      </svg>
-    </div>
+    <figure className="flex min-w-0 flex-col gap-5 md:gap-6">
+      <FrxQuoteMarkIcon />
+      <blockquote className={frxClinicQuoteClass}>&ldquo;{quote}&rdquo;</blockquote>
+      <figcaption className={frxClinicAttributionClass}>{attribution}</figcaption>
+    </figure>
   );
 }
 
 export default function FrxChallengeCard() {
-  return (
-    <section
-      className={`${frxSectionGapClass} ${frxFilledBandClass}`}
-      aria-labelledby="frx-problem-heading"
-    >
-      <div
-        id="frx-nav-challenge"
-        data-frx-case-study-section=""
-        className={frxNavScrollMtClass}
-      >
-        <p className={frxMetaEyebrowClass}>Challenge</p>
+  const [leadQuote, ...moreClinicQuotes] = frxClinicQuotes;
 
-        <div className="mt-6">
-          <div className={frxSplitRowGridClass}>
+  return (
+    <>
+      <section
+        className={`${frxSectionGapClass} ${frxFilledBandClass}`}
+        aria-labelledby="frx-problem-heading"
+      >
+        <div
+          id="frx-nav-challenge"
+          data-frx-case-study-section=""
+          className={frxNavScrollMtClass}
+        >
+          <p className={frxMetaEyebrowClass}>Challenge</p>
+
+          <div className="mt-6 grid w-full grid-cols-1 items-stretch gap-6 md:grid-cols-[minmax(0,1fr)_20rem] md:gap-8">
             <div className="flex min-w-0 flex-col gap-4 text-left">
               <h2 id="frx-problem-heading" className={frxStrategyHeadlineClass}>
                 {frxChallengeIntro.title}
               </h2>
               <p className={frxSectionBodyClass}>{frxChallengeIntro.body}</p>
+              {leadQuote ? (
+                <div className="mt-2">
+                  <FrxClinicQuote
+                    quote={leadQuote.quote}
+                    attribution={leadQuote.attribution}
+                  />
+                </div>
+              ) : null}
             </div>
 
-            <div className="min-w-0 w-full">
+            <div className="relative min-h-48 overflow-hidden rounded-[16px] border border-black/15 bg-white/40 md:h-full md:min-h-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={frxChallengeIntro.imageSrc}
                 alt={frxChallengeIntro.imageAlt}
-                className="h-auto w-full rounded-[16px] border border-black/15 bg-white/40 object-cover"
+                className="h-auto w-full object-cover object-[44%_center] md:absolute md:inset-0 md:h-full"
               />
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12">
-            <p className={frxMetaEyebrowClass}>From the clinic</p>
+      <div className={frxSectionGapClass}>
+        <p className={frxMetaEyebrowClass}>Impact</p>
+        <p className={`${frxSectionBodyClass} mt-6`}>{frxChallengeImpact.body}</p>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3">
-              {frxClinicQuotes.map((item, index) => (
-                <figure
-                  key={item.attribution + index}
-                  className={`flex min-w-0 flex-col gap-5 py-6 md:gap-6 md:py-0 md:pr-6 lg:pr-8 ${
-                    index > 0
-                      ? "border-t border-black/10 pt-6 md:border-t-0 md:border-l md:pl-6 md:pt-0 lg:pl-8"
-                      : ""
-                  } ${index < frxClinicQuotes.length - 1 ? "md:pr-6 lg:pr-8" : ""}`}
-                >
-                  <FrxQuoteMarkIcon />
-                  <blockquote className={frxClinicQuoteClass}>
-                    &ldquo;{item.quote}&rdquo;
-                  </blockquote>
-                  <figcaption className={frxClinicAttributionClass}>
-                    {item.attribution}
-                  </figcaption>
-                </figure>
-              ))}
+        <div className="mt-10 grid grid-cols-1 md:mt-12 md:grid-cols-2">
+          {moreClinicQuotes.map((item, index) => (
+            <div
+              key={item.attribution + index}
+              className={`min-w-0 py-6 md:py-0 ${
+                index > 0
+                  ? "border-t border-black/10 pt-6 md:border-t-0 md:border-l md:pl-6 md:pt-0 lg:pl-8"
+                  : "md:pr-6 lg:pr-8"
+              }`}
+            >
+              <FrxClinicQuote quote={item.quote} attribution={item.attribution} />
             </div>
-          </div>
-
-          <div
-            className="mt-10 flex gap-4 border-t border-black/10 pt-8 md:mt-12 md:gap-5 md:pt-10"
-            role="region"
-            aria-label={frxChallengeImpact.title}
-          >
-            <FrxImpactIcon />
-            <div className="flex min-w-0 flex-col gap-1.5">
-              <h3 className={frxSectionTitleClass}>{frxChallengeImpact.title}</h3>
-              <p className={frxSectionBodyClass}>{frxChallengeImpact.body}</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-    </section>
+    </>
   );
 }
