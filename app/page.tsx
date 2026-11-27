@@ -334,7 +334,7 @@ export default function Home() {
             <p className="mt-3 font-sans text-[15px] leading-[1.4] text-black/70 md:text-[16px]">
               Case studies coming soon
             </p>
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-6 min-[1025px]:grid-cols-2">
               <CaseStudyArticle project={frxCaseStudy} />
               <CaseStudyArticle project={dellCaseStudy} />
               <CaseStudyArticle project={vehrCaseStudy} />
